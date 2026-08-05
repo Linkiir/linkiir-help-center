@@ -46,9 +46,8 @@ function HomepageHeader() {
   return (
     <header className={clsx('hero', styles.heroBanner)}>
       <div className="container">
-        <p className="lnk-eyebrow">Help Center</p>
         <Heading as="h1" className="hero__title">
-          Linkiir
+          Linkiir Help Center
         </Heading>
         <p className={clsx('hero__subtitle', styles.heroSubtitle)}>
           {siteConfig.tagline}

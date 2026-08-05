@@ -108,7 +108,7 @@ export default function Footer(): ReactNode {
 
         <div className={styles.bottom}>
           <span className={`footer__copyright ${styles.copyright}`}>
-            &#169; Linkiir, Inc. &#8212; Registered in Ontario, Canada
+            &#169; Linkiir, Inc.
           </span>
           <div className={styles.socials}>
             {LINKEDIN_URL && (

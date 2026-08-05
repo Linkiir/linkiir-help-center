@@ -113,3 +113,25 @@
 .markdown .lnk-card-link p {
   margin-bottom: 0;
 }
+
+/* ────────── SIDEBAR: REMOVE LEFT BRACKET/BORDER ──────────
+   The active-link border-left and the category collapsible border
+   create a visual "(" bracket on the left side of nav items. */
+.menu__link--active {
+  border-left: none;
+}
+
+.menu__list-item-collapsible,
+.menu__list-item-collapsible:hover {
+  border-left: none;
+}
+
+.theme-doc-sidebar-item-category > .menu__list {
+  border-left: none;
+}
+
+/* Override Docusaurus's default left border on nested sidebar lists */
+.menu__list .menu__list {
+  border-left: none;
+  padding-left: 0.75rem;
+}
