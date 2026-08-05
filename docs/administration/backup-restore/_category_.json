@@ -1,0 +1,8 @@
+{
+  "label": "Backup and Restore",
+  "position": 6,
+  "link": {
+    "type": "generated-index",
+    "description": "Back up and restore the Linkiir working directory and key material."
+  }
+}

@@ -1,0 +1,61 @@
+.features {
+  width: 100%;
+  padding: 4rem 0 1rem;
+}
+
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+/* The card is the whole link target. Inherit colour so the theme's monochrome
+   link styling does not tint the card text. */
+.featureCard {
+  display: flex;
+  flex-direction: column;
+  color: inherit;
+  text-decoration: none;
+}
+
+.featureCard:hover,
+.featureCard:focus-visible {
+  color: inherit;
+  text-decoration: none;
+}
+
+.featureIcon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 1.15rem;
+  flex: none;
+}
+
+.featureTitle {
+  margin-bottom: 0.5rem;
+}
+
+/* Push the affordance to the bottom so cards of uneven copy length align. */
+.featureBody {
+  flex: 1;
+  margin-bottom: 1.15rem;
+}
+
+.featureMore {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lnk-fg-faint);
+  transition: color 0.25s ease;
+}
+
+.featureCard:hover .featureMore {
+  color: var(--ifm-color-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featureMore {
+    transition: none;
+  }
+}

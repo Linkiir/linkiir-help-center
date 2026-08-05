@@ -1,0 +1,94 @@
+/**
+ * CSS files with the .module.css suffix will be treated as CSS modules
+ * and scoped locally.
+ */
+
+.heroBanner {
+  padding: 6rem 0 5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 3.5rem 1.5rem 3rem;
+  }
+}
+
+/* The theme caps .hero__subtitle at 38rem, so re-center it in this layout. */
+.heroSubtitle {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+  margin-top: 2.25rem;
+}
+
+/* ── Common tasks ───────────────────────────────────────────── */
+
+.quickSection {
+  width: 100%;
+  padding: 3.5rem 0 5rem;
+}
+
+.quickGrid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 0;
+  border-top: 1px dashed var(--lnk-dashed);
+}
+
+.quickItem {
+  margin: 0;
+  border-bottom: 1px dashed var(--lnk-dashed);
+}
+
+.quickLink {
+  display: block;
+  padding: 0.95rem 0.25rem;
+  font-size: 0.98rem;
+  color: var(--lnk-fg-muted);
+  text-decoration: none;
+  transition: color 0.2s ease, padding-left 0.25s ease;
+}
+
+.quickLink::after {
+  content: '→';
+  margin-left: 0.6rem;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.quickLink:hover,
+.quickLink:focus-visible {
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+  padding-left: 0.6rem;
+}
+
+.quickLink:hover::after,
+.quickLink:focus-visible::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quickLink,
+  .quickLink::after {
+    transition: none;
+  }
+
+  .quickLink:hover,
+  .quickLink:focus-visible {
+    padding-left: 0.25rem;
+  }
+}

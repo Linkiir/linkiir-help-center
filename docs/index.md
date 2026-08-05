@@ -1,0 +1,100 @@
+---
+title: Linkiir Documentation
+description: Install Linkiir, build your first interface, and operate it in production. Node reference, Lua scripting API, deployment, licensing, and troubleshooting.
+slug: /
+---
+
+# Linkiir Documentation
+
+Linkiir is a healthcare integration platform for designing, testing, deploying, and monitoring interfaces across HL7 v2, X12, APIs, files, and other healthcare data formats.
+
+## New to Linkiir?
+
+[**Getting Started**](getting-started/index.md) takes you from a downloaded package to a working HTTP endpoint in four steps:
+
+1. [Download and install](getting-started/quick-install.md) — macOS Docker bundle, Windows installer, or Linux.
+2. [Reset the admin user](getting-started/first-login.md) — set the administrator password.
+3. [Create a project, workflow, and HTTP source node](getting-started/create-project-workflow.md).
+4. [Edit the script and start the HTTP server](getting-started/start-http-server.md) — then call it with `curl`.
+
+About 20 minutes on a local machine.
+
+## Documentation areas
+
+<div class="lnk-grid">
+
+<a class="lnk-card lnk-card-link" href="/docs/getting-started/">
+  <svg class="lnk-card__icon" viewBox="0 0 32 32" aria-hidden="true">
+    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="16" cy="16" r="12.5" />
+      <path d="M13.4 10.9L22 16l-8.6 5.1z" />
+    </g>
+  </svg>
+  <span class="lnk-card__title">Getting Started</span>
+  <span class="lnk-card__body">Install Linkiir and build your first interface.</span>
+</a>
+
+<a class="lnk-card lnk-card-link" href="/docs/interface-development/">
+  <svg class="lnk-card__icon" viewBox="0 0 32 32" aria-hidden="true">
+    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10.3 9.6l11.5 5.6" />
+      <path d="M10.3 22.4l11.5-5.6" />
+      <circle cx="6.6" cy="8" r="3.4" />
+      <circle cx="6.6" cy="24" r="3.4" />
+      <circle cx="25.4" cy="16" r="3.4" />
+    </g>
+    <circle cx="25.4" cy="16" r="1.4" fill="currentColor" />
+  </svg>
+  <span class="lnk-card__title">Interface Development</span>
+  <span class="lnk-card__body">Node types and their fields, Lua scripting, sample interfaces, error handling.</span>
+</a>
+
+<a class="lnk-card lnk-card-link" href="/docs/administration/">
+  <svg class="lnk-card__icon" viewBox="0 0 32 32" aria-hidden="true">
+    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3.5" y="4" width="25" height="6.5" rx="3.25" />
+      <rect x="3.5" y="13" width="25" height="6.5" rx="3.25" />
+      <rect x="3.5" y="22" width="25" height="6.5" rx="3.25" />
+    </g>
+    <g fill="currentColor">
+      <circle cx="8.2" cy="7.25" r="1.5" />
+      <circle cx="8.2" cy="16.25" r="1.5" />
+      <circle cx="8.2" cy="25.25" r="1.5" />
+    </g>
+  </svg>
+  <span class="lnk-card__title">Administration</span>
+  <span class="lnk-card__body">Licensing, upgrades, deployment environments, configuration, backups, security, troubleshooting.</span>
+</a>
+
+<a class="lnk-card lnk-card-link" href="/docs/faq/">
+  <svg class="lnk-card__icon" viewBox="0 0 32 32" aria-hidden="true">
+    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 5h16a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5h-7l-6 4.6V23H8a5 5 0 0 1-5-5v-8a5 5 0 0 1 5-5z" />
+      <path d="M12.9 11.4a3.2 3.2 0 1 1 3.2 3.2v1.5" />
+    </g>
+    <circle cx="16.1" cy="19.4" r="1.35" fill="currentColor" />
+  </svg>
+  <span class="lnk-card__title">FAQ</span>
+  <span class="lnk-card__body">Queue and database choices, and day-to-day operating practice.</span>
+</a>
+
+</div>
+
+## Common tasks
+
+| I want to | Go to |
+| --- | --- |
+| Install on Windows | [Install on Windows](administration/installation/windows.md) |
+| Install on macOS | [Install on macOS](administration/installation/macos.md) |
+| Recover a lost administrator password | [Reset the Admin User](getting-started/first-login.md) |
+| Receive HL7 v2 over MLLP | [Source Nodes](interface-development/interfaces/source-nodes.md) |
+| Look up a Lua function | [Linkiir Scripting API](interface-development/lua-programming/linkiir-api.md) |
+| Test a script before starting a node | [Testing and Debugging Lua](interface-development/lua-programming/testing-debugging.md) |
+| Copy a complete working interface | [Sample Code](interface-development/sample-code/index.md) |
+| Connect my own Kafka or Redpanda cluster | [Kafka and Redpanda Configuration](administration/configurations/kafka-redpanda.md) |
+| Find out why messages are not arriving | [Troubleshooting](administration/troubleshooting/index.md) |
+| Move a project between environments | [Project Import and Export](administration/deployment/import-export.md) |
+
+:::info Documentation status
+Licensing and Notifications content is marked where commercial policy or feature availability is not yet finalized. Confirm against the release notes for your version.
+:::

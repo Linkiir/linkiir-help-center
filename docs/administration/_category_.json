@@ -1,0 +1,8 @@
+{
+  "label": "Administration",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "Install, license, upgrade, deploy, configure, secure, back up, and troubleshoot Linkiir."
+  }
+}

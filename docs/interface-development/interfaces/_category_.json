@@ -1,0 +1,8 @@
+{
+  "label": "Interfaces and Core Nodes",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "Source, destination, and scripting nodes."
+  }
+}

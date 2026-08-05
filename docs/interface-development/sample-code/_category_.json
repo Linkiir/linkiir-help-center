@@ -1,0 +1,8 @@
+{
+  "label": "Sample Code",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "Example HTTP and HL7 LLP workflows."
+  }
+}

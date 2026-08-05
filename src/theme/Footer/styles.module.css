@@ -1,0 +1,130 @@
+/* Layout for the linkiir.com-style footer. Typography for the column headings,
+   links and copyright line comes from the Linkiir theme via the Infima class
+   names the component also applies. */
+
+.footer {
+  padding-top: 3.5rem;
+  padding-bottom: 2.25rem;
+}
+
+.top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+@media screen and (max-width: 996px) {
+  .top {
+    grid-template-columns: 1fr 1fr;
+    gap: 2.25rem;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .top {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Brand block ────────────────────────────────────────────── */
+
+.brand {
+  max-width: 20rem;
+}
+
+.brandLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.brandLink:hover {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.mark {
+  width: 2rem;
+  height: 1.5rem;
+  flex: none;
+}
+
+.wordmark {
+  font-size: 1.3rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.tagline {
+  margin: 1rem 0 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: #a7a7a7;
+}
+
+/* ── Link columns ───────────────────────────────────────────── */
+
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+.colHead {
+  margin: 0 0 1rem;
+}
+
+.colLink {
+  padding: 0.28rem 0;
+}
+
+/* ── Bottom bar ─────────────────────────────────────────────── */
+
+.bottom {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--lnk-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+/* The theme gives .footer__copyright a 2rem top margin intended for the
+   stacked classic layout; this bar handles its own spacing. */
+.copyright {
+  margin-top: 0;
+}
+
+.socials {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  border: 1px solid var(--lnk-border);
+  color: #e7e7e7;
+  transition: border-color 0.25s ease, color 0.25s ease;
+}
+
+.social:hover {
+  border-color: var(--lnk-border-strong);
+  color: #ffffff;
+  text-decoration: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .social {
+    transition: none;
+  }
+}
