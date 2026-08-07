@@ -64,7 +64,24 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category', label: 'API', link: {type: 'doc', id: 'api/index'},
       items: [
-        'api/scripting-api',
+        {
+          type: 'category', label: 'Linkiir Scripting API', link: {type: 'doc', id: 'api/scripting-api/index'},
+          items: [
+            'api/scripting-api/script-globals',
+            'api/scripting-api/message-data',
+            'api/scripting-api/message-flow',
+            'api/scripting-api/connectivity',
+            'api/scripting-api/database',
+            'api/scripting-api/byte-transforms',
+            'api/scripting-api/json',
+            'api/scripting-api/security',
+            'api/scripting-api/runtime-system',
+            'api/scripting-api/lua-table-library',
+            'api/scripting-api/lua-math-library',
+            'api/scripting-api/lua-os-library',
+            'api/scripting-api/lua-string-library',
+          ],
+        },
         {
           type: 'category', label: 'Web API', link: {type: 'doc', id: 'api/web-api/linkiir-api'},
           // The generated array's own first item duplicates this category's `link`

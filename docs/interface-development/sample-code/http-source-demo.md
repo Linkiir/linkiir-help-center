@@ -229,5 +229,5 @@ Open a data record to view the archived payload. Searching the correlation ID re
 ## Next
 
 - [Demo: HL7 LLP → Scripting → LLP](hl7-llp-scripting-llp.md)
-- [Linkiir Scripting API](../../api/scripting-api.md)
+- [Linkiir Scripting API](../../api/scripting-api/index.md)
 - [Error Handling and Retry](../error-handling.md)

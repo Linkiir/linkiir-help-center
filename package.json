@@ -12,7 +12,8 @@
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "gen-api-docs": "node scripts/gen-web-api-spec.js && docusaurus gen-api-docs all",
+    "gen-scripting-api-docs": "node scripts/gen-scripting-api-docs.js",
+    "gen-api-docs": "npm run gen-scripting-api-docs && node scripts/gen-web-api-spec.js && docusaurus gen-api-docs all",
     "clean-api-docs": "docusaurus clean-api-docs all",
     "typecheck": "tsc"
   },

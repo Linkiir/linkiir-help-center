@@ -80,7 +80,7 @@ end
 
 Each push is delivered independently, so a failure downstream affects one item rather than the batch.
 
-JSON is handled by `linkiir.json`, which returns ordinary Lua tables. HL7 v2 and X12 use `linkiir.data`, which returns a navigable node tree. See [Linkiir Scripting API](../../api/scripting-api.md).
+JSON is handled by `linkiir.json`, which returns ordinary Lua tables. HL7 v2 and X12 use `linkiir.data`, which returns a navigable node tree. See [Linkiir Scripting API](../../api/scripting-api/index.md).
 
 ## Errors versus filtering
 
@@ -137,6 +137,6 @@ Run Test and Debug both run your script against a sample without producing real 
 
 ## Next
 
-- [Linkiir Scripting API](../../api/scripting-api.md)
+- [Linkiir Scripting API](../../api/scripting-api/index.md)
 - [Sample Code](../sample-code/index.md)
 - [Error Handling and Retry](../error-handling.md)

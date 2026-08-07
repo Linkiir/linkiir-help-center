@@ -255,4 +255,4 @@ For clinical interfaces, prefer stopping. A node that quietly skips messages can
 
 - [Destination Nodes](destination-nodes.md)
 - [Custom Scripting Nodes](custom-scripting-nodes.md)
-- [Linkiir Scripting API](../../api/scripting-api.md)
+- [Linkiir Scripting API](../../api/scripting-api/index.md)

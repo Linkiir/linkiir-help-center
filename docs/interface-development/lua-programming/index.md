@@ -40,7 +40,7 @@ end
 | `linkiir.sys` | Identifiers, timing, and filesystem operations |
 | `linkiir.store` | Database connections and queries |
 
-Signatures are in [Linkiir Scripting API](../../api/scripting-api.md).
+Signatures are in [Linkiir Scripting API](../../api/scripting-api/index.md).
 
 :::note HL7 and JSON use different modules
 `linkiir.data` returns a navigable node tree, which suits HL7 v2 and X12. `linkiir.json` returns ordinary Lua tables. Passing `type = "json"` to `linkiir.data.extract` is an error, and the message tells you to use `linkiir.json` instead.
@@ -101,6 +101,6 @@ Use the adapter to get an interface running with minimal edits, then move to the
 
 ## Next
 
-- [Linkiir Scripting API](../../api/scripting-api.md) — signatures and examples.
+- [Linkiir Scripting API](../../api/scripting-api/index.md) — signatures and examples.
 - [Testing and Debugging Lua](testing-debugging.md) — Run Test, Debug, and samples.
 - [Sample Code](../sample-code/index.md) — complete working interfaces.

@@ -51,6 +51,6 @@ You configure transports with fields and write Lua only where the logic is yours
   - [Demo: HTTP Source to File](sample-code/http-source-demo.md)
   - [Demo: HL7 LLP to Scripting to LLP](sample-code/hl7-llp-scripting-llp.md)
 - [Lua Programming](lua-programming/index.md)
-  - [Linkiir Scripting API](../api/scripting-api.md)
+  - [Linkiir Scripting API](../api/scripting-api/index.md)
   - [Testing and Debugging Lua](lua-programming/testing-debugging.md)
 - [Error Handling and Retry](error-handling.md)

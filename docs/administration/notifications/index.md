@@ -180,4 +180,4 @@ Items 1 to 5 come from your monitoring system. Only item 6 is built inside Linki
 
 - [Troubleshooting](../troubleshooting/index.md)
 - [Error Handling and Retry](../../interface-development/error-handling.md)
-- [Linkiir Scripting API](../../api/scripting-api.md)
+- [Linkiir Scripting API](../../api/scripting-api/index.md)
