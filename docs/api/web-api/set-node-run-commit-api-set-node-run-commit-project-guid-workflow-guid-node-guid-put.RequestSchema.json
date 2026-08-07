@@ -1,0 +1,1 @@
+{"title":"Body","body":{"required":true,"content":{"application/json":{"schema":{"properties":{"commit":{"type":"string","title":"Commit","description":"Full or abbreviated commit hash to pin this node's runs to. Empty string clears the pin, so the node runs from the latest commit (HEAD) again.","default":""}},"type":"object","title":"SetRunCommitRequest"}}}}}

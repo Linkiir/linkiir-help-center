@@ -1,0 +1,72 @@
+---
+id: delete-connection-api-delete-connection-project-guid-workflow-guid-source-guid-target-guid-delete
+title: "Delete a connection between two nodes"
+description: "Removes the target node's GUID from the source node's `dest_guids`"
+sidebar_label: "Delete a connection between two nodes"
+hide_title: true
+hide_table_of_contents: true
+api: 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
+sidebar_class_name: "delete api-method"
+info_path: docs/api/web-api/linkiir-api
+custom_edit_url: null
+hide_send_button: true
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Delete a connection between two nodes"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"delete"}
+  path={"/api/delete_connection/{project_guid}/{workflow_guid}/{source_guid}/{target_guid}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Removes the target node's GUID from the source node's `dest_guids`
+list in the workflow's config on the project's hub, then commits and
+propagates the change to every clone.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<ParamsDetails
+  {...require("./delete-connection-api-delete-connection-project-guid-workflow-guid-source-guid-target-guid-delete.ParamsDetails.json")}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  {...require("./delete-connection-api-delete-connection-project-guid-workflow-guid-source-guid-target-guid-delete.RequestSchema.json")}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  {...require("./delete-connection-api-delete-connection-project-guid-workflow-guid-source-guid-target-guid-delete.StatusCodes.json")}
+>
+  
+</StatusCodes>
+
+
+      

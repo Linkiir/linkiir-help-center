@@ -185,8 +185,6 @@ Put the password in the project's **Credentials** tab flagged **Secret**, and re
 There is no working dedicated node type for these. Make the call from a **Transform Custom** node:
 
 ```lua
-local linkiir = require("linkiir")
-
 function main(Data)
    local resp, err = linkiir.link.web.post{
       url = "https://api.example.com/messages",

@@ -18,4 +18,4 @@ Complete interfaces you can build and run. Each one lists every node, its field 
 - Replace ports, hostnames, directories, and schema names with values for your environment.
 - Run Test each script before starting a node. It catches compile and mapping errors in one click.
 
-Both samples use the native `linkiir.*` API. If you are migrating scripts from a legacy integration engine, the equivalent legacy names and how to enable them are in [Linkiir Scripting API](../lua-programming/linkiir-api.md).
+Both samples use the native `linkiir.*` API. If you are migrating scripts from a legacy integration engine, the equivalent legacy names and how to enable them are in [Linkiir Scripting API](../../api/scripting-api.md).

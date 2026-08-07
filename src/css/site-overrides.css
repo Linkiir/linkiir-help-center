@@ -135,3 +135,33 @@
   border-left: none;
   padding-left: 0.75rem;
 }
+
+/* ────────── WEB API: "LINKIIR" CODE-SAMPLE TAB ICON ──────────
+   docusaurus-theme-openapi-docs ships icons for its built-in languages
+   (curl, http, ...) as background-images keyed off logoClass, but has
+   nothing for our custom `linkiir` language tab (see docusaurus.config.ts
+   languageTabs). This adds one, matching that pattern. A relative url()
+   here goes through webpack's asset pipeline (unlike an absolute /img/...
+   path), so it resolves correctly under any baseUrl.
+   The code-tabs card follows site color mode (unlike what an earlier pass
+   here assumed), so this swaps to the white-stroke navbar variant in dark
+   mode the same way the navbar logo itself does via srcDark. */
+.openapi-tabs__code-item--linkiir::after {
+  content: '';
+  width: var(--code-tab-logo-width, 24px);
+  height: var(--code-tab-logo-height, 24px);
+  background: url('../../static/img/linkiir-logo.svg') no-repeat center / contain;
+  margin-block: auto;
+}
+
+html[data-theme='dark'] .openapi-tabs__code-item--linkiir::after {
+  background-image: url('../../static/img/linkiir-logo-dark.svg');
+}
+
+/* The theme's own HTTP tab icon (a plain "<>" glyph) uses --ifm-color-gray-500
+   for its `currentColor` stroke, which is too low-contrast against the
+   code-tabs card's dark-mode background. Match it to the linkiir-logo-dark.svg
+   stroke color above instead of guessing at a gray shade. */
+html[data-theme='dark'] .openapi-tabs__code-item--http {
+  color: #ffffff;
+}

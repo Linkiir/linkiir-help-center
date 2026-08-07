@@ -1,0 +1,1 @@
+{"parameters":[{"name":"guid","in":"path","required":true,"schema":{"type":"string","description":"Unique identifier of the project to pull.","title":"Guid"},"description":"Unique identifier of the project to pull."}]}

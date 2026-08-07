@@ -1,0 +1,1 @@
+{"parameters":[{"name":"correlation_id","in":"query","required":true,"schema":{"type":"string","description":"Correlation ID to find related records","title":"Correlation Id"},"description":"Correlation ID to find related records"}]}

@@ -1,0 +1,1 @@
+{"parameters":[{"name":"workflow_guid","in":"query","required":true,"schema":{"type":"string","title":"Workflow Guid"}},{"name":"node_guid","in":"query","required":true,"schema":{"type":"string","title":"Node Guid"}}]}

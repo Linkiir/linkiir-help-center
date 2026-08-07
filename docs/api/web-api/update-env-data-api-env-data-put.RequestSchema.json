@@ -1,0 +1,1 @@
+{"title":"Body","body":{"content":{"application/json":{"schema":{"properties":{"local":{"additionalProperties":{"type":"string"},"type":"object","title":"Local","description":"User-defined environment variables to store for this instance."}},"type":"object","required":["local"],"title":"UpdateEnvDataRequest"}}},"required":true}}

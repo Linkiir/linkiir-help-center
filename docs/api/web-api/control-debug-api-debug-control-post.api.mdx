@@ -1,0 +1,71 @@
+---
+id: control-debug-api-debug-control-post
+title: "Control an active Lua debug session"
+description: "Sends a control command (continue, step over/in/out, or stop) to an"
+sidebar_label: "Control an active Lua debug session"
+hide_title: true
+hide_table_of_contents: true
+api: eJztWdtyG7kR/RXU7IMlhxrKKqeyxcSpkr3eWpa9lkuX3QdRa4EzIInVEJgFZiQxilL5iHxhviSnGxgOb6Jk+TV2lTgEge6DRvfpRs9dUsmxT3rnySebK59cdBJ8ZE6XlbYm6SUnyuReSJFZUzlb4HM6lSYXOzSgTa06wleqFPZaua42XVtXHWEdBm25KyorpBkYmVX6WolcDeux8Mp7yMYs1iGLYibqMpeQNha68mLolLwqrTZ4HmnnIRAaB8apqnbGi2qihFG3VZSnrpWpUnEChSWJkI0GUSnpPESK3N4AhZ5OVa5lpaCQttDIw4KZgdBKZ1jiptpgTh7lJp3ElspJgtrPYZBoiC+s/IssdXxqxkvrKyxy6o9a+eqtzWdJ745XQRw9yrIsdMYCu797MvJd4rOJmkp6Kh2pqzTOgsbDTr7onL5Vs1IBga8c9gkdla4KxWcU9gt8q8fXz6FVj7Rywo7YcpvOgs4p4k+T+05CcwKwh1Qehhmr6t5FLwkCSCw2M7Ju2hONv4h/ssMcwV/iY980Y3XFT7ZkFAt+wHYzs6MRPPUu0ZWa+nVjjTRBexjzj/T7KmJy+z2nCslWIRHCyKliU7UAhPawFT7gtiodp2KQTKU2aVHLQSK6/JW9L4ww/EKbRTiQosbKLeD5SBNW8dCgMPV0CPNsxmANxEN+lGuHv6us8TjtVE7BPApbZQgXrca3c2FJK0A6J2f4Pkdq6qJI7jcu82t4j2IQhxBG2DDE0VIQEwvA6WdiqOALqvEJCtbGI5+yqYVgmLvoAsroez+QYx+H6IPI+0UZlasVD/jSGh+85mB/nz5WWK/OMmgb1YU4jpOh85lBzESyzTHf84RVy37Q4ChYkpf34GIUGKXK4XDg10HSUlV0OFg8ImlDZVnltkM+DqtXUYRhoW5VVnNMRxQdoUciWmFYKAbQBOBz1D81OFsgCIesdg7GgWdFVByg68CaUFwD1gTlNmSPhukjkGS1CZKvZHZFmB4gMxy+ut1KH32esQrss/WasTDdA9DIEZ1pw6GWIdsKVs0giOm2OeYn+n3tUEheTCaj2kSmb1U5VSLAYAO/5BTfysqsLuxl0crR+FQ6mG+g3XdBoCgWzvVGY1fBboSApV9Lp+kM/Zaj+2arNkrSlqUflnZK42vuWUtBCzZKvJZF/ew4/YUXr1WJvLA9etm6YKv8hResOoTDtdTFHNJUVfK5iH6mtauADvNcx8REspGapJBDFKdLiAISM2MM2UQXOZxgY62RZNpldSHdDueXX6KA3eQr0ui7RsHa2SNVgSgYwByb7wgkSVHRcxdVd0mBrYIF/ePJ0gQn4ykLGJbQrxUBi8fc+Pkq2Pkv4lp7jYfALU34p7xgJOsCKe/84jGYOpJYhPtA3cKofyTxWyCfMKOuBfac8UDEfPiVbiONcyu8wBgkUxTukWH41rG6E87/3gY2m4f+qp8+hO5dXLuhYqZxAdcs68A/XoBP8jqjYkqbLFAfAuta29q315JlbPZqY/wMLYRLs9Uvj9at9ituQ5NYgbra0K2vLBSXd/PKqJh1Yj06vzWFMq6TKOese248v+fFq4h4FLHsvRyHuG2wLVzZclwv+MopGMHjURJKs1VPC/XYPRePrzeVh2fmyuBKGSvXhKe9Xp/2w9Idy1i4l61NzvNfbRC7PB8RZaworEH6oo2a6GCvDw7Wl4KWdR5Yt7HfM6vVHHSpiy3prbDZ0q9POON5mXXxcIB8tAEgpwM/3pbyfg5e8JTsGNyGc+RjvkD7CqrXabM1b7Duw9v4IZhvk7Jmyk+np5/XBLKz/XmLF1GThagrJ6pg+bd7GcqkE0mh6fkAConNc4VzpTX5ADKsKpZGvK1dRiiwXSRHugp1KFrEG+IempTSZ3qjhim1Mu4GRghRuwITBsmkqspet/vq4C/pPv6/6n2///1+V5a6y/2EbmwiDJIOLxvafLYgmFwv9Qr5o9D/UHdib+/8HO6uRLyuCeqW4JJY2BtxcSHug5C9PREbHO+svdKqx0sGyWENBjBV9Gu6FYVarU8QQJ8cDCX8JGUxEyVz5Tzg3InzQRJkDZILDCyJZ7X3AwOGoYglA5FYw0KYVnbwN41MtDswinpTJfyu2qHJKR1Kh9eltP9dJjcUIRNL7aPYHiplNcG3ddPhNzLTcds+en/LJ7zaDmp9venWtCNLnZPzpjPS/h5q5H0OR21GliOoLY/psMTh5z5mXsNkQfgrOvE1Wj6FwZsVv6ohrSLionMgN+fv1cIcnD41fnTlVYGr7S3MgXz333//h2YNjKfs26yBC4qzvqhpBlh9Kg0MTrmR4gnl0Y11VyP4Ch4NNS87cLShQ3lCj9wxjNqQpeiG4OEIA/Pdd+Kt9EqcHX+kr9iAo8oUVDvSt4iush6CK8UwzunNoXP7pRjtTSxVa8h9VsQmnxdjC4QDM0NwCUoMQXEqyDwqnJ8XzTWJfJJ2JS43htMlwA/M2Om8YX3BsVrMGvwrno//yFgOdyGTh05RpDVPmVC2k7k7wx6Uio+WbkzAhPriWkPh5eejk1PBDlnYsTaXZPMx8nvbT804QDocDhg0OZ5QVIVh2p4iGNSoDeEsRxXXEJgTT7gxtVeldAAUztpeKcN7u7y8pP6ZQci/mkMEDPKGwFdklg6usWVVu1AYLYODmDCR93D8dHZ7hN5YXENra1TCiXaPskwglMFaxgU93S9x4ou7QQIfcFT4DpLeIHkh0lScxRF6fkHqQBTew9Hzds7nOBLn3L9Y4qv5vldJa5DwT43PihHSlMqpr0SCNlAaBM6FMamJf70RB/v7DwumuOTIwP0PlWqQvCIjpd5pb+03ZsqomM+fIodjAMHLLXrEAcrk6GtkoxxCiisI2jk8O/2pS39YXlrOeuLk/clJ/+jTl3dHRx/673fnbgFpkebfLGiPB4qzPFHV3jw1zI3arnpg71wVqxyYhiji4eCtnOgt4kb6+MaBGnbNXhtUiwnoTauvN5VVNoGa385/++vFn7CO8yFt/M3fOG7+PkiixQ5S5FGiFW70RLg2tHzWeIBNi+CbG2ZeCBxsihXwwFMLAUz90nD0gwHT5l7/9bn34CuSL3PKBoZkDg6Vhp8ghcDDXr782P/0od8/fvlSsKt65m2cqC7CzZGz042cEZtBtcwmID0lEI/1lMhWXC5VEpeRs2SBdIygn9givkoLfDlEpWioQeiRqSZ8nxjaa9Ww/DG1v1SIB3F+EpIukgFO7WInTbu+GdmD2dNpvtuQrLhszu/lJR+/p2yTB+kxM4rA1dTgGgtVwGvmDRlwrtfYvuSsKoIagKKilzgTebjtcrVvfEzzZol6T0tvl1aLhoW3Yf9/vTi/JlRQ2S0LuAQZGnHGNy8uE8+RTjRbEYDizY5KRdSVVIzQhLs7KljOXHF/T8OgeDejzkDbsYx9ghCKXBVeqVk8wCZ7JfPm4PqVka5zYcUhuK6sts5drHiprqCaNL4JncKpMOrkDd2/8LeX8DtWWs33SR4Ld5mabnm9JMikf/8D5vah2Q==
+sidebar_class_name: "post api-method"
+info_path: docs/api/web-api/linkiir-api
+custom_edit_url: null
+hide_send_button: true
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Control an active Lua debug session"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/api/debug/control"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Sends a control command (continue, step over/in/out, or stop) to an
+active debug session, optionally updating its breakpoints first, and
+returns the next debug event. Stopping a session tears it down
+immediately and returns a synthetic terminated event.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<ParamsDetails>
+  
+</ParamsDetails>
+
+<RequestSchema
+  {...require("./control-debug-api-debug-control-post.RequestSchema.json")}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  {...require("./control-debug-api-debug-control-post.StatusCodes.json")}
+>
+  
+</StatusCodes>
+
+
+      

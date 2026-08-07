@@ -1,0 +1,1 @@
+{"title":"Body","body":{"content":{"application/json":{"schema":{"properties":{"project_ids":{"items":{"type":"string"},"type":"array","title":"Project Ids","description":"Project GUIDs in the desired display order."}},"type":"object","required":["project_ids"],"title":"ReorderProjectsRequest"}}},"required":true}}

@@ -1,0 +1,1 @@
+{"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"additionalProperties":true,"type":"object","title":"Response Get Logs Facets Api Logs Facets Get"}}}},"500":{"description":"Facets query failed"}}}

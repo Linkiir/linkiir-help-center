@@ -1,0 +1,90 @@
+---
+id: linkiir-api
+title: "Linkiir API"
+description: "The Linkiir Web API is the HTTP API the Linkiir server itself exposes — the"
+sidebar_label: Introduction
+sidebar_position: 0
+hide_title: true
+custom_edit_url: null
+---
+
+import ApiLogo from "@theme/ApiLogo";
+import Heading from "@theme/Heading";
+import SchemaTabs from "@theme/SchemaTabs";
+import TabItem from "@theme/TabItem";
+import Export from "@theme/ApiExplorer/Export";
+
+<span
+  className={"theme-doc-version-badge badge badge--secondary"}
+  children={"Version: 1.0.0"}
+>
+</span>
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Linkiir API"}
+>
+</Heading>
+
+
+
+The Linkiir Web API is the HTTP API the Linkiir server itself exposes — the
+same API the web UI uses to manage projects, workflows, nodes, libraries, and
+server settings.
+
+## Base URL
+
+There's no fixed public base URL: Linkiir is self-hosted, so requests go to
+your own server. The examples on this page use `http://127.0.0.1:8080`, a
+grid running locally.
+
+## Authentication
+
+Every endpoint requires an authenticated session. Log in once via
+`POST /api/login` to get a session cookie, then send that cookie on every
+request after that — there's no separate API token.
+
+```lua
+-- 1. Log in to the local grid, capture the session cookie.
+local loginResp, err = linkiir.link.web.post{
+   url  = "http://127.0.0.1:8080/api/login",
+   headers = { ["Content-Type"] = "application/json" },
+   body = '{"username":"' .. Username .. '","password":"' .. Password .. '"}',
+}
+if not loginResp then
+   error("login request failed: " .. err.message)
+end
+if loginResp.code ~= 200 then
+   error("login rejected, status " .. loginResp.code .. ": " .. loginResp.body)
+end
+
+local setCookie = loginResp.headers["Set-Cookie"]
+if not setCookie then
+   error("login succeeded but no Set-Cookie header was returned")
+end
+local sessionCookie = setCookie:match("^[^;]+")  -- "lk=<token>"
+
+-- 2. Reuse the cookie to call an authenticated grid API.
+local resp, err2 = linkiir.link.web.get{
+   url = "http://127.0.0.1:8080/api/get_projects",
+   headers = { ["Cookie"] = sessionCookie },
+}
+if not resp then
+   error(err2.message)
+end
+print(resp.code, resp.body)
+```
+
+Every endpoint page below shows a **LINKIIR** code sample built the same way —
+each one assumes a `SessionCookie` local already holds a cookie obtained as
+shown above.
+
+## Related
+
+- [Scripting API](../scripting-api.md) — the `linkiir.*` calls used above, and
+  everything else available inside a node script.
+
+
+
+      

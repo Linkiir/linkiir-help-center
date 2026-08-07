@@ -57,7 +57,7 @@ The palette also offers **Custom** under **Destination**. It has no runtime impl
 | Email | Transform Custom, calling `linkiir.link.mail.send` |
 | A database write | Transform Custom, calling `linkiir.store` |
 
-The last three are transform nodes rather than dedicated destination types: you make the outbound call from a script. See [Linkiir Scripting API](../lua-programming/linkiir-api.md).
+The last three are transform nodes rather than dedicated destination types: you make the outbound call from a script. See [Linkiir Scripting API](../../api/scripting-api.md).
 
 ## Required fields and when they are checked
 

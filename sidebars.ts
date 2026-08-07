@@ -56,9 +56,22 @@ const sidebars: SidebarsConfig = {
           'interface-development/sample-code/http-source-demo', 'interface-development/sample-code/hl7-llp-scripting-llp',
         ]},
         {type: 'category', label: 'Lua Programming', link: {type: 'doc', id: 'interface-development/lua-programming/index'}, items: [
-          'interface-development/lua-programming/linkiir-api', 'interface-development/lua-programming/testing-debugging',
+          'interface-development/lua-programming/testing-debugging',
         ]},
         'interface-development/error-handling',
+      ],
+    },
+    {
+      type: 'category', label: 'API', link: {type: 'doc', id: 'api/index'},
+      items: [
+        'api/scripting-api',
+        {
+          type: 'category', label: 'Web API', link: {type: 'doc', id: 'api/web-api/linkiir-api'},
+          // The generated array's own first item duplicates this category's `link`
+          // (both point at the intro doc) — drop it, or Next/Prev pagination loops
+          // the intro page back to itself.
+          items: require('./docs/api/web-api/sidebar.ts').slice(1),
+        },
       ],
     },
     {

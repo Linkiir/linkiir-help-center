@@ -1,0 +1,73 @@
+---
+id: post-logs-resubmit-api-logs-resubmit-post
+title: "Resubmit log events to Kafka"
+description: "Re-produce the payload of each given DATA record onto its originating"
+sidebar_label: "Resubmit log events to Kafka"
+hide_title: true
+hide_table_of_contents: true
+api: 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
+sidebar_class_name: "post api-method"
+info_path: docs/api/web-api/linkiir-api
+custom_edit_url: null
+hide_send_button: true
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Resubmit log events to Kafka"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/api/logs/resubmit"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Re-produce the payload of each given DATA record onto its originating
+topic, so the owning node picks it up again as a new queued message.
+
+Non-DATA records, missing records, and records with no archived payload
+are skipped rather than erroring the whole request. Returns
+``{ "resubmitted": int, "results": [{event_id, status, reason}] }``.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<ParamsDetails>
+  
+</ParamsDetails>
+
+<RequestSchema
+  {...require("./post-logs-resubmit-api-logs-resubmit-post.RequestSchema.json")}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  {...require("./post-logs-resubmit-api-logs-resubmit-post.StatusCodes.json")}
+>
+  
+</StatusCodes>
+
+
+      

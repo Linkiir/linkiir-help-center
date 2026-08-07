@@ -1,0 +1,1 @@
+{"title":"Body","body":{"required":true,"content":{"application/json":{"schema":{"properties":{"ssh_url":{"type":"string","title":"Ssh Url","description":"SSH remote URL configured for the template group's git repository, if any.","default":""}},"type":"object","title":"TemplateGitConfig"}}}}}

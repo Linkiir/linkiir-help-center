@@ -165,6 +165,6 @@ For a message that already went through a running node, open its record in log s
 
 ## Next
 
-- [Linkiir Scripting API](linkiir-api.md)
+- [Linkiir Scripting API](../../api/scripting-api.md)
 - [Sample Code](../sample-code/index.md)
 - [Error Handling and Retry](../error-handling.md)

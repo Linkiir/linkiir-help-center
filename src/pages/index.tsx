@@ -23,7 +23,7 @@ const QUICK_LINKS: QuickLink[] = [
   },
   {
     label: 'Look up a Lua function',
-    to: '/docs/interface-development/lua-programming/linkiir-api',
+    to: '/docs/api/scripting-api',
   },
   {
     label: 'Move a project between environments',

@@ -9,6 +9,8 @@
 # Generated files
 .docusaurus
 .cache-loader
+# web_api.json + a computed Linkiir code sample, fed to gen-api-docs
+/.generated
 
 # Internal authoring metadata
 manifest.json

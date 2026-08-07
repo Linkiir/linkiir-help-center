@@ -1,0 +1,1 @@
+{"title":"Body","body":{"content":{"application/json":{"schema":{"properties":{"name":{"type":"string","title":"Name","description":"Name of the new template group. Must contain only letters, numbers, hyphens and underscores."}},"type":"object","required":["name"],"title":"CreateTemplateGroupRequest"}}},"required":true}}

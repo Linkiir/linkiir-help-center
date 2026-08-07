@@ -58,8 +58,6 @@ Do not keep state in module-level variables when Worker Count is above `1`. Each
 `main(Data)` receives the complete raw HTTP request text. Parse it and respond:
 
 ```lua
-local linkiir = require("linkiir")
-
 function main(Data)
    local req, err = linkiir.link.web.request{ data = Data }
    if not req then
@@ -213,8 +211,6 @@ Its Lua script is also needed to start.
 `main` is called with **no argument** on this node type — there is no inbound message. Fetch or build your data and push each message:
 
 ```lua
-local linkiir = require("linkiir")
-
 function main()
    local resp, err = linkiir.link.web.get{
       url = "https://api.example.com/pending",
@@ -259,4 +255,4 @@ For clinical interfaces, prefer stopping. A node that quietly skips messages can
 
 - [Destination Nodes](destination-nodes.md)
 - [Custom Scripting Nodes](custom-scripting-nodes.md)
-- [Linkiir Scripting API](../lua-programming/linkiir-api.md)
+- [Linkiir Scripting API](../../api/scripting-api.md)

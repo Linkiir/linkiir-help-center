@@ -1,0 +1,1 @@
+{"responses":{"200":{"description":"Current system-wide CPU utilization percentage.","content":{"application/json":{"schema":{"properties":{"cpu_percent":{"type":"number","title":"Cpu Percent","description":"Current system-wide CPU utilization, as a percentage."}},"type":"object","required":["cpu_percent"],"title":"CpuUsage"}}}}}}

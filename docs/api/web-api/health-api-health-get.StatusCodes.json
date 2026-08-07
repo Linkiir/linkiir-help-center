@@ -1,0 +1,1 @@
+{"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"properties":{"status":{"type":"string","title":"Status","description":"Health check result, e.g. 'ok' when the backend is up and serving requests."}},"type":"object","required":["status"],"title":"HealthResponse"}}}}}}

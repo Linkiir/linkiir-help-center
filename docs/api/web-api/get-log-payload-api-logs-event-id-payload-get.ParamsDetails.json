@@ -1,0 +1,1 @@
+{"parameters":[{"name":"event_id","in":"path","required":true,"schema":{"type":"string","description":"Unique identifier of the log event whose stored payload is being requested.","title":"Event Id"},"description":"Unique identifier of the log event whose stored payload is being requested."}]}

@@ -1,0 +1,1 @@
+{"parameters":[{"name":"instance_id","in":"path","required":true,"schema":{"type":"string","description":"Unique identifier of the archiver instance.","title":"Instance Id"},"description":"Unique identifier of the archiver instance."}]}

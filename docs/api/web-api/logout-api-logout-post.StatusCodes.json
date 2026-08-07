@@ -1,0 +1,1 @@
+{"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"properties":{"success":{"type":"boolean","title":"Success","description":"Whether the logout completed successfully."}},"type":"object","required":["success"],"title":"LogoutResponse"}}}}}}

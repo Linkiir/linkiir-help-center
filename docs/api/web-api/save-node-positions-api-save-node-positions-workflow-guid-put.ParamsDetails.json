@@ -1,0 +1,1 @@
+{"parameters":[{"name":"workflow_guid","in":"path","required":true,"schema":{"type":"string","description":"GUID of the workflow whose node positions are being saved.","title":"Workflow Guid"},"description":"GUID of the workflow whose node positions are being saved."}]}

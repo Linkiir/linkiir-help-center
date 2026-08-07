@@ -1,6 +1,7 @@
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import type * as OpenApiPlugin from 'docusaurus-plugin-openapi-docs';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
@@ -83,7 +84,7 @@ const config: Config = {
     },
   },
 
-  themes: ['@docusaurus/theme-mermaid'],
+  themes: ['@docusaurus/theme-mermaid', 'docusaurus-theme-openapi-docs'],
 
   presets: [
     [
@@ -91,6 +92,7 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
+          docItemComponent: '@theme/ApiItem', // Renders Web API pages via docusaurus-theme-openapi-docs
           // No editUrl: this package is published documentation, not a repo
           // the reader can send pull requests to. Set one here if that changes.
         },
@@ -105,6 +107,35 @@ const config: Config = {
     ],
   ],
 
+  // Generates docs/api/web-api/**  from web_api.json — run `npm run gen-api-docs`
+  // after editing that spec, then commit the regenerated files.
+  plugins: [
+    [
+      'docusaurus-plugin-openapi-docs',
+      {
+        id: 'openapi',
+        docsPluginId: 'classic',
+        config: {
+          webApi: {
+            // Built from web_api.json by `npm run gen-api-docs`, which layers on
+            // a "Linkiir" code sample per operation (see scripts/gen-web-api-spec.js)
+            // without touching the source spec.
+            specPath: '.generated/web_api.json',
+            outputDir: 'docs/api/web-api',
+            // No `servers` in the spec and no fixed base URL a public docs site
+            // could sensibly send requests to (Linkiir is self-hosted per
+            // customer) — so this documents the API rather than executing it.
+            hideSendButton: true,
+            sidebarOptions: {
+              groupPathsBy: 'tag',
+              categoryLinkSource: 'tag',
+            },
+          } satisfies OpenApiPlugin.Options,
+        },
+      },
+    ],
+  ],
+
   themeConfig: {
     image: 'img/linkiir-social-card.png',
     colorMode: {
@@ -116,6 +147,29 @@ const config: Config = {
     mermaid: {
       theme: {light: 'neutral', dark: 'dark'},
     },
+    api: {
+      // Web API pages get a per-operation "Linkiir" code sample (see
+      // scripts/gen-web-api-spec.js). Once a language has one of those, this
+      // hides its separately-generated snippet tab so there's one obvious
+      // "Linkiir" tab instead of a Linkiir tab plus an empty generated one.
+      hideGeneratedSnippets: true,
+    },
+    // Only these three: `linkiir` is a real entry (its snippet comes from
+    // x-codeSamples, see scripts/gen-web-api-spec.js); `curl` and `http` are
+    // bare `{language: '<id>'}` so they pick up their icon/highlighting from
+    // the theme's built-in defaults.
+    languageTabs: [
+      {
+        highlight: 'lua',
+        language: 'linkiir',
+        codeSampleLanguage: 'Linkiir',
+        logoClass: 'linkiir',
+        variant: 'Linkiir',
+        variants: ['Linkiir'],
+      },
+      {language: 'curl'},
+      {language: 'http'},
+    ],
     navbar: {
       title: 'Linkiir',
       logo: {
@@ -131,11 +185,7 @@ const config: Config = {
           label: 'Documentation',
         },
         {to: '/docs/getting-started/', label: 'Getting Started', position: 'left'},
-        {
-          to: '/docs/interface-development/lua-programming/linkiir-api',
-          label: 'Scripting API',
-          position: 'left',
-        },
+        {to: '/docs/api/', label: 'API', position: 'left'},
         {to: '/docs/faq/', label: 'FAQ', position: 'right'},
       ],
     },

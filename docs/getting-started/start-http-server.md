@@ -62,8 +62,6 @@ The parsed request table gives you:
 Replace the contents of `main.lua` with this:
 
 ```lua
-local linkiir = require("linkiir")
-
 function main(Data)
    -- Parse the raw HTTP request.
    local req, err = linkiir.link.web.request{ data = Data }
@@ -267,7 +265,7 @@ Settings → Http Server       installation-wide, port 9001
 | Goal | Read |
 | --- | --- |
 | Add a transform or a destination after this node | [Interfaces and Core Nodes](../interface-development/interfaces/index.md) |
-| Work with HL7 v2, X12, XML, or JSON payloads | [Linkiir Scripting API](../interface-development/lua-programming/linkiir-api.md) |
+| Work with HL7 v2, X12, XML, or JSON payloads | [Linkiir Scripting API](../api/scripting-api.md) |
 | See a full HL7 interface end to end | [Demo: HL7 LLP → Scripting → LLP](../interface-development/sample-code/hl7-llp-scripting-llp.md) |
 | Handle failures and retries properly | [Error Handling and Retry](../interface-development/error-handling.md) |
 | Move this into a real environment | [Deployment](../administration/deployment/index.md) |

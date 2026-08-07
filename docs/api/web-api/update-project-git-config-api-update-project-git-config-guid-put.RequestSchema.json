@@ -1,0 +1,1 @@
+{"title":"Body","body":{"required":true,"content":{"application/json":{"schema":{"properties":{"ssh_url":{"type":"string","title":"Ssh Url","description":"SSH remote URL to configure for the project's git repository (git@host:path or ssh://host/path). Empty string unlinks the project back to local-only.","default":""}},"type":"object","title":"GitConfigRequest"}}}}}

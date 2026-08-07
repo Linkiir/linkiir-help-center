@@ -1,0 +1,1 @@
+{"parameters":[{"name":"hash","in":"query","required":true,"schema":{"type":"string","description":"Git commit hash to list changed files for.","title":"Hash"},"description":"Git commit hash to list changed files for."}]}

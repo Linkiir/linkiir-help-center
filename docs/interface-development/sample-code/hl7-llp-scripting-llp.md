@@ -42,8 +42,6 @@ Drag **Custom** from the **Transform** group. It has no configuration fields of 
 Connect `Receive ADT` to this node. Place your HL7 schema, `adt.json`, in the node's directory.
 
 ```lua
-local linkiir = require("linkiir")
-
 function main(Data)
    local MsgIn, MsgType = linkiir.data.extract{
       schema = "adt.json",

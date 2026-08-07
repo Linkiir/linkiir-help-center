@@ -227,7 +227,7 @@ local id = body.patientId
 
 `linkiir.data` is for HL7 v2, X12, and XML — it returns a navigable node tree and needs a schema. Passing `type = "json"` to `linkiir.data.extract` is an error, and it tells you to use `linkiir.json` instead.
 
-See [Linkiir Scripting API](../interface-development/lua-programming/linkiir-api.md).
+See [Linkiir Scripting API](../api/scripting-api.md).
 
 ## Is there a node for outbound HTTP or email?
 

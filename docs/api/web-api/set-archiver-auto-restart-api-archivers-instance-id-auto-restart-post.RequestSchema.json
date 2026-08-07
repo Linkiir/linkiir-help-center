@@ -1,0 +1,1 @@
+{"title":"Body","body":{"required":true,"content":{"application/json":{"schema":{"properties":{"enabled":{"type":"boolean","title":"Enabled","description":"Whether to enable or disable auto-restart for the instance."}},"type":"object","required":["enabled"],"title":"ArchiverAutoRestartRequest","description":"Request body for toggling auto-restart on an archiver instance."}}}}}

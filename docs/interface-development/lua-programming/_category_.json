@@ -3,6 +3,6 @@
   "position": 3,
   "link": {
     "type": "generated-index",
-    "description": "Linkiir Lua runtime, API namespaces, and debugging."
+    "description": "Linkiir Lua runtime and debugging. For the call reference, see the API section."
   }
 }

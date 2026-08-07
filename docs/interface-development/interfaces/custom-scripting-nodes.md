@@ -17,8 +17,6 @@ You can add your own fields to its configuration and read them from the script, 
 ## Entry point
 
 ```lua
-local linkiir = require("linkiir")
-
 function main(Data)
    -- Data is the message from the upstream node.
    linkiir.flow.push{ data = Data }
@@ -53,8 +51,6 @@ Whether the node is a pass-through, a filter, or a terminal step is decided by w
 Filtering is the absence of a push, not an error:
 
 ```lua
-local linkiir = require("linkiir")
-
 function main(Data)
    local Msg, MsgType = linkiir.data.extract{ schema = "adt.json", data = Data, type = "hl7" }
 
@@ -73,8 +69,6 @@ Print a line when you drop a message. Otherwise a filtered feed and a broken fee
 ## Splitting a batch
 
 ```lua
-local linkiir = require("linkiir")
-
 function main(Data)
    local batch = linkiir.json.parse(Data)
 
@@ -86,7 +80,7 @@ end
 
 Each push is delivered independently, so a failure downstream affects one item rather than the batch.
 
-JSON is handled by `linkiir.json`, which returns ordinary Lua tables. HL7 v2 and X12 use `linkiir.data`, which returns a navigable node tree. See [Linkiir Scripting API](../lua-programming/linkiir-api.md).
+JSON is handled by `linkiir.json`, which returns ordinary Lua tables. HL7 v2 and X12 use `linkiir.data`, which returns a navigable node tree. See [Linkiir Scripting API](../../api/scripting-api.md).
 
 ## Errors versus filtering
 
@@ -143,6 +137,6 @@ Run Test and Debug both run your script against a sample without producing real 
 
 ## Next
 
-- [Linkiir Scripting API](../lua-programming/linkiir-api.md)
+- [Linkiir Scripting API](../../api/scripting-api.md)
 - [Sample Code](../sample-code/index.md)
 - [Error Handling and Retry](../error-handling.md)

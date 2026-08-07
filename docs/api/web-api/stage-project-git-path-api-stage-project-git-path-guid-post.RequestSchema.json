@@ -1,0 +1,1 @@
+{"title":"Body","body":{"required":true,"content":{"application/json":{"schema":{"properties":{"path":{"type":"string","title":"Path","description":"Repo-relative path of the file or directory to stage/unstage."}},"type":"object","required":["path"],"title":"GitPathRequest"}}}}}

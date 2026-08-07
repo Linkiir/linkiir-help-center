@@ -1,0 +1,1 @@
+{"title":"Body","body":{"required":true,"content":{"application/json":{"schema":{"properties":{"names":{"items":{"type":"string"},"type":"array","minItems":1,"title":"Names","description":"Usernames to add to the project. Names already on it are ignored."}},"type":"object","required":["names"],"title":"AddCollaboratorsRequest"}}}}}

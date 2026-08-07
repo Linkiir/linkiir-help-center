@@ -1,0 +1,1 @@
+{"title":"Body","body":{"required":true,"content":{"application/json":{"schema":{"properties":{"message":{"type":"string","title":"Message","description":"Commit message to use for the git commit."}},"type":"object","required":["message"],"title":"CommitGitRequest"}}}}}

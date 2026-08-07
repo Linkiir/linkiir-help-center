@@ -40,8 +40,6 @@ Drag **HTTP** from the **Source** group of the palette.
 `main(Data)` receives the complete raw HTTP request text. Parse it, validate, hand the payload onward, and answer the caller.
 
 ```lua
-local linkiir = require("linkiir")
-
 function main(Data)
    local req, err = linkiir.link.web.request{ data = Data }
    if not req then
@@ -94,8 +92,6 @@ Connect `Intake` to this node. Its `main(Data)` receives the payload the source 
 JSON is handled by `linkiir.json`, which returns ordinary Lua tables — no schema file needed.
 
 ```lua
-local linkiir = require("linkiir")
-
 function main(Data)
    local input = linkiir.json.parse(Data)
 
@@ -233,5 +229,5 @@ Open a data record to view the archived payload. Searching the correlation ID re
 ## Next
 
 - [Demo: HL7 LLP → Scripting → LLP](hl7-llp-scripting-llp.md)
-- [Linkiir Scripting API](../lua-programming/linkiir-api.md)
+- [Linkiir Scripting API](../../api/scripting-api.md)
 - [Error Handling and Retry](../error-handling.md)

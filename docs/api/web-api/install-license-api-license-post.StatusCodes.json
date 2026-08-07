@@ -1,0 +1,1 @@
+{"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"409":{"description":"This License Code was migrated away from this installation."},"422":{"description":"license_code must not be empty"}}}

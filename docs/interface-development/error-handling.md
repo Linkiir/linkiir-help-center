@@ -77,8 +77,6 @@ That is the safe default for clinical interfaces, and it is worth understanding 
 Where individual bad records are genuinely expected and must not halt a feed, handle them in the script rather than letting them raise:
 
 ```lua
-local linkiir = require("linkiir")
-
 function main(Data)
    local ok, Msg = pcall(function()
       return linkiir.data.extract{ schema = "adt.json", data = Data, type = "hl7" }

@@ -9,14 +9,12 @@ Node logic is written in Lua. The editor gives you static IntelliSense, schema-a
 ## Every script has one entry point
 
 ```lua
-local linkiir = require("linkiir")
-
 function main(Data)
    linkiir.flow.push{ data = Data }
 end
 ```
 
-`require("linkiir")` returns one table holding every capability. There is nothing else to import.
+`linkiir` is a global table holding every capability. There is nothing to import.
 
 `main` has to be a global function named exactly `main` — Linkiir looks it up by name. Declaring it `local` means the node will not start.
 
@@ -42,7 +40,7 @@ end
 | `linkiir.sys` | Identifiers, timing, and filesystem operations |
 | `linkiir.store` | Database connections and queries |
 
-Signatures are in [Linkiir Scripting API](linkiir-api.md).
+Signatures are in [Linkiir Scripting API](../../api/scripting-api.md).
 
 :::note HL7 and JSON use different modules
 `linkiir.data` returns a navigable node tree, which suits HL7 v2 and X12. `linkiir.json` returns ordinary Lua tables. Passing `type = "json"` to `linkiir.data.extract` is an error, and the message tells you to use `linkiir.json` instead.
@@ -103,6 +101,6 @@ Use the adapter to get an interface running with minimal edits, then move to the
 
 ## Next
 
-- [Linkiir Scripting API](linkiir-api.md) — signatures and examples.
+- [Linkiir Scripting API](../../api/scripting-api.md) — signatures and examples.
 - [Testing and Debugging Lua](testing-debugging.md) — Run Test, Debug, and samples.
 - [Sample Code](../sample-code/index.md) — complete working interfaces.

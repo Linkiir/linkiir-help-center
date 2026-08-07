@@ -88,7 +88,7 @@ About 20 minutes on a local machine.
 | Install on macOS | [Install on macOS](administration/installation/macos.md) |
 | Recover a lost administrator password | [Reset the Admin User](getting-started/first-login.md) |
 | Receive HL7 v2 over MLLP | [Source Nodes](interface-development/interfaces/source-nodes.md) |
-| Look up a Lua function | [Linkiir Scripting API](interface-development/lua-programming/linkiir-api.md) |
+| Look up a Lua function | [Linkiir Scripting API](api/scripting-api.md) |
 | Test a script before starting a node | [Testing and Debugging Lua](interface-development/lua-programming/testing-debugging.md) |
 | Copy a complete working interface | [Sample Code](interface-development/sample-code/index.md) |
 | Connect my own Kafka or Redpanda cluster | [Kafka and Redpanda Configuration](administration/configurations/kafka-redpanda.md) |

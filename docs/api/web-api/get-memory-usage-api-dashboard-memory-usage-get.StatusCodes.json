@@ -1,0 +1,1 @@
+{"responses":{"200":{"description":"Currently used system memory, in gibibytes.","content":{"application/json":{"schema":{"properties":{"used_gb":{"type":"number","title":"Used Gb","description":"Currently used system memory, in gibibytes, rounded to one decimal place."}},"type":"object","required":["used_gb"],"title":"MemoryUsage"}}}}}}

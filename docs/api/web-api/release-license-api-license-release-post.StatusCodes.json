@@ -1,0 +1,1 @@
+{"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"409":{"description":"Cannot start a migration while the license state is not migratable, or the migration could not be declared."},"503":{"description":"Cannot start a migration: no License ID is available yet."}}}

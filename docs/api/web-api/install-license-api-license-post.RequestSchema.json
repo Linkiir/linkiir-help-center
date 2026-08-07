@@ -1,0 +1,1 @@
+{"title":"Body","body":{"content":{"application/json":{"schema":{"properties":{"license_code":{"type":"string","title":"License Code","description":"The License Code to persist and activate for this installation."}},"type":"object","required":["license_code"],"title":"InstallLicenseRequest"}}},"required":true}}
