@@ -4,180 +4,169 @@ title: Alerting and Notifications
 
 # Alerting and Notifications
 
-:::info There is no built-in notification feature
-Linkiir does not ship error alerting, inactivity alerting, or an SMTP notification configuration. There is no Notifications settings page, and nothing in the platform will email you when an interface fails.
-
-Do not plan an operational model around a built-in alerting feature. This page covers what you can build with what does ship, and what to monitor from outside.
-:::
-
-You have two practical routes: alert from inside a workflow using the scripting API, or monitor Linkiir from your existing monitoring system. Most sites want both.
+Linkiir has a built-in notification engine that monitors workflow events and sends alerts through two channels: **Email** (SMTP) and **Alert Node** (a Transform Custom node that can forward alerts to Slack, Teams, webhooks, or any custom destination).
 
 ---
 
-## Alerting from a workflow
+## How it works
 
-Any Custom node can send email directly. This is the fastest way to get an alert out of an interface, and it works today.
+The notification engine runs as a background thread inside the Grid. It consumes event records from all workflows in real time, matches them against your rules, and delivers alerts when conditions are met.
 
-```lua
-local function alert(subject, detail)
-   local ok, err = linkiir.link.mail.send{
-      server  = "smtp://mail.example.com:587",
-      from    = "linkiir-alerts@example.com",
-      to      = { "integration-oncall@example.com" },
-      header  = {
-         Subject = subject,
-         From    = "linkiir-alerts@example.com",
-      },
-      body    = detail,
-      use_ssl = "try",
-   }
-   if not ok then
-      print("alert delivery failed: " .. err.message)
-   end
-end
+- **Event alerts** — triggered when a node emits an error, warning, info, or debug log entry
+- **Inactivity alerts** — triggered when a source node receives no messages for a configured period
 
-function main(Data)
-   local Msg, MsgType = linkiir.data.extract{ schema = "adt.json", data = Data, type = "hl7" }
-
-   local mrn = Msg.PID[3][1][1]:value()
-   if mrn == nil or mrn == "" then
-      alert(
-         "ADT Inbound: message rejected",
-         "A message arrived without a PID-3 patient identifier and was rejected."
-      )
-      error("PID-3 patient identifier is missing")
-   end
-
-   linkiir.flow.push{ data = Msg:text() }
-end
-```
-
-Three things about this pattern:
-
-**Send to a distribution list or a ticketing address, not to individuals.** Otherwise the alert stops working when someone changes team.
-
-**Never put payload content in the alert.** Name the field and the interface; do not include the value. Alert email is not a controlled store, and an MRN in a subject line is a disclosure. See [Error Handling and Retry](../../interface-development/error-handling.md).
-
-**Rate-limit it yourself.** A malformed feed can send one alert per message. Guard the call — alert on the first failure in a window, or only when a counter crosses a threshold — or your first bad batch will send thousands of emails and get the address blocked.
-
-### Reaching Slack, Teams, PagerDuty, or a webhook
-
-The same idea with an HTTP call instead of email:
-
-```lua
-local resp, err = linkiir.link.web.post{
-   url     = WebhookUrl,
-   body    = '{"text":"ADT Inbound rejected a message: PID-3 missing"}',
-   headers = { ["Content-Type"] = "application/json" },
-   timeout = 10,
-}
-if not resp then
-   print("alert delivery failed: " .. err.message)
-end
-```
-
-Keep the webhook URL in the project's **Credentials** tab, flagged **Secret**, rather than in the script. See [Project Settings](../configurations/project-settings.md).
-
-:::caution Alerting from inside a node has a blind spot
-A script can only alert while it is running. It cannot tell you that its own node stopped, that the Runtime died, or that a feed has gone quiet — the three things you most want to know. That is what external monitoring is for.
-:::
+The engine starts automatically when at least one rule is enabled. No separate process to manage.
 
 ---
 
-## Monitoring Linkiir from outside
+## Setting up alerts
 
-Point your existing monitoring at the platform. This is what catches the failures a script cannot report.
+### 1. Configure Alert Settings
 
-### Platform health
+Go to **Settings → Notifications → Alert Settings** and press **Edit**.
 
-`GET /api/health` needs no authentication, always returns HTTP 200, and reports the verdict in the body:
+**Email channel:**
+- Toggle Email channel ON
+- Fill in SMTP connection details (server, port, encryption, authentication)
+- Enter recipients (comma-separated) — all rules deliver to these addresses
+- Press **Send Test Email** to verify the connection
+- Press **Save**
 
-```json
-{
-  "status": "healthy",
-  "version": "1.0.0",
-  "uptime_seconds": 34512.4,
-  "checks": {
-    "queue":    { "status": "ok",   "detail": "1 broker(s)" },
-    "runtime":  { "status": "ok",   "detail": "pid=4821" },
-    "archiver": { "status": "ok",   "detail": "1/1 running" }
-  }
-}
-```
+**Alert Node channel:**
+- Toggle Alert Node channel ON
+- Select a Project, Workflow, and Transform Custom node
+- Press **Send Test Alert** to verify the channel
+- Press **Save**
 
-| `status` | Alert on it? |
+**Grid Timezone:** Used for schedule evaluation. Search and select from the dropdown.
+
+**Global kill switch:** Suppresses all alert delivery. Useful during maintenance windows.
+
+:::tip
+The engine status badge in the Alert Settings header shows whether the notification engine is running. If it shows stopped or degraded, check the Grid logs.
+:::
+
+### 2. Create notification rules
+
+Go to **Notification Rules** → **Add Rule**.
+
+| Field | Description |
 | --- | --- |
-| `healthy` | No |
-| `degraded` | Warn. Something is warming up or one component is not running. Normal for the first minute after a start. |
-| `unhealthy` | Yes. A dependency is unreachable — usually the broker. |
+| Rule Name | Optional. Auto-generated from scope and trigger if left blank. |
+| Scope | System (all projects), or narrow to a specific project, workflow, or node. |
+| Alert when | **Event** (matches log entries) or **Inactivity** (silence detection). |
+| Levels | For Event rules: which log levels to match (ERROR, WARN, INFO, DEBUG). |
+| Filter by content | Optional. Only alert when the event body contains this exact text. |
+| Minimum interval between alerts | Cool-down period (5–1440 minutes). The first alert sends immediately; repeated events are suppressed until the interval elapses, then a summary is sent. Prevents alert floods from recurring errors. |
+| Deliver via | Which channels this rule uses: Email, Alert Node, or Both. |
+| Schedule | Always, or a time window (e.g. 08:00–18:00 in the Grid timezone). |
+| Enabled | Toggle the rule on or off without deleting it. |
 
-Each sub-check carries its own `status` of `ok`, `warn`, or `fail`, and a `detail` string naming the reason. Alert on the sub-check details rather than the overall verdict alone, so you know which component to look at.
+**Advanced options:**
+- **Include alert detail** — includes event content in the alert. May contain sensitive information depending on the log detail level.
+- **Filter by content** — only events containing this exact text will trigger an alert.
 
-A `degraded` that persists is worth alerting on. A `degraded` for thirty seconds after a restart is not.
+### 3. Verify with a test
 
-:::note This endpoint is unauthenticated
-It reports component status and a version number, no message data. If the Studio is reachable beyond your network, restrict the path at your reverse proxy rather than assuming it is private.
-:::
+The fastest way to confirm end-to-end delivery:
 
-### What to monitor, and why
-
-| Signal | Where from | Catches |
-| --- | --- | --- |
-| `/api/health` overall status | HTTP check | Platform down, broker unreachable |
-| `checks.runtime` | Same response | Runtime not running, so nothing processes |
-| `checks.archiver` | Same response | Message history not being recorded |
-| Consumer lag against broker retention | Your broker's own monitoring | The one signal that prevents permanent loss of message history |
-| Log DB disk and size | Database monitoring | Archiving stops when the disk fills |
-| Studio process/service state | OS service check | The service died rather than degraded |
-| Workflow state | Studio, or your own check | A feed stopped and nobody noticed |
-
-**The lag alert matters most.** Message history is copied from the broker to the Log DB. If the Archiver falls behind for longer than the broker's retention window, the broker discards those records first and that history is gone permanently. Alert on lag well before it approaches retention — see [Message History Is Not Being Recorded](../troubleshooting/log-archiver-connectivity.md).
-
-### Detecting a quiet feed
-
-Nothing in the platform will tell you a feed has gone quiet. Silence looks identical to a working interface with nothing to do.
-
-Two ways to cover it:
-
-**From the Log DB.** If you use PostgreSQL or MS SQL, query it from your monitoring system for the most recent record per interface and alert when it is older than that interface's expected interval. This is the more reliable route, because it observes what actually arrived.
-
-**From a Custom source node.** A node on a timer that reads a heartbeat table or file and raises an alert when a feed is overdue. Simpler to build inside Linkiir, but it stops working when Linkiir stops — which is exactly when you need it.
-
-Whichever you choose, set expectations per interface. A busy ADT feed silent for five minutes is a problem; a nightly batch silent at midday is not. Account for overnight and weekend patterns or you will train people to ignore the alerts.
+1. Create a Source Custom node with this script:
+   ```lua
+   local linkiir = require("linkiir")
+   function main()
+       linkiir.log.error("test alert: synthetic failure")
+   end
+   ```
+2. Commit and start the node
+3. Watch for the alert in your inbox or the Alert Node's output
 
 ---
 
-## A minimum viable setup
+## Alert Node scripting
 
-If you are going live and need something in place:
+The Alert Node receives a JSON payload in its `main(Data)` function. Parse it to forward alerts:
 
-1. **HTTP check on `/api/health`** every minute. Alert on `unhealthy`, and on `degraded` sustained past a few minutes.
-2. **Service check** on the Linkiir service or container, so a dead process is distinguishable from a degraded one.
-3. **Broker consumer lag alert**, thresholded well below your retention window.
-4. **Disk and size alerts** on the Log DB and the log directory.
-5. **Inactivity check per critical interface**, from the Log DB, with per-interface expectations.
-6. **Email or webhook alerts from scripts** for data-level rejections that a human needs to act on.
+```lua
+function main(Data)
+    local alert = linkiir.json.parse(Data)
 
-Items 1 to 5 come from your monitoring system. Only item 6 is built inside Linkiir.
+    -- Forward to Slack
+    linkiir.link.web.post{
+        url = "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+        headers = { ["Content-Type"] = "application/json" },
+        body = linkiir.json.encode({
+            text = string.format("[%s] %s", alert.rule_name or "Alert", alert.message or "")
+        })
+    }
+end
+```
+
+The payload includes: `rule_name`, `trigger`, `source`, `message`, `timestamp`, `event_count`.
+
+:::note
+The Alert Node does not need to be running for alerts to work. Kafka retains the messages until the node starts consuming.
+:::
+
+---
+
+## Cool-down and suppression
+
+When a rule matches an event, it fires immediately. After that:
+
+- Repeated events from the same source are **suppressed** for the configured interval (no alert flood)
+- After the interval, a **summary** is sent with the count of accumulated events
+- A **daily reminder** is sent every 24 hours while the condition persists
+- Suppression clears only when the notification state file is reset (with the Grid stopped)
+
+This prevents scenarios like a failing database connection generating thousands of identical alerts.
+
+---
+
+## Alerting from scripts (manual)
+
+Any Custom node can also send alerts directly using the scripting API. This is useful for data-level rejections that need custom logic:
+
+```lua
+local ok, err = linkiir.link.mail.send{
+    server  = "smtp://mail.example.com:587",
+    from    = "linkiir-alerts@example.com",
+    to      = { "ops@example.com" },
+    header  = { Subject = "ADT Inbound: message rejected" },
+    body    = "A message arrived without a PID-3 patient identifier.",
+    use_ssl = "try",
+}
+```
+
+:::caution
+Script-based alerts only work while the node is running. Use the built-in notification engine for detecting node failures, inactivity, and platform issues.
+:::
+
+---
+
+## Monitoring from outside
+
+For infrastructure-level monitoring, point your existing tools at the Grid's health endpoint:
+
+```bash
+curl -s http://your-linkiir-host:8080/api/health
+```
+
+Returns `healthy`, `degraded`, or `unhealthy` with per-component checks (queue, runtime, archiver).
 
 ---
 
 ## Practices
 
-**Keep patient data out of every alert.** Interface name, node name, error category, correlation ID, counts, timestamps. Never a name, MRN, date of birth, or payload fragment. Alert channels are rarely access-controlled and are often archived somewhere you did not choose.
-
-**Alert on the condition, not on every occurrence.** One notification per failing message turns a bad batch into an outage of its own.
-
-**Send a recovery notice.** An alert with no "resolved" leaves people checking manually.
-
-**Route to a rota, not a person.** Use a group address, a ticket queue, or your on-call tool.
-
-**Rehearse it in TEST.** Stop the Runtime. Block a destination. Fill the Log DB disk. Confirm the alert actually arrives and names the right thing. An alerting setup that has never fired is an assumption. See [Tips and Best Practices](../../faq/tips-best-practices.md).
+- **Keep patient data out of alerts.** Use interface names, error categories, and timestamps — never payload content.
+- **Route to a team, not a person.** Use distribution lists or on-call tools.
+- **Test your alerts.** Use the Send Test Email / Send Test Alert buttons before going live.
+- **Set realistic intervals.** A 5-minute cool-down is appropriate for critical interfaces; 60 minutes for non-urgent ones.
 
 ---
 
 ## Next
 
-- [Troubleshooting](../troubleshooting/index.md)
-- [Error Handling and Retry](../../interface-development/error-handling.md)
 - [Linkiir Scripting API](../../api/scripting-api/index.md)
+- [Logging API](../../api/scripting-api/logging.md)
+- [Error Handling and Retry](../../interface-development/error-handling.md)
+- [Troubleshooting](../troubleshooting/index.md)
