@@ -56,7 +56,7 @@ Use variables for values that differ between environments but are not secret: ho
 3. Set a **Label** and a **Value**.
 4. Click **Save**.
 
-The label is the name your scripts and node configuration refer to, so use a stable, readable form. The placeholder suggests `VARIABLE_NAME`.
+The label is the name your scripts and node configuration refer to, so use a stable, readable form. The default text reads `VARIABLE_NAME`.
 
 Each row has a **Secret** checkbox. Ticking it masks the value in the UI and clears whatever was there, so you re-enter it deliberately. Use **Credentials** rather than a secret variable when the value is a password or key — it keeps the two concerns separate and makes an export easier to reason about.
 
@@ -74,7 +74,7 @@ Same editor as Variables, used for connection secrets.
 
 1. Click **Edit**.
 2. Click **Add Credential**.
-3. Set a **Label** — the placeholder suggests `Credential name` — and a **Value**.
+3. Set a **Label** — the hint text reads `Credential name` — and a **Value**.
 4. Tick **Secret** for anything that must not be readable in the UI.
 5. Click **Save**.
 

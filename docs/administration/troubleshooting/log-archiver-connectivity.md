@@ -55,7 +55,7 @@ A connection test is available without any Kafka tooling installed. See [Kafka a
 - Confirm the account can read and write the Linkiir schema, and could create it during installation or upgrade.
 - Check free disk space and, on PostgreSQL or MS SQL, transaction log capacity. A full disk stops history cleanly and silently.
 - Confirm firewall and TLS rules between the Linkiir host and the database.
-- On SQLite, confirm only one Archiver is configured. SQLite supports a single writer.
+- On SQLite, confirm only one Archiver is configured. SQLite does not support concurrent writers.
 
 ## History stops but nothing looks broken
 

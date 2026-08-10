@@ -120,8 +120,8 @@ string.find(s, pattern, init, plain)
 local S, E = string.find('hello world', 'wor')
 print(S, E)  -- 7  9
 
-local S2, E2, Cap = string.find('MRN:12345', '(%d+)')
-print(Cap)   -- "12345"
+local S2, E2, Cap = string.find('ID:98765', '(%d+)')
+print(Cap)   -- "98765"
 ```
 
 
@@ -243,8 +243,8 @@ print(Out, N)  -- "hell0 w0rld"  2
 local Wire = ('ADT^A01|20260101'):gsub('%^', '-')
 print(Wire)    -- "ADT-A01|20260101"
 
-local Redacted = string.gsub('SSN: 123-45-6789', '%d', '#')
-print(Redacted)  -- "SSN: ###-##-####"
+local Redacted = string.gsub('REF: 123-45-6789', '%d', '#')
+print(Redacted)  -- "REF: ###-##-####"
 ```
 
 
@@ -352,8 +352,8 @@ string.match(s, pattern, init)
 **Example**
 
 ```lua
-local Mrn = string.match('MRN:12345', 'MRN:(%d+)')
-print(Mrn)  -- "12345"
+local Id = string.match('CODE:98765', 'CODE:(%d+)')
+print(Id)  -- "98765"
 ```
 
 

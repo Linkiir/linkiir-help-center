@@ -6,7 +6,7 @@ title: JSON
 
 `linkiir.json`
 
-JSON parse and serialize operating on plain Lua tables. Unlike linkiir.data (which returns LkNode userdata), linkiir.json works with native Lua values.
+JSON parse and serialize operating on plain Lua tables. Unlike linkiir.data (which returns structured node objects), linkiir.json works with native Lua values.
 
 ---
 

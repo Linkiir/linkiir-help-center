@@ -1,7 +1,7 @@
 ---
 id: get-license-api-license-get
 title: "Get the current license status"
-description: "Fetches the runtime license status via gRPC (falling back to a"
+description: "Returns the current license status, type, capacity, and expiration"
 sidebar_label: "Get the current license status"
 hide_title: true
 hide_table_of_contents: true
@@ -38,12 +38,9 @@ import Translate from "@docusaurus/Translate";
 
 
 
-Fetches the runtime license status via gRPC (falling back to a
-placeholder MISSING status if that call fails), enriches it with the
-local anchor's install/creation info, adds installed/released file
-metadata and any pending migration record, and flags the response with
-managed_by "environment" when the license is controlled by an
-environment variable.
+Returns the current license status, type, capacity, and expiration
+date. If the license is managed by an environment variable, the
+response includes `managed_by: "environment"`.
 
 <ParamsDetails>
   
