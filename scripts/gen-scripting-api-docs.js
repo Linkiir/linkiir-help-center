@@ -142,49 +142,7 @@ Do not write scripts against these.
 `);
   }
 
-  lines.push(`## Legacy compatibility names
-
-Names such as \`hl7.parse\`, \`json.parse\`, \`queue.push\`, \`net.http.get\`, and \`db.connect\` are **not** part of the Linkiir API. They come from a compatibility adapter, and exist only after:
-
-\`\`\`lua
-require "legacy_adapter"
-\`\`\`
-
-The adapter is a Lua file that ships with a migrated project, in the node's directory or the project's \`common\` directory. Without that \`require\`, only the \`linkiir.*\` API exists.
-
-| Legacy name | Linkiir equivalent |
-| --- | --- |
-| \`hl7.parse{ vmd =, data = }\` | \`linkiir.data.extract{ schema =, data =, type = 'hl7' }\` |
-| \`hl7.message{ vmd =, name = }\` | \`linkiir.data.create{ schema =, name =, type = 'hl7' }\` |
-| \`x12.parse\` / \`xml.parse\` | \`linkiir.data.extract{ ..., type = 'x12' \\| 'xml' }\` |
-| \`json.parse\` | \`linkiir.json.parse\` |
-| \`json.serialize{ data = }\` | \`linkiir.json.serialize\` |
-| \`queue.push\` | \`linkiir.flow.push\` |
-| \`net.http.get\` / \`post\` / … | \`linkiir.link.web.get\` / \`post\` / … |
-| \`net.http.parseRequest\` | \`linkiir.link.web.request\` |
-| \`net.http.respond\` | \`linkiir.link.web.respond\` |
-| \`net.smtp.send\` | \`linkiir.link.mail.send\` |
-| \`db.connect\` | \`linkiir.store.open\` |
-| \`filter.base64.enc\` / \`dec\` | \`linkiir.codec.base64.encode\` / \`decode\` |
-| \`util.guid\` | \`linkiir.sys.guid\` |
-
-Node methods also answer to their legacy names, so migrated mapping code keeps working unchanged:
-
-| Legacy method | Native |
-| --- | --- |
-| \`Node:nodeValue()\` | \`Node:value()\` |
-| \`Node:setNodeValue(v)\` | \`Node:set(v)\` |
-| \`Node:nodeName()\` | \`Node:name()\` |
-| \`Node:S()\` / \`Node:serialize()\` | \`Node:text()\` |
-| \`Node:mapTree(src)\` | \`Node:map(src)\` |
-| \`Node:childCount()\` | \`Node:count()\` |
-| \`Node:nodeType()\` | \`Node:type()\` |
-
-Write new scripts against the native API. Use the adapter to get existing scripts running, then migrate them as you touch each one — see [Migrating Existing Interfaces](../../administration/configurations/migration.md).
-
----
-
-## Next
+  lines.push(`## Next
 
 - [Testing and Debugging Lua](../../interface-development/lua-programming/testing-debugging.md)
 - [Sample Code](../../interface-development/sample-code/index.md)
