@@ -14,7 +14,9 @@ title: Install on Windows
 The installer supplies the Linkiir application dependencies. A bundled-Kafka installation also includes Java and Kafka.
 
 ```
+
 For production environments, Kafka needs to be installed on Linux servers.
+
 ```
 
 ## Interactive installation
