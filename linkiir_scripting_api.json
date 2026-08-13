@@ -4781,7 +4781,7 @@
           "signature": "linkiir.config.node()",
           "usage": "local Cfg = linkiir.config.node()",
           "summary": "Return this node's configuration as a label → value table.",
-          "description": "Reads node_config.json from the current node directory and returns a flat table keyed by each config entry's label. Value types map directly from JSON: string → string, number → number, boolean → boolean. Entries whose field_type is \"password\" are decrypted with the runtime secret key (LINKIIR_SECRET_KEY) before being returned, so the script sees plaintext. Entries with a null value, a non-string label, or an object/array value are omitted, so reading them yields nil — the same as reading a label that does not exist. A node with an empty config[] array, or no config key at all, returns an empty table. The returned table is cached in the VM after the first call: repeated calls return the identical table reference (rawequal is true), the file is not re-read, and later changes to the node directory do not affect it. Because the same table is handed back each time, any field you add or overwrite on it is visible to subsequent calls within the same script run.",
+          "description": "Reads node_config.json from the current node directory and returns a flat table keyed by each config entry's label. Strings, numbers, and booleans map straight across from JSON. Labels that are absent, null, or hold an object or array read as nil. The table is cached per script VM: the file is read once, and every later call returns that same table.",
           "returns": [
             {
               "name": "table",
