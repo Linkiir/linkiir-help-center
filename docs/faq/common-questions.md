@@ -4,14 +4,13 @@ title: Commonly Asked Questions
 
 # Commonly Asked Questions
 
-## Should I use Redpanda or Kafka?
+## Which broker should I use?
 
-Both speak the same protocol, so Linkiir works identically with either. Choose on operational grounds:
+Linkiir ships with a bundled Apache Kafka broker and also supports connecting to your own external Kafka cluster. Redpanda is compatible since it implements the Kafka protocol, but is not bundled or officially supported.
 
 | Choose | When |
 | --- | --- |
-| **Bundled Redpanda** | Local DEV or TEST on macOS or Linux. Smallest footprint, no JVM. |
-| **Bundled Kafka** | DEV or TEST where you want Apache Kafka specifically, or a Windows install. |
+| **Bundled Kafka** | Local DEV or TEST. Self-contained, no external dependencies. |
 | **Your own external cluster** | Production. Replication, patching, storage, monitoring, and support stay with the team that already owns them. |
 
 For production, the deciding factor is usually which one your organisation can already operate well, not a technical difference in how Linkiir behaves.
@@ -22,7 +21,7 @@ Yes, and it is a common path: build and test on the bundled broker, then point t
 
 Your projects, workflows, settings, and message history are preserved. The connection is tested before the switch is committed, so a failed test leaves you running exactly as before.
 
-Let running workflows drain first — in-flight messages are not migrated. See [Kafka and Redpanda Configuration](../administration/configurations/kafka-redpanda.md).
+Let running workflows drain first — in-flight messages are not migrated. See [Kafka Configuration](../administration/configurations/kafka-redpanda.md).
 
 ## Should production use SQLite for the Log DB?
 

@@ -7,9 +7,9 @@ title: Upgrade on Linux
 Use the same package variant and queue mode as the installed system.
 
 ```bash
-tar xzf linkiir-1.1.0-linux-x64-redpanda.tar.gz
-cd linkiir-1.1.0-linux-x64-redpanda
-sudo ./install.sh --queue bundled-redpanda
+tar xzf linkiir-1.1.0-linux-x64-kafka.tar.gz
+cd linkiir-1.1.0-linux-x64-kafka
+sudo ./install.sh --queue bundled-kafka
 ```
 
 Check the current queue mode before upgrading:

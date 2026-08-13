@@ -26,13 +26,12 @@ Every platform offers the same three variants. The variant decides which message
 
 | Variant | Use for | Broker |
 | --- | --- | --- |
-| `redpanda` | DEV / TEST | Bundled Redpanda. Smallest self-contained option, no JVM. |
-| `kafka` | DEV / TEST | Bundled Apache Kafka, including a Java runtime. |
-| `external` | PRODUCTION | None. You point Linkiir at your own Kafka or Redpanda cluster. |
+| `kafka` | DEV / TEST | Bundled Apache Kafka. Self-contained, no external dependencies. |
+| `external` | PRODUCTION | None. You point Linkiir at your own Kafka cluster. |
 
-For a first install, take **`redpanda`** on macOS/Linux or **bundled Kafka** on Windows. Both work with no broker configuration at all.
+For a first install, take **`kafka`**. It works with no broker configuration at all.
 
-You are not locked in. A bundled installation can be pointed at your own cluster later, keeping your projects, workflows, settings, and logs. See [Kafka and Redpanda Configuration](../administration/configurations/kafka-redpanda.md).
+You are not locked in. A bundled installation can be pointed at your own cluster later, keeping your projects, workflows, settings, and logs. See [Kafka Configuration](../administration/configurations/kafka-redpanda.md).
 
 ---
 
@@ -86,8 +85,8 @@ Installing the wrong architecture stops with a clear message rather than a confu
 Substitute the variant and architecture you downloaded:
 
 ```bash
-unzip linkiir-1.0.0-macos-docker-redpanda-arm64.zip
-cd linkiir-1.0.0-macos-docker-redpanda-arm64
+unzip linkiir-1.0.0-macos-docker-kafka-arm64.zip
+cd linkiir-1.0.0-macos-docker-kafka-arm64
 ./scripts/linkiirctl install
 ```
 
@@ -139,7 +138,7 @@ Download `LinkiirSetup-1.0.0-x64.exe` and double-click it.
 2. Choose the install location. The default is `C:\Program Files\Linkiir`.
 3. Choose a queue mode:
    - **Install Apache Kafka for me** — recommended for a first install. Zero configuration.
-   - **Connect to my own Kafka or Redpanda broker** — enter the broker address, security protocol, and SASL credentials, plus a CA certificate if you use TLS.
+   - **Connect to my own Kafka broker** — enter the broker address, security protocol, and SASL credentials, plus a CA certificate if you use TLS.
 4. If you chose your own broker, click **Test Connection** and confirm it passes before continuing.
 5. Review the summary and click **Install**.
 

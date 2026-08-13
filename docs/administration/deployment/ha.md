@@ -11,7 +11,7 @@ flowchart TB
     LB[Load Balancer / VIP]
     A[Server A: Active Grid, Runtime, Archiver]
     B[Server B: Warm Standby Grid]
-    Q[External Kafka/Redpanda Cluster]
+    Q[External Kafka Cluster]
     WD[(Shared or replicated Working Directory)]
     DB[(Shared PostgreSQL/MS SQL Log DB)]
     LB --> A
@@ -31,7 +31,7 @@ flowchart TB
 
 ## Failover
 
-When the active server fails, the standby acquires the lease, starts Runtime and Archiver, and becomes healthy for the load balancer. The Archiver resumes from committed queue offsets; Kafka/Redpanda retains records during the gap.
+When the active server fails, the standby acquires the lease, starts Runtime and Archiver, and becomes healthy for the load balancer. The Archiver resumes from committed queue offsets; Kafka retains records during the gap.
 
 ## Requirements
 

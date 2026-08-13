@@ -8,7 +8,7 @@ Production should use infrastructure managed to the organization’s availabilit
 
 ## Recommended profile
 
-- External Kafka or Redpanda cluster rather than a single bundled broker.
+- External Kafka cluster rather than a single bundled broker.
 - PostgreSQL or MS SQL for the Log Archive DB.
 - TLS for remote Grid/API access and secure broker protocols where required.
 - Named service accounts and least privilege.
@@ -22,4 +22,4 @@ Bundled brokers are convenient for DEV and TEST. They should not be assumed to s
 
 ## Windows production note
 
-Linkiir services can run on Windows. For production Kafka, Linux-hosted brokers are operationally preferred. A Windows Linkiir tier can connect to a dedicated Linux Kafka or Redpanda cluster.
+Linkiir services can run on Windows. For production Kafka, Linux-hosted brokers are operationally preferred. A Windows Linkiir tier can connect to a dedicated Linux Kafka cluster.

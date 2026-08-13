@@ -39,7 +39,7 @@ A Linkiir installation is one package that brings up everything below. You do no
 | --- | --- |
 | **Studio** | The browser UI and API at `http://127.0.0.1:8080`. Projects, workflows, nodes, scripts, users, settings, and log search. |
 | **Runtime** | Runs your nodes and scripts. Starts and stops with your workflows. |
-| **Message queue** | Carries messages between nodes so a slow or stopped downstream node does not lose data. Apache Kafka or Redpanda, either bundled with the package or your own cluster. |
+| **Message queue** | Carries messages between nodes so a slow or stopped downstream node does not lose data. Apache Kafka, either bundled with the package or your own cluster. |
 | **Log Archiver** | Copies message payloads and node events into the Log DB so you can search them later. Runs quietly in the background. |
 | **Log DB** | Where message history lives. SQLite for a local install; PostgreSQL or MS SQL for production. |
 

@@ -24,12 +24,12 @@ ldd --version | head -1
 ### Native installation
 
 ```bash
-tar xzf linkiir-1.0.0-linux-x64-redpanda.tar.gz
-cd linkiir-1.0.0-linux-x64-redpanda
+tar xzf linkiir-1.0.0-linux-x64-kafka.tar.gz
+cd linkiir-1.0.0-linux-x64-kafka
 sudo ./install.sh
 ```
 
-The installer offers bundled Redpanda, bundled Kafka, or an external broker according to the selected tarball.
+The installer offers bundled Kafka or an external broker according to the selected tarball.
 
 Default locations:
 
@@ -53,8 +53,8 @@ docker compose version
 Install an offline bundle:
 
 ```bash
-tar xzf linkiir-1.0.0-linux-docker-redpanda-amd64.tar.gz
-cd linkiir-1.0.0-linux-docker-redpanda-amd64
+tar xzf linkiir-1.0.0-linux-docker-kafka-amd64.tar.gz
+cd linkiir-1.0.0-linux-docker-kafka-amd64
 ./scripts/linkiirctl install
 ```
 

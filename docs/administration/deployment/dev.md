@@ -9,7 +9,7 @@ DEV is optimized for rapid interface development and safe testing.
 ## Recommended profile
 
 - Single Linkiir Grid and Runtime.
-- Bundled Kafka or Redpanda, or a lightweight local queue profile.
+- Bundled Kafka, or a lightweight local queue profile.
 - One Log Archiver.
 - SQLite Log DB.
 - Synthetic or de-identified samples.

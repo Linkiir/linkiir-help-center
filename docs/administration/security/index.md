@@ -58,7 +58,7 @@ The Studio is a full administrative surface: it edits interfaces, reads message 
 
 Node listeners are a separate decision from the Studio. An LLP listener has to be reachable by the sending system and by nothing else — restrict it at the network layer, not by hoping nobody finds the port.
 
-Use secure broker protocols such as `SSL` or `SASL_SSL` where your broker requires them. See [Kafka and Redpanda Configuration](../configurations/kafka-redpanda.md).
+Use secure broker protocols such as `SSL` or `SASL_SSL` where your broker requires them. See [Kafka Configuration](../configurations/kafka-redpanda.md).
 
 ---
 
