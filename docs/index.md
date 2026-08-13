@@ -91,7 +91,7 @@ About 20 minutes on a local machine.
 | Look up a Lua function | [Linkiir Scripting API](api/scripting-api/index.md) |
 | Test a script before starting a node | [Testing and Debugging Lua](interface-development/lua-programming/testing-debugging.md) |
 | Copy a complete working interface | [Sample Code](interface-development/sample-code/index.md) |
-| Connect my own Kafka or Redpanda cluster | [Kafka and Redpanda Configuration](administration/configurations/kafka-redpanda.md) |
+| Connect my own Kafka cluster | [Kafka Configuration](administration/configurations/kafka-redpanda.md) |
 | Find out why messages are not arriving | [Troubleshooting](administration/troubleshooting/index.md) |
 | Move a project between environments | [Project Import and Export](administration/deployment/import-export.md) |
 

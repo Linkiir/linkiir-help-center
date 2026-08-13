@@ -99,6 +99,12 @@ const sidebars: SidebarsConfig = {
       type: 'category', label: 'FAQ', link: {type: 'doc', id: 'faq/index'},
       items: ['faq/common-questions', 'faq/tips-best-practices'],
     },
+    {
+      type: 'category', label: 'Release Notes', link: {type: 'doc', id: 'release-notes/index'},
+      items: [
+        'release-notes/linkiir-grid-v1.0.0',
+      ],
+    },
   ],
 };
 

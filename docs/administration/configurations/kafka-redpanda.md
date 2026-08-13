@@ -1,20 +1,19 @@
 ---
-title: Kafka and Redpanda Configuration
+title: Kafka Configuration
 ---
 
-# Kafka and Redpanda Configuration
+# Kafka Configuration
 
-Linkiir communicates with Apache Kafka and Redpanda through the Kafka protocol.
+Linkiir communicates with Apache Kafka through the Kafka protocol. Redpanda is also compatible as an alternative broker since it implements the same protocol, but the bundled and documented broker is Apache Kafka.
 
 ## Which broker should be used?
 
 | Scenario | Recommendation |
 | --- | --- |
-| Local DEV | Bundled Redpanda or Kafka. |
+| Local DEV | Bundled Kafka. |
 | Shared TEST | Bundled broker for simplicity, or external cluster for production-like validation. |
-| PROD | External organization-managed Kafka or Redpanda cluster. |
+| PROD | External organization-managed Kafka cluster. |
 | Windows host | Bundled Kafka is supported; production brokers are preferably Linux-hosted. |
-| Low-JVM footprint in Linux/macOS DEV | Bundled Redpanda. |
 
 ## Connection settings
 

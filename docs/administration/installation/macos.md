@@ -25,8 +25,8 @@ uname -m
 ## Install
 
 ```bash
-unzip linkiir-1.0.0-macos-docker-redpanda-arm64.zip
-cd linkiir-1.0.0-macos-docker-redpanda-arm64
+unzip linkiir-1.0.0-macos-docker-kafka-arm64.zip
+cd linkiir-1.0.0-macos-docker-kafka-arm64
 ./scripts/linkiirctl install
 ```
 
@@ -36,9 +36,8 @@ The offline bundle loads its images locally and does not require a registry conn
 
 | Variant | Intended use |
 | --- | --- |
-| `redpanda` | Self-contained DEV/TEST without a JVM. |
 | `kafka` | Self-contained DEV/TEST using Apache Kafka. |
-| `external` | Connect to an organization-managed Kafka or Redpanda cluster. |
+| `external` | Connect to an organization-managed Kafka cluster. |
 
 For an external cluster, the installer collects the connection details and tests them before starting Linkiir.
 

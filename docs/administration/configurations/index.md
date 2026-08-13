@@ -10,7 +10,7 @@ Configuration is divided between platform settings, environment-specific connect
 - [Users and Roles](user-roles.md) — accounts, the permission set, and SSH keys
 - [Migrating Existing Interfaces](migration.md)
 - [Log Archive Database](log-archive-database.md)
-- [Kafka and Redpanda](kafka-redpanda.md)
+- [Kafka Configuration](kafka-redpanda.md)
 
 ## Where a setting lives
 

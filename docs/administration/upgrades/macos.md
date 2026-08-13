@@ -7,9 +7,9 @@ title: Upgrade on macOS
 Extract the new offline bundle, copy the existing `.env`, and run the new bundle’s upgrade command.
 
 ```bash
-unzip linkiir-1.1.0-macos-docker-redpanda-arm64.zip
-cd linkiir-1.1.0-macos-docker-redpanda-arm64
-cp ../linkiir-1.0.0-macos-docker-redpanda-arm64/.env .
+unzip linkiir-1.1.0-macos-docker-kafka-arm64.zip
+cd linkiir-1.1.0-macos-docker-kafka-arm64
+cp ../linkiir-1.0.0-macos-docker-kafka-arm64/.env .
 ./scripts/linkiirctl upgrade
 ```
 

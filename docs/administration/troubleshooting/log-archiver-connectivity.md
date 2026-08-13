@@ -47,7 +47,7 @@ Read `checks.archiver.detail` and `checks.queue.detail`. Each names its own reas
 - Verify the CA certificate path resolves on the Linkiir host — in Docker, that means the path **inside the container**.
 - Confirm the service account can read Linkiir's topics and commit consumer-group offsets. Missing offset-commit permission is easy to overlook and produces exactly this symptom.
 
-A connection test is available without any Kafka tooling installed. See [Kafka and Redpanda Configuration](../configurations/kafka-redpanda.md) — it reports the first stage that failed, so a wrong port is not mistaken for a wrong password.
+A connection test is available without any Kafka tooling installed. See [Kafka Configuration](../configurations/kafka-redpanda.md) — it reports the first stage that failed, so a wrong port is not mistaken for a wrong password.
 
 ## Log DB side
 
@@ -69,7 +69,7 @@ A connection test is available without any Kafka tooling installed. See [Kafka a
 :::warning Aged-out records cannot be recovered
 If the broker discarded records before they were copied to the Log DB, that history is gone. It cannot be rebuilt from the Log DB, because it never arrived.
 
-This is why lag alerting matters more than it appears to: lag approaching your retention window is the warning that history is about to be lost permanently. See [Kafka and Redpanda Configuration](../configurations/kafka-redpanda.md).
+This is why lag alerting matters more than it appears to: lag approaching your retention window is the warning that history is about to be lost permanently. See [Kafka Configuration](../configurations/kafka-redpanda.md).
 :::
 
 ## Recovery
@@ -101,6 +101,6 @@ If the cause is not clear, collect a diagnostics bundle and send it to support. 
 
 ## Related
 
-- [Kafka and Redpanda Configuration](../configurations/kafka-redpanda.md)
+- [Kafka Configuration](../configurations/kafka-redpanda.md)
 - [Log Archive Database](../configurations/log-archive-database.md)
 - [Troubleshooting](index.md)

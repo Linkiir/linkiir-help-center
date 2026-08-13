@@ -211,7 +211,7 @@ These are separate from project portability. Moving a project does not move them
 | Not in a project bundle | Where it lives |
 | --- | --- |
 | Users, roles, and permissions | Instance settings — recreate them on the target grid |
-| Broker connection settings | [Kafka and Redpanda Configuration](../configurations/kafka-redpanda.md) |
+| Broker connection settings | [Kafka Configuration](../configurations/kafka-redpanda.md) |
 | Log Archive DB settings and archived message history | [Log Archive Database](../configurations/log-archive-database.md) |
 | The HTTP server port and TLS settings | Instance settings — see [Security](../security/index.md) |
 | The license | [Licensing](../licensing/index.md) |

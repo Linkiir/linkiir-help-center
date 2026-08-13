@@ -8,7 +8,7 @@ Practices worth adopting early, when they cost nothing, rather than after an inc
 
 ## Infrastructure
 
-**Use your own Kafka or Redpanda cluster in production.** Bundled brokers are excellent for DEV and TEST. Production wants replication, monitoring, backup planning, and a team that owns it.
+**Use your own Kafka cluster in production.** Bundled brokers are excellent for DEV and TEST. Production wants replication, monitoring, backup planning, and a team that owns it.
 
 **Use PostgreSQL or MS SQL for production message history.** SQLite suits one local installation. Anything beyond that wants central backup, real tooling, and room to scale.
 

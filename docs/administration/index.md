@@ -12,7 +12,7 @@ Administration covers the complete Linkiir platform lifecycle.
 - [Licensing](licensing/index.md): Activation, capacity and expiry, and transfer to a replacement installation.
 - [Upgrades](upgrades/index.md): In-place procedures by operating system.
 - [Deployment](deployment/index.md): DEV, TEST, PROD, HA, and moving projects between environments.
-- [Configurations](configurations/index.md): Project settings, users and roles, migration, Log Archive DB, Kafka, and Redpanda.
+- [Configurations](configurations/index.md): Project settings, users and roles, migration, Log Archive DB, and Kafka.
 - [Backup and Restore](backup-restore/index.md): Protect and recover the Linkiir working directory.
 - [Alerting and Notifications](notifications/index.md): Monitoring Linkiir, and alerting from a workflow.
 - [Security](security/index.md): First-login hardening, remote access, secrets, and patient data in logs.
@@ -26,7 +26,7 @@ Administration covers the complete Linkiir platform lifecycle.
 | Move a project to another environment | [Import and Export](deployment/import-export.md) |
 | Add a user and control what they can do | [Users and Roles](configurations/user-roles.md) |
 | Set project variables and credentials | [Project Settings](configurations/project-settings.md) |
-| Connect my own Kafka or Redpanda cluster | [Kafka and Redpanda](configurations/kafka-redpanda.md) |
+| Connect my own Kafka cluster | [Kafka Configuration](configurations/kafka-redpanda.md) |
 | Replace the server Linkiir runs on | [Backup and Restore](backup-restore/index.md), then [License Transfer](licensing/license-transfer.md) |
 | Get alerted when an interface fails | [Alerting and Notifications](notifications/index.md) |
 

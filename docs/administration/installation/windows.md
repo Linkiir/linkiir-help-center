@@ -13,6 +13,12 @@ title: Install on Windows
 
 The installer supplies the Linkiir application dependencies. A bundled-Kafka installation also includes Java and Kafka.
 
+```
+
+For production environments, Kafka needs to be installed on Linux servers.
+
+```
+
 ## Interactive installation
 
 1. Run `LinkiirSetup-1.0.0-x64.exe` as Administrator.
@@ -20,7 +26,7 @@ The installer supplies the Linkiir application dependencies. A bundled-Kafka ins
 3. Select the installation directory, normally `C:\Program Files\Linkiir`.
 4. Choose a queue mode:
    - **Install Apache Kafka for me** for a self-contained DEV/TEST installation.
-   - **Connect to my own Kafka or Redpanda broker** for an existing cluster.
+   - **Connect to my own Kafka broker** for an existing cluster.
 5. For an external broker, enter the endpoint, security protocol, SASL settings, and CA certificate when applicable.
 6. Run **Test Connection**.
 7. Review the summary and install.
