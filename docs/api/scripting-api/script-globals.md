@@ -48,8 +48,6 @@ print(#Raw)
 __node_dir
 ```
 
-Filesystem path to the current node directory.
-
 Filesystem path to the current node directory. Set by the runtime before script execution. Used to resolve relative schema paths.
 
 **Usage**
@@ -876,5 +874,294 @@ print(_VERSION)
 
 ```lua
 print(_VERSION)  -- "Lua 5.1"
+```
+
+
+## `_G`
+
+*field*
+
+```lua
+_G
+```
+
+The global environment table.
+
+The table representing the script's global environment. Reading/writing _G.x is equivalent to reading/writing the global variable x.
+
+**Usage**
+
+```lua
+_G.SomeGlobal
+```
+
+**Returns**
+
+- table
+
+**Example**
+
+```lua
+_G.Counter = 0
+print(Counter)  -- 0
+```
+
+
+## `dofile`
+
+*function*
+
+```lua
+dofile([filename])
+```
+
+Execute a Lua file as a chunk.
+
+Loads and immediately runs the Lua chunk in filename (or stdin, if omitted), in the global environment. Errors propagate to the caller, unprotected. Prefer require for loading reusable modules — dofile re-runs the file every call and has no module caching.
+
+**Usage**
+
+```lua
+dofile(path)
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `filename` | string | No | Path of the Lua file to run. Default stdin. |
+
+**Returns**
+
+- whatever the chunk returns
+
+**Example**
+
+```lua
+dofile(__node_dir .. '/helpers.lua')
+```
+
+
+## `loadfile`
+
+*function*
+
+```lua
+loadfile([filename])
+```
+
+Load a Lua file without running it.
+
+Loads a chunk from filename (or stdin, if omitted) without running it. Returns the compiled chunk as a function, or nil plus an error message on a syntax error.
+
+**Usage**
+
+```lua
+local chunk, err = loadfile(path)
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `filename` | string | No | Path of the Lua file to load. Default stdin. |
+
+**Returns**
+
+- function on success; nil, errorMessage on failure
+
+**Example**
+
+```lua
+local Chunk, Err = loadfile(__node_dir .. '/helpers.lua')
+if Chunk then Chunk() end
+```
+
+
+## `loadstring`
+
+*function*
+
+```lua
+loadstring(string [, chunkname])
+```
+
+Compile a Lua chunk from a string.
+
+Loads a chunk from the given string without running it. Returns the compiled chunk as a function, or nil plus an error message on a syntax error. chunkname is used in error messages and debug info.
+
+**Usage**
+
+```lua
+local chunk, err = loadstring(code)
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `string` | string | Yes | Lua source code. |
+| `chunkname` | string | No | Name used in error messages/tracebacks. Default the string itself. |
+
+**Returns**
+
+- function on success; nil, errorMessage on failure
+
+**Example**
+
+```lua
+local Chunk = loadstring('return 1 + 1')
+print(Chunk())  -- 2
+```
+
+
+## `load`
+
+*function*
+
+```lua
+load(func [, chunkname])
+```
+
+Compile a Lua chunk from a reader function.
+
+Loads a chunk using func, a reader function repeatedly called with no arguments that must return successive pieces of the chunk's source (or nil/empty string to signal the end). Returns the compiled chunk as a function, or nil plus an error message on a syntax error.
+
+**Usage**
+
+```lua
+local chunk, err = load(reader)
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `func` | function | Yes | Reader function returning successive source chunks. |
+| `chunkname` | string | No | Name used in error messages/tracebacks. |
+
+**Returns**
+
+- function on success; nil, errorMessage on failure
+
+**Example**
+
+```lua
+local Parts = { 'return ', '1 + 1' }
+local I = 0
+local Chunk = load(function() I = I + 1 return Parts[I] end)
+print(Chunk())  -- 2
+```
+
+
+## `getfenv`
+
+*function*
+
+```lua
+getfenv([f])
+```
+
+Read a function's environment table.
+
+Returns the current environment table of f (a function, or a stack-level integer; default 1, the calling function).
+
+**Usage**
+
+```lua
+getfenv(f)
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `f` | function\|integer | No | Function, or stack level. Default 1. |
+
+**Returns**
+
+- table
+
+**Example**
+
+```lua
+local Env = getfenv(1)
+```
+
+
+## `setfenv`
+
+*function*
+
+```lua
+setfenv(f, table)
+```
+
+Set a function's environment table.
+
+Sets the environment for the function f (a function, or a stack-level integer, where 1 means the calling function) to table. Returns f when f is a function.
+
+**Usage**
+
+```lua
+setfenv(f, table)
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `f` | function\|integer | Yes | Function, or stack level. |
+| `table` | table | Yes | New environment table. |
+
+**Returns**
+
+- f (when f is a function)
+
+**Example**
+
+```lua
+local Sandbox = setmetatable({}, { __index = _G })
+setfenv(SomeFn, Sandbox)
+```
+
+
+## `module`
+
+*function*
+
+```lua
+module(name [, ...])
+```
+
+Create or enter a named module.
+
+Legacy Lua 5.1 module system: creates (or reuses) a table for module name, sets it as the value of the global name and of package.loaded[name], and sets it as the new environment of the running function, so subsequent top-level function/variable definitions become fields of the module. Optional arguments are 'module modifiers' such as package.seeall. Superseded in most modern Lua code by returning a table from a plain chunk loaded via require.
+
+**Usage**
+
+```lua
+module('mymodule')
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `name` | string | Yes | Module name. |
+| `...` | function | No | Optional module modifiers, e.g. package.seeall. |
+
+**Returns**
+
+- none
+
+**Example**
+
+```lua
+module('mymodule', package.seeall)
+
+function greet(name)
+   return 'hello, ' .. name
+end
 ```
 

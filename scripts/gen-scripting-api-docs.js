@@ -47,8 +47,16 @@ function renderItem(it, level) {
   if (of) tag = `*${kind} of \`${of}\`*`;
   if (tag) lines.push(tag, '');
   if (it.signature) lines.push('```lua', it.signature, '```', '');
-  if (it.summary) lines.push(mdxEscape(it.summary), '');
-  if (it.description && it.description !== it.summary) lines.push(mdxEscape(it.description), '');
+  // `description` is often written as `summary` plus extra sentences. Printing
+  // both verbatim repeats the first sentence, so when description subsumes
+  // summary keep only the longer one.
+  const summary = it.summary;
+  const desc = it.description;
+  if (summary && desc && desc !== summary && !desc.startsWith(summary)) {
+    lines.push(mdxEscape(summary), '', mdxEscape(desc), '');
+  } else if (desc || summary) {
+    lines.push(mdxEscape(desc && desc.length >= (summary || '').length ? desc : summary), '');
+  }
   if (it.usage) lines.push('**Usage**', '', '```lua', it.usage, '```', '');
 
   if (it.params && it.params.length) {
@@ -111,6 +119,17 @@ function renderModulePage(m) {
     lines.push(`## ${of} methods`, '');
     for (const it of items) {
       lines.push(renderItem(it, 3), '');
+    }
+  }
+
+  // Optional trailing prose. Unlike the item fields these are authored as
+  // markdown (links, bold, code spans), so they go through verbatim — keep
+  // any literal `{`/`<` out of them, or MDX will choke.
+  for (const [heading, key] of [['Notes', 'notes'], ['Next', 'next']]) {
+    if (m[key] && m[key].length) {
+      lines.push('---', '', `## ${heading}`, '');
+      for (const line of m[key]) lines.push(`- ${line}`);
+      lines.push('');
     }
   }
 

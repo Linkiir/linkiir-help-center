@@ -18,12 +18,15 @@ Reference for the Lua scripting API available inside Linkiir workflow scripts.
 | [Byte Transforms](byte-transforms.md) (`linkiir.codec`) | Everything that turns bytes into other bytes and back: text encodings, compression, and character-set conversion. |
 | [JSON](json.md) (`linkiir.json`) | JSON parse and serialize operating on plain Lua tables. |
 | [Security](security.md) (`linkiir.sec`) | Security primitives with modern, explicit parameters. |
-| [Logging](logging.md) (`linkiir.log`) | Write log entries (error, warn, info, debug) that appear in the Logs view and trigger notification rules. |
 | [Runtime & System](runtime-system.md) (`linkiir.sys`) | Small runtime helpers and filesystem access in one place. |
+| [Logging](logging.md) (`linkiir.log`) | Emit structured log events to the workflow event topic. |
+| [Node Configuration](node-configuration.md) (`linkiir.config`) | Read the current node's configuration fields. |
 | [Lua Table Library](lua-table-library.md) (`table`) | Standard Lua 5.1 table library for building and manipulating array-style tables (insert/remove/sort/concat). |
 | [Lua Math Library](lua-math-library.md) (`math`) | Standard Lua 5.1 math library. |
-| [Lua OS Library (time/env)](lua-os-library.md) (`os`) | Time and environment functions from the standard Lua 5.1 os library. |
+| [Lua OS Library (time/env)](lua-os-library.md) (`os`) | Time and environment functions from the standard Lua 5.1 os library, plus the file/process functions (os.execute, os.remove, os.rename, os.tmpname, os.exit). |
+| [Lua IO Library (files/stdio)](lua-io-library.md) (`io`) | Standard Lua 5.1 io library: local file and standard-stream I/O, available exactly as in stock Lua/LuaJIT (registered by the runtime alongside table/math/os/string). |
 | [Lua String Library](lua-string-library.md) (`string`) | Standard Lua 5.1 string library. |
+| [Lua Debug Library](lua-debug-library.md) (`debug`) | Standard Lua 5.1 debug library: introspection and instrumentation for the call stack, locals, upvalues, and metatables. |
 
 ---
 

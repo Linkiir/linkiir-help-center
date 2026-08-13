@@ -6,7 +6,7 @@ title: JSON
 
 `linkiir.json`
 
-JSON parse and serialize operating on plain Lua tables. Unlike linkiir.data (which returns structured node objects), linkiir.json works with native Lua values.
+JSON parse and serialize operating on plain Lua tables. Unlike linkiir.data (which returns LkNode userdata), linkiir.json works with native Lua values.
 
 ---
 
@@ -17,8 +17,6 @@ JSON parse and serialize operating on plain Lua tables. Unlike linkiir.data (whi
 ```lua
 linkiir.json.parse(str)
 ```
-
-Parse a JSON string into a Lua value.
 
 Parse a JSON string into a Lua value. Objects become tables with string keys; arrays become tables with integer keys 1..N. JSON null becomes linkiir.json.null. Raises on invalid JSON.
 
@@ -60,8 +58,6 @@ print(obj.age)   -- 30
 ```lua
 linkiir.json.serialize(value)
 ```
-
-Serialize a Lua value to a JSON string.
 
 Serialize a Lua value to a JSON string. Tables with consecutive integer keys emit as arrays; otherwise as objects. nil and json.null become null. Raises on circular references, NaN/Infinity, or non-serializable types (functions, userdata).
 

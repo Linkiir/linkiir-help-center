@@ -732,6 +732,238 @@
               "code": "print(_VERSION)  -- \"Lua 5.1\""
             }
           ]
+        },
+        {
+          "kind": "field",
+          "name": "_G",
+          "signature": "_G",
+          "usage": "_G.SomeGlobal",
+          "summary": "The global environment table.",
+          "description": "The table representing the script's global environment. Reading/writing _G.x is equivalent to reading/writing the global variable x.",
+          "returns": [
+            {
+              "description": "table"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "_G.Counter = 0\nprint(Counter)  -- 0"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "dofile",
+          "signature": "dofile([filename])",
+          "usage": "dofile(path)",
+          "summary": "Execute a Lua file as a chunk.",
+          "description": "Loads and immediately runs the Lua chunk in filename (or stdin, if omitted), in the global environment. Errors propagate to the caller, unprotected. Prefer require for loading reusable modules — dofile re-runs the file every call and has no module caching.",
+          "params": [
+            {
+              "name": "filename",
+              "type": "string",
+              "required": false,
+              "description": "Path of the Lua file to run. Default stdin."
+            }
+          ],
+          "returns": [
+            {
+              "description": "whatever the chunk returns"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "dofile(__node_dir .. '/helpers.lua')"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "loadfile",
+          "signature": "loadfile([filename])",
+          "usage": "local chunk, err = loadfile(path)",
+          "summary": "Load a Lua file without running it.",
+          "description": "Loads a chunk from filename (or stdin, if omitted) without running it. Returns the compiled chunk as a function, or nil plus an error message on a syntax error.",
+          "params": [
+            {
+              "name": "filename",
+              "type": "string",
+              "required": false,
+              "description": "Path of the Lua file to load. Default stdin."
+            }
+          ],
+          "returns": [
+            {
+              "description": "function on success; nil, errorMessage on failure"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Chunk, Err = loadfile(__node_dir .. '/helpers.lua')\nif Chunk then Chunk() end"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "loadstring",
+          "signature": "loadstring(string [, chunkname])",
+          "usage": "local chunk, err = loadstring(code)",
+          "summary": "Compile a Lua chunk from a string.",
+          "description": "Loads a chunk from the given string without running it. Returns the compiled chunk as a function, or nil plus an error message on a syntax error. chunkname is used in error messages and debug info.",
+          "params": [
+            {
+              "name": "string",
+              "type": "string",
+              "required": true,
+              "description": "Lua source code."
+            },
+            {
+              "name": "chunkname",
+              "type": "string",
+              "required": false,
+              "description": "Name used in error messages/tracebacks. Default the string itself."
+            }
+          ],
+          "returns": [
+            {
+              "description": "function on success; nil, errorMessage on failure"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Chunk = loadstring('return 1 + 1')\nprint(Chunk())  -- 2"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "load",
+          "signature": "load(func [, chunkname])",
+          "usage": "local chunk, err = load(reader)",
+          "summary": "Compile a Lua chunk from a reader function.",
+          "description": "Loads a chunk using func, a reader function repeatedly called with no arguments that must return successive pieces of the chunk's source (or nil/empty string to signal the end). Returns the compiled chunk as a function, or nil plus an error message on a syntax error.",
+          "params": [
+            {
+              "name": "func",
+              "type": "function",
+              "required": true,
+              "description": "Reader function returning successive source chunks."
+            },
+            {
+              "name": "chunkname",
+              "type": "string",
+              "required": false,
+              "description": "Name used in error messages/tracebacks."
+            }
+          ],
+          "returns": [
+            {
+              "description": "function on success; nil, errorMessage on failure"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Parts = { 'return ', '1 + 1' }\nlocal I = 0\nlocal Chunk = load(function() I = I + 1 return Parts[I] end)\nprint(Chunk())  -- 2"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "getfenv",
+          "signature": "getfenv([f])",
+          "usage": "getfenv(f)",
+          "summary": "Read a function's environment table.",
+          "description": "Returns the current environment table of f (a function, or a stack-level integer; default 1, the calling function).",
+          "params": [
+            {
+              "name": "f",
+              "type": "function|integer",
+              "required": false,
+              "description": "Function, or stack level. Default 1."
+            }
+          ],
+          "returns": [
+            {
+              "description": "table"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Env = getfenv(1)"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "setfenv",
+          "signature": "setfenv(f, table)",
+          "usage": "setfenv(f, table)",
+          "summary": "Set a function's environment table.",
+          "description": "Sets the environment for the function f (a function, or a stack-level integer, where 1 means the calling function) to table. Returns f when f is a function.",
+          "params": [
+            {
+              "name": "f",
+              "type": "function|integer",
+              "required": true,
+              "description": "Function, or stack level."
+            },
+            {
+              "name": "table",
+              "type": "table",
+              "required": true,
+              "description": "New environment table."
+            }
+          ],
+          "returns": [
+            {
+              "description": "f (when f is a function)"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Sandbox = setmetatable({}, { __index = _G })\nsetfenv(SomeFn, Sandbox)"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "module",
+          "signature": "module(name [, ...])",
+          "usage": "module('mymodule')",
+          "summary": "Create or enter a named module.",
+          "description": "Legacy Lua 5.1 module system: creates (or reuses) a table for module name, sets it as the value of the global name and of package.loaded[name], and sets it as the new environment of the running function, so subsequent top-level function/variable definitions become fields of the module. Optional arguments are 'module modifiers' such as package.seeall. Superseded in most modern Lua code by returning a table from a plain chunk loaded via require.",
+          "params": [
+            {
+              "name": "name",
+              "type": "string",
+              "required": true,
+              "description": "Module name."
+            },
+            {
+              "name": "...",
+              "type": "function",
+              "required": false,
+              "description": "Optional module modifiers, e.g. package.seeall."
+            }
+          ],
+          "returns": [
+            {
+              "description": "none"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "module('mymodule', package.seeall)\n\nfunction greet(name)\n   return 'hello, ' .. name\nend"
+            }
+          ]
         }
       ]
     },
@@ -4413,6 +4645,170 @@
       ]
     },
     {
+      "name": "linkiir.log",
+      "title": "Logging",
+      "description": "Emit structured log events to the workflow event topic. Each call produces a SCRIPT_LOG record at the named level. These are annotations — they never raise, never stop the node, and are independent of Lua's error(). Gated by the node's log_level setting: a call below the threshold is dropped inside the runtime and never reaches the broker.",
+      "items": [
+        {
+          "kind": "function",
+          "name": "linkiir.log.error",
+          "signature": "linkiir.log.error(message)",
+          "usage": "linkiir.log.error(message)",
+          "summary": "Emit a SCRIPT_LOG event at ERROR level.",
+          "description": "Emit a SCRIPT_LOG event at ERROR level. Does not stop the node (unlike Lua's error()). This is an annotation, not a fault — it never raises, never halts execution. Gated by the node's log_level setting.",
+          "params": [
+            {
+              "name": "message",
+              "type": "string",
+              "required": true,
+              "description": "Log message text."
+            }
+          ],
+          "returns": [
+            {
+              "description": "nil"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "linkiir.log.error('Failed to parse inbound HL7: ' .. tostring(Err))"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "linkiir.log.warn",
+          "signature": "linkiir.log.warn(message)",
+          "usage": "linkiir.log.warn(message)",
+          "summary": "Emit a SCRIPT_LOG event at WARN level.",
+          "description": "Emit a SCRIPT_LOG event at WARN level. This is an annotation, not a fault — it never raises, never halts execution. Gated by the node's log_level setting.",
+          "params": [
+            {
+              "name": "message",
+              "type": "string",
+              "required": true,
+              "description": "Log message text."
+            }
+          ],
+          "returns": [
+            {
+              "description": "nil"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "linkiir.log.warn('Missing optional field PID[8], defaulting to Unknown')"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "linkiir.log.info",
+          "signature": "linkiir.log.info(message)",
+          "usage": "linkiir.log.info(message)",
+          "summary": "Emit a SCRIPT_LOG event at INFO level.",
+          "description": "Emit a SCRIPT_LOG event at INFO level. This is an annotation, not a fault — it never raises, never halts execution. Gated by the node's log_level setting.",
+          "params": [
+            {
+              "name": "message",
+              "type": "string",
+              "required": true,
+              "description": "Log message text."
+            }
+          ],
+          "returns": [
+            {
+              "description": "nil"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "linkiir.log.info('Processed ' .. tostring(Count) .. ' segments')"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "linkiir.log.debug",
+          "signature": "linkiir.log.debug(message)",
+          "usage": "linkiir.log.debug(message)",
+          "summary": "Emit a SCRIPT_LOG event at DEBUG level.",
+          "description": "Emit a SCRIPT_LOG event at DEBUG level. Dropped by the runtime if the node's log_level is above DEBUG. This is an annotation, not a fault — it never raises, never halts execution. Gated by the node's log_level setting.",
+          "params": [
+            {
+              "name": "message",
+              "type": "string",
+              "required": true,
+              "description": "Log message text."
+            }
+          ],
+          "returns": [
+            {
+              "description": "nil"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "linkiir.log.debug('Raw payload length: ' .. tostring(#Data))"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "Log entries appear in the **Logs** view (searchable by project, workflow, node, and level).",
+        "The notification engine matches log entries against rules in real time. An `ERROR`-level log from `linkiir.log.error()` is the most common way to trigger an alert.",
+        "`print()` also writes to the log, but at `INFO` level with event type `SCRIPT_PRINT` — it is **not** matched by notification rules.",
+        "`error()` (Lua's built-in) raises an exception and stops the script. It only emits an event when `stop_on_error` is enabled on the node. Use `linkiir.log.error()` to report an error without stopping execution."
+      ],
+      "next": [
+        "[Alerting and Notifications](../../administration/notifications/index.md)",
+        "[Runtime & System](runtime-system.md)",
+        "[Error Handling and Retry](../../interface-development/error-handling.md)"
+      ]
+    },
+    {
+      "name": "linkiir.config",
+      "title": "Node Configuration",
+      "description": "Read the current node's configuration fields. Values come from the config[] array in the node's node_config.json, flattened into a single label → value table. Password fields are decrypted automatically. The result is cached for the lifetime of the script VM: the first call reads and parses from disk, every later call returns the same table with no I/O.",
+      "items": [
+        {
+          "kind": "function",
+          "name": "linkiir.config.node",
+          "signature": "linkiir.config.node()",
+          "usage": "local Cfg = linkiir.config.node()",
+          "summary": "Return this node's configuration as a label → value table.",
+          "description": "Reads node_config.json from the current node directory and returns a flat table keyed by each config entry's label. Value types map directly from JSON: string → string, number → number, boolean → boolean. Entries whose field_type is \"password\" are decrypted with the runtime secret key (LINKIIR_SECRET_KEY) before being returned, so the script sees plaintext. Entries with a null value, a non-string label, or an object/array value are omitted, so reading them yields nil — the same as reading a label that does not exist. A node with an empty config[] array, or no config key at all, returns an empty table. The returned table is cached in the VM after the first call: repeated calls return the identical table reference (rawequal is true), the file is not re-read, and later changes to the node directory do not affect it. Because the same table is handed back each time, any field you add or overwrite on it is visible to subsequent calls within the same script run.",
+          "returns": [
+            {
+              "name": "table",
+              "description": "flat map of config label → value (string, number, or boolean); empty when the node has no config fields."
+            }
+          ],
+          "errors": {
+            "description": "Raises a Lua error when the node directory is not configured, when node_config.json is missing or unreadable, when it is not valid JSON, or when a password field cannot be decrypted (typically a missing or wrong LINKIIR_SECRET_KEY)."
+          },
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Cfg = linkiir.config.node()\n\nlocal Host = Cfg.host          -- \"10.0.0.1\"\nlocal Port = Cfg.port          -- 2575 (number)\nlocal UseSsl = Cfg.use_ssl     -- true (boolean)\nlocal Password = Cfg.password  -- decrypted plaintext\n\nlocal Sock, Err = linkiir.link.socket.connect{ host = Host, port = Port }\nif not Sock then\n  linkiir.log.error('connect failed: ' .. tostring(Err))\n  return\nend"
+            },
+            {
+              "language": "lua",
+              "code": "-- Absent fields are nil, so defaults are a plain 'or'.\nlocal Cfg = linkiir.config.node()\nlocal Timeout = Cfg.timeout_ms or 5000\n\nif Cfg.protocol == 'hl7' then\n  linkiir.log.info('Using HL7 profile')\nend"
+            },
+            {
+              "language": "lua",
+              "code": "-- Cached: the second call does no disk I/O and returns the same table.\nlocal A = linkiir.config.node()\nlocal B = linkiir.config.node()\nassert(rawequal(A, B))"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "table",
       "title": "Lua Table Library",
       "description": "Standard Lua 5.1 table library for building and manipulating array-style tables (insert/remove/sort/concat). Node trees returned by linkiir.data are their own object type, not plain tables — use the Node:* methods for those.",
@@ -5283,13 +5679,154 @@
               "code": "print(math.rad(180))  -- 3.1415926535898"
             }
           ]
+        },
+        {
+          "kind": "function",
+          "name": "math.sinh",
+          "signature": "math.sinh(x)",
+          "usage": "math.sinh(x)",
+          "summary": "Hyperbolic sine.",
+          "description": "Returns the hyperbolic sine of x.",
+          "params": [
+            {
+              "name": "x",
+              "type": "number",
+              "required": true,
+              "description": "Input value."
+            }
+          ],
+          "returns": [
+            {
+              "description": "number"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "print(math.sinh(0))  -- 0.0"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "math.cosh",
+          "signature": "math.cosh(x)",
+          "usage": "math.cosh(x)",
+          "summary": "Hyperbolic cosine.",
+          "description": "Returns the hyperbolic cosine of x.",
+          "params": [
+            {
+              "name": "x",
+              "type": "number",
+              "required": true,
+              "description": "Input value."
+            }
+          ],
+          "returns": [
+            {
+              "description": "number"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "print(math.cosh(0))  -- 1.0"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "math.tanh",
+          "signature": "math.tanh(x)",
+          "usage": "math.tanh(x)",
+          "summary": "Hyperbolic tangent.",
+          "description": "Returns the hyperbolic tangent of x.",
+          "params": [
+            {
+              "name": "x",
+              "type": "number",
+              "required": true,
+              "description": "Input value."
+            }
+          ],
+          "returns": [
+            {
+              "description": "number"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "print(math.tanh(0))  -- 0.0"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "math.frexp",
+          "signature": "math.frexp(x)",
+          "usage": "math.frexp(x)",
+          "summary": "Split a number into mantissa and exponent.",
+          "description": "Returns m (a multiplier, |m| in [0.5, 1)) and e (an integer exponent) such that x = m * 2^e. Used for portable, precision-safe manipulation of floating-point values.",
+          "params": [
+            {
+              "name": "x",
+              "type": "number",
+              "required": true,
+              "description": "Input value."
+            }
+          ],
+          "returns": [
+            {
+              "description": "m (mantissa), e (exponent)"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local M, E = math.frexp(8)\nprint(M, E)  -- 0.5  4"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "math.ldexp",
+          "signature": "math.ldexp(m, e)",
+          "usage": "math.ldexp(m, e)",
+          "summary": "Build a number from a mantissa and exponent.",
+          "description": "Returns m * 2^e. The inverse of math.frexp.",
+          "params": [
+            {
+              "name": "m",
+              "type": "number",
+              "required": true,
+              "description": "Mantissa."
+            },
+            {
+              "name": "e",
+              "type": "integer",
+              "required": true,
+              "description": "Exponent."
+            }
+          ],
+          "returns": [
+            {
+              "description": "number"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "print(math.ldexp(0.5, 4))  -- 8"
+            }
+          ]
         }
       ]
     },
     {
       "name": "os",
       "title": "Lua OS Library (time/env)",
-      "description": "Time and environment functions from the standard Lua 5.1 os library. File and process functions (os.execute, os.remove, os.rename, os.tmpname, os.exit) are intentionally not used in Linkiir scripts — use linkiir.sys.fs for local filesystem work and linkiir.link.file for remote transfer instead.",
+      "description": "Time and environment functions from the standard Lua 5.1 os library, plus the file/process functions (os.execute, os.remove, os.rename, os.tmpname, os.exit). The file/process functions are fully functional but are a Linkiir convention to avoid in workflow scripts — they bypass logging/auditing and portability that linkiir.sys.fs (local filesystem) and linkiir.link.file (remote transfer) provide, and os.exit()/os.execute() can terminate or fork the worker process outright. Prefer the linkiir.* equivalents unless you specifically need raw OS access.",
       "items": [
         {
           "kind": "function",
@@ -5429,6 +5966,681 @@
               "code": "local ApiKey = os.getenv('LINKIIR_API_KEY')"
             }
           ]
+        },
+        {
+          "kind": "function",
+          "name": "os.execute",
+          "signature": "os.execute([command])",
+          "usage": "os.execute(command)",
+          "summary": "Run a shell command.",
+          "description": "Passes command to the system shell (via C's system()) and returns its exit status. With no argument, returns whether a shell is available. Runs with the worker process's OS privileges — discouraged in workflow scripts; prefer linkiir.sys.fs / linkiir.link.file for file and transfer work.",
+          "params": [
+            {
+              "name": "command",
+              "type": "string",
+              "required": false,
+              "description": "Shell command line to run."
+            }
+          ],
+          "returns": [
+            {
+              "description": "integer exit status (or boolean shell-availability when called with no arguments)"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Status = os.execute('true')\nprint(Status)  -- 0"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "os.remove",
+          "signature": "os.remove(filename)",
+          "usage": "os.remove(filename)",
+          "summary": "Delete a file.",
+          "description": "Deletes the file (or empty directory, on POSIX) at filename. Returns true on success, or nil plus an error message on failure. Prefer linkiir.sys.fs.remove, which is scoped to the node's working directories.",
+          "params": [
+            {
+              "name": "filename",
+              "type": "string",
+              "required": true,
+              "description": "Path of the file to delete."
+            }
+          ],
+          "returns": [
+            {
+              "description": "true on success; nil, errorMessage on failure"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Ok, Err = os.remove('/tmp/scratch.txt')\nif not Ok then print(Err) end"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "os.rename",
+          "signature": "os.rename(oldname, newname)",
+          "usage": "os.rename(oldname, newname)",
+          "summary": "Rename/move a file.",
+          "description": "Renames the file or directory at oldname to newname. Returns true on success, or nil plus an error message on failure.",
+          "params": [
+            {
+              "name": "oldname",
+              "type": "string",
+              "required": true,
+              "description": "Existing path."
+            },
+            {
+              "name": "newname",
+              "type": "string",
+              "required": true,
+              "description": "New path."
+            }
+          ],
+          "returns": [
+            {
+              "description": "true on success; nil, errorMessage on failure"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Ok, Err = os.rename('/tmp/a.txt', '/tmp/b.txt')\nif not Ok then print(Err) end"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "os.tmpname",
+          "signature": "os.tmpname()",
+          "usage": "os.tmpname()",
+          "summary": "Generate a temporary file name.",
+          "description": "Returns a string with a name that can safely be used as a temporary file. The file must be explicitly opened (e.g. io.open) and removed (os.remove) when done.",
+          "returns": [
+            {
+              "description": "string (a filesystem path)"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Path = os.tmpname()\nlocal F = io.open(Path, 'w')\nF:write('scratch')\nF:close()\nos.remove(Path)"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "os.exit",
+          "signature": "os.exit([code [, close]])",
+          "usage": "os.exit(code)",
+          "summary": "Terminate the process.",
+          "description": "Terminates the host process immediately, with an optional exit code (default success/true) and an optional flag to close the Lua state first. Never call this in a workflow script — it kills the worker process running the script, not just the current script invocation.",
+          "params": [
+            {
+              "name": "code",
+              "type": "boolean|integer",
+              "required": false,
+              "description": "Exit status. Default true (success)."
+            },
+            {
+              "name": "close",
+              "type": "boolean",
+              "required": false,
+              "description": "Whether to close the Lua state before exiting. Default false."
+            }
+          ],
+          "returns": [
+            {
+              "description": "does not return"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "-- Avoid in Linkiir scripts; shown for reference only.\n-- os.exit(0)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "io",
+      "title": "Lua IO Library (files/stdio)",
+      "description": "Standard Lua 5.1 io library: local file and standard-stream I/O, available exactly as in stock Lua/LuaJIT (registered by the runtime alongside table/math/os/string). For directory listings, metadata, and simple file management, prefer linkiir.sys.fs, which is purpose-built for the node's working directories; for reading/writing remote files (FTP/SFTP), use linkiir.link.file. io.* is the right tool when you need actual byte-level read/write access to a local file or stdin/stdout/stderr. io.popen spawns a shell process and should be avoided in workflow scripts.",
+      "items": [
+        {
+          "kind": "function",
+          "name": "io.open",
+          "signature": "io.open(filename [, mode])",
+          "usage": "local f, err = io.open(filename, mode)",
+          "summary": "Open a file.",
+          "description": "Opens filename in the given mode (\"r\" read, \"w\" write/truncate, \"a\" append, with optional \"b\" for binary and \"+\" for update; default \"r\"). Returns a new file handle on success, or nil plus an error message on failure.",
+          "params": [
+            {
+              "name": "filename",
+              "type": "string",
+              "required": true,
+              "description": "Path to open."
+            },
+            {
+              "name": "mode",
+              "type": "string",
+              "required": false,
+              "description": "r/w/a, optionally with b and/or +. Default \"r\"."
+            }
+          ],
+          "returns": [
+            {
+              "description": "file handle on success; nil, errorMessage on failure"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local F, Err = io.open(__node_dir .. '/scratch.txt', 'w')\nif not F then error(Err) end\nF:write('hello')\nF:close()"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "io.close",
+          "signature": "io.close([file])",
+          "usage": "io.close(file)",
+          "summary": "Close a file.",
+          "description": "Closes file (default the current default output file). Equivalent to file:close().",
+          "params": [
+            {
+              "name": "file",
+              "type": "file",
+              "required": false,
+              "description": "File handle to close. Default the current output file."
+            }
+          ],
+          "returns": [
+            {
+              "description": "true on success; nil, errorMessage on failure"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local F = io.open('/tmp/x.txt', 'r')\n-- ... use F ...\nio.close(F)"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "io.read",
+          "signature": "io.read(...)",
+          "usage": "io.read(format)",
+          "summary": "Read from the default input file.",
+          "description": "Reads from the current default input file, using the same formats as file:read.",
+          "params": [
+            {
+              "name": "...",
+              "type": "string",
+              "required": false,
+              "description": "Format specifiers (\"*l\", \"*n\", \"*a\", or a byte count). Default \"*l\"."
+            }
+          ],
+          "returns": [
+            {
+              "description": "the values read, per format; nil at end of file"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Line = io.read('*l')"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "io.write",
+          "signature": "io.write(...)",
+          "usage": "io.write(...)",
+          "summary": "Write to the default output file.",
+          "description": "Writes the given strings/numbers to the current default output file, using the same rules as file:write.",
+          "params": [
+            {
+              "name": "...",
+              "type": "string|number",
+              "required": true,
+              "description": "Values to write (variadic)."
+            }
+          ],
+          "returns": [
+            {
+              "description": "the default output file, for chaining; nil, errorMessage on failure"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "io.write('processed ', tostring(Count), ' records\\n')"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "io.lines",
+          "signature": "io.lines([filename, ...])",
+          "usage": "for line in io.lines(filename) do ... end",
+          "summary": "Iterate the lines of a file.",
+          "description": "Opens filename (or uses the default input file if omitted), and returns an iterator function that returns a new line each time it is called, per the given format(s). The file is closed automatically when the iterator finishes (only when a filename is given).",
+          "params": [
+            {
+              "name": "filename",
+              "type": "string",
+              "required": false,
+              "description": "Path to read. Default the current input file."
+            },
+            {
+              "name": "...",
+              "type": "string",
+              "required": false,
+              "description": "Read formats (as in file:read). Default \"*l\"."
+            }
+          ],
+          "returns": [
+            {
+              "description": "iterator function, for use in a generic for loop"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "for Line in io.lines(__node_dir .. '/data.csv') do\n   print(Line)\nend"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "io.input",
+          "signature": "io.input([file])",
+          "usage": "io.input(file)",
+          "summary": "Get/set the default input file.",
+          "description": "With a string, opens the named file in read mode and sets it as the default input file. With a file handle, sets it as the default input file. With no argument, returns the current default input file.",
+          "params": [
+            {
+              "name": "file",
+              "type": "string|file",
+              "required": false,
+              "description": "Filename to open, or an already-open file handle."
+            }
+          ],
+          "returns": [
+            {
+              "description": "the default input file"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "io.input(__node_dir .. '/data.csv')\nlocal Line = io.read('*l')"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "io.output",
+          "signature": "io.output([file])",
+          "usage": "io.output(file)",
+          "summary": "Get/set the default output file.",
+          "description": "With a string, opens the named file in write mode and sets it as the default output file. With a file handle, sets it as the default output file. With no argument, returns the current default output file.",
+          "params": [
+            {
+              "name": "file",
+              "type": "string|file",
+              "required": false,
+              "description": "Filename to open, or an already-open file handle."
+            }
+          ],
+          "returns": [
+            {
+              "description": "the default output file"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "io.output('/tmp/out.txt')\nio.write('done\\n')"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "io.popen",
+          "signature": "io.popen(prog [, mode])",
+          "usage": "local f = io.popen(prog, mode)",
+          "summary": "Run a shell command, connected via a pipe.",
+          "description": "Starts prog in a separate process (via the system shell) and returns a file handle for reading its output (mode \"r\", the default) or writing to its input (mode \"w\"). Runs with the worker process's OS privileges — avoid in workflow scripts; prefer linkiir.link.file / linkiir.link.web for external I/O.",
+          "params": [
+            {
+              "name": "prog",
+              "type": "string",
+              "required": true,
+              "description": "Shell command line to run."
+            },
+            {
+              "name": "mode",
+              "type": "string",
+              "required": false,
+              "description": "\"r\" (read prog's stdout) or \"w\" (write to prog's stdin). Default \"r\"."
+            }
+          ],
+          "returns": [
+            {
+              "description": "file handle on success; nil, errorMessage on failure"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "-- Avoid in Linkiir scripts; shown for reference only.\nlocal P = io.popen('date', 'r')\nprint(P:read('*l'))\nP:close()"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "io.tmpfile",
+          "signature": "io.tmpfile()",
+          "usage": "io.tmpfile()",
+          "summary": "Open a temporary file.",
+          "description": "Returns a handle for a temporary file, opened in update mode ('w+'), that is automatically removed when the script ends.",
+          "returns": [
+            {
+              "description": "file handle on success; nil, errorMessage on failure"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local F = io.tmpfile()\nF:write('scratch')\nF:seek('set', 0)\nprint(F:read('*a'))"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "io.type",
+          "signature": "io.type(obj)",
+          "usage": "io.type(obj)",
+          "summary": "Test whether a value is a file handle.",
+          "description": "Returns \"file\" if obj is an open file handle, \"closed file\" if it is a closed file handle, or nil if it is not a file handle at all.",
+          "params": [
+            {
+              "name": "obj",
+              "type": "any",
+              "required": true,
+              "description": "Value to test."
+            }
+          ],
+          "returns": [
+            {
+              "description": "\"file\", \"closed file\", or nil"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local F = io.open('/tmp/x.txt', 'r')\nprint(io.type(F))  -- \"file\"\nF:close()\nprint(io.type(F))  -- \"closed file\""
+            }
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "io.stdin",
+          "signature": "io.stdin",
+          "usage": "io.stdin",
+          "summary": "The process's standard input file handle.",
+          "description": "The process's standard input, as a file handle.",
+          "returns": [
+            {
+              "description": "file handle"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Line = io.stdin:read('*l')"
+            }
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "io.stdout",
+          "signature": "io.stdout",
+          "usage": "io.stdout",
+          "summary": "The process's standard output file handle.",
+          "description": "The process's standard output, as a file handle.",
+          "returns": [
+            {
+              "description": "file handle"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "io.stdout:write('hello\\n')"
+            }
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "io.stderr",
+          "signature": "io.stderr",
+          "usage": "io.stderr",
+          "summary": "The process's standard error file handle.",
+          "description": "The process's standard error, as a file handle.",
+          "returns": [
+            {
+              "description": "file handle"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "io.stderr:write('warning: retrying\\n')"
+            }
+          ]
+        },
+        {
+          "kind": "method",
+          "of": "File",
+          "name": "File:read",
+          "signature": "file:read(...)",
+          "summary": "Read from a file.",
+          "description": "Reads from file per the given format(s): \"*l\" a line without the newline (default), \"*L\" a line with the newline, \"*a\" the whole rest of the file, \"*n\" a number, or an integer n for up to n bytes. Returns nil (or an empty string for \"*a\") at end of file.",
+          "returns": [
+            {
+              "description": "the value(s) read, one per format; nil at end of file"
+            }
+          ],
+          "usage": "local Line = f:read('*l')",
+          "params": [
+            {
+              "name": "...",
+              "type": "string|integer",
+              "required": false,
+              "description": "One or more read formats. Default \"*l\"."
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local F = io.open(Path, 'r')\nlocal All = F:read('*a')\nF:close()"
+            }
+          ]
+        },
+        {
+          "kind": "method",
+          "of": "File",
+          "name": "File:write",
+          "signature": "file:write(...)",
+          "summary": "Write to a file.",
+          "description": "Writes the given strings/numbers to file. Numbers are converted per their usual string representation.",
+          "returns": [
+            {
+              "description": "file, for chaining; nil, errorMessage on failure"
+            }
+          ],
+          "usage": "f:write('hello')",
+          "params": [
+            {
+              "name": "...",
+              "type": "string|number",
+              "required": true,
+              "description": "Values to write (variadic)."
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local F = io.open(Path, 'w')\nF:write('id,name\\n')\nF:write('1,Alice\\n')\nF:close()"
+            }
+          ]
+        },
+        {
+          "kind": "method",
+          "of": "File",
+          "name": "File:close",
+          "signature": "file:close()",
+          "summary": "Close a file.",
+          "description": "Closes file. Files are also closed automatically (in an unspecified order) when their handle is garbage-collected, but explicit close is recommended.",
+          "returns": [
+            {
+              "description": "true on success; nil, errorMessage on failure"
+            }
+          ],
+          "usage": "f:close()",
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local F = io.open(Path, 'r')\n-- ... use F ...\nF:close()"
+            }
+          ]
+        },
+        {
+          "kind": "method",
+          "of": "File",
+          "name": "File:lines",
+          "signature": "file:lines(...)",
+          "summary": "Iterate the lines of an already-open file.",
+          "description": "Returns an iterator function that, each time it is called, reads the next line from file per the given format(s) (as file:read; default \"*l\"). Does not close file when done.",
+          "returns": [
+            {
+              "description": "iterator function, for use in a generic for loop"
+            }
+          ],
+          "usage": "for line in f:lines() do ... end",
+          "params": [
+            {
+              "name": "...",
+              "type": "string",
+              "required": false,
+              "description": "Read formats. Default \"*l\"."
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local F = io.open(Path, 'r')\nfor Line in F:lines() do\n   print(Line)\nend\nF:close()"
+            }
+          ]
+        },
+        {
+          "kind": "method",
+          "of": "File",
+          "name": "File:seek",
+          "signature": "file:seek([whence [, offset]])",
+          "summary": "Get/set the file position.",
+          "description": "Sets and/or gets the current file position, measured from the start of the file. whence is \"set\" (from the start), \"cur\" (from the current position, the default), or \"end\" (from the end of the file); offset defaults to 0. With no arguments, returns the current position without changing it.",
+          "returns": [
+            {
+              "description": "the new file position (bytes from the start); nil, errorMessage on failure"
+            }
+          ],
+          "usage": "local pos = f:seek('set', 0)",
+          "params": [
+            {
+              "name": "whence",
+              "type": "string",
+              "required": false,
+              "description": "\"set\", \"cur\", or \"end\". Default \"cur\"."
+            },
+            {
+              "name": "offset",
+              "type": "integer",
+              "required": false,
+              "description": "Byte offset from whence. Default 0."
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local F = io.open(Path, 'r')\nlocal Size = F:seek('end')\nF:seek('set', 0)\nF:close()"
+            }
+          ]
+        },
+        {
+          "kind": "method",
+          "of": "File",
+          "name": "File:flush",
+          "signature": "file:flush()",
+          "summary": "Flush buffered writes.",
+          "description": "Saves any written data to file, without closing it.",
+          "returns": [
+            {
+              "description": "file, for chaining"
+            }
+          ],
+          "usage": "f:flush()",
+          "examples": [
+            {
+              "language": "lua",
+              "code": "F:write('partial')\nF:flush()"
+            }
+          ]
+        },
+        {
+          "kind": "method",
+          "of": "File",
+          "name": "File:setvbuf",
+          "signature": "file:setvbuf(mode [, size])",
+          "summary": "Set the file's buffering mode.",
+          "description": "Sets the buffering mode for an output file: \"no\" (unbuffered), \"full\" (buffer up to size bytes, flushed when full or explicitly), or \"line\" (line-buffered).",
+          "returns": [
+            {
+              "description": "true on success"
+            }
+          ],
+          "usage": "f:setvbuf('line')",
+          "params": [
+            {
+              "name": "mode",
+              "type": "string",
+              "required": true,
+              "description": "\"no\", \"full\", or \"line\"."
+            },
+            {
+              "name": "size",
+              "type": "integer",
+              "required": false,
+              "description": "Buffer size in bytes (for \"full\")."
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "F:setvbuf('line')"
+            }
+          ]
         }
       ]
     },
@@ -5500,6 +6712,33 @@
             {
               "language": "lua",
               "code": "print(string.char(65, 66, 67))  -- \"ABC\""
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "string.dump",
+          "signature": "string.dump(function)",
+          "usage": "string.dump(fn)",
+          "summary": "Serialize a function to a binary chunk.",
+          "description": "Returns a binary string containing a loadable, compiled representation (bytecode) of function. To load and run it again, pass the string to loadstring (or load). Only works on Lua functions defined in the script itself, not C functions exposed by the runtime (print, linkiir.*, etc.).",
+          "params": [
+            {
+              "name": "function",
+              "type": "function",
+              "required": true,
+              "description": "A Lua function with no upvalues other than _ENV/globals."
+            }
+          ],
+          "returns": [
+            {
+              "description": "string (binary chunk)"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local function Add(a, b) return a + b end\nlocal Bytes = string.dump(Add)\nlocal Reloaded = loadstring(Bytes)\nprint(Reloaded(2, 3))  -- 5"
             }
           ]
         },
@@ -5886,6 +7125,439 @@
             {
               "language": "lua",
               "code": "print(string.upper('hello'))  -- \"HELLO\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "debug",
+      "title": "Lua Debug Library",
+      "description": "Standard Lua 5.1 debug library: introspection and instrumentation for the call stack, locals, upvalues, and metatables. debug.traceback is the one function commonly useful in workflow scripts (paired with xpcall to capture where an error occurred); the rest are low-level tools for advanced debugging.",
+      "items": [
+        {
+          "kind": "function",
+          "name": "debug.traceback",
+          "signature": "debug.traceback([thread,] [message [, level]])",
+          "usage": "debug.traceback(message)",
+          "summary": "Build a traceback string.",
+          "description": "Returns a string with a traceback of the call stack, optionally prefixed with message. Commonly used as the message handler passed to xpcall to capture where an error occurred.",
+          "params": [
+            {
+              "name": "message",
+              "type": "string",
+              "required": false,
+              "description": "Text to prefix the traceback with."
+            },
+            {
+              "name": "level",
+              "type": "integer",
+              "required": false,
+              "description": "Stack level to start the traceback at. Default 1 (the caller)."
+            }
+          ],
+          "returns": [
+            {
+              "description": "string"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Ok, Err = xpcall(RiskyFn, debug.traceback)\nif not Ok then print(Err) end"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "debug.getinfo",
+          "signature": "debug.getinfo([thread,] function [, what])",
+          "usage": "debug.getinfo(1, 'Sl')",
+          "summary": "Get information about a function or stack level.",
+          "description": "Returns a table with information about a function, or about the function running at the given stack level. what selects which fields to fill in (\"n\" name, \"S\" source, \"l\" current line, \"u\" upvalues, \"f\" the function itself); default is all of them.",
+          "params": [
+            {
+              "name": "function",
+              "type": "function|integer",
+              "required": true,
+              "description": "A function value, or a stack level (integer, 0 = current function)."
+            },
+            {
+              "name": "what",
+              "type": "string",
+              "required": false,
+              "description": "Field selector string. Default all fields."
+            }
+          ],
+          "returns": [
+            {
+              "description": "table of debug info, or nil if the level is out of range"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Info = debug.getinfo(1, 'Sl')\nprint(Info.source, Info.currentline)"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "debug.getlocal",
+          "signature": "debug.getlocal([thread,] level, index)",
+          "usage": "debug.getlocal(1, 1)",
+          "summary": "Read a local variable of a stack frame.",
+          "description": "Returns the name and value of the local variable at index in the function at stack level level. Returns nil if there is no local at that index.",
+          "params": [
+            {
+              "name": "level",
+              "type": "integer",
+              "required": true,
+              "description": "Stack level (1 = the caller of debug.getlocal)."
+            },
+            {
+              "name": "index",
+              "type": "integer",
+              "required": true,
+              "description": "1-based local-variable index."
+            }
+          ],
+          "returns": [
+            {
+              "description": "name, value, or nil if index is out of range"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Name, Value = debug.getlocal(1, 1)"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "debug.setlocal",
+          "signature": "debug.setlocal([thread,] level, index, value)",
+          "usage": "debug.setlocal(1, 1, 42)",
+          "summary": "Write a local variable of a stack frame.",
+          "description": "Sets the value of the local variable at index in the function at stack level level to value. Returns the variable's name, or nil if there is no local at that index.",
+          "params": [
+            {
+              "name": "level",
+              "type": "integer",
+              "required": true,
+              "description": "Stack level."
+            },
+            {
+              "name": "index",
+              "type": "integer",
+              "required": true,
+              "description": "1-based local-variable index."
+            },
+            {
+              "name": "value",
+              "type": "any",
+              "required": true,
+              "description": "New value."
+            }
+          ],
+          "returns": [
+            {
+              "description": "name, or nil if index is out of range"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "debug.setlocal(1, 1, 42)"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "debug.getupvalue",
+          "signature": "debug.getupvalue(f, index)",
+          "usage": "debug.getupvalue(f, 1)",
+          "summary": "Read an upvalue of a function.",
+          "description": "Returns the name and value of the upvalue at index of function f. Returns nil if there is no upvalue at that index.",
+          "params": [
+            {
+              "name": "f",
+              "type": "function",
+              "required": true,
+              "description": "Function to inspect."
+            },
+            {
+              "name": "index",
+              "type": "integer",
+              "required": true,
+              "description": "1-based upvalue index."
+            }
+          ],
+          "returns": [
+            {
+              "description": "name, value, or nil if index is out of range"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Name, Value = debug.getupvalue(SomeFn, 1)"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "debug.setupvalue",
+          "signature": "debug.setupvalue(f, index, value)",
+          "usage": "debug.setupvalue(f, 1, 42)",
+          "summary": "Write an upvalue of a function.",
+          "description": "Sets the value of the upvalue at index of function f to value. Returns the upvalue's name, or nil if there is no upvalue at that index.",
+          "params": [
+            {
+              "name": "f",
+              "type": "function",
+              "required": true,
+              "description": "Function to modify."
+            },
+            {
+              "name": "index",
+              "type": "integer",
+              "required": true,
+              "description": "1-based upvalue index."
+            },
+            {
+              "name": "value",
+              "type": "any",
+              "required": true,
+              "description": "New value."
+            }
+          ],
+          "returns": [
+            {
+              "description": "name, or nil if index is out of range"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "debug.setupvalue(SomeFn, 1, 42)"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "debug.getmetatable",
+          "signature": "debug.getmetatable(object)",
+          "usage": "debug.getmetatable(object)",
+          "summary": "Read a value's metatable, bypassing __metatable.",
+          "description": "Returns the metatable of object, or nil if it has none. Unlike getmetatable(), ignores the __metatable field, so it can inspect protected metatables.",
+          "params": [
+            {
+              "name": "object",
+              "type": "any",
+              "required": true,
+              "description": "Value to inspect."
+            }
+          ],
+          "returns": [
+            {
+              "description": "table, or nil"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Meta = debug.getmetatable(SomeValue)"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "debug.setmetatable",
+          "signature": "debug.setmetatable(object, table)",
+          "usage": "debug.setmetatable(object, meta)",
+          "summary": "Set a value's metatable, bypassing __metatable.",
+          "description": "Sets the metatable for object to table (which can be nil). Returns object. Unlike setmetatable(), ignores the __metatable field.",
+          "params": [
+            {
+              "name": "object",
+              "type": "any",
+              "required": true,
+              "description": "Value to modify."
+            },
+            {
+              "name": "table",
+              "type": "table|nil",
+              "required": true,
+              "description": "New metatable, or nil to remove it."
+            }
+          ],
+          "returns": [
+            {
+              "description": "object"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "debug.setmetatable(SomeValue, SomeMeta)"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "debug.getfenv",
+          "signature": "debug.getfenv(object)",
+          "usage": "debug.getfenv(object)",
+          "summary": "Read a value's environment table.",
+          "description": "Returns the environment table of object.",
+          "params": [
+            {
+              "name": "object",
+              "type": "any",
+              "required": true,
+              "description": "Value to inspect."
+            }
+          ],
+          "returns": [
+            {
+              "description": "table"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Env = debug.getfenv(SomeFn)"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "debug.setfenv",
+          "signature": "debug.setfenv(object, table)",
+          "usage": "debug.setfenv(object, table)",
+          "summary": "Set a value's environment table.",
+          "description": "Sets the environment table of object to table. Returns object.",
+          "params": [
+            {
+              "name": "object",
+              "type": "any",
+              "required": true,
+              "description": "Value to modify."
+            },
+            {
+              "name": "table",
+              "type": "table",
+              "required": true,
+              "description": "New environment table."
+            }
+          ],
+          "returns": [
+            {
+              "description": "object"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "debug.setfenv(SomeFn, {})"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "debug.gethook",
+          "signature": "debug.gethook([thread])",
+          "usage": "debug.gethook()",
+          "summary": "Read the current debug hook.",
+          "description": "Returns the current hook function, hook mask, and hook count set with debug.sethook, or nothing if there is no active hook.",
+          "returns": [
+            {
+              "description": "hook, mask, count"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Hook, Mask, Count = debug.gethook()"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "debug.sethook",
+          "signature": "debug.sethook([thread,] hook, mask [, count])",
+          "usage": "debug.sethook(hook, 'l')",
+          "summary": "Install a debug hook.",
+          "description": "Installs hook as a debug hook, called on the events selected by mask (\"c\" calls, \"r\" returns, \"l\" every line), and optionally every count instructions. Call with no arguments to remove the current hook.",
+          "params": [
+            {
+              "name": "hook",
+              "type": "function",
+              "required": true,
+              "description": "Hook function, called as hook(event, line)."
+            },
+            {
+              "name": "mask",
+              "type": "string",
+              "required": true,
+              "description": "Combination of \"c\", \"r\", \"l\"."
+            },
+            {
+              "name": "count",
+              "type": "integer",
+              "required": false,
+              "description": "Also call the hook every count instructions."
+            }
+          ],
+          "returns": [
+            {
+              "description": "none"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "debug.sethook(function(event, line) print(event, line) end, 'l')\n-- ... \ndebug.sethook()  -- remove the hook"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "debug.getregistry",
+          "signature": "debug.getregistry()",
+          "usage": "debug.getregistry()",
+          "summary": "Read the registry table.",
+          "description": "Returns the registry table, a predefined table used by C code to store Lua values.",
+          "returns": [
+            {
+              "description": "table"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Registry = debug.getregistry()"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "debug.debug",
+          "signature": "debug.debug()",
+          "usage": "debug.debug()",
+          "summary": "Enter an interactive debug console.",
+          "description": "Enters an interactive mode, reading and running Lua commands from stdin until the user types \"cont\". Not useful in Linkiir workflow scripts, which have no interactive stdin — documented for stdlib completeness only.",
+          "returns": [
+            {
+              "description": "none"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "-- Not useful outside an interactive Lua REPL.\n-- debug.debug()"
             }
           ]
         }

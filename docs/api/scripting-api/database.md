@@ -18,8 +18,6 @@ Database access, named for what it does (store / retrieve). Connection-object st
 linkiir.store.open{ driver=, name=, user=, password=, … }
 ```
 
-Open a database connection.
-
 Open a database connection. Driver constants: linkiir.store.MYSQL, POSTGRES, SQLSERVER, ORACLE, SQLITE, DB2, SYBASE, ODBC.
 
 **Usage**

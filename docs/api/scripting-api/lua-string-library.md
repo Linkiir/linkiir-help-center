@@ -83,6 +83,44 @@ print(string.char(65, 66, 67))  -- "ABC"
 ```
 
 
+## `string.dump`
+
+*function*
+
+```lua
+string.dump(function)
+```
+
+Serialize a function to a binary chunk.
+
+Returns a binary string containing a loadable, compiled representation (bytecode) of function. To load and run it again, pass the string to loadstring (or load). Only works on Lua functions defined in the script itself, not C functions exposed by the runtime (print, linkiir.*, etc.).
+
+**Usage**
+
+```lua
+string.dump(fn)
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `function` | function | Yes | A Lua function with no upvalues other than _ENV/globals. |
+
+**Returns**
+
+- string (binary chunk)
+
+**Example**
+
+```lua
+local function Add(a, b) return a + b end
+local Bytes = string.dump(Add)
+local Reloaded = loadstring(Bytes)
+print(Reloaded(2, 3))  -- 5
+```
+
+
 ## `string.find`
 
 *function*
@@ -120,8 +158,8 @@ string.find(s, pattern, init, plain)
 local S, E = string.find('hello world', 'wor')
 print(S, E)  -- 7  9
 
-local S2, E2, Cap = string.find('ID:98765', '(%d+)')
-print(Cap)   -- "98765"
+local S2, E2, Cap = string.find('MRN:12345', '(%d+)')
+print(Cap)   -- "12345"
 ```
 
 
@@ -243,8 +281,8 @@ print(Out, N)  -- "hell0 w0rld"  2
 local Wire = ('ADT^A01|20260101'):gsub('%^', '-')
 print(Wire)    -- "ADT-A01|20260101"
 
-local Redacted = string.gsub('REF: 123-45-6789', '%d', '#')
-print(Redacted)  -- "REF: ###-##-####"
+local Redacted = string.gsub('SSN: 123-45-6789', '%d', '#')
+print(Redacted)  -- "SSN: ###-##-####"
 ```
 
 
@@ -352,8 +390,8 @@ string.match(s, pattern, init)
 **Example**
 
 ```lua
-local Id = string.match('CODE:98765', 'CODE:(%d+)')
-print(Id)  -- "98765"
+local Mrn = string.match('MRN:12345', 'MRN:(%d+)')
+print(Mrn)  -- "12345"
 ```
 
 

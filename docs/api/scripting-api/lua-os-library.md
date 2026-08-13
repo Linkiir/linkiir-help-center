@@ -6,7 +6,7 @@ title: Lua OS Library (time/env)
 
 `os`
 
-Time and environment functions from the standard Lua 5.1 os library. File and process functions (os.execute, os.remove, os.rename, os.tmpname, os.exit) are intentionally not used in Linkiir scripts — use linkiir.sys.fs for local filesystem work and linkiir.link.file for remote transfer instead.
+Time and environment functions from the standard Lua 5.1 os library, plus the file/process functions (os.execute, os.remove, os.rename, os.tmpname, os.exit). The file/process functions are fully functional but are a Linkiir convention to avoid in workflow scripts — they bypass logging/auditing and portability that linkiir.sys.fs (local filesystem) and linkiir.link.file (remote transfer) provide, and os.exit()/os.execute() can terminate or fork the worker process outright. Prefer the linkiir.* equivalents unless you specifically need raw OS access.
 
 ---
 
@@ -183,5 +183,184 @@ os.getenv(varname)
 
 ```lua
 local ApiKey = os.getenv('LINKIIR_API_KEY')
+```
+
+
+## `os.execute`
+
+*function*
+
+```lua
+os.execute([command])
+```
+
+Run a shell command.
+
+Passes command to the system shell (via C's system()) and returns its exit status. With no argument, returns whether a shell is available. Runs with the worker process's OS privileges — discouraged in workflow scripts; prefer linkiir.sys.fs / linkiir.link.file for file and transfer work.
+
+**Usage**
+
+```lua
+os.execute(command)
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `command` | string | No | Shell command line to run. |
+
+**Returns**
+
+- integer exit status (or boolean shell-availability when called with no arguments)
+
+**Example**
+
+```lua
+local Status = os.execute('true')
+print(Status)  -- 0
+```
+
+
+## `os.remove`
+
+*function*
+
+```lua
+os.remove(filename)
+```
+
+Delete a file.
+
+Deletes the file (or empty directory, on POSIX) at filename. Returns true on success, or nil plus an error message on failure. Prefer linkiir.sys.fs.remove, which is scoped to the node's working directories.
+
+**Usage**
+
+```lua
+os.remove(filename)
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `filename` | string | Yes | Path of the file to delete. |
+
+**Returns**
+
+- true on success; nil, errorMessage on failure
+
+**Example**
+
+```lua
+local Ok, Err = os.remove('/tmp/scratch.txt')
+if not Ok then print(Err) end
+```
+
+
+## `os.rename`
+
+*function*
+
+```lua
+os.rename(oldname, newname)
+```
+
+Rename/move a file.
+
+Renames the file or directory at oldname to newname. Returns true on success, or nil plus an error message on failure.
+
+**Usage**
+
+```lua
+os.rename(oldname, newname)
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `oldname` | string | Yes | Existing path. |
+| `newname` | string | Yes | New path. |
+
+**Returns**
+
+- true on success; nil, errorMessage on failure
+
+**Example**
+
+```lua
+local Ok, Err = os.rename('/tmp/a.txt', '/tmp/b.txt')
+if not Ok then print(Err) end
+```
+
+
+## `os.tmpname`
+
+*function*
+
+```lua
+os.tmpname()
+```
+
+Generate a temporary file name.
+
+Returns a string with a name that can safely be used as a temporary file. The file must be explicitly opened (e.g. io.open) and removed (os.remove) when done.
+
+**Usage**
+
+```lua
+os.tmpname()
+```
+
+**Returns**
+
+- string (a filesystem path)
+
+**Example**
+
+```lua
+local Path = os.tmpname()
+local F = io.open(Path, 'w')
+F:write('scratch')
+F:close()
+os.remove(Path)
+```
+
+
+## `os.exit`
+
+*function*
+
+```lua
+os.exit([code [, close]])
+```
+
+Terminate the process.
+
+Terminates the host process immediately, with an optional exit code (default success/true) and an optional flag to close the Lua state first. Never call this in a workflow script — it kills the worker process running the script, not just the current script invocation.
+
+**Usage**
+
+```lua
+os.exit(code)
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `code` | boolean\|integer | No | Exit status. Default true (success). |
+| `close` | boolean | No | Whether to close the Lua state before exiting. Default false. |
+
+**Returns**
+
+- does not return
+
+**Example**
+
+```lua
+-- Avoid in Linkiir scripts; shown for reference only.
+-- os.exit(0)
 ```
 

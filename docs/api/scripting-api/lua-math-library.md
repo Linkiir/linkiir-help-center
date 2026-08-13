@@ -878,3 +878,180 @@ math.rad(x)
 print(math.rad(180))  -- 3.1415926535898
 ```
 
+
+## `math.sinh`
+
+*function*
+
+```lua
+math.sinh(x)
+```
+
+Hyperbolic sine.
+
+Returns the hyperbolic sine of x.
+
+**Usage**
+
+```lua
+math.sinh(x)
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `x` | number | Yes | Input value. |
+
+**Returns**
+
+- number
+
+**Example**
+
+```lua
+print(math.sinh(0))  -- 0.0
+```
+
+
+## `math.cosh`
+
+*function*
+
+```lua
+math.cosh(x)
+```
+
+Hyperbolic cosine.
+
+Returns the hyperbolic cosine of x.
+
+**Usage**
+
+```lua
+math.cosh(x)
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `x` | number | Yes | Input value. |
+
+**Returns**
+
+- number
+
+**Example**
+
+```lua
+print(math.cosh(0))  -- 1.0
+```
+
+
+## `math.tanh`
+
+*function*
+
+```lua
+math.tanh(x)
+```
+
+Hyperbolic tangent.
+
+Returns the hyperbolic tangent of x.
+
+**Usage**
+
+```lua
+math.tanh(x)
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `x` | number | Yes | Input value. |
+
+**Returns**
+
+- number
+
+**Example**
+
+```lua
+print(math.tanh(0))  -- 0.0
+```
+
+
+## `math.frexp`
+
+*function*
+
+```lua
+math.frexp(x)
+```
+
+Split a number into mantissa and exponent.
+
+Returns m (a multiplier, |m| in [0.5, 1)) and e (an integer exponent) such that x = m * 2^e. Used for portable, precision-safe manipulation of floating-point values.
+
+**Usage**
+
+```lua
+math.frexp(x)
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `x` | number | Yes | Input value. |
+
+**Returns**
+
+- m (mantissa), e (exponent)
+
+**Example**
+
+```lua
+local M, E = math.frexp(8)
+print(M, E)  -- 0.5  4
+```
+
+
+## `math.ldexp`
+
+*function*
+
+```lua
+math.ldexp(m, e)
+```
+
+Build a number from a mantissa and exponent.
+
+Returns m * 2^e. The inverse of math.frexp.
+
+**Usage**
+
+```lua
+math.ldexp(m, e)
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `m` | number | Yes | Mantissa. |
+| `e` | integer | Yes | Exponent. |
+
+**Returns**
+
+- number
+
+**Example**
+
+```lua
+print(math.ldexp(0.5, 4))  -- 8
+```
+
