@@ -186,6 +186,7 @@ const config: Config = {
         },
         {to: '/docs/getting-started/', label: 'Getting Started', position: 'left'},
         {to: '/docs/api/', label: 'API', position: 'left'},
+        {to: '/docs/release-notes/', label: 'Release Notes', position: 'right'},
         {to: '/docs/faq/', label: 'FAQ', position: 'right'},
       ],
     },
