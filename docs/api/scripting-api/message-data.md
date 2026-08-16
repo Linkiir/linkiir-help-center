@@ -470,3 +470,10 @@ local p = N:protocol()
 print(Msg:protocol())  -- 101 (HL7), 102 (X12), 105 (XML), ...
 ```
 
+
+---
+
+## See also
+
+- [Code Sets](code-sets.md) — look up and cross-map the code tables embedded in your schema.
+

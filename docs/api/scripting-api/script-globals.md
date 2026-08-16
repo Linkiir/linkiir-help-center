@@ -78,7 +78,7 @@ require(modname)
 
 Load a Lua module.
 
-Loads a Lua module. Search path: node dir (including any linked library dependencies, staged there at run time) then system defaults.
+Loads a Lua module. Search path: the node's own directory first, then the project's `common/` directory (shared modules available to all nodes in the project), then system defaults. A node-local file with the same name takes priority over a shared one.
 
 **Usage**
 
