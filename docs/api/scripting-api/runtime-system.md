@@ -86,6 +86,78 @@ linkiir.sys.sleep(250)
 ```
 
 
+
+---
+
+## `linkiir.sys.workingDir`
+
+*function*
+
+```lua
+linkiir.sys.workingDir()
+```
+
+Returns the Runtime's working directory as an absolute path.
+
+This is the directory the Runtime was pointed at with `--working-dir` — the parent of `projects/`, `users/`, `logs/`, and `run/`. Relative paths passed to `linkiir.store.open` and `linkiir.sys.fs` resolve against this directory.
+
+**Returns**
+
+- `string` — absolute path to the working directory.
+
+**Errors**
+
+Raises a Lua error if the working directory is not configured (e.g. running outside the Runtime without calling `linkiir.init`).
+
+**Example**
+
+```lua
+print(linkiir.sys.workingDir())   -- "/opt/linkiir/linkiir_dir"
+```
+
+---
+
+## `linkiir.sys.nodeDir`
+
+*function*
+
+```lua
+linkiir.sys.nodeDir()
+```
+
+Returns the current node's directory as an absolute path.
+
+This is the directory the node's files were loaded from — the same value as the deprecated `__node_dir` global. Relative `schema` paths in `linkiir.data.extract` and `linkiir.data.create` resolve against this directory.
+
+**Returns**
+
+- `string` — absolute path to the node directory.
+
+**Errors**
+
+Raises a Lua error if the node directory is not configured.
+
+**Example**
+
+```lua
+local dir = linkiir.sys.nodeDir()
+print(dir)   -- ".../run/MyProject_.../MyWorkflow_.../MyNode_..."
+```
+
+---
+
+## Filesystem path resolution
+
+All `linkiir.sys.fs` functions resolve relative paths against the Runtime's working directory (`linkiir.sys.workingDir()`). Absolute paths are used unchanged. A relative path that escapes the working directory via `..` raises an error.
+
+```lua
+-- These are equivalent:
+linkiir.sys.fs.mkdir('demo')
+linkiir.sys.fs.mkdir(linkiir.sys.workingDir() .. '/demo')
+```
+
+---
+
 ## `linkiir.sys.fs.stat`
 
 *function*
