@@ -26,6 +26,10 @@ Open a database connection. Driver constants: linkiir.store.MYSQL, POSTGRES, SQL
 local conn, err = linkiir.store.open{ driver=, name=, user=, password=, timeout=, live= }
 ```
 
+:::note Path resolution for SQLite
+For SQLite databases, a relative `name` resolves against the Runtime's working directory (`linkiir.sys.workingDir()`), not the node directory or the process working directory. This means `name = 'demo/patient.db'` always creates the database at `<working-dir>/demo/patient.db` regardless of how the service was started. Absolute paths are used unchanged. The sentinel `:memory:` is never resolved.
+:::
+
 **Parameters**
 
 | Name | Type | Required | Description |

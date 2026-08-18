@@ -42,18 +42,28 @@ print(#Raw)
 
 ## `__node_dir`
 
-*field*
+*field (deprecated)*
 
 ```lua
 __node_dir
 ```
 
-Filesystem path to the current node directory. Set by the runtime before script execution. Used to resolve relative schema paths.
+Filesystem path to the current node directory.
+
+:::caution Deprecated
+Use `linkiir.sys.nodeDir()` instead. This global remains for backward compatibility but may be removed in a future release.
+:::
+
+Set by the runtime before script execution. Relative `schema` paths in `linkiir.data.extract` and `linkiir.data.create` resolve against the node directory automatically, so you rarely need to reference this directly.
 
 **Usage**
 
 ```lua
-local schemaPath = __node_dir .. '/demo.json'
+-- Preferred (no manual path needed):
+local Msg = linkiir.data.extract{ schema = 'demo.json', data = Data }
+
+-- Or via the accessor:
+print(linkiir.sys.nodeDir())
 ```
 
 **Returns**
@@ -63,8 +73,8 @@ local schemaPath = __node_dir .. '/demo.json'
 **Example**
 
 ```lua
-local SchemaPath = __node_dir .. '/demo.json'
-local Msg = linkiir.data.extract{ schema = SchemaPath, data = Data }
+local Msg = linkiir.data.extract{ schema = 'demo.json', data = Data }
+local configPath = linkiir.sys.nodeDir() .. '/config.txt'
 ```
 
 
@@ -78,7 +88,7 @@ require(modname)
 
 Load a Lua module.
 
-Loads a Lua module. Search path: node dir (including any linked library dependencies, staged there at run time) then system defaults.
+Loads a Lua module. Search path: the node's own directory first, then the project's `common/` directory (shared modules available to all nodes in the project), then system defaults. A node-local file with the same name takes priority over a shared one.
 
 **Usage**
 
