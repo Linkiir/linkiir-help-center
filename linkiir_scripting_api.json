@@ -3184,7 +3184,7 @@
           "signature": "linkiir.codec.html.encode(s)",
           "usage": "linkiir.codec.html.encode(s)   -- or linkiir.codec.html.encode{ data = s }",
           "summary": "Encode using html.",
-          "description": "Escape HTML-significant characters (<, >, &, \", ') in a string.",
+          "description": "Escape HTML-significant characters (&, <, >, \", ', ;) in a string. Quotes become &quot; and &#39;; the semicolon becomes &#59;.",
           "params": [
             {
               "name": "data",
@@ -3209,6 +3209,40 @@
             {
               "language": "lua",
               "code": "local Esc = linkiir.codec.html.encode('<b>Tom & Jerry</b>')"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "linkiir.codec.html.decode",
+          "signature": "linkiir.codec.html.decode(s)",
+          "usage": "linkiir.codec.html.decode(s)   -- or linkiir.codec.html.decode{ data = s }",
+          "summary": "Decode using html.",
+          "description": "Decode HTML entities and numeric character references back to text. Handles the named entities &amp;, &lt;, &gt;, &quot; and &nbsp; (decoded as a plain space), decimal references (&#39;) and hex references (&#x27;, &#X27;). Numeric references are emitted as UTF-8, so codepoints above U+007F expand to multiple bytes. Unknown entities and malformed sequences (no closing semicolon within 12 characters) pass through verbatim, so decode(encode(s)) round-trips.",
+          "params": [
+            {
+              "name": "data",
+              "type": "string",
+              "required": true,
+              "description": "Input string (positional) or named data= field."
+            }
+          ],
+          "returns": [
+            {
+              "description": "The transformed string."
+            }
+          ],
+          "errors": {
+            "description": "Raises a Lua error on failure.",
+            "codes": [
+              "INVALID_PARAMETER",
+              "DECODE_ERROR"
+            ]
+          },
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Txt = linkiir.codec.html.decode('&lt;b&gt;Tom &amp; Jerry&lt;/b&gt;')\n-- '<b>Tom & Jerry</b>'\n\n-- Round-trips with encode\nlocal Src = [[<script>alert(\"xss's\");</script>]]\nassert(linkiir.codec.html.decode(linkiir.codec.html.encode(Src)) == Src)"
             }
           ]
         },
@@ -3635,7 +3669,7 @@
     {
       "name": "linkiir.json",
       "title": "JSON",
-      "description": "JSON parse and serialize operating on plain Lua tables. Unlike linkiir.data (which returns LkNode userdata), linkiir.json works with native Lua values.",
+      "description": "JSON parse and serialize operating on plain Lua tables. Unlike linkiir.data, which returns the node-tree interface, linkiir.json works with native Lua values. json.array() and json.object() tag a table so its JSON shape is explicit rather than inferred.",
       "items": [
         {
           "kind": "function",
@@ -3676,7 +3710,7 @@
           "signature": "linkiir.json.serialize(value)",
           "usage": "local str = linkiir.json.serialize(value)",
           "summary": "Serialize a Lua value to a JSON string.",
-          "description": "Serialize a Lua value to a JSON string. Tables with consecutive integer keys emit as arrays; otherwise as objects. nil and json.null become null. Raises on circular references, NaN/Infinity, or non-serializable types (functions, userdata).",
+          "description": "Serialize a Lua value to a JSON string. Tables with consecutive integer keys emit as arrays; otherwise as objects, unless the table was tagged with linkiir.json.array() or linkiir.json.object(). nil and json.null become null. Raises on circular references, NaN/Infinity, or non-serializable types (functions, userdata).",
           "params": [
             {
               "name": "value",
@@ -3701,6 +3735,72 @@
             {
               "language": "lua",
               "code": "local s = linkiir.json.serialize({name = \"Alice\", age = 30})\nprint(s)  -- {\"name\":\"Alice\",\"age\":30}"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "linkiir.json.array",
+          "signature": "linkiir.json.array([t])",
+          "usage": "local arr = linkiir.json.array()   -- or linkiir.json.array(t)",
+          "summary": "Tag a table so it always serializes as a JSON array.",
+          "description": "Mark a Lua table as a JSON array. Called with no argument (or nil) it creates and tags a new empty table; called with a table it tags that table in place and returns it. The tag overrides the usual shape heuristic, so a tagged table emits as [ ... ] even when empty or when it holds string keys (array serialization walks integer keys 1..N and ignores the rest). Tables returned by linkiir.json.parse are already tagged, so an empty array survives a parse/serialize round-trip.",
+          "params": [
+            {
+              "name": "t",
+              "type": "table",
+              "required": false,
+              "description": "Existing table to tag. Omit or pass nil to create a new empty table."
+            }
+          ],
+          "returns": [
+            {
+              "description": "The tagged table (the same table when one was passed in)."
+            }
+          ],
+          "errors": {
+            "description": "Raises a Lua error if the argument is present and not a table.",
+            "codes": [
+              "INVALID_PARAMETER"
+            ]
+          },
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local obj = linkiir.json.object()\nobj.items = linkiir.json.array()\nprint(linkiir.json.serialize(obj))  -- {\"items\":[]}"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "linkiir.json.object",
+          "signature": "linkiir.json.object([t])",
+          "usage": "local obj = linkiir.json.object()   -- or linkiir.json.object(t)",
+          "summary": "Tag a table so it always serializes as a JSON object.",
+          "description": "Mark a Lua table as a JSON object. Called with no argument (or nil) it creates and tags a new empty table; called with a table it tags that table in place and returns it. The tag overrides the usual shape heuristic: an untagged empty table serializes as [], while a tagged one serializes as {}. A tagged table holding a sequence emits its integer keys as the object keys \"1\", \"2\", ... Tables returned by linkiir.json.parse are already tagged.",
+          "params": [
+            {
+              "name": "t",
+              "type": "table",
+              "required": false,
+              "description": "Existing table to tag. Omit or pass nil to create a new empty table."
+            }
+          ],
+          "returns": [
+            {
+              "description": "The tagged table (the same table when one was passed in)."
+            }
+          ],
+          "errors": {
+            "description": "Raises a Lua error if the argument is present and not a table.",
+            "codes": [
+              "INVALID_PARAMETER"
+            ]
+          },
+          "examples": [
+            {
+              "language": "lua",
+              "code": "print(linkiir.json.serialize({}))                        -- []\nprint(linkiir.json.serialize(linkiir.json.object()))     -- {}\n\nlocal meta = linkiir.json.object{ source = 'lab' }\nprint(linkiir.json.serialize(meta))  -- {\"source\":\"lab\"}"
             }
           ]
         },
@@ -5826,7 +5926,7 @@
     {
       "name": "os",
       "title": "Lua OS Library (time/env)",
-      "description": "Time and environment functions from the standard Lua 5.1 os library, plus the file/process functions (os.execute, os.remove, os.rename, os.tmpname, os.exit). The file/process functions are fully functional but are a Linkiir convention to avoid in workflow scripts — they bypass logging/auditing and portability that linkiir.sys.fs (local filesystem) and linkiir.link.file (remote transfer) provide, and os.exit()/os.execute() can terminate or fork the worker process outright. Prefer the linkiir.* equivalents unless you specifically need raw OS access.",
+      "description": "Time and environment functions from the standard Lua 5.1 os library, plus the file/process functions (os.execute, os.remove, os.rename, os.tmpname, os.exit). The file/process functions are fully functional but are a Linkiir convention to avoid in workflow scripts — they bypass logging/auditing and portability that linkiir.sys.fs (local filesystem) and linkiir.link.file (remote transfer) provide, and os.exit()/os.execute() can terminate or fork the worker process outright. Prefer the linkiir.* equivalents unless you specifically need raw OS access. os.remove and os.rename resolve paths the same way as linkiir.sys.fs: a relative path resolves against the Runtime's working directory (linkiir.sys.workingDir()), an absolute path is used unchanged, and a path that escapes the working directory via '..' raises an error. os.execute, os.exit and os.tmpname are unwrapped and still act on the raw process.",
       "items": [
         {
           "kind": "function",
@@ -6000,7 +6100,7 @@
           "signature": "os.remove(filename)",
           "usage": "os.remove(filename)",
           "summary": "Delete a file.",
-          "description": "Deletes the file (or empty directory, on POSIX) at filename. Returns true on success, or nil plus an error message on failure. Prefer linkiir.sys.fs.remove, which is scoped to the node's working directories.",
+          "description": "Deletes the file (or empty directory, on POSIX) at filename. Returns true on success, or nil plus an error message on failure. Prefer linkiir.sys.fs.remove, which is scoped to the node's working directories. A relative path resolves against the Runtime's working directory (linkiir.sys.workingDir()), not the process working directory; an absolute path is used unchanged, and a path escaping the working directory via '..' raises an error.",
           "params": [
             {
               "name": "filename",
@@ -6027,7 +6127,7 @@
           "signature": "os.rename(oldname, newname)",
           "usage": "os.rename(oldname, newname)",
           "summary": "Rename/move a file.",
-          "description": "Renames the file or directory at oldname to newname. Returns true on success, or nil plus an error message on failure.",
+          "description": "Renames the file or directory at oldname to newname. Returns true on success, or nil plus an error message on failure. A relative path resolves against the Runtime's working directory (linkiir.sys.workingDir()), not the process working directory; an absolute path is used unchanged, and a path escaping the working directory via '..' raises an error.",
           "params": [
             {
               "name": "oldname",
@@ -6111,7 +6211,7 @@
     {
       "name": "io",
       "title": "Lua IO Library (files/stdio)",
-      "description": "Standard Lua 5.1 io library: local file and standard-stream I/O, available exactly as in stock Lua/LuaJIT (registered by the runtime alongside table/math/os/string). For directory listings, metadata, and simple file management, prefer linkiir.sys.fs, which is purpose-built for the node's working directories; for reading/writing remote files (FTP/SFTP), use linkiir.link.file. io.* is the right tool when you need actual byte-level read/write access to a local file or stdin/stdout/stderr. io.popen spawns a shell process and should be avoided in workflow scripts.",
+      "description": "Standard Lua 5.1 io library: local file and standard-stream I/O, available exactly as in stock Lua/LuaJIT (registered by the runtime alongside table/math/os/string). For directory listings, metadata, and simple file management, prefer linkiir.sys.fs, which is purpose-built for the node's working directories; for reading/writing remote files (FTP/SFTP), use linkiir.link.file. io.* is the right tool when you need actual byte-level read/write access to a local file or stdin/stdout/stderr. io.popen spawns a shell process and should be avoided in workflow scripts. Paths are resolved the same way as linkiir.sys.fs: io.open, io.lines, io.input and io.output take a relative path as relative to the Runtime's working directory (linkiir.sys.workingDir()), never the process working directory. Absolute paths are used unchanged, and a relative path that escapes the working directory via '..' raises an error.",
       "items": [
         {
           "kind": "function",
@@ -6119,7 +6219,7 @@
           "signature": "io.open(filename [, mode])",
           "usage": "local f, err = io.open(filename, mode)",
           "summary": "Open a file.",
-          "description": "Opens filename in the given mode (\"r\" read, \"w\" write/truncate, \"a\" append, with optional \"b\" for binary and \"+\" for update; default \"r\"). Returns a new file handle on success, or nil plus an error message on failure.",
+          "description": "Opens filename in the given mode (\"r\" read, \"w\" write/truncate, \"a\" append, with optional \"b\" for binary and \"+\" for update; default \"r\"). Returns a new file handle on success, or nil plus an error message on failure. A relative path resolves against the Runtime's working directory (linkiir.sys.workingDir()), not the process working directory; an absolute path is used unchanged, and a path escaping the working directory via '..' raises an error.",
           "params": [
             {
               "name": "filename",
@@ -6233,7 +6333,7 @@
           "signature": "io.lines([filename, ...])",
           "usage": "for line in io.lines(filename) do ... end",
           "summary": "Iterate the lines of a file.",
-          "description": "Opens filename (or uses the default input file if omitted), and returns an iterator function that returns a new line each time it is called, per the given format(s). The file is closed automatically when the iterator finishes (only when a filename is given).",
+          "description": "Opens filename (or uses the default input file if omitted), and returns an iterator function that returns a new line each time it is called, per the given format(s). The file is closed automatically when the iterator finishes (only when a filename is given). A relative path resolves against the Runtime's working directory (linkiir.sys.workingDir()), not the process working directory; an absolute path is used unchanged, and a path escaping the working directory via '..' raises an error.",
           "params": [
             {
               "name": "filename",
@@ -6266,7 +6366,7 @@
           "signature": "io.input([file])",
           "usage": "io.input(file)",
           "summary": "Get/set the default input file.",
-          "description": "With a string, opens the named file in read mode and sets it as the default input file. With a file handle, sets it as the default input file. With no argument, returns the current default input file.",
+          "description": "With a string, opens the named file in read mode and sets it as the default input file. With a file handle, sets it as the default input file. With no argument, returns the current default input file. A relative path resolves against the Runtime's working directory (linkiir.sys.workingDir()), not the process working directory; an absolute path is used unchanged, and a path escaping the working directory via '..' raises an error.",
           "params": [
             {
               "name": "file",
@@ -6293,7 +6393,7 @@
           "signature": "io.output([file])",
           "usage": "io.output(file)",
           "summary": "Get/set the default output file.",
-          "description": "With a string, opens the named file in write mode and sets it as the default output file. With a file handle, sets it as the default output file. With no argument, returns the current default output file.",
+          "description": "With a string, opens the named file in write mode and sets it as the default output file. With a file handle, sets it as the default output file. With no argument, returns the current default output file. A relative path resolves against the Runtime's working directory (linkiir.sys.workingDir()), not the process working directory; an absolute path is used unchanged, and a path escaping the working directory via '..' raises an error.",
           "params": [
             {
               "name": "file",

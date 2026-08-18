@@ -120,6 +120,12 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "api/web-api/get-workflow-node-commits-api-get-workflow-node-commits-guid-get",
+          label: "Get every node's newest commit for one workflow",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
           id: "api/web-api/get-project-git-commit-files-api-get-project-git-commit-files-guid-get",
           label: "List files changed in a git commit",
           className: "api-method get",
@@ -696,6 +702,12 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "api/web-api/restart-runtime-route-api-restart-runtime-post",
+          label: "Restart the Runtime process",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
           id: "api/web-api/get-backup-settings-route-api-backup-settings-get",
           label: "Get instance backup settings",
           className: "api-method get",
@@ -710,6 +722,12 @@ const sidebar: SidebarsConfig = {
           type: "doc",
           id: "api/web-api/run-instance-backup-api-run-instance-backup-post",
           label: "Run an instance backup now",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/restore-instance-route-api-restore-instance-post",
+          label: "Restore this instance from a remote",
           className: "api-method post",
         },
         {
@@ -842,6 +860,18 @@ const sidebar: SidebarsConfig = {
           type: "doc",
           id: "api/web-api/clear-queue-api-clear-queue-post",
           label: "Clear a node's or workflow's queue",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/node-queue-api-node-queue-get",
+          label: "Read a node's queue",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/reposition-queue-api-reposition-queue-post",
+          label: "Move a node's position in its queue",
           className: "api-method post",
         },
       ],
@@ -1014,6 +1044,12 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "api/web-api/get-log-index-status-api-logs-index-status-get",
+          label: "Log index build status",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
           id: "api/web-api/get-log-payload-api-logs-event-id-payload-get",
           label: "Get a log record's stored payload",
           className: "api-method get",
@@ -1094,6 +1130,78 @@ const sidebar: SidebarsConfig = {
           type: "doc",
           id: "api/web-api/release-license-api-license-release-post",
           label: "Declare a license migration",
+          className: "api-method post",
+        },
+      ],
+    },
+    {
+      type: "category",
+      label: "Notification Settings",
+      items: [
+        {
+          type: "doc",
+          id: "api/web-api/get-notification-settings-api-settings-notifications-get",
+          label: "Get notification settings",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/update-notification-settings-api-settings-notifications-put",
+          label: "Update notification settings",
+          className: "api-method put",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/test-email-api-settings-notifications-test-email-post",
+          label: "Send a test email",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/test-alert-node-api-settings-notifications-test-alert-node-post",
+          label: "Send a test alert to the Alert Node",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/get-notification-engine-health-api-notification-engine-health-get",
+          label: "Get notification engine health and consumer lag",
+          className: "api-method get",
+        },
+      ],
+    },
+    {
+      type: "category",
+      label: "Notification Rules",
+      items: [
+        {
+          type: "doc",
+          id: "api/web-api/get-notification-rules-api-notification-rules-get",
+          label: "List all notification rules",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/create-notification-rule-api-notification-rules-post",
+          label: "Create a notification rule",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/update-notification-rule-api-notification-rules-rule-id-put",
+          label: "Update a notification rule",
+          className: "api-method put",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/delete-notification-rule-api-notification-rules-rule-id-delete",
+          label: "Delete a notification rule",
+          className: "api-method delete",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/re-enable-notification-rule-api-notification-rules-rule-id-re-enable-post",
+          label: "Re-enable a rule the engine auto-disabled after a fault",
           className: "api-method post",
         },
       ],

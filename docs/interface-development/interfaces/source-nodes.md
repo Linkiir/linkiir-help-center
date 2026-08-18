@@ -23,7 +23,7 @@ Its Lua script is created with the node and is also needed to start.
 
 ### The server is installation-wide
 
-There is no port field on this node. Every HTTP source node answers on one embedded server, configured in **Settings → Http Server**: **Use Server**, **Port**, and optionally **Secure** with its certificate fields.
+There is no port field on this node. Every HTTP source node answers on one embedded server, configured in **Settings → Http Server**: **Use Server**, **Port**, and optionally **Secure** with its certificate fields. See [HTTP Server Settings](../../administration/configurations/http-server.md).
 
 ```text
 Settings → Http Server            port 9001
@@ -37,6 +37,7 @@ Consequences worth knowing:
 - Changing the port affects every HTTP source node on the installation.
 - Turning **Use Server** off stops all of them.
 - Enabling **Secure** makes every route HTTPS, not just some.
+- Changing the port or any TLS field restarts the Runtime when saved, which stops and restarts every running node on the installation — not only the HTTP ones.
 
 Prefix routes with the interface they belong to — `/adt/intake`, `/orders/intake` — so a second project cannot accidentally claim a path a first one already uses.
 
@@ -74,6 +75,8 @@ function main(Data)
    }
 end
 ```
+
+A new HTTP source node starts from a default script that does roughly this: parse the request, answer `400` if it cannot be parsed, echo the body back (or `Hello from Linkiir` when the body is empty), and push the body downstream **only when it is not empty**. An empty request body is answered but not pushed, so a health check or a stray `GET` does not enqueue a blank message. Replace the default with your own handling before the node goes anywhere near production.
 
 Method checks, path checks, authentication, and body size limits are yours to enforce in the script — there are no node fields for them. Reject what you do not accept with an explicit status code rather than letting it through.
 

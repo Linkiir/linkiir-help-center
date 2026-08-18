@@ -272,7 +272,7 @@ linkiir.codec.html.encode(s)
 
 Encode using html.
 
-Escape HTML-significant characters (\<, \>, &, ", ') in a string.
+Escape HTML-significant characters (&, \<, \>, ", ', ;) in a string. Quotes become &quot; and &#39;; the semicolon becomes &#59;.
 
 **Usage**
 
@@ -300,6 +300,52 @@ Codes: `INVALID_PARAMETER`, `DECODE_ERROR`
 
 ```lua
 local Esc = linkiir.codec.html.encode('<b>Tom & Jerry</b>')
+```
+
+
+## `linkiir.codec.html.decode`
+
+*function*
+
+```lua
+linkiir.codec.html.decode(s)
+```
+
+Decode using html.
+
+Decode HTML entities and numeric character references back to text. Handles the named entities &amp;, &lt;, &gt;, &quot; and &nbsp; (decoded as a plain space), decimal references (&#39;) and hex references (&#x27;, &#X27;). Numeric references are emitted as UTF-8, so codepoints above U+007F expand to multiple bytes. Unknown entities and malformed sequences (no closing semicolon within 12 characters) pass through verbatim, so decode(encode(s)) round-trips.
+
+**Usage**
+
+```lua
+linkiir.codec.html.decode(s)   -- or linkiir.codec.html.decode{ data = s }
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `data` | string | Yes | Input string (positional) or named data= field. |
+
+**Returns**
+
+- The transformed string.
+
+**Errors**
+
+Raises a Lua error on failure.
+
+Codes: `INVALID_PARAMETER`, `DECODE_ERROR`
+
+**Example**
+
+```lua
+local Txt = linkiir.codec.html.decode('&lt;b&gt;Tom &amp; Jerry&lt;/b&gt;')
+-- '<b>Tom & Jerry</b>'
+
+-- Round-trips with encode
+local Src = [[<script>alert("xss's");</script>]]
+assert(linkiir.codec.html.decode(linkiir.codec.html.encode(Src)) == Src)
 ```
 
 

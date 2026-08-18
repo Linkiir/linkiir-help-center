@@ -1,0 +1,1 @@
+{"title":"Body","body":{"content":{"application/json":{"schema":{"properties":{"ssh_url":{"type":"string","title":"Ssh Url","description":"SSH URL of the remote instance repository to restore this grid from."}},"type":"object","required":["ssh_url"],"title":"RestoreRequest"}}},"required":true}}

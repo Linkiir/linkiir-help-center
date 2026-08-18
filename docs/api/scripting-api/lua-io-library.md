@@ -6,7 +6,7 @@ title: Lua IO Library (files/stdio)
 
 `io`
 
-Standard Lua 5.1 io library: local file and standard-stream I/O, available exactly as in stock Lua/LuaJIT (registered by the runtime alongside table/math/os/string). For directory listings, metadata, and simple file management, prefer linkiir.sys.fs, which is purpose-built for the node's working directories; for reading/writing remote files (FTP/SFTP), use linkiir.link.file. io.* is the right tool when you need actual byte-level read/write access to a local file or stdin/stdout/stderr. io.popen spawns a shell process and should be avoided in workflow scripts.
+Standard Lua 5.1 io library: local file and standard-stream I/O, available exactly as in stock Lua/LuaJIT (registered by the runtime alongside table/math/os/string). For directory listings, metadata, and simple file management, prefer linkiir.sys.fs, which is purpose-built for the node's working directories; for reading/writing remote files (FTP/SFTP), use linkiir.link.file. io.* is the right tool when you need actual byte-level read/write access to a local file or stdin/stdout/stderr. io.popen spawns a shell process and should be avoided in workflow scripts. Paths are resolved the same way as linkiir.sys.fs: io.open, io.lines, io.input and io.output take a relative path as relative to the Runtime's working directory (linkiir.sys.workingDir()), never the process working directory. Absolute paths are used unchanged, and a relative path that escapes the working directory via '..' raises an error.
 
 ---
 
@@ -20,7 +20,7 @@ io.open(filename [, mode])
 
 Open a file.
 
-Opens filename in the given mode ("r" read, "w" write/truncate, "a" append, with optional "b" for binary and "+" for update; default "r"). Returns a new file handle on success, or nil plus an error message on failure.
+Opens filename in the given mode ("r" read, "w" write/truncate, "a" append, with optional "b" for binary and "+" for update; default "r"). Returns a new file handle on success, or nil plus an error message on failure. A relative path resolves against the Runtime's working directory (linkiir.sys.workingDir()), not the process working directory; an absolute path is used unchanged, and a path escaping the working directory via '..' raises an error.
 
 **Usage**
 
@@ -166,7 +166,7 @@ io.lines([filename, ...])
 
 Iterate the lines of a file.
 
-Opens filename (or uses the default input file if omitted), and returns an iterator function that returns a new line each time it is called, per the given format(s). The file is closed automatically when the iterator finishes (only when a filename is given).
+Opens filename (or uses the default input file if omitted), and returns an iterator function that returns a new line each time it is called, per the given format(s). The file is closed automatically when the iterator finishes (only when a filename is given). A relative path resolves against the Runtime's working directory (linkiir.sys.workingDir()), not the process working directory; an absolute path is used unchanged, and a path escaping the working directory via '..' raises an error.
 
 **Usage**
 
@@ -204,7 +204,7 @@ io.input([file])
 
 Get/set the default input file.
 
-With a string, opens the named file in read mode and sets it as the default input file. With a file handle, sets it as the default input file. With no argument, returns the current default input file.
+With a string, opens the named file in read mode and sets it as the default input file. With a file handle, sets it as the default input file. With no argument, returns the current default input file. A relative path resolves against the Runtime's working directory (linkiir.sys.workingDir()), not the process working directory; an absolute path is used unchanged, and a path escaping the working directory via '..' raises an error.
 
 **Usage**
 
@@ -240,7 +240,7 @@ io.output([file])
 
 Get/set the default output file.
 
-With a string, opens the named file in write mode and sets it as the default output file. With a file handle, sets it as the default output file. With no argument, returns the current default output file.
+With a string, opens the named file in write mode and sets it as the default output file. With a file handle, sets it as the default output file. With no argument, returns the current default output file. A relative path resolves against the Runtime's working directory (linkiir.sys.workingDir()), not the process working directory; an absolute path is used unchanged, and a path escaping the working directory via '..' raises an error.
 
 **Usage**
 

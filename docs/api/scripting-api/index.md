@@ -12,12 +12,11 @@ Reference for the Lua scripting API available inside Linkiir workflow scripts.
 | --- | --- |
 | [Script Globals](script-globals.md) (`script.globals`) | Values and functions available in every script without requiring any module: the script's input payload, the current node directory, and stdlib-style helpers for loading modules and debug printing. |
 | [Message Data](message-data.md) (`linkiir.data`) | Parse (extract), build (create), and serialize messages of any supported format (HL7, X12, XML), plus the node-tree interface returned by those calls. |
-| [Code Sets](code-sets.md) (`linkiir.data.codeset`) | Look up and cross-map code sets (code tables) embedded in your schema for translating coded field values between systems or HL7 versions. |
 | [Message Flow](message-flow.md) (`linkiir.flow`) | Everything about a message's movement through a channel: acknowledge what came in, route/enqueue what goes out. |
 | [Connectivity](connectivity.md) (`linkiir.link`) | All connectivity to external systems, named for the heart of Linkiir. |
 | [Database](database.md) (`linkiir.store`) | Database access, named for what it does (store / retrieve). |
 | [Byte Transforms](byte-transforms.md) (`linkiir.codec`) | Everything that turns bytes into other bytes and back: text encodings, compression, and character-set conversion. |
-| [JSON](json.md) (`linkiir.json`) | JSON parse and serialize operating on plain Lua tables. |
+| [JSON](json.md) (`linkiir.json`) | JSON parse and serialize operating on plain Lua tables, with explicit array/object tagging. |
 | [Security](security.md) (`linkiir.sec`) | Security primitives with modern, explicit parameters. |
 | [Runtime & System](runtime-system.md) (`linkiir.sys`) | Small runtime helpers and filesystem access in one place. |
 | [Logging](logging.md) (`linkiir.log`) | Emit structured log events to the workflow event topic. |

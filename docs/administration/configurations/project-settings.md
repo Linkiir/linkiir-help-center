@@ -22,7 +22,7 @@ Across the top it shows four counters — **Workflow Count**, **Workflows Runnin
 
 ## Workflows
 
-The default tab. Each row shows the workflow name, its state, queue depth, error count, and last activity.
+The default tab. Each row shows the workflow name, its state, its auto-start setting, queue depth, error count, and last activity.
 
 | State | Meaning |
 | --- | --- |
@@ -42,6 +42,21 @@ Per-row actions:
 Header actions: **Add Workflow**, **Start All** / **Stop All**, and **Edit** — which reveals rename and delete on each row.
 
 A workflow with no nodes has no Start button. There is nothing to run yet.
+
+### Auto Start
+
+Each row carries an **Auto start on** or **Auto start off** badge. It decides whether the Runtime starts that workflow by itself when it boots — after a server reboot, a service restart, or a Runtime restart from **Settings → Http Server**.
+
+| Setting | At Runtime start-up |
+| --- | --- |
+| **Auto start on** | The workflow's nodes start automatically |
+| **Auto start off** (default) | The workflow stays off until someone starts it |
+
+To change it: click **Edit** in the tab header, open a workflow's edit dialog, and switch **Auto Start** on or off. It is saved with the workflow's name and description, and is committed to the project's history like any other change.
+
+Turn it on for production interfaces that must come back on their own after a restart. Leave it off for anything half-built, or for a workflow whose destination is a live system you do not want written to unattended — an auto-started workflow begins consuming its queue as soon as the Runtime is up, with nobody watching.
+
+Auto start is a property of the workflow, so it travels with the project into an export.
 
 ---
 
@@ -144,7 +159,7 @@ These are not project settings. They apply to the whole installation, in **Setti
 
 | Setting | Tab |
 | --- | --- |
-| HTTP server port and TLS | **Http Server** |
+| [HTTP server port and TLS](http-server.md) | **Http Server** |
 | Studio port and TLS | **Instance** |
 | Session timeouts | **Instance** |
 | Users, and their SSH keys | **Users** |

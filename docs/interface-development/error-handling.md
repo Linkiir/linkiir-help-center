@@ -151,10 +151,29 @@ Rewinding a queue consumer to an earlier position reprocesses everything from th
 | Action | Scope | Use for |
 | --- | --- | --- |
 | Replay an archived message | One message | Normal recovery |
-| Bulk replay | A selected set | A known batch that failed together |
+| Bulk replay | A selected set, up to 500 at a time | A known batch that failed together |
 | Rewind a consumer position | Everything from that point | Rarely; only with a full understanding of the side effects |
 
 Confirm the receiver tolerates a duplicate before replaying anything.
+
+### Correcting a message on the way back out
+
+Select the records in **Logs** and click **Resubmit**. The confirmation window lists each selected message and shows the archived payload itself, not just its index row, so you can read what is about to go back onto a live topic — and edit it first.
+
+| Behaviour | Detail |
+| --- | --- |
+| An untouched message | Resubmitted byte-for-byte as archived |
+| An edited message | The edited text is published in its place |
+| The archived record | Never rewritten. The edit applies to this one resubmission |
+| Skipped messages | Reported individually, with the reason, rather than failing the whole batch |
+
+Use it for the cases where the payload is the problem and the sender cannot resend: a bad delimiter, a field the receiver rejects, a truncated segment. It is not a substitute for fixing the sender, and every edit is a clinical record that no longer matches what was originally received — say so in your change record.
+
+:::caution Editing masked messages
+HL7 payloads render masked unless you hold `logs.unredact` and reveal the message in the window. A masked message cannot be edited, and an edit that still contains mask blocks is refused on the server as well as in the page. Both refusals exist for the same reason: an edit made against `██████` would publish the mask in place of the patient identifiers.
+
+Resubmitting itself needs `logs.resubmit`, and reading the payload needs `logs.view`. See [Users and Roles](../administration/configurations/user-roles.md).
+:::
 
 ## Safe context to record
 

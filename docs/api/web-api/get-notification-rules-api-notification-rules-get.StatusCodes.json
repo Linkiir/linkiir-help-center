@@ -1,0 +1,1 @@
+{"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"properties":{"rules":{"items":{"additionalProperties":true,"type":"object"},"type":"array","title":"Rules","description":"All notification rules."}},"type":"object","required":["rules"],"title":"RuleListResponse","description":"Response model for GET /api/notification_rules."}}}}}}

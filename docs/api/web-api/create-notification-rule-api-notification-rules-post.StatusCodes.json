@@ -1,0 +1,1 @@
+{"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"additionalProperties":true,"type":"object","title":"Response Create Notification Rule Api Notification Rules Post"}}}},"403":{"description":"Project access denied"},"422":{"description":"Validation failed"}}}

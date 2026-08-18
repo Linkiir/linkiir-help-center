@@ -32,6 +32,7 @@ const sidebars: SidebarsConfig = {
         {type: 'category', label: 'Configurations', link: {type: 'doc', id: 'administration/configurations/index'}, items: [
           'administration/configurations/project-settings', 'administration/configurations/user-roles',
           'administration/configurations/migration',
+          'administration/configurations/http-server',
           'administration/configurations/log-archive-database', 'administration/configurations/kafka-redpanda',
         ]},
         'administration/backup-restore/index',

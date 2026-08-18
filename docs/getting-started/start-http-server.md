@@ -186,7 +186,7 @@ Check the node's status detail first; it carries the last error.
 | Reports a Lua error with a line number | Script problem. Fix it and use Run Test before starting again. |
 | `missing required field: Route Path` | The field is blank. Set it and save. |
 | `invalid required field: Worker Count (must be >= 1)` | Worker Count is `0` or negative. |
-| Reports the port is unavailable | Another process holds port `9001`. Change **Port** in **Settings → Http Server**. |
+| Reports the port is unavailable | Another process holds port `9001`. Change **Port** in [**Settings → Http Server**](../administration/configurations/http-server.md) — saving a port change restarts the Runtime, so every running node restarts with it. |
 | Two nodes conflict on a route | Two HTTP source nodes share the same **Route Path**. Give each its own. |
 | The workflow will not start and mentions capacity | The license limits how many workflows run at once, and how many nodes a workflow may contain. See [Licensing](../administration/licensing/index.md). |
 

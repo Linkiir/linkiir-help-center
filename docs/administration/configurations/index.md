@@ -9,6 +9,7 @@ Configuration is divided between platform settings, environment-specific connect
 - [Project Settings](project-settings.md) — variables, credentials, templates, libraries, and Git, per project
 - [Users and Roles](user-roles.md) — accounts, the permission set, and SSH keys
 - [Migrating Existing Interfaces](migration.md)
+- [HTTP Server Settings](http-server.md) — the embedded server every Source HTTP node shares
 - [Log Archive Database](log-archive-database.md)
 - [Kafka Configuration](kafka-redpanda.md)
 
@@ -74,18 +75,20 @@ For archiver troubleshooting, see [Log Archiver Connectivity](../troubleshooting
 
 ### Http Server
 
-Controls the Studio's web server binding and TLS configuration.
+Controls the embedded HTTP(S) server that every **Source HTTP** node on the installation shares — not the Studio's own web server, which lives under **Instance**.
 
 | Field | Description |
 | --- | --- |
-| Host | IP address to bind (default `127.0.0.1`). Use `0.0.0.0` to accept remote connections. |
-| Port | HTTP port (default `8080`). |
-| TLS Enabled | Toggle HTTPS. When on, certificate and key file paths are required. |
-| Certificate File | Path to the TLS certificate (PEM format). |
-| Key File | Path to the TLS private key (PEM format). |
+| Use Server | Whether the embedded server runs at all. Off stops every HTTP source node. |
+| Port | Port every route answers on (default `8081`). |
+| Secure | Toggle HTTPS for every route. Certificate and private key are both required when on. |
+| Certificate, Private Key | Absolute paths on the server to the TLS certificate and key (PEM format). |
+| Verify Peer | Require and verify a client certificate (mutual TLS). |
+| Certificate Authority File | The CA signing accepted client certificates. Shown with **Verify Peer** on; blank uses the system CA store. |
+| Serve Files, Serve Files Directory | Serve static files from a directory alongside the node routes. |
 
 :::caution
-Changing the host or port requires a Grid restart to take effect. TLS changes also require a restart.
+Changing the port or any TLS field restarts the Runtime, so the button reads **Save & Restart**. Every running node stops and comes back with it. See [HTTP Server Settings](http-server.md).
 :::
 
 ### Notifications

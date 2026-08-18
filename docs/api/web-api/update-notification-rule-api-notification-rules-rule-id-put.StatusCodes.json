@@ -1,0 +1,1 @@
+{"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"type":"object","additionalProperties":true,"title":"Response Update Notification Rule Api Notification Rules  Rule Id  Put"}}}},"403":{"description":"Project access denied"},"404":{"description":"Rule not found"},"422":{"description":"Validation failed"}}}

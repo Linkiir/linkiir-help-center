@@ -59,6 +59,8 @@ The default is `localhost`, which is a valid value — so a node you forgot to c
 | **Reconnect Attempts** | `60` | With `Yes, with limit`. |
 | **Reconnection Interval** | `10000` | Milliseconds between attempts. |
 
+A node sitting in its reconnect wait still stops when you stop it — it does not finish the interval first. Stopping a whole workflow or project joins each node in turn, so a large one takes proportionally longer to come to a stop; wait for the state to settle rather than clicking again.
+
 ### TLS
 
 | Field | Default | Notes |
