@@ -25,10 +25,6 @@ The project contains four workflows.
 
 Together they form a round trip: the generator produces messages, the file workflow sends them over LLP, the database workflow stores them, and the API reads them back.
 
-```text
-Step 1  ──file──▶  Step 2  ──LLP:5145──▶  Step 3  ──SQLite──▶  Step 4  ──HTTP:8081──▶  you
-```
-
 ---
 
 ## Import the project
@@ -47,14 +43,14 @@ No additional setup is required. Everything the project needs is created automat
 
 ## Start the workflows
 
-Click into the project, then start the workflows in this order:
+Click into the project. On the first start of the project, start the workflows in this order:
 
 1. **Step 3: HL7 LLP to Database** — starts the LLP listener and creates the database
 2. **Step 4: Patient Lookup API** — starts the web endpoint
 3. **Step 1: HL7 Message Generator** — begins producing HL7 messages
 4. **Step 2: HL7 File to LLP** — reads generated files and sends them to Step 3
 
-Or click **Start All**. The order doesn't matter for correctness, since everything retries automatically — it only affects how many "connection refused" lines you see in the log while the listener comes up.
+For all future starts, simply select **Start All**.
 
 ---
 
