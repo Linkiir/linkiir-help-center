@@ -72,4 +72,4 @@ Background polling the Studio does on its own does not count as activity, so an 
 
 ## Next
 
-Continue with [Create a Project, Workflow, and Source HTTP Node](create-project-workflow.md).
+Continue with [Linkiir Demo Project](demo-project.md).

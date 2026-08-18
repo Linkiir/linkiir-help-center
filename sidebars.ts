@@ -9,8 +9,7 @@ const sidebars: SidebarsConfig = {
         'getting-started/platform-overview',
         'getting-started/quick-install',
         'getting-started/first-login',
-        'getting-started/create-project-workflow',
-        'getting-started/start-http-server',
+        'getting-started/demo-project',
       ],
     },
     {

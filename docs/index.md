@@ -10,12 +10,11 @@ Linkiir is a healthcare integration platform for designing, testing, deploying, 
 
 ## New to Linkiir?
 
-[**Getting Started**](getting-started/index.md) takes you from a downloaded package to a working HTTP endpoint in four steps:
+[**Getting Started**](getting-started/index.md) takes you from a downloaded package to a running interface in three steps:
 
 1. [Download and install](getting-started/quick-install.md) — macOS Docker bundle, Windows installer, or Linux.
 2. [Reset the admin user](getting-started/first-login.md) — set the administrator password.
-3. [Create a project, workflow, and HTTP source node](getting-started/create-project-workflow.md).
-4. [Edit the script and start the HTTP server](getting-started/start-http-server.md) — then call it with `curl`.
+3. [Import the Linkiir Demo Project](getting-started/demo-project.md) — four ready-made workflows that generate HL7, move it over LLP, store it, and serve it back as JSON.
 
 About 20 minutes on a local machine.
 

@@ -4,7 +4,7 @@ title: Getting Started
 
 # Getting Started
 
-This section takes you from a downloaded package to a working HTTP interface that you can call with `curl`.
+This section takes you from a downloaded package to a running interface you can watch move messages end to end.
 
 Work through the pages in order. The whole walkthrough takes about 20 minutes on a local machine.
 
@@ -14,8 +14,7 @@ Work through the pages in order. The whole walkthrough takes about 20 minutes on
 | --- | --- | --- |
 | 1 | [Download and Install](quick-install.md) | Linkiir running locally, Studio open at `http://127.0.0.1:8080` |
 | 2 | [Reset the Admin User](first-login.md) | A working administrator password, or a recovered one |
-| 3 | [Create a Project, Workflow, and HTTP Source Node](create-project-workflow.md) | A project with one workflow and one HTTP source node |
-| 4 | [Edit the Script and Start the HTTP Server](start-http-server.md) | A live endpoint that accepts a request and returns a response |
+| 3 | [Linkiir Demo Project](demo-project.md) | A running project with four workflows: HL7 generation, LLP, a SQLite database, and a JSON API |
 
 Before you start, [Platform Overview](platform-overview.md) explains the pieces you will see in the Studio and the Project → Workflow → Node model the walkthrough uses.
 
