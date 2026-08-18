@@ -1,8 +1,8 @@
 ---
-title: Reset the Admin User
+title: Create Grid User Accounts
 ---
 
-# Reset the Admin User
+# Create Grid User Accounts
 
 A fresh installation seeds one administrator account and blocks the rest of the product until you replace its password. This page covers that first reset, and the recovery reset you need if the password is later lost.
 
@@ -69,92 +69,6 @@ Sessions are held in the running Studio process. Two timeouts apply, both config
 | Absolute | 24 hours | Signed out this long after signing in, regardless of activity |
 
 Background polling the Studio does on its own does not count as activity, so an unattended tab still times out. Restarting the Studio signs everyone out.
-
----
-
-## Recovery: reset the admin user when the password is lost
-
-If the administrator password is lost, you can make Linkiir re-seed the bootstrap `admin` account. Every time the Studio starts it checks its working directory for missing files and restores them without overwriting anything: if the `admin` account's file is gone, it recreates `admin` with the password `password` and the forced-change flag set — exactly like a fresh install.
-
-So the recovery is: move the `admin` account aside, restart, and sign in with the bootstrap credentials again.
-
-:::warning Move only what you need to
-Moving the whole `users` directory removes every account, not just `admin`. Named users, their roles, and their passwords are gone and have to be recreated. Moving only `users/admin` re-seeds the administrator and leaves other accounts intact.
-
-Your projects, workflows, message history, and settings are **not** affected either way.
-
-Copy whatever you move somewhere safe first — that copy is your only way back if you recover a password later.
-:::
-
-### Windows
-
-```powershell
-# 1. Stop the Grid
-Stop-Service LinkiirGrid
-
-# 2. Move the accounts aside (keep the copy)
-Move-Item "C:\ProgramData\Linkiir\data\users" "C:\ProgramData\Linkiir\data\users.backup"
-
-# 3. Start the Grid — it re-seeds the admin account
-Start-Service LinkiirGrid
-```
-
-### macOS and Linux (Docker)
-
-The user store lives in the `linkiir_work` volume, so work through the container.
-
-```bash
-# 1. Move the accounts aside (keep the copy)
-docker compose exec linkiir-grid \
-  mv /var/lib/linkiir/work/users /var/lib/linkiir/work/users.backup
-
-# 2. Restart so the Grid re-seeds the admin account
-./scripts/linkiirctl restart
-```
-
-:::note Confirm the path for your release
-The working directory inside the container is set by your installation's configuration. Confirm it before running the command:
-
-```bash
-docker compose exec linkiir-grid sh -c 'ls "$LINKIIR_WORK_DIR"'
-```
-
-If that variable is not set in your build, find the `working_dir` value in the rendered `config.ini`:
-
-```bash
-docker compose exec linkiir-grid sh -c 'grep -A2 "\[paths\]" /etc/linkiir/config.ini'
-```
-:::
-
-### Linux (native install)
-
-Stop the service, move `users` aside inside the configured Linkiir data directory, then start the service again:
-
-```bash
-sudo systemctl stop linkiir-grid
-sudo mv /var/lib/linkiir/data/users /var/lib/linkiir/data/users.backup
-sudo systemctl start linkiir-grid
-```
-
-Adjust the path to match your installation's data directory. See [Install on Linux](../administration/installation/linux.md).
-
-### After the recovery reset
-
-1. Open `http://127.0.0.1:8080`.
-2. Sign in as `admin` / `password`.
-3. Complete the forced password change.
-4. Recreate any named accounts you removed.
-5. Delete the `users.backup` copy once you are satisfied, since it still contains the old password hashes.
-
-Restarting the Studio ends every session, so anyone still logged in is returned to the login page.
-
-The Studio also writes a warning to its log when it re-seeds the account, which is a useful confirmation that the step worked:
-
-```text
-Created default admin account with password 'password' — change it in Settings › Users
-```
-
----
 
 ## Next
 
