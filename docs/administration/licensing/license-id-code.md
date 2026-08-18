@@ -105,7 +105,7 @@ This suits container and infrastructure-as-code deployments, where the license b
 | --- | --- |
 | Precedence | The variable always wins over the stored license |
 | Still bound to the License ID | The code must match this installation's License ID, however it is supplied |
-| Changing it | Update the variable and restart the Studio |
+| Changing it | Update the variable and restart the Grid |
 | Where to set it | Windows: `linkiir.env`. Docker: the bundle's `.env`. Linux: the service environment file. |
 
 Pick one method per installation. Setting the variable while a license is also stored on disk works, but makes it easy to change the wrong one and wonder why nothing happened.

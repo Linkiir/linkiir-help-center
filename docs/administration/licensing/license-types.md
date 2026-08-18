@@ -34,7 +34,7 @@ Practical advice for an evaluation:
 
 **Note the expiration date when you apply the code.** The tab shows **Expiring Soon** from 30 days out, which is little help on a two-week evaluation.
 
-**Export anything you build before the license lapses.** Expiry stops workflows running; it does not delete your work, and the Studio stays usable. But get your projects out as bundles so the evaluation's results are not stranded on a server someone later reclaims. See [Import and Export](../deployment/import-export.md).
+**Export anything you build before the license lapses.** Expiry stops workflows running; it does not delete your work, and the Grid stays usable. But get your projects out as bundles so the evaluation's results are not stranded on a server someone later reclaims. See [Import and Export](../deployment/import-export.md).
 
 **Use synthetic data.** An evaluation environment has not been through your normal approval for handling patient data. Use clearly fake identifiers throughout.
 

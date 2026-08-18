@@ -77,7 +77,7 @@ When a license fully expires:
 
 | Keeps working | Stops |
 | --- | --- |
-| Signing in to the Studio | Running workflows — they finish in-flight messages, then stop |
+| Signing in to the Grid | Running workflows — they finish in-flight messages, then stop |
 | Viewing and searching message history | Starting a workflow |
 | Opening, editing, and exporting projects | |
 | Message history recording | |

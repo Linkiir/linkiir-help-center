@@ -17,7 +17,7 @@ What a fresh Linkiir installation gives you, what it does not, and what to do ab
 | User passwords | Hashed individually |
 | Sessions | 15-minute idle timeout, 24-hour absolute timeout |
 
-The two things to do first: change the administrator password, and decide how the Studio will be reached.
+The two things to do first: change the administrator password, and decide how the Grid will be reached.
 
 ---
 
@@ -33,30 +33,30 @@ Enforced password rules are a minimum length of 8 characters and "not the same a
 
 ## 2. Protect remote access
 
-Linkiir binds to localhost, and nothing you do inside the Studio changes that. Opening remote access is a deliberate act: changing the bind address, publishing a port, or putting a proxy in front.
+Linkiir binds to localhost, and nothing you do inside the Grid changes that. Opening remote access is a deliberate act: changing the bind address, publishing a port, or putting a proxy in front.
 
 Before you do:
 
 - Complete the administrator password change.
-- Put TLS in front of the Studio. Terminate it at Linkiir where its own TLS settings suffice, or at a reverse proxy or load balancer you control.
+- Put TLS in front of the Grid. Terminate it at Linkiir where its own TLS settings suffice, or at a reverse proxy or load balancer you control.
 - Redirect or block plain HTTP.
 - Use organisation-issued certificates.
 - Restrict source addresses at the firewall to the networks that need access.
 
-:::caution Do not publish the Studio directly
-The Studio is a full administrative surface: it edits interfaces, reads message payloads, and manages credentials. Put it behind a reverse proxy providing TLS and whatever access controls your organisation requires, and restrict who can reach that proxy. Treat it like any other administrative console, not like a public web application.
+:::caution Do not publish the Grid directly
+The Grid is a full administrative surface: it edits interfaces, reads message payloads, and manages credentials. Put it behind a reverse proxy providing TLS and whatever access controls your organisation requires, and restrict who can reach that proxy. Treat it like any other administrative console, not like a public web application.
 :::
 
 ### Ports to keep private
 
 | Surface | Exposure |
 | --- | --- |
-| Studio (default `8080`) | Restricted, TLS-terminated, authenticated |
+| Grid (default `8080`) | Restricted, TLS-terminated, authenticated |
 | Node listeners (HTTP, LLP) | Only to the systems that send to them |
 | Runtime internals | Private to the host |
 | Broker and broker management | Private to your infrastructure |
 
-Node listeners are a separate decision from the Studio. An LLP listener has to be reachable by the sending system and by nothing else — restrict it at the network layer, not by hoping nobody finds the port.
+Node listeners are a separate decision from the Grid. An LLP listener has to be reachable by the sending system and by nothing else — restrict it at the network layer, not by hoping nobody finds the port.
 
 Use secure broker protocols such as `SSL` or `SASL_SSL` where your broker requires them. See [Kafka Configuration](../configurations/kafka-redpanda.md).
 
@@ -69,9 +69,9 @@ Use secure broker protocols such as `SSL` or `SASL_SSL` where your broker requir
 | Idle | 15 minutes | **Settings → Instance** |
 | Absolute | 24 hours | **Settings → Instance** |
 
-Background polling the Studio performs on its own does not count as activity, so an unattended tab still times out.
+Background polling the Grid performs on its own does not count as activity, so an unattended tab still times out.
 
-Sessions live in the running Studio process. Restarting it signs everyone out — worth knowing before a planned restart, and a useful lever if you need to revoke access immediately.
+Sessions live in the running Grid process. Restarting it signs everyone out — worth knowing before a planned restart, and a useful lever if you need to revoke access immediately.
 
 Shorten the idle timeout on installations reachable beyond a trusted network, and on shared workstations.
 
@@ -139,7 +139,7 @@ Rely on broker TLS, storage-level encryption, access control, and network isolat
 | --- | --- |
 | Administrator password changed | The forced change completed and `admin` is out of daily use |
 | Named accounts with narrow roles | Each person has their own account |
-| Studio not directly published | TLS terminated, source addresses restricted |
+| Grid not directly published | TLS terminated, source addresses restricted |
 | Node listeners restricted | Only sending systems can reach them |
 | Broker uses a secure protocol | Where your broker requires it |
 | Master key backed up, permissions restricted | Included in your backup, readable only by the service account |

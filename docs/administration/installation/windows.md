@@ -62,7 +62,7 @@ LinkiirSetup-1.0.0-x64.exe /VERYSILENT /SUPPRESSMSGBOXES /NORESTART `
 | Bundled queue service | `LinkiirKafka` |
 | Program files | `C:\Program Files\Linkiir` |
 | Mutable configuration/data | `C:\ProgramData\Linkiir` |
-| Studio | `http://127.0.0.1:8080` |
+| Grid | `http://127.0.0.1:8080` |
 | Runtime gRPC | `127.0.0.1:50051` |
 | Kafka | `127.0.0.1:9092` |
 

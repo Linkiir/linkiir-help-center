@@ -228,7 +228,7 @@ Node listeners bind to `127.0.0.1` by default. `curl` from another machine will 
 
 ## 7. Confirm it in the logs
 
-Open **Logs** in the Studio and search for recent events in the `Getting Started` project.
+Open **Logs** in the Grid and search for recent events in the `Getting Started` project.
 
 You should find:
 

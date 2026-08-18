@@ -24,7 +24,7 @@ These credentials work only until the forced password change completes.
 3. The same card switches to **Choose a new password**. Enter **New password** and **Confirm new password**.
 4. Click **Set new password**.
 
-You land on the dashboard, and the rest of the Studio becomes available.
+You land on the dashboard, and the rest of the Grid becomes available.
 
 ### Password rules
 
@@ -61,14 +61,14 @@ See [Users and Roles](../administration/configurations/user-roles.md) for the pe
 
 ## Session timeouts
 
-Sessions are held in the running Studio process. Two timeouts apply, both configurable in the **Instance** tab of Settings:
+Sessions are held in the running Grid process. Two timeouts apply, both configurable in the **Instance** tab of Settings:
 
 | Timeout | Default | Meaning |
 | --- | --- | --- |
 | Idle | 15 minutes | Signed out after this long without activity |
 | Absolute | 24 hours | Signed out this long after signing in, regardless of activity |
 
-Background polling the Studio does on its own does not count as activity, so an unattended tab still times out. Restarting the Studio signs everyone out.
+Background polling the Grid does on its own does not count as activity, so an unattended tab still times out. Restarting the Grid signs everyone out.
 
 ## Next
 

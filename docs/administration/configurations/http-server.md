@@ -12,7 +12,7 @@ Settings → Http Server            port 8081
 └─ /discharge   → Source HTTP node "Discharge"     (project B)
 ```
 
-This is not the Studio's own web server. The port and certificate the browser talks to live in **Settings → Instance**.
+This is not the Grid's own web server. The port and certificate the browser talks to live in **Settings → Instance**.
 
 Changing anything here needs the `settings.http` permission. See [Users and Roles](user-roles.md).
 
@@ -51,7 +51,7 @@ The save button says which one you are about to do:
 | **Save** | You changed only **Use Server**, **Serve Files**, or **Serve Files Directory** | Stored. Nothing restarts. |
 | **Save & Restart** | You changed **Port**, **Secure**, **Certificate**, **Private Key**, **Verify Peer**, or **Certificate Authority File** | Stored, then the Runtime is stopped and started again. |
 
-A restart is fleet-wide: every node the Runtime was running stops with it and comes back as it starts up. Expect a few seconds of interruption, and up to about 30 seconds if the Runtime needs its full grace period to shut down cleanly. Only the Runtime restarts — the Studio stays up, so the page keeps its connection and tells you when the Runtime is back.
+A restart is fleet-wide: every node the Runtime was running stops with it and comes back as it starts up. Expect a few seconds of interruption, and up to about 30 seconds if the Runtime needs its full grace period to shut down cleanly. Only the Runtime restarts — the Grid stays up, so the page keeps its connection and tells you when the Runtime is back.
 
 Two cases end with the settings saved but not applied, and say so rather than reporting success:
 

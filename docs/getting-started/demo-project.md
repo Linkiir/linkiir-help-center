@@ -29,7 +29,7 @@ Together they form a round trip: the generator produces messages, the file workf
 
 ## Import the project
 
-1. Open the Linkiir Studio in your browser.
+1. Open the Linkiir Grid in your browser.
 2. Go to **Projects**.
 3. Click the chevron on **Add Project** and choose **From zip**.
 4. Drop [`Linkiir_Demo.linkiir.zip`](pathname:///downloads/Linkiir_Demo.linkiir.zip) on **Choose a project bundle**, or click to browse for it.

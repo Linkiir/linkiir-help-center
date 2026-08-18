@@ -25,7 +25,7 @@ flowchart TD
 
 Display names are separate from the internal identifiers Linkiir assigns, so you can rename a project, workflow, or node for clarity without breaking the interface or losing its history.
 
-Some things are set once for the whole installation rather than per project — the HTTP server port and its TLS, the Studio port, session timeouts, users and roles, the Log Archive DB, and the license. See [Configurations](../administration/configurations/index.md) for which is which.
+Some things are set once for the whole installation rather than per project — the HTTP server port and its TLS, the Grid port, session timeouts, users and roles, the Log Archive DB, and the license. See [Configurations](../administration/configurations/index.md) for which is which.
 
 The workflow is also the unit your license counts: **Active Workflows** limits how many run at once. That makes how you divide interfaces between workflows a decision with a cost — see [Capacity and Expiry](../administration/licensing/capacity-and-expiry.md).
 
@@ -66,7 +66,7 @@ Source HTTP is the only exception: its **Worker Count** sets how many requests i
 
 ## Message history
 
-Everything a workflow does is recorded for you: the payload at each step, node lifecycle events, script output, and errors. That history lives in the Log DB and is what the Studio's log search reads.
+Everything a workflow does is recorded for you: the payload at each step, node lifecycle events, script output, and errors. That history lives in the Log DB and is what the Grid's log search reads.
 
 Two identifiers make it searchable:
 

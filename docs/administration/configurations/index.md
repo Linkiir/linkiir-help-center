@@ -19,7 +19,7 @@ Linkiir splits configuration between the installation and the individual project
 
 | Scope | Where | Examples |
 | --- | --- | --- |
-| **Installation** | **Settings**, in the Studio | HTTP server port and TLS, Studio port, session timeouts, users, roles, Log Archive DB, environment variables, license |
+| **Installation** | **Settings**, in the Grid | HTTP server port and TLS, Grid port, session timeouts, users, roles, Log Archive DB, environment variables, license |
 | **Project** | The project popout | Variables, credentials, node templates, libraries, Git remote |
 | **Node** | The node's configuration in the Workflow Builder | Route paths, listen ports, directories, hosts, intervals |
 
@@ -31,7 +31,7 @@ Keep secrets out of project source. Back up configuration and the master encrypt
 
 ## Settings tab reference
 
-Brief descriptions of each Settings tab in the Studio.
+Brief descriptions of each Settings tab in the Grid.
 
 ### About
 
@@ -75,7 +75,7 @@ For archiver troubleshooting, see [Log Archiver Connectivity](../troubleshooting
 
 ### Http Server
 
-Controls the embedded HTTP(S) server that every **Source HTTP** node on the installation shares — not the Studio's own web server, which lives under **Instance**.
+Controls the embedded HTTP(S) server that every **Source HTTP** node on the installation shares — not the Grid's own web server, which lives under **Instance**.
 
 | Field | Description |
 | --- | --- |

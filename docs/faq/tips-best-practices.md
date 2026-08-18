@@ -26,7 +26,7 @@ Practices worth adopting early, when they cost nothing, rather than after an inc
 
 **Change the administrator password before opening remote access.** In that order. A fresh install binds to localhost; do not change that until the password is set.
 
-**Put TLS in front of the Studio before exposing it.** Use a reverse proxy. Do not publish it directly.
+**Put TLS in front of the Grid before exposing it.** Use a reverse proxy. Do not publish it directly.
 
 **Give Linkiir dedicated service accounts.** For the broker and the database. Shared administrative credentials make the audit trail useless and widen the impact of a leak.
 

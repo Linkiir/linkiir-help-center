@@ -73,7 +73,7 @@ Use it to move a project between environments or to keep a versioned artifact of
 9. Run controlled interface tests before accepting traffic.
 
 :::note Everyone is signed out after a restore
-Sessions live in the running Studio process, so restarting it ends them. Users sign in again with their existing passwords — which are restored with the working directory and are not affected by the master key.
+Sessions live in the running Grid process, so restarting it ends them. Users sign in again with their existing passwords — which are restored with the working directory and are not affected by the master key.
 :::
 
 :::caution Environment cloning

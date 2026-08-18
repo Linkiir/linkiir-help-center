@@ -12,11 +12,11 @@ Work through the pages in order. The whole walkthrough takes about 20 minutes on
 
 | Step | Page | What you end up with |
 | --- | --- | --- |
-| 1 | [Download and Install](quick-install.md) | Linkiir running locally, Studio open at `http://127.0.0.1:8080` |
+| 1 | [Download and Install](quick-install.md) | Linkiir running locally, Grid open at `http://127.0.0.1:8080` |
 | 2 | [Reset the Admin User](first-login.md) | A working administrator password, or a recovered one |
 | 3 | [Linkiir Demo Project](demo-project.md) | A running project with four workflows: HL7 generation, LLP, a SQLite database, and a JSON API |
 
-Before you start, [Platform Overview](platform-overview.md) explains the pieces you will see in the Studio and the Project → Workflow → Node model the walkthrough uses.
+Before you start, [Platform Overview](platform-overview.md) explains the pieces you will see in the Grid and the Project → Workflow → Node model the walkthrough uses.
 
 ## After the walkthrough
 

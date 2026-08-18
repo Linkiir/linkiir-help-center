@@ -18,7 +18,7 @@ There are five permissions. A role is a name plus any combination of them.
 | --- | --- |
 | **Edit** | Changing configuration — projects, workflows, nodes, and their settings |
 | **Start / Stop** | Starting and stopping workflows and nodes |
-| **Export Logs** | Exporting message history out of the Studio |
+| **Export Logs** | Exporting message history out of the Grid |
 | **View Logs** | Reading message history and node events |
 | **IDE** | The script editor, including Run Test and Debug |
 
@@ -124,7 +124,7 @@ Being explicit so you can plan around it:
 
 | Not available | Consequence |
 | --- | --- |
-| Account lockout or login rate limiting | Protect the Studio at the network layer, and behind a reverse proxy if it is reachable remotely |
+| Account lockout or login rate limiting | Protect the Grid at the network layer, and behind a reverse proxy if it is reachable remotely |
 | Password complexity or reuse rules | Only a minimum length of 8 characters and "not the current password" are enforced. Set your own standard by policy. |
 | Self-service password reset | An administrator resets passwords from the Users tab |
 | A self-service profile page | Users cannot set their own SSH key; an administrator does it |

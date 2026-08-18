@@ -12,7 +12,7 @@ Pick your platform:
 - [Windows — installer](#windows--installer)
 - [Linux](../administration/installation/linux.md)
 
-Both walkthroughs end at the same place: the Studio open at `http://127.0.0.1:8080`.
+Both walkthroughs end at the same place: the Grid open at `http://127.0.0.1:8080`.
 
 :::info Version numbers
 Commands below use `1.0.0` as an example. Replace it with the version you downloaded.
@@ -90,11 +90,11 @@ cd linkiir-1.0.0-macos-docker-kafka-arm64
 ./scripts/linkiirctl install
 ```
 
-Install asks no questions for bundled variants. The bundle already knows which broker it carries. It checks Docker, writes configuration, generates an encryption key, loads its images without downloading anything, starts the broker and Linkiir, waits for the Studio to answer its health check, and prints the URL.
+Install asks no questions for bundled variants. The bundle already knows which broker it carries. It checks Docker, writes configuration, generates an encryption key, loads its images without downloading anything, starts the broker and Linkiir, waits for the Grid to answer its health check, and prints the URL.
 
 `install` is also how you bring a stopped installation back up. It is safe to run again.
 
-### 4. Open the Studio
+### 4. Open the Grid
 
 ```text
 http://127.0.0.1:8080
@@ -148,11 +148,11 @@ Windows SmartScreen warns about installers without a code-signing certificate. I
 
 ### 3. Wait for the readiness check
 
-The final step can take up to a minute. The installer does not simply check that the services report Running — it waits for the broker to accept connections and for the Studio to answer its health check.
+The final step can take up to a minute. The installer does not simply check that the services report Running — it waits for the broker to accept connections and for the Grid to answer its health check.
 
-The completion page offers **Open Linkiir Grid Studio** only when the Studio actually responded, so you are never sent to a URL that will not load. If something did not come up, that page names the problem and points at `C:\ProgramData\Linkiir\logs\installer\`.
+The completion page offers **Open Linkiir Grid Grid** only when the Grid actually responded, so you are never sent to a URL that will not load. If something did not come up, that page names the problem and points at `C:\ProgramData\Linkiir\logs\installer\`.
 
-### 4. Open the Studio
+### 4. Open the Grid
 
 Your browser opens automatically to:
 

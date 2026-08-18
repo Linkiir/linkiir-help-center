@@ -27,7 +27,7 @@ In the Workflow Builder, the palette groups node types under three headings. Dra
 Transport nodes are configured with fields, not code. You write Lua only where the work is genuinely yours: HTTP handling, transformation, and generated or fetched messages.
 
 :::note How this documentation names nodes
-The palette shows a group heading and a short name. In running text, naming a node type needs both, so this documentation writes them together — "Source HTTP", "Destination File/FTP". In the Studio you will see **HTTP** under **Source**.
+The palette shows a group heading and a short name. In running text, naming a node type needs both, so this documentation writes them together — "Source HTTP", "Destination File/FTP". In the Grid you will see **HTTP** under **Source**.
 :::
 
 Your project's own [node templates](../../administration/configurations/project-settings.md) appear in the same palette, under the group matching their type.

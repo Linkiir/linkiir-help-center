@@ -13,7 +13,7 @@ You will write the script and start the listener in [the next step](start-http-s
 
 ## 1. Create the project
 
-1. Open **Projects** in the Studio.
+1. Open **Projects** in the Grid.
 2. Click the chevron on **Add Project** and choose **New project**.
 3. Name it `Getting Started`. A description is optional.
 4. Save.
@@ -57,7 +57,7 @@ The palette groups node types under three headings. This walkthrough uses **Sour
 See [Source Nodes](../interface-development/interfaces/source-nodes.md) and [Destination Nodes](../interface-development/interfaces/destination-nodes.md) for the full field reference for each.
 
 :::note Naming in this documentation
-The palette shows a group heading and a short node name. This documentation writes them together — "Source HTTP", "Destination File/FTP" — so a node type can be named unambiguously in running text. In the Studio you will see **HTTP** under **Source**.
+The palette shows a group heading and a short node name. This documentation writes them together — "Source HTTP", "Destination File/FTP" — so a node type can be named unambiguously in running text. In the Grid you will see **HTTP** under **Source**.
 :::
 
 ### Configure the node
@@ -71,7 +71,7 @@ Open the node's configuration and set:
 
 Name the node `Intake` and save. Its Lua script, `main.lua`, is created with the node.
 
-These are the fields the node needs before it will start. The Studio does not mark fields as required — a node with a missing value fails at start with a message naming the field, for example `missing required field: Route Path`.
+These are the fields the node needs before it will start. The Grid does not mark fields as required — a node with a missing value fails at start with a message naming the field, for example `missing required field: Route Path`.
 
 :::info There is no port field on the node
 The HTTP server and its port are configured once for the installation, in **Settings → Http Server**. Every HTTP source node answers on that one server and is told apart by its **Route Path**. You set the port in the next step.
@@ -101,7 +101,7 @@ http://127.0.0.1:9001/intake
 
 | Guidance | Reason |
 | --- | --- |
-| Do not use `8080` | The Studio itself uses it by default |
+| Do not use `8080` | The Grid itself uses it by default |
 | Do not use `9092` | The bundled message broker uses it |
 | Pick a port nothing else on the host holds | The server fails to start if the port is already bound |
 

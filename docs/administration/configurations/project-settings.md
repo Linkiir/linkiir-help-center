@@ -160,7 +160,7 @@ These are not project settings. They apply to the whole installation, in **Setti
 | Setting | Tab |
 | --- | --- |
 | [HTTP server port and TLS](http-server.md) | **Http Server** |
-| Studio port and TLS | **Instance** |
+| Grid port and TLS | **Instance** |
 | Session timeouts | **Instance** |
 | Users, and their SSH keys | **Users** |
 | Roles and permissions | **Roles** |

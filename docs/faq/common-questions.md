@@ -80,7 +80,7 @@ If the trail stops partway, check whether a script created a new message without
 
 ## What happens if the Runtime crashes?
 
-Unprocessed messages stay in the queue, so nothing is lost. The Studio restarts the Runtime.
+Unprocessed messages stay in the queue, so nothing is lost. The Grid restarts the Runtime.
 
 Before resuming normal operation, confirm no message was delivered twice — delivery is at-least-once, so an interruption between doing work and confirming it can cause a redelivery. See [Error Handling and Retry](../interface-development/error-handling.md).
 
@@ -139,11 +139,11 @@ Yes. Windows Server is a supported production platform.
 
 Brokers and the Log DB are more commonly hosted on Linux, and there is no requirement for them to match the Linkiir host — Linkiir on Windows connecting to a Linux-hosted cluster and database is a normal deployment.
 
-## Can I reach the Studio from another machine?
+## Can I reach the Grid from another machine?
 
 Not by default. Everything binds to `127.0.0.1` on a fresh install, so it is reachable only from the machine it runs on.
 
-Before changing that: complete the administrator password change, and put the Studio behind a reverse proxy providing TLS. See [Security](../administration/security/index.md).
+Before changing that: complete the administrator password change, and put the Grid behind a reverse proxy providing TLS. See [Security](../administration/security/index.md).
 
 ## What if I lose the master encryption key?
 
@@ -175,7 +175,7 @@ Worth knowing: a workflow left started but failing still holds its slot. If you 
 
 After the grace period, workflows drain their in-flight messages and stop. Nothing is deleted.
 
-The Studio stays usable, message history keeps recording, and you can still open, edit, and export projects. Applying a valid code and starting your workflows returns everything to normal.
+The Grid stays usable, message history keeps recording, and you can still open, edit, and export projects. Applying a valid code and starting your workflows returns everything to normal.
 
 Renew on **Expiring Soon**, which appears 30 days out, rather than treating the grace period as headroom.
 
