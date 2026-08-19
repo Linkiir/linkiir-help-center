@@ -6,7 +6,7 @@ title: Node Configuration
 
 `linkiir.config`
 
-Read the current node's configuration fields. Values come from the config[] array in the node's node_config.json, flattened into a single label → value table. Password fields are decrypted automatically. The result is cached for the lifetime of the script VM: the first call reads and parses from disk, every later call returns the same table with no I/O.
+Read the current node's configuration fields. Values come from the config fields set on the node in the Node Parameters panel, flattened into a single label → value table. Password fields are decrypted automatically. The result is cached for the lifetime of the script VM: the first call reads and parses the configuration, every later call returns the same table with no I/O.
 
 ---
 
@@ -20,7 +20,7 @@ linkiir.config.node()
 
 Return this node's configuration as a label → value table.
 
-Reads node_config.json from the current node directory and returns a flat table keyed by each config entry's label. Strings, numbers, and booleans map straight across from JSON. Labels that are absent, null, or hold an object or array read as nil. The table is cached per script VM: the file is read once, and every later call returns that same table.
+Reads the current node's configuration and returns a flat table keyed by each config entry's label. Strings, numbers, and booleans map straight across. Labels that are absent, null, or hold an object or array read as nil. The table is cached per script VM: the configuration is read once, and every later call returns that same table.
 
 **Usage**
 
@@ -34,7 +34,7 @@ local Cfg = linkiir.config.node()
 
 **Errors**
 
-Raises a Lua error when the node directory is not configured, when node_config.json is missing or unreadable, when it is not valid JSON, or when a password field cannot be decrypted (typically a missing or wrong LINKIIR_SECRET_KEY).
+Raises a Lua error when the node directory is not configured, when the node's configuration is missing or unreadable, when it is malformed, or when a password field cannot be decrypted (typically a missing or wrong LINKIIR_SECRET_KEY).
 
 **Example**
 

@@ -14,7 +14,7 @@ Settings → Http Server            port 8081
 
 This is not the Grid's own web server. The port and certificate the browser talks to live in **Settings → Instance**.
 
-Changing anything here needs the `settings.http` permission. See [Users and Roles](user-roles.md).
+Changing anything here needs the **HTTP server settings** permission. See [Users and Roles](user-roles.md).
 
 ---
 
@@ -42,7 +42,7 @@ Saving with **Secure** on and either **Certificate** or **Private Key** blank is
 
 ## Saving restarts the Runtime
 
-The Runtime reads `settings/http_server.json` once, when its process starts. There is no hot reload for it, so a change to a field the Runtime consumes only takes effect when the Runtime is replaced.
+The Runtime reads these settings once, when its process starts. There is no hot reload for them, so a change to a field the Runtime consumes only takes effect when the Runtime is replaced.
 
 The save button says which one you are about to do:
 
@@ -57,7 +57,7 @@ Two cases end with the settings saved but not applied, and say so rather than re
 
 | Message | Meaning | What to do |
 | --- | --- | --- |
-| *This Grid does not supervise the Runtime* | `process.supervise_runtime` is disabled — typically a developer running the Runtime by hand or under a debugger | Restart the Runtime yourself |
+| *This Grid does not supervise the Runtime* | Runtime supervision is turned off for this installation — typically a developer running the Runtime by hand or under a debugger | Restart the Runtime yourself |
 | *The Runtime binary was not found* | No Runtime is installed at the configured path | Fix the installation, then restart |
 
 ---

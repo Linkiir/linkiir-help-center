@@ -88,7 +88,7 @@ When enabled, click the collapsible header to expand:
 | Workflow | The workflow containing the Alert Node. |
 | Node | Only Transform Custom nodes appear. This node will receive alert payloads. |
 
-**Selecting a node here IS the designation.** Saving writes `alert_receiver` into the node's config and creates the `__alert__` Kafka topic immediately.
+**Selecting a node here IS the designation.** Saving marks the node as the alert receiver and creates its `__alert__` Kafka topic immediately.
 
 ### Send Test Alert
 
@@ -138,7 +138,7 @@ Both channel sections collapse after configuration to keep the page clean:
 
 ## What happens after saving
 
-1. Settings are written to `notifications.json` in the working directory
+1. Settings are saved to the working directory
 2. The notification engine reloads on its next tick (within seconds, no restart needed)
 3. A git commit is created in the instance repository (change is tracked)
 4. If an Alert Node was designated, the `__alert__` topic is created and a deploy notice appears
