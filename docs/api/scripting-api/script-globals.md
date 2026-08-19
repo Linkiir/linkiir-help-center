@@ -40,44 +40,6 @@ print(#Raw)
 ```
 
 
-## `__node_dir`
-
-*field (deprecated)*
-
-```lua
-__node_dir
-```
-
-Filesystem path to the current node directory.
-
-:::caution Deprecated
-Use `linkiir.sys.nodeDir()` instead. This global remains for backward compatibility but may be removed in a future release.
-:::
-
-Set by the runtime before script execution. Relative `schema` paths in `linkiir.data.extract` and `linkiir.data.create` resolve against the node directory automatically, so you rarely need to reference this directly.
-
-**Usage**
-
-```lua
--- Preferred (no manual path needed):
-local Msg = linkiir.data.extract{ schema = 'demo.json', data = Data }
-
--- Or via the accessor:
-print(linkiir.sys.nodeDir())
-```
-
-**Returns**
-
-- `string` — absolute path to the node directory.
-
-**Example**
-
-```lua
-local Msg = linkiir.data.extract{ schema = 'demo.json', data = Data }
-local configPath = linkiir.sys.nodeDir() .. '/config.txt'
-```
-
-
 ## `require`
 
 *function*
@@ -88,7 +50,7 @@ require(modname)
 
 Load a Lua module.
 
-Loads a Lua module. Search path: the node's own directory first, then the project's `common/` directory (shared modules available to all nodes in the project), then system defaults. A node-local file with the same name takes priority over a shared one.
+Loads a Lua module. Search path: node dir (including any linked library dependencies, staged there at run time), then the project's common/ dir (shared modules), then system defaults.
 
 **Usage**
 
@@ -948,7 +910,7 @@ dofile(path)
 **Example**
 
 ```lua
-dofile(__node_dir .. '/helpers.lua')
+dofile(linkiir.sys.nodeDir() .. '/helpers.lua')
 ```
 
 
@@ -983,7 +945,7 @@ local chunk, err = loadfile(path)
 **Example**
 
 ```lua
-local Chunk, Err = loadfile(__node_dir .. '/helpers.lua')
+local Chunk, Err = loadfile(linkiir.sys.nodeDir() .. '/helpers.lua')
 if Chunk then Chunk() end
 ```
 

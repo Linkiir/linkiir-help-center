@@ -15,10 +15,10 @@ Database access, named for what it does (store / retrieve). Connection-object st
 *function*
 
 ```lua
-linkiir.store.open{ driver=, name=, user=, password=, … }
+linkiir.store.open{ driver=, name=, user=, password=, live= }
 ```
 
-Open a database connection. Driver constants: linkiir.store.MYSQL, POSTGRES, SQLSERVER, ORACLE, SQLITE, DB2, SYBASE, ODBC.
+Open a database connection. Pass one of the driver constants (linkiir.store.SQLITE, MYSQL, MARIADB, ORACLE, POSTGRES_ODBC, SQLSERVER_ODBC, ORACLE_ODBC, MYSQL_ODBC) as the driver parameter.
 
 **Usage**
 
@@ -26,16 +26,12 @@ Open a database connection. Driver constants: linkiir.store.MYSQL, POSTGRES, SQL
 local conn, err = linkiir.store.open{ driver=, name=, user=, password=, timeout=, live= }
 ```
 
-:::note Path resolution for SQLite
-For SQLite databases, a relative `name` resolves against the Runtime's working directory (`linkiir.sys.workingDir()`), not the node directory or the process working directory. This means `name = 'demo/patient.db'` always creates the database at `<working-dir>/demo/patient.db` regardless of how the service was started. Absolute paths are used unchanged. The sentinel `:memory:` is never resolved.
-:::
-
 **Parameters**
 
 | Name | Type | Required | Description |
 | --- | --- | --- | --- |
-| `driver` | constant | Yes | One of the linkiir.store.* driver constants. |
-| `name` | string | Yes | DSN / host / database / file, per driver. |
+| `driver` | integer | Yes | One of the linkiir.store.* driver constants (e.g. linkiir.store.SQLITE). These are integer values, not strings. |
+| `name` | string | Yes | DSN / host / database / file, per driver. For SQLITE this is a file path: a relative path resolves against the Runtime's working directory (linkiir.sys.workingDir()), never the process working directory, and an absolute path is used unchanged. The :memory: sentinel and file: URIs are passed to SQLite untouched. For every other driver the value is a server, DSN or database name and is never treated as a path. |
 | `user` | string | No | Username. |
 | `password` | string | No | Password. |
 | `timeout` | integer | No | Connect timeout (seconds). |
@@ -55,10 +51,233 @@ Codes: `DRIVER_NOT_FOUND`, `AUTH_FAILED`, `CONNECT_FAILED`, `TIMEOUT`
 **Example**
 
 ```lua
-local Conn, Err = linkiir.store.open{ driver = linkiir.store.POSTGRES, name = 'clinicdb',
+local Conn, Err = linkiir.store.open{ driver = linkiir.store.POSTGRES_ODBC, name = 'clinicdb',
                                user = 'svc', password = Secret }
 if not Conn then error(Err.message) end
 ```
+
+
+## `linkiir.store.tables`
+
+*function*
+
+```lua
+linkiir.store.tables{ name= }
+```
+
+Create an empty database table node tree.
+
+Create an empty database table node tree for building rows to insert or update. The returned node is a Linkiir node (protocol code 103 = DB) that can be populated field by field, then passed to Connection:execute for INSERT/UPDATE operations.
+
+**Usage**
+
+```lua
+local tbl = linkiir.store.tables{ name = 'patients' }
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `name` | string | Yes | Table name in the database. |
+
+**Returns**
+
+- `node` — Root node of the database table tree.
+
+**Example**
+
+```lua
+local tbl = linkiir.store.tables{ name = 'patients' }
+tbl.first_name = 'John'
+tbl.last_name = 'Smith'
+Conn:execute{ sql = 'INSERT INTO patients (first_name, last_name) VALUES (?, ?)',
+              params = { tbl.first_name:value(), tbl.last_name:value() } }
+```
+
+
+## `linkiir.store.SQLITE`
+
+*field*
+
+```lua
+linkiir.store.SQLITE
+```
+
+Driver constant (1013).
+
+SQLite (file-based database). The name parameter is the file path. Pass as the driver= argument to linkiir.store.open.
+
+**Usage**
+
+```lua
+local driver = linkiir.store.SQLITE
+```
+
+**Returns**
+
+- `integer` — Constant value 1013.
+
+
+## `linkiir.store.MYSQL`
+
+*field*
+
+```lua
+linkiir.store.MYSQL
+```
+
+Driver constant (1001).
+
+MySQL (native connector). Pass as the driver= argument to linkiir.store.open.
+
+**Usage**
+
+```lua
+local driver = linkiir.store.MYSQL
+```
+
+**Returns**
+
+- `integer` — Constant value 1001.
+
+
+## `linkiir.store.MARIADB`
+
+*field*
+
+```lua
+linkiir.store.MARIADB
+```
+
+Driver constant (1014).
+
+MariaDB (native connector). Pass as the driver= argument to linkiir.store.open.
+
+**Usage**
+
+```lua
+local driver = linkiir.store.MARIADB
+```
+
+**Returns**
+
+- `integer` — Constant value 1014.
+
+
+## `linkiir.store.ORACLE`
+
+*field*
+
+```lua
+linkiir.store.ORACLE
+```
+
+Driver constant (1003).
+
+Oracle Database (native OCI). Pass as the driver= argument to linkiir.store.open.
+
+**Usage**
+
+```lua
+local driver = linkiir.store.ORACLE
+```
+
+**Returns**
+
+- `integer` — Constant value 1003.
+
+
+## `linkiir.store.POSTGRES_ODBC`
+
+*field*
+
+```lua
+linkiir.store.POSTGRES_ODBC
+```
+
+Driver constant (1002).
+
+PostgreSQL via ODBC. The name parameter is the connection string or database name. Pass as the driver= argument to linkiir.store.open.
+
+**Usage**
+
+```lua
+local driver = linkiir.store.POSTGRES_ODBC
+```
+
+**Returns**
+
+- `integer` — Constant value 1002.
+
+
+## `linkiir.store.SQLSERVER_ODBC`
+
+*field*
+
+```lua
+linkiir.store.SQLSERVER_ODBC
+```
+
+Driver constant (1006).
+
+Microsoft SQL Server via ODBC. Pass as the driver= argument to linkiir.store.open.
+
+**Usage**
+
+```lua
+local driver = linkiir.store.SQLSERVER_ODBC
+```
+
+**Returns**
+
+- `integer` — Constant value 1006.
+
+
+## `linkiir.store.ORACLE_ODBC`
+
+*field*
+
+```lua
+linkiir.store.ORACLE_ODBC
+```
+
+Driver constant (1012).
+
+Oracle Database via ODBC. Pass as the driver= argument to linkiir.store.open.
+
+**Usage**
+
+```lua
+local driver = linkiir.store.ORACLE_ODBC
+```
+
+**Returns**
+
+- `integer` — Constant value 1012.
+
+
+## `linkiir.store.MYSQL_ODBC`
+
+*field*
+
+```lua
+linkiir.store.MYSQL_ODBC
+```
+
+Driver constant (1015).
+
+MySQL via ODBC (use for remote MySQL when native driver is unavailable). Pass as the driver= argument to linkiir.store.open.
+
+**Usage**
+
+```lua
+local driver = linkiir.store.MYSQL_ODBC
+```
+
+**Returns**
+
+- `integer` — Constant value 1015.
 
 
 ## Connection methods
@@ -299,7 +518,7 @@ if conn:check() then ... end
 
 ```lua
 if not Conn:check() then
-   Conn = linkiir.store.open{ driver = linkiir.store.POSTGRES, name = 'clinicdb' }
+   Conn = linkiir.store.open{ driver = linkiir.store.POSTGRES_ODBC, name = 'clinicdb' }
 end
 ```
 

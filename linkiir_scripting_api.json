@@ -29,32 +29,12 @@
           ]
         },
         {
-          "kind": "field",
-          "name": "__node_dir",
-          "signature": "__node_dir",
-          "usage": "local schemaPath = __node_dir .. '/demo.json'",
-          "summary": "Filesystem path to the current node directory.",
-          "description": "Filesystem path to the current node directory. Set by the runtime before script execution. Used to resolve relative schema paths.",
-          "returns": [
-            {
-              "name": "string",
-              "description": "absolute path to the node directory."
-            }
-          ],
-          "examples": [
-            {
-              "language": "lua",
-              "code": "local SchemaPath = __node_dir .. '/demo.json'\nlocal Msg = linkiir.data.extract{ schema = SchemaPath, data = Data }"
-            }
-          ]
-        },
-        {
           "kind": "function",
           "name": "require",
           "signature": "require(modname)",
           "usage": "local mod = require \"modname\"",
           "summary": "Load a Lua module.",
-          "description": "Loads a Lua module. Search path: node dir (including any linked library dependencies, staged there at run time) then system defaults.",
+          "description": "Loads a Lua module. Search path: node dir (including any linked library dependencies, staged there at run time), then the project's common/ dir (shared modules), then system defaults.",
           "params": [
             {
               "name": "modname",
@@ -775,7 +755,7 @@
           "examples": [
             {
               "language": "lua",
-              "code": "dofile(__node_dir .. '/helpers.lua')"
+              "code": "dofile(linkiir.sys.nodeDir() .. '/helpers.lua')"
             }
           ]
         },
@@ -802,7 +782,7 @@
           "examples": [
             {
               "language": "lua",
-              "code": "local Chunk, Err = loadfile(__node_dir .. '/helpers.lua')\nif Chunk then Chunk() end"
+              "code": "local Chunk, Err = loadfile(linkiir.sys.nodeDir() .. '/helpers.lua')\nif Chunk then Chunk() end"
             }
           ]
         },
@@ -1349,6 +1329,158 @@
             {
               "language": "lua",
               "code": "print(Msg:protocol())  -- 101 (HL7), 102 (X12), 105 (XML), ..."
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "linkiir.data.codeset.get",
+          "signature": "linkiir.data.codeset.get{ schema=, table= }",
+          "usage": "linkiir.data.codeset.get{ schema = <string>, table = <string> }",
+          "summary": "Load a code set from a schema.",
+          "description": "Retrieve a code set (Table object) from the given schema by its id. Returns nil when the code set id is not present in the schema — callers can branch without pcall. The schema path resolves relative to the current node directory, the same as linkiir.data.extract.",
+          "params": [
+            {
+              "name": "schema",
+              "type": "string",
+              "required": true,
+              "description": "Linkiir grammar JSON file containing the code set (e.g. demo.json)."
+            },
+            {
+              "name": "table",
+              "type": "string",
+              "required": true,
+              "description": "Code set id to look up (e.g. \"0001\")."
+            }
+          ],
+          "returns": [
+            {
+              "name": "Table",
+              "description": "Table userdata for the code set, or nil if the id is absent from the schema."
+            }
+          ],
+          "errors": {
+            "description": "Raises a Lua error on failure (trap with pcall).",
+            "codes": [
+              "MISSING_PARAMETER",
+              "SCHEMA_NOT_FOUND"
+            ]
+          },
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local codeset = linkiir.data.codeset\nlocal Sex = codeset.get{ schema = 'demo.json', table = '0001' }\nif Sex then\n  print('Loaded code set 0001 with ' .. #Sex:codes() .. ' codes')\nelse\n  print('Code set 0001 not found in schema')\nend\n\n-- Raises on missing parameter or unloadable schema.\nlocal ok, err = pcall(codeset.get, { schema = 'missing.json', table = '0001' })\nif not ok then print(err) end"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "linkiir.data.codeset.match",
+          "signature": "linkiir.data.codeset.match(sourceTable, destTable)",
+          "usage": "linkiir.data.codeset.match(<Table>, <Table>)",
+          "summary": "Map source code values to destination code values by description.",
+          "description": "Build a plain Lua table that maps each source code value to the destination code value whose description matches (case-insensitive, whitespace-collapsed). Source codes with no matching description in the destination are omitted — use an 'or default' fallback at the call site to handle gaps. Cross-format mapping is intentionally the developer's job; match provides description-based joining to automate the common case, while developers handle the remaining gaps via fallback values or manual overrides.",
+          "params": [
+            {
+              "name": "sourceTable",
+              "type": "Table",
+              "required": true,
+              "description": "Source code set (Table userdata returned by table.get)."
+            },
+            {
+              "name": "destTable",
+              "type": "Table",
+              "required": true,
+              "description": "Destination code set (Table userdata returned by table.get)."
+            }
+          ],
+          "returns": [
+            {
+              "name": "map",
+              "description": "Plain Lua table keyed by source code values, values are destination code values. Assignable, printable, pairs-able."
+            }
+          ],
+          "errors": {
+            "description": "Raises a Lua error if either argument is not a Table userdata.",
+            "codes": [
+              "TABLE_NOT_FOUND"
+            ]
+          },
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local codeset = linkiir.data.codeset\nlocal SourceSex = codeset.get{ schema = 'sourcedemo.json', table = '0001' }\nlocal DestSex   = codeset.get{ schema = 'destdemo.json',   table = '0001' }\nlocal Sex = codeset.match(SourceSex, DestSex)\n-- Sex = { F='F', M='M', O='O', U='U' }  (A and N omitted if descriptions differ)\n\nOut.PID[8] = Sex[Msg.PID[8]:value()] or 'U'   -- fallback for unmapped codes"
+            }
+          ]
+        },
+        {
+          "kind": "method",
+          "of": "Table",
+          "name": "Table:codes",
+          "signature": "Table:codes()",
+          "usage": "local codes = T:codes()",
+          "summary": "All code values in stored order.",
+          "description": "Return an array of all code value strings in the code set, preserving the order defined in the schema (spec order or drag-reordered).",
+          "returns": [
+            {
+              "name": "codes",
+              "description": "Array of code value strings."
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local codeset = linkiir.data.codeset\nlocal Sex = codeset.get{ schema = 'demo.json', table = '0001' }\nfor i, code in ipairs(Sex:codes()) do\n  print(i, code)   -- 1 F, 2 M, 3 O, ...\nend"
+            }
+          ]
+        },
+        {
+          "kind": "method",
+          "of": "Table",
+          "name": "Table:pairs",
+          "signature": "Table:pairs()",
+          "usage": "for code, desc in T:pairs() do ... end",
+          "summary": "Iterate code/description pairs.",
+          "description": "Return an iterator that yields (code, description) pairs in stored order. Suitable for use in a generic for loop.",
+          "returns": [
+            {
+              "name": "iterator",
+              "description": "Iterator yielding (code, desc) string pairs."
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local codeset = linkiir.data.codeset\nlocal Sex = codeset.get{ schema = 'demo.json', table = '0001' }\nfor code, desc in Sex:pairs() do\n  print(code .. ' = ' .. desc)   -- F = Female, M = Male, ...\nend"
+            }
+          ]
+        },
+        {
+          "kind": "method",
+          "of": "Table",
+          "name": "Table:desc",
+          "signature": "Table:desc(code)",
+          "usage": "local description = T:desc(<string>)",
+          "summary": "Look up the description for a code value.",
+          "description": "Return the description string for the given code value, or nil if the code is not present in this code set. Builds an internal index on first call for efficient repeated lookups.",
+          "params": [
+            {
+              "name": "code",
+              "type": "string",
+              "required": true,
+              "description": "Code value to look up (e.g. \"F\")."
+            }
+          ],
+          "returns": [
+            {
+              "name": "desc",
+              "description": "Description string (e.g. \"Female\"), or nil if the code is not in the code set."
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local codeset = linkiir.data.codeset\nlocal Sex = codeset.get{ schema = 'demo.json', table = '0001' }\nprint(Sex:desc('F'))    -- \"Female\"\nprint(Sex:desc('X'))    -- nil (not in code set)"
             }
           ]
         }
@@ -2635,22 +2767,22 @@
         {
           "kind": "function",
           "name": "linkiir.store.open",
-          "signature": "linkiir.store.open{ driver=, name=, user=, password=, … }",
+          "signature": "linkiir.store.open{ driver=, name=, user=, password=, live= }",
           "usage": "local conn, err = linkiir.store.open{ driver=, name=, user=, password=, timeout=, live= }",
           "summary": "Open a database connection.",
-          "description": "Open a database connection. Driver constants: linkiir.store.MYSQL, POSTGRES, SQLSERVER, ORACLE, SQLITE, DB2, SYBASE, ODBC.",
+          "description": "Open a database connection. Pass one of the driver constants (linkiir.store.SQLITE, MYSQL, MARIADB, ORACLE, POSTGRES_ODBC, SQLSERVER_ODBC, ORACLE_ODBC, MYSQL_ODBC) as the driver parameter.",
           "params": [
             {
               "name": "driver",
-              "type": "constant",
+              "type": "integer",
               "required": true,
-              "description": "One of the linkiir.store.* driver constants."
+              "description": "One of the linkiir.store.* driver constants (e.g. linkiir.store.SQLITE). These are integer values, not strings."
             },
             {
               "name": "name",
               "type": "string",
               "required": true,
-              "description": "DSN / host / database / file, per driver."
+              "description": "DSN / host / database / file, per driver. For SQLITE this is a file path: a relative path resolves against the Runtime's working directory (linkiir.sys.workingDir()), never the process working directory, and an absolute path is used unchanged. The :memory: sentinel and file: URIs are passed to SQLite untouched. For every other driver the value is a server, DSN or database name and is never treated as a path."
             },
             {
               "name": "user",
@@ -2697,7 +2829,147 @@
           "examples": [
             {
               "language": "lua",
-              "code": "local Conn, Err = linkiir.store.open{ driver = linkiir.store.POSTGRES, name = 'clinicdb',\n                               user = 'svc', password = Secret }\nif not Conn then error(Err.message) end"
+              "code": "local Conn, Err = linkiir.store.open{ driver = linkiir.store.POSTGRES_ODBC, name = 'clinicdb',\n                               user = 'svc', password = Secret }\nif not Conn then error(Err.message) end"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "linkiir.store.tables",
+          "signature": "linkiir.store.tables{ name= }",
+          "usage": "local tbl = linkiir.store.tables{ name = 'patients' }",
+          "summary": "Create an empty database table node tree.",
+          "description": "Create an empty database table node tree for building rows to insert or update. The returned node is a Linkiir node (protocol code 103 = DB) that can be populated field by field, then passed to Connection:execute for INSERT/UPDATE operations.",
+          "params": [
+            {
+              "name": "name",
+              "type": "string",
+              "required": true,
+              "description": "Table name in the database."
+            }
+          ],
+          "returns": [
+            {
+              "name": "node",
+              "description": "Root node of the database table tree."
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local tbl = linkiir.store.tables{ name = 'patients' }\ntbl.first_name = 'John'\ntbl.last_name = 'Smith'\nConn:execute{ sql = 'INSERT INTO patients (first_name, last_name) VALUES (?, ?)',\n              params = { tbl.first_name:value(), tbl.last_name:value() } }"
+            }
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "linkiir.store.SQLITE",
+          "signature": "linkiir.store.SQLITE",
+          "usage": "local driver = linkiir.store.SQLITE",
+          "summary": "Driver constant (1013).",
+          "description": "SQLite (file-based database). The name parameter is the file path. Pass as the driver= argument to linkiir.store.open.",
+          "returns": [
+            {
+              "name": "integer",
+              "description": "Constant value 1013."
+            }
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "linkiir.store.MYSQL",
+          "signature": "linkiir.store.MYSQL",
+          "usage": "local driver = linkiir.store.MYSQL",
+          "summary": "Driver constant (1001).",
+          "description": "MySQL (native connector). Pass as the driver= argument to linkiir.store.open.",
+          "returns": [
+            {
+              "name": "integer",
+              "description": "Constant value 1001."
+            }
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "linkiir.store.MARIADB",
+          "signature": "linkiir.store.MARIADB",
+          "usage": "local driver = linkiir.store.MARIADB",
+          "summary": "Driver constant (1014).",
+          "description": "MariaDB (native connector). Pass as the driver= argument to linkiir.store.open.",
+          "returns": [
+            {
+              "name": "integer",
+              "description": "Constant value 1014."
+            }
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "linkiir.store.ORACLE",
+          "signature": "linkiir.store.ORACLE",
+          "usage": "local driver = linkiir.store.ORACLE",
+          "summary": "Driver constant (1003).",
+          "description": "Oracle Database (native OCI). Pass as the driver= argument to linkiir.store.open.",
+          "returns": [
+            {
+              "name": "integer",
+              "description": "Constant value 1003."
+            }
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "linkiir.store.POSTGRES_ODBC",
+          "signature": "linkiir.store.POSTGRES_ODBC",
+          "usage": "local driver = linkiir.store.POSTGRES_ODBC",
+          "summary": "Driver constant (1002).",
+          "description": "PostgreSQL via ODBC. The name parameter is the connection string or database name. Pass as the driver= argument to linkiir.store.open.",
+          "returns": [
+            {
+              "name": "integer",
+              "description": "Constant value 1002."
+            }
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "linkiir.store.SQLSERVER_ODBC",
+          "signature": "linkiir.store.SQLSERVER_ODBC",
+          "usage": "local driver = linkiir.store.SQLSERVER_ODBC",
+          "summary": "Driver constant (1006).",
+          "description": "Microsoft SQL Server via ODBC. Pass as the driver= argument to linkiir.store.open.",
+          "returns": [
+            {
+              "name": "integer",
+              "description": "Constant value 1006."
+            }
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "linkiir.store.ORACLE_ODBC",
+          "signature": "linkiir.store.ORACLE_ODBC",
+          "usage": "local driver = linkiir.store.ORACLE_ODBC",
+          "summary": "Driver constant (1012).",
+          "description": "Oracle Database via ODBC. Pass as the driver= argument to linkiir.store.open.",
+          "returns": [
+            {
+              "name": "integer",
+              "description": "Constant value 1012."
+            }
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "linkiir.store.MYSQL_ODBC",
+          "signature": "linkiir.store.MYSQL_ODBC",
+          "usage": "local driver = linkiir.store.MYSQL_ODBC",
+          "summary": "Driver constant (1015).",
+          "description": "MySQL via ODBC (use for remote MySQL when native driver is unavailable). Pass as the driver= argument to linkiir.store.open.",
+          "returns": [
+            {
+              "name": "integer",
+              "description": "Constant value 1015."
             }
           ]
         },
@@ -2915,7 +3187,7 @@
           "examples": [
             {
               "language": "lua",
-              "code": "if not Conn:check() then\n   Conn = linkiir.store.open{ driver = linkiir.store.POSTGRES, name = 'clinicdb' }\nend"
+              "code": "if not Conn:check() then\n   Conn = linkiir.store.open{ driver = linkiir.store.POSTGRES_ODBC, name = 'clinicdb' }\nend"
             }
           ]
         },
@@ -4331,7 +4603,7 @@
     {
       "name": "linkiir.sys",
       "title": "Runtime & System",
-      "description": "Small runtime helpers and filesystem access in one place. Time/env helpers (os.date, os.time, os.getenv) stay as native Lua.",
+      "description": "Small runtime helpers and filesystem access in one place. Time/env helpers (os.date, os.time, os.getenv) stay as native Lua. Path resolution: every linkiir.sys.fs function resolves a relative path against the Runtime's working directory (linkiir.sys.workingDir()), never the process working directory. An absolute path is used unchanged. A relative path that escapes the working directory via .. is rejected.",
       "items": [
         {
           "kind": "function",
@@ -4388,6 +4660,52 @@
             {
               "language": "lua",
               "code": "linkiir.sys.sleep(250)"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "linkiir.sys.workingDir",
+          "signature": "linkiir.sys.workingDir()",
+          "usage": "local wd = linkiir.sys.workingDir()",
+          "summary": "Absolute path of the Runtime's working directory.",
+          "description": "Absolute path of the Runtime's working directory - the parent of projects/, users/, logs/ and run/. This is the base a relative linkiir.store or linkiir.sys.fs path resolves against, so a project built on it means the same thing regardless of how the service was started. Returns the same value under Run Test and Debug as the live Runtime reports for that node.",
+          "returns": [
+            {
+              "name": "string",
+              "description": "absolute path to the working directory."
+            }
+          ],
+          "errors": {
+            "description": "Raises a Lua error naming the missing context when the working directory is unknown to the calling VM, rather than returning an empty string."
+          },
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Root = linkiir.sys.workingDir()\nprint('working dir: ' .. Root)\n\n-- Rarely needed: a relative path already resolves here.\nlocal DB = linkiir.store.open{ driver = linkiir.store.SQLITE, name = 'demo/patient.db' }"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "linkiir.sys.nodeDir",
+          "signature": "linkiir.sys.nodeDir()",
+          "usage": "local nd = linkiir.sys.nodeDir()",
+          "summary": "Absolute path of the executing node's directory.",
+          "description": "Absolute path of the directory the executing node's files were loaded from. Under the live Runtime this is the staged run folder; under Run Test and Debug it is your dev clone. A relative schema path already resolves against this directory, so concatenation is not needed.",
+          "returns": [
+            {
+              "name": "string",
+              "description": "absolute path to the node directory."
+            }
+          ],
+          "errors": {
+            "description": "Raises a Lua error naming the missing context when the node directory is unknown to the calling VM."
+          },
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Dir = linkiir.sys.nodeDir()\nprint('node dir: ' .. Dir)\n\n-- Rarely needed: a relative schema path already resolves here.\nlocal Msg = linkiir.data.extract{ schema = 'demo.json', data = Data }"
             }
           ]
         },
@@ -4857,17 +5175,6 @@
             }
           ]
         }
-      ],
-      "notes": [
-        "Log entries appear in the **Logs** view (searchable by project, workflow, node, and level).",
-        "The notification engine matches log entries against rules in real time. An `ERROR`-level log from `linkiir.log.error()` is the most common way to trigger an alert.",
-        "`print()` also writes to the log, but at `INFO` level with event type `SCRIPT_PRINT` — it is **not** matched by notification rules.",
-        "`error()` (Lua's built-in) raises an exception and stops the script. It only emits an event when `stop_on_error` is enabled on the node. Use `linkiir.log.error()` to report an error without stopping execution."
-      ],
-      "next": [
-        "[Alerting and Notifications](../../administration/notifications/index.md)",
-        "[Runtime & System](runtime-system.md)",
-        "[Error Handling and Retry](../../interface-development/error-handling.md)"
       ]
     },
     {
@@ -6242,7 +6549,7 @@
           "examples": [
             {
               "language": "lua",
-              "code": "local F, Err = io.open(__node_dir .. '/scratch.txt', 'w')\nif not F then error(Err) end\nF:write('hello')\nF:close()"
+              "code": "local F, Err = io.open(linkiir.sys.nodeDir() .. '/scratch.txt', 'w')\nif not F then error(Err) end\nF:write('hello')\nF:close()"
             }
           ]
         },
@@ -6356,7 +6663,7 @@
           "examples": [
             {
               "language": "lua",
-              "code": "for Line in io.lines(__node_dir .. '/data.csv') do\n   print(Line)\nend"
+              "code": "for Line in io.lines(linkiir.sys.nodeDir() .. '/data.csv') do\n   print(Line)\nend"
             }
           ]
         },
@@ -6383,7 +6690,7 @@
           "examples": [
             {
               "language": "lua",
-              "code": "io.input(__node_dir .. '/data.csv')\nlocal Line = io.read('*l')"
+              "code": "io.input(linkiir.sys.nodeDir() .. '/data.csv')\nlocal Line = io.read('*l')"
             }
           ]
         },

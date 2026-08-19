@@ -16,7 +16,7 @@ Reference for the Lua scripting API available inside Linkiir workflow scripts.
 | [Connectivity](connectivity.md) (`linkiir.link`) | All connectivity to external systems, named for the heart of Linkiir. |
 | [Database](database.md) (`linkiir.store`) | Database access, named for what it does (store / retrieve). |
 | [Byte Transforms](byte-transforms.md) (`linkiir.codec`) | Everything that turns bytes into other bytes and back: text encodings, compression, and character-set conversion. |
-| [JSON](json.md) (`linkiir.json`) | JSON parse and serialize operating on plain Lua tables, with explicit array/object tagging. |
+| [JSON](json.md) (`linkiir.json`) | JSON parse and serialize operating on plain Lua tables. |
 | [Security](security.md) (`linkiir.sec`) | Security primitives with modern, explicit parameters. |
 | [Runtime & System](runtime-system.md) (`linkiir.sys`) | Small runtime helpers and filesystem access in one place. |
 | [Logging](logging.md) (`linkiir.log`) | Emit structured log events to the workflow event topic. |

@@ -129,7 +129,7 @@ If you genuinely need state across messages, keep it in a database through `link
 - `require` modules by bare name; node-local files take priority, then the project's `common` directory.
 - Override a shared module for one node by placing a file of the same name in the node's directory.
 - Use a project [library](../../administration/configurations/project-settings.md) when you want a shared module versioned, so a node pins a published version rather than tracking every edit.
-- Keep credentials and endpoints in the project's **Variables** and **Credentials** tabs, not in code.
+- Keep endpoints and credentials in the project's **Variables** tab — with **Secret** ticked for passwords and keys — not in code.
 
 ## Testing
 

@@ -228,8 +228,20 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "api/web-api/get-library-dependents-api-get-library-dependents-get",
+          label: "List nodes that depend on a library",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
           id: "api/web-api/delete-library-api-delete-library-post",
           label: "Delete a project library",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/import-libraries-api-import-libraries-post",
+          label: "Import libraries from another project",
           className: "api-method post",
         },
         {

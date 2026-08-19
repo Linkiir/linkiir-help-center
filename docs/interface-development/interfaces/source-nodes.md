@@ -197,7 +197,7 @@ With **Use FTP** on, the form shows two fields with this label — one for the r
 
 Choose SFTP or FTPS over plain FTP. Plain FTP sends credentials and file contents unencrypted.
 
-Put the password in the project's **Credentials** tab flagged **Secret**, and reference it, rather than typing it into the node. See [Project Settings](../../administration/configurations/project-settings.md).
+Put the password in the project's **Variables** tab flagged **Secret**, and reference it, rather than typing it into the node. See [Project Settings](../../administration/configurations/project-settings.md).
 
 ---
 

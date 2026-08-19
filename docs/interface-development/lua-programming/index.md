@@ -95,7 +95,7 @@ Use the adapter to get an interface running with minimal edits, then move to the
 - Put reusable functions in separate `.lua` files and `require` them by bare name. Node-local files take priority, then the project's `common` directory.
 - Use a project library when you want a shared module versioned, so a node pins a published version instead of tracking every edit. See [Project Settings](../../administration/configurations/project-settings.md).
 - Avoid module-level mutable state. A Source HTTP node with **Worker Count** above `1` runs several script instances, each with its own copy.
-- Never hard-code credentials or endpoints; keep them in the project's **Variables** and **Credentials** tabs.
+- Never hard-code credentials or endpoints; keep them in the project's **Variables** tab, with **Secret** ticked for passwords and keys.
 - Handle optional fields explicitly. An absent HL7 field is normal, not exceptional.
 - Keep payload contents out of error messages. See [Error Handling](../error-handling.md).
 

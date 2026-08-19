@@ -19,7 +19,7 @@ Workspace
 
 | Term | What it means to you |
 | --- | --- |
-| **Project** | A container for related interfaces. Holds workflows, scripts, schemas, project variables, credentials, and libraries. |
+| **Project** | A container for related interfaces. Holds workflows, scripts, schemas, project variables (secret ones included), and libraries. |
 | **Workflow** | One end-to-end message path, and the unit you start and stop. |
 | **Node** | One step in a workflow. A node receives, transforms, or delivers a message. |
 

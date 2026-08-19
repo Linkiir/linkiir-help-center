@@ -57,6 +57,7 @@ const sidebars: SidebarsConfig = {
         ]},
         {type: 'category', label: 'Lua Programming', link: {type: 'doc', id: 'interface-development/lua-programming/index'}, items: [
           'interface-development/lua-programming/testing-debugging',
+          'interface-development/lua-programming/code-sets',
         ]},
         'interface-development/error-handling',
       ],

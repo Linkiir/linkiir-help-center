@@ -178,7 +178,7 @@ Leave **Use Remote Temporary File** on whenever the receiver polls the upload di
 The default silently replaces an existing remote file of the same name. Combined with timestamp or index naming, a redelivery can overwrite a file the receiver has not read yet. Set it to `not be uploaded` when silent replacement would lose data.
 :::
 
-Put the password in the project's **Credentials** tab flagged **Secret**, and reference it. See [Project Settings](../../administration/configurations/project-settings.md).
+Put the password in the project's **Variables** tab flagged **Secret**, and reference it. See [Project Settings](../../administration/configurations/project-settings.md).
 
 ---
 

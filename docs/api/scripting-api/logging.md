@@ -141,20 +141,3 @@ linkiir.log.debug(message)
 linkiir.log.debug('Raw payload length: ' .. tostring(#Data))
 ```
 
-
----
-
-## Notes
-
-- Log entries appear in the **Logs** view (searchable by project, workflow, node, and level).
-- The notification engine matches log entries against rules in real time. An `ERROR`-level log from `linkiir.log.error()` is the most common way to trigger an alert.
-- `print()` also writes to the log, but at `INFO` level with event type `SCRIPT_PRINT` — it is **not** matched by notification rules.
-- `error()` (Lua's built-in) raises an exception and stops the script. It only emits an event when `stop_on_error` is enabled on the node. Use `linkiir.log.error()` to report an error without stopping execution.
-
----
-
-## Next
-
-- [Alerting and Notifications](../../administration/notifications/index.md)
-- [Runtime & System](runtime-system.md)
-- [Error Handling and Retry](../../interface-development/error-handling.md)

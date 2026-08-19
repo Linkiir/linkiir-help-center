@@ -42,7 +42,7 @@ local f, err = io.open(filename, mode)
 **Example**
 
 ```lua
-local F, Err = io.open(__node_dir .. '/scratch.txt', 'w')
+local F, Err = io.open(linkiir.sys.nodeDir() .. '/scratch.txt', 'w')
 if not F then error(Err) end
 F:write('hello')
 F:close()
@@ -188,7 +188,7 @@ for line in io.lines(filename) do ... end
 **Example**
 
 ```lua
-for Line in io.lines(__node_dir .. '/data.csv') do
+for Line in io.lines(linkiir.sys.nodeDir() .. '/data.csv') do
    print(Line)
 end
 ```
@@ -225,7 +225,7 @@ io.input(file)
 **Example**
 
 ```lua
-io.input(__node_dir .. '/data.csv')
+io.input(linkiir.sys.nodeDir() .. '/data.csv')
 local Line = io.read('*l')
 ```
 

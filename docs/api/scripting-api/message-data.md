@@ -148,6 +148,106 @@ local wire2 = Out:text()   -- identical result
 ```
 
 
+## `linkiir.data.codeset.get`
+
+*function*
+
+```lua
+linkiir.data.codeset.get{ schema=, table= }
+```
+
+Load a code set from a schema.
+
+Retrieve a code set (Table object) from the given schema by its id. Returns nil when the code set id is not present in the schema — callers can branch without pcall. The schema path resolves relative to the current node directory, the same as linkiir.data.extract.
+
+**Usage**
+
+```lua
+linkiir.data.codeset.get{ schema = <string>, table = <string> }
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `schema` | string | Yes | Linkiir grammar JSON file containing the code set (e.g. demo.json). |
+| `table` | string | Yes | Code set id to look up (e.g. "0001"). |
+
+**Returns**
+
+- `Table` — Table userdata for the code set, or nil if the id is absent from the schema.
+
+**Errors**
+
+Raises a Lua error on failure (trap with pcall).
+
+Codes: `MISSING_PARAMETER`, `SCHEMA_NOT_FOUND`
+
+**Example**
+
+```lua
+local codeset = linkiir.data.codeset
+local Sex = codeset.get{ schema = 'demo.json', table = '0001' }
+if Sex then
+  print('Loaded code set 0001 with ' .. #Sex:codes() .. ' codes')
+else
+  print('Code set 0001 not found in schema')
+end
+
+-- Raises on missing parameter or unloadable schema.
+local ok, err = pcall(codeset.get, { schema = 'missing.json', table = '0001' })
+if not ok then print(err) end
+```
+
+
+## `linkiir.data.codeset.match`
+
+*function*
+
+```lua
+linkiir.data.codeset.match(sourceTable, destTable)
+```
+
+Map source code values to destination code values by description.
+
+Build a plain Lua table that maps each source code value to the destination code value whose description matches (case-insensitive, whitespace-collapsed). Source codes with no matching description in the destination are omitted — use an 'or default' fallback at the call site to handle gaps. Cross-format mapping is intentionally the developer's job; match provides description-based joining to automate the common case, while developers handle the remaining gaps via fallback values or manual overrides.
+
+**Usage**
+
+```lua
+linkiir.data.codeset.match(<Table>, <Table>)
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `sourceTable` | Table | Yes | Source code set (Table userdata returned by table.get). |
+| `destTable` | Table | Yes | Destination code set (Table userdata returned by table.get). |
+
+**Returns**
+
+- `map` — Plain Lua table keyed by source code values, values are destination code values. Assignable, printable, pairs-able.
+
+**Errors**
+
+Raises a Lua error if either argument is not a Table userdata.
+
+Codes: `TABLE_NOT_FOUND`
+
+**Example**
+
+```lua
+local codeset = linkiir.data.codeset
+local SourceSex = codeset.get{ schema = 'sourcedemo.json', table = '0001' }
+local DestSex   = codeset.get{ schema = 'destdemo.json',   table = '0001' }
+local Sex = codeset.match(SourceSex, DestSex)
+-- Sex = { F='F', M='M', O='O', U='U' }  (A and N omitted if descriptions differ)
+
+Out.PID[8] = Sex[Msg.PID[8]:value()] or 'U'   -- fallback for unmapped codes
+```
+
+
 ## Node methods
 
 ### `Node:value`
@@ -471,9 +571,108 @@ print(Msg:protocol())  -- 101 (HL7), 102 (X12), 105 (XML), ...
 ```
 
 
----
+## Table methods
 
-## See also
+### `Table:codes`
 
-- [Code Sets](code-sets.md) — look up and cross-map the code tables embedded in your schema.
+*method of `Table`*
+
+```lua
+Table:codes()
+```
+
+All code values in stored order.
+
+Return an array of all code value strings in the code set, preserving the order defined in the schema (spec order or drag-reordered).
+
+**Usage**
+
+```lua
+local codes = T:codes()
+```
+
+**Returns**
+
+- `codes` — Array of code value strings.
+
+**Example**
+
+```lua
+local codeset = linkiir.data.codeset
+local Sex = codeset.get{ schema = 'demo.json', table = '0001' }
+for i, code in ipairs(Sex:codes()) do
+  print(i, code)   -- 1 F, 2 M, 3 O, ...
+end
+```
+
+
+### `Table:pairs`
+
+*method of `Table`*
+
+```lua
+Table:pairs()
+```
+
+Iterate code/description pairs.
+
+Return an iterator that yields (code, description) pairs in stored order. Suitable for use in a generic for loop.
+
+**Usage**
+
+```lua
+for code, desc in T:pairs() do ... end
+```
+
+**Returns**
+
+- `iterator` — Iterator yielding (code, desc) string pairs.
+
+**Example**
+
+```lua
+local codeset = linkiir.data.codeset
+local Sex = codeset.get{ schema = 'demo.json', table = '0001' }
+for code, desc in Sex:pairs() do
+  print(code .. ' = ' .. desc)   -- F = Female, M = Male, ...
+end
+```
+
+
+### `Table:desc`
+
+*method of `Table`*
+
+```lua
+Table:desc(code)
+```
+
+Look up the description for a code value.
+
+Return the description string for the given code value, or nil if the code is not present in this code set. Builds an internal index on first call for efficient repeated lookups.
+
+**Usage**
+
+```lua
+local description = T:desc(<string>)
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `code` | string | Yes | Code value to look up (e.g. "F"). |
+
+**Returns**
+
+- `desc` — Description string (e.g. "Female"), or nil if the code is not in the code set.
+
+**Example**
+
+```lua
+local codeset = linkiir.data.codeset
+local Sex = codeset.get{ schema = 'demo.json', table = '0001' }
+print(Sex:desc('F'))    -- "Female"
+print(Sex:desc('X'))    -- nil (not in code set)
+```
 

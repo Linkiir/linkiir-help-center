@@ -6,7 +6,7 @@ title: Runtime & System
 
 `linkiir.sys`
 
-Small runtime helpers and filesystem access in one place. Time/env helpers (os.date, os.time, os.getenv) stay as native Lua.
+Small runtime helpers and filesystem access in one place. Time/env helpers (os.date, os.time, os.getenv) stay as native Lua. Path resolution: every linkiir.sys.fs function resolves a relative path against the Runtime's working directory (linkiir.sys.workingDir()), never the process working directory. An absolute path is used unchanged. A relative path that escapes the working directory via .. is rejected.
 
 ---
 
@@ -86,9 +86,6 @@ linkiir.sys.sleep(250)
 ```
 
 
-
----
-
 ## `linkiir.sys.workingDir`
 
 *function*
@@ -97,9 +94,15 @@ linkiir.sys.sleep(250)
 linkiir.sys.workingDir()
 ```
 
-Returns the Runtime's working directory as an absolute path.
+Absolute path of the Runtime's working directory.
 
-This is the directory the Runtime was pointed at with `--working-dir` — the parent of `projects/`, `users/`, `logs/`, and `run/`. Relative paths passed to `linkiir.store.open` and `linkiir.sys.fs` resolve against this directory.
+Absolute path of the Runtime's working directory - the parent of projects/, users/, logs/ and run/. This is the base a relative linkiir.store or linkiir.sys.fs path resolves against, so a project built on it means the same thing regardless of how the service was started. Returns the same value under Run Test and Debug as the live Runtime reports for that node.
+
+**Usage**
+
+```lua
+local wd = linkiir.sys.workingDir()
+```
 
 **Returns**
 
@@ -107,15 +110,18 @@ This is the directory the Runtime was pointed at with `--working-dir` — the pa
 
 **Errors**
 
-Raises a Lua error if the working directory is not configured (e.g. running outside the Runtime without calling `linkiir.init`).
+Raises a Lua error naming the missing context when the working directory is unknown to the calling VM, rather than returning an empty string.
 
 **Example**
 
 ```lua
-print(linkiir.sys.workingDir())   -- "/opt/linkiir/linkiir_dir"
+local Root = linkiir.sys.workingDir()
+print('working dir: ' .. Root)
+
+-- Rarely needed: a relative path already resolves here.
+local DB = linkiir.store.open{ driver = linkiir.store.SQLITE, name = 'demo/patient.db' }
 ```
 
----
 
 ## `linkiir.sys.nodeDir`
 
@@ -125,9 +131,15 @@ print(linkiir.sys.workingDir())   -- "/opt/linkiir/linkiir_dir"
 linkiir.sys.nodeDir()
 ```
 
-Returns the current node's directory as an absolute path.
+Absolute path of the executing node's directory.
 
-This is the directory the node's files were loaded from — the same value as the deprecated `__node_dir` global. Relative `schema` paths in `linkiir.data.extract` and `linkiir.data.create` resolve against this directory.
+Absolute path of the directory the executing node's files were loaded from. Under the live Runtime this is the staged run folder; under Run Test and Debug it is your dev clone. A relative schema path already resolves against this directory, so concatenation is not needed.
+
+**Usage**
+
+```lua
+local nd = linkiir.sys.nodeDir()
+```
 
 **Returns**
 
@@ -135,28 +147,18 @@ This is the directory the node's files were loaded from — the same value as th
 
 **Errors**
 
-Raises a Lua error if the node directory is not configured.
+Raises a Lua error naming the missing context when the node directory is unknown to the calling VM.
 
 **Example**
 
 ```lua
-local dir = linkiir.sys.nodeDir()
-print(dir)   -- ".../run/MyProject_.../MyWorkflow_.../MyNode_..."
+local Dir = linkiir.sys.nodeDir()
+print('node dir: ' .. Dir)
+
+-- Rarely needed: a relative schema path already resolves here.
+local Msg = linkiir.data.extract{ schema = 'demo.json', data = Data }
 ```
 
----
-
-## Filesystem path resolution
-
-All `linkiir.sys.fs` functions resolve relative paths against the Runtime's working directory (`linkiir.sys.workingDir()`). Absolute paths are used unchanged. A relative path that escapes the working directory via `..` raises an error.
-
-```lua
--- These are equivalent:
-linkiir.sys.fs.mkdir('demo')
-linkiir.sys.fs.mkdir(linkiir.sys.workingDir() .. '/demo')
-```
-
----
 
 ## `linkiir.sys.fs.stat`
 

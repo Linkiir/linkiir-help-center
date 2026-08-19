@@ -89,11 +89,11 @@ Linkiir generates a master encryption key at install time and uses it to encrypt
 
 Restrict its filesystem permissions, and include it in your backups — see [Backup and Restore](../backup-restore/index.md). Losing it does not affect projects, users, or message history; it makes the stored broker and database passwords unrecoverable.
 
-### Credentials in projects
+### Secrets in projects
 
-Keep connection secrets in a project's **Credentials** tab with the **Secret** flag set, and reference them by name from node configuration and scripts. Never paste a password into a Lua file: the file is committed to the project's history and travels in an export.
+Keep connection secrets in a project's **Variables** tab with the **Secret** flag set, and reference them by name from node configuration and scripts. Never paste a password into a Lua file: the file is committed to the project's history and travels in an export.
 
-Secret values are blanked when a project is exported. Their names survive, so whoever imports it can see what needs filling in. See [Project Settings](../configurations/project-settings.md) and [Import and Export](../deployment/import-export.md).
+Secret values leave an export encrypted, and only the installation that exported them can read them back. Their names survive, so whoever imports the project elsewhere can see exactly what needs re-entering. See [Project Settings](../configurations/project-settings.md) and [Import and Export](../deployment/import-export.md).
 
 ### Service accounts
 
@@ -143,7 +143,7 @@ Rely on broker TLS, storage-level encryption, access control, and network isolat
 | Node listeners restricted | Only sending systems can reach them |
 | Broker uses a secure protocol | Where your broker requires it |
 | Master key backed up, permissions restricted | Included in your backup, readable only by the service account |
-| Credentials in the Credentials tab, not in scripts | No secrets in any `.lua` file |
+| Secrets in the Variables tab with **Secret** ticked, not in scripts | No secrets in any `.lua` file |
 | Samples are synthetic | No real identifiers in any sample |
 | Session timeouts suit your exposure | Reviewed rather than left at defaults |
 | Log DB retention and access reviewed | Policy applied, access restricted |

@@ -6,17 +6,39 @@ title: Project Settings
 
 Open a project by clicking its card on the **Projects** page. The popout that appears is where everything project-wide lives.
 
+---
+
+## The project card
+
+Each card on the **Projects** page carries the project's name and description, a chip summarising its workflows, and a footer showing **Total Queue**, the workflow count, and when the project last changed.
+
+| To | Do |
+| --- | --- |
+| Open the project's settings | Click the card |
+| Open the Builder or Monitor | Right-click the card, choose **Open in Builder** or **Open in Monitor** |
+| Rename or re-describe it | Right-click the card, choose **Edit project** |
+| Delete it | Right-click the card, choose **Delete project**, then type the project's name to confirm |
+| Reorder the cards | Drag a card by the grip handle in its top-right corner |
+| Create or import a project | Click the chevron on **Add Project** — **New project**, **From zip**, or **From remote** |
+
+**Edit project** and **Delete project** are greyed out without the **Edit project details** and **Delete projects** permissions; card order is only a display preference, so it is open to everyone and saves as soon as you drop the card.
+
+A project you do not collaborate on shows as **No access** — name and description only, with no counters and no right-click menu.
+
+---
+
+## The project popout
+
 Across the top it shows four counters — **Workflow Count**, **Workflows Running**, **Nodes Running**, and **Current Queue** — then a row of tabs.
 
 | Tab | Use it for |
 | --- | --- |
 | [Workflows](#workflows) | Create, start, stop, and open the project's workflows |
 | [Variables](#variables) | Values shared by every workflow in the project |
-| [Credentials](#credentials) | Connection secrets shared by every workflow in the project |
 | [Templates](#templates) | Reusable node configurations, and importing them from another project |
 | [Libraries](#libraries) | Versioned code bundles the project's scripts share |
 | [Git](#git) | Project history, the remote, and **Export project** |
-| Collaborators | Reserved. Collaborator management is not built yet. |
+| [Collaborators](#collaborators) | Who may open this project at all |
 
 ---
 
@@ -39,7 +61,9 @@ Per-row actions:
 | **Open in Monitor** (activity icon) | Opens live monitoring for that workflow |
 | **Start** / **Stop** | Starts or stops every node in the workflow |
 
-Header actions: **Add Workflow**, **Start All** / **Stop All**, and **Edit** — which reveals rename and delete on each row.
+Header actions: **Add Workflow**, **Start All** / **Stop All**, and a sort button that cycles the order rows are listed in.
+
+Right-click a workflow row for **Edit workflow** — name, description, and **Auto Start** — and **Delete workflow**. Both need the **Edit workflows** permission; without it the menu does not open.
 
 A workflow with no nodes has no Start button. There is nothing to run yet.
 
@@ -52,7 +76,7 @@ Each row carries an **Auto start on** or **Auto start off** badge. It decides wh
 | **Auto start on** | The workflow's nodes start automatically |
 | **Auto start off** (default) | The workflow stays off until someone starts it |
 
-To change it: click **Edit** in the tab header, open a workflow's edit dialog, and switch **Auto Start** on or off. It is saved with the workflow's name and description, and is committed to the project's history like any other change.
+To change it: right-click the workflow row, choose **Edit workflow**, and switch **Auto Start** on or off. It is saved with the workflow's name and description, and is committed to the project's history like any other change.
 
 Turn it on for production interfaces that must come back on their own after a restart. Leave it off for anything half-built, or for a workflow whose destination is a live system you do not want written to unattended — an auto-started workflow begins consuming its queue as soon as the Runtime is up, with nobody watching.
 
@@ -64,7 +88,7 @@ Auto start is a property of the workflow, so it travels with the project into an
 
 > Project-level variables available to all workflows in this project.
 
-Use variables for values that differ between environments but are not secret: hostnames, directory paths, account identifiers, feature switches.
+Use variables for the values that differ between environments: hostnames, directory paths, account identifiers, feature switches — and, with the **Secret** flag set, the passwords and keys those endpoints need.
 
 1. Click **Edit**.
 2. Click **Add Variable**.
@@ -73,30 +97,20 @@ Use variables for values that differ between environments but are not secret: ho
 
 The label is the name your scripts and node configuration refer to, so use a stable, readable form. The default text reads `VARIABLE_NAME`.
 
-Each row has a **Secret** checkbox. Ticking it masks the value in the UI and clears whatever was there, so you re-enter it deliberately. Use **Credentials** rather than a secret variable when the value is a password or key — it keeps the two concerns separate and makes an export easier to reason about.
+### Secrets
+
+Each row has a **Secret** checkbox. This is where connection passwords and keys belong — there is no separate credentials tab. Ticking **Secret** masks the value in the UI and clears whatever was there, so you re-enter it deliberately, and the value is encrypted at rest rather than stored as plain text. Password-typed fields on a node's configuration are protected the same way.
+
+Reference a secret from node configuration and scripts by its label. Never paste a password into a Lua file: the file is committed to the project's history and travels in an export.
+
+:::caution Secrets do not survive a move to another installation
+Secrets leave in their encrypted form, and only the installation that encrypted them can read them back. Import the bundle somewhere else and every secret arrives unreadable — the labels are intact, the values are not usable. Re-enter them on the target before starting anything.
+
+Restoring onto the same installation, with the same key, keeps them working.
+:::
 
 :::tip Variables are what make a project portable
 A project whose endpoints are variables is repointed by editing this tab. A project with hostnames typed into every node has to be edited node by node. Decide this early — it is the difference between a five-minute promotion and an afternoon of it. See [Import and Export](../deployment/import-export.md).
-:::
-
----
-
-## Credentials
-
-> Project-level credentials available to all workflows in this project.
-
-Same editor as Variables, used for connection secrets.
-
-1. Click **Edit**.
-2. Click **Add Credential**.
-3. Set a **Label** — the hint text reads `Credential name` — and a **Value**.
-4. Tick **Secret** for anything that must not be readable in the UI.
-5. Click **Save**.
-
-Reference credentials from node configuration and scripts by label. Never paste a password into a Lua file: the file is committed to the project's history and travels in an export.
-
-:::caution Secret values do not travel in an export
-Exporting a project keeps every credential's label and its **Secret** flag, but blanks the value. That is deliberate — a bundle is a file people pass around. After importing a project, come back to this tab and fill the values in for the new environment. The labels tell you exactly what is needed.
 :::
 
 ---
@@ -113,7 +127,7 @@ A template captures a configured node so the next one like it starts from the sa
 
 Template names must be unique within a project for a given node type. Importing one whose name is already taken is refused; rename the existing template first.
 
-Each template row offers **Edit template** and delete.
+Right-click a template row for **Edit template** and **Delete template**. Both need the **Manage node templates** permission.
 
 ---
 
@@ -121,13 +135,38 @@ Each template row offers **Edit template** and delete.
 
 > Reusable, versioned code bundles shared across this project's nodes. Created, edited, and linked to nodes from the Scripting page's Libraries picker.
 
-This tab is read-only — a list of what exists, showing each library's name, its current working version, how many versions are published, and its description. A library that has never been published shows `unpublished`.
+The tab lists what exists, showing each library's name, its current working version, how many versions are published, and its description. A library that has never been published shows `unpublished`.
 
 Create, edit, publish, and link libraries from the **Libraries** picker on the Scripting page, where a node links to a library at the point it is used.
+
+**Copying from another project:** click **Import from Project**, pick a **Source Project**, tick the libraries you want, and click **Import Selected**. The whole library comes across — the working copy and every published version. A name already taken in this project is refused rather than merged, and this only reaches projects on the same installation.
+
+**Removing one:** right-click a library row and choose **Remove library from project** (needs **Manage shared libraries**). Before you confirm, the dialog lists every node that currently links to it — workflow, node, and the version each is pinned to — so you can see what the removal touches. Those nodes are unlinked automatically and keep running: their own scripts are untouched, but anything they called from the library is gone.
 
 Use a library rather than the project's `common` directory when you want versioning: a node pins a published version, so changing the library does not silently change every node that uses it.
 
 Libraries travel inside a project export.
+
+---
+
+## Collaborators
+
+> Only collaborators can open this project. Everyone else sees that it exists and nothing more.
+
+Permissions decide what a user may do; this tab decides which projects they may do it to. Both have to allow an action for it to go through — see [Users and Roles](user-roles.md).
+
+| Action | Needs | Does |
+| --- | --- | --- |
+| **Add Collaborators** | **Add collaborators** | Opens a picker of every user not already on the project; tick names and add them together |
+| Trash icon on a row | **Remove collaborators** | Removes that person, after a confirmation |
+
+Your own row is marked **you**, and you can remove yourself — the confirmation says so plainly, because it takes your own access away.
+
+There is no owner. Whoever creates the project is added as its first collaborator like anybody else. That means the list can end up empty, which is legal and shows as *Nobody is on this project. It cannot be opened until someone is added.* Anyone holding **Add collaborators** can reopen it, on any project on the instance; that permission is what makes a lockout recoverable, and it grants no access to the contents on its own.
+
+A project you are not on still appears on the **Projects** page as **No access**, with its name and description and nothing else — no workflows, no counters, no right-click menu. Someone holding **Add collaborators** or **Remove collaborators** can still open such a project, and the popout then shows this tab and nothing else: enough to grant access, not enough to read the project.
+
+The collaborator list lives inside the project, so it travels with an export and with a git sync, and deleting the project takes it along.
 
 ---
 

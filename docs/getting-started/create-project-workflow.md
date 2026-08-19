@@ -18,7 +18,7 @@ You will write the script and start the listener in [the next step](start-http-s
 3. Name it `Getting Started`. A description is optional.
 4. Save.
 
-A project holds workflows, scripts, schemas, project variables, credentials, and libraries.
+A project holds workflows, scripts, schemas, project variables, and libraries.
 
 :::tip Names versus identifiers
 Linkiir gives every project, workflow, and node a stable internal identifier separate from its display name. Renaming something for clarity later will not break the interface, so pick a readable name now.
@@ -62,14 +62,14 @@ The palette shows a group heading and a short node name. This documentation writ
 
 ### Configure the node
 
-Open the node's configuration and set:
+Click the node to open **Node Parameters** on the right, click **Edit** in the panel header, and set:
 
 | Field | Set it to | Notes |
 | --- | --- | --- |
 | **Route Path** | `/intake` | The path this node answers on. Must be unique across the HTTP nodes sharing the server. |
 | **Worker Count** | `1` | How many requests the node handles at the same time. Defaults to `1`. |
 
-Name the node `Intake` and save. Its Lua script, `main.lua`, is created with the node.
+The node's name is the first thing in the same panel — set it to `Intake` — then **Save**. Its Lua script, `main.lua`, is created with the node.
 
 These are the fields the node needs before it will start. The Grid does not mark fields as required — a node with a missing value fails at start with a message naming the field, for example `missing required field: Route Path`.
 
@@ -89,7 +89,9 @@ The HTTP server is an installation-wide setting, not a per-project one.
 2. Click **Edit**.
 3. Turn on **Use Server**.
 4. Set **Port** to `9001`.
-5. Save.
+5. Click **Save & Restart**.
+
+The button reads **Save & Restart** rather than **Save** because the Runtime only reads the port when it starts. It is restarted for you; every running node stops and comes back with it. See [HTTP Server Settings](../administration/configurations/http-server.md).
 
 Combined with the node's Route Path, your endpoint will be:
 
@@ -109,7 +111,7 @@ Other settings on this tab:
 
 | Setting | What it does |
 | --- | --- |
-| **Secure** | Turns the server into HTTPS, and reveals **Certificate Authority File**, **Certificate**, **Private Key**, and **Verify Peer**. |
+| **Secure** | Turns the server into HTTPS, and reveals **Certificate**, **Private Key**, and **Verify Peer**. Turning **Verify Peer** on reveals **Certificate Authority File** as well. |
 | **Serve Files** | Serves static files from the directory named in **Serve Files Directory**. |
 
 Leave **Secure** off for this local walkthrough. Adding TLS is covered in [Security](../administration/security/index.md).
@@ -142,8 +144,7 @@ The project popout has more than the **Workflows** tab. You do not need them for
 
 | Tab | Use it for |
 | --- | --- |
-| **Variables** | Project-level variables available to all workflows in this project |
-| **Credentials** | Project-level credentials, with a **Secret** flag that masks the value |
+| **Variables** | Project-level variables available to all workflows, with a **Secret** flag for passwords and keys |
 | **Templates** | Reusable node templates, and importing them from another project |
 | **Libraries** | Versioned code bundles shared across the project's nodes |
 | **Git** | Project history, remote configuration, and **Export project** |

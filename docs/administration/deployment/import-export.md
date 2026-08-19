@@ -45,7 +45,7 @@ The button sits next to **Configure remote** on purpose: they are the two ways a
 
 | Excluded | Why, and what to do about it |
 | --- | --- |
-| **Secret credential values** | A zip is a file people pass around. Credentials marked **Secret** arrive with their name intact and their value blank, so you can see exactly what needs filling in. Re-enter them on the target grid. |
+| **Usable secret values** | Variables marked **Secret** travel encrypted, and only the installation that encrypted them can read them back. On another grid their names arrive intact and their values do not work. Re-enter them on the target. |
 | **The remote URL** | An imported project starts out local-only. Connect a remote on the target grid if you want one. |
 | **Git history** | A bundle is a snapshot. If the commit history matters, move the project by remote instead. |
 
@@ -148,7 +148,7 @@ Unlike a zip import, a remote import never regenerates identifiers — it has to
 
 Work through these before you start anything.
 
-1. **Re-enter secrets.** Open the project's **Credentials** tab. Every credential marked **Secret** arrived with an empty value. The names tell you what is needed.
+1. **Re-enter secrets.** Open the project's **Variables** tab. Every variable marked **Secret** arrived encrypted under the source installation's key and is unusable here. The names tell you what is needed.
 2. **Check project variables.** The **Variables** tab travelled with its values. Anything environment-specific — hostnames, paths, account identifiers — needs repointing at this environment.
 3. **Repoint node configuration.** Source and destination nodes carry the source environment's directories, hosts, and ports. A destination LLP node imported from DEV still names the DEV receiver.
 4. **Connect a remote, if you want one.** A bundle import is local-only. Set it up in the **Git** tab.

@@ -109,13 +109,13 @@ Export a bundle from the project's **Git** tab with **Export project**. Import o
 
 See [Import and Export](../administration/deployment/import-export.md).
 
-## Do exported projects contain credentials?
+## Do exported projects contain secrets?
 
-Credential **names** travel; secret **values** do not. Every credential marked **Secret** arrives with its name and flag intact and its value blank, so you can see exactly what needs filling in on the target installation.
+Not usably, on another installation. A project variable marked **Secret** — and a password-typed node field — is stored encrypted, and the export carries it that way. Only the installation that encrypted it can read it back, so importing elsewhere leaves the labels intact and the values unreadable.
 
-Project **variables** do travel with their values, so anything environment-specific there needs repointing after an import.
+Project **variables** that are not marked **Secret** travel with their values, so anything environment-specific there needs repointing after an import.
 
-After importing, open the project's **Credentials** tab and fill in the values for that environment.
+After importing onto a different installation, open the project's **Variables** tab and re-enter each secret for that environment. Restoring onto the same installation keeps them working.
 
 ## Can I import the same project twice onto one installation?
 
@@ -192,9 +192,9 @@ Renaming the host, changing its IP, or moving to different hardware does not cha
 
 ## Are there built-in user roles?
 
-No. You create the roles you need and choose which of five permissions each carries: **Edit**, **Start / Stop**, **Export Logs**, **View Logs**, and **IDE**. A fresh install ships one role, `admin`, holding all five.
+No. You create the roles you need and tick which of 37 permissions each carries, grouped as Run Control, Projects, Logs, Scripting, Node Configuration, and Administration. A fresh install ships one built-in role, `admin`, holding every one of them.
 
-The permission set is deliberately coarse, so some separations are not available — **Edit** covers project configuration, credentials, and exporting together. Where a stricter split matters, separate environments rather than relying on roles within one. See [Users and Roles](../administration/configurations/user-roles.md).
+Permissions say what a user may do; a project's **Collaborators** tab says which projects they may do it to. Both gates have to allow an action. See [Users and Roles](../administration/configurations/user-roles.md).
 
 ## Will Linkiir email me when an interface fails?
 

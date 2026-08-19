@@ -54,7 +54,7 @@ Practices worth adopting early, when they cost nothing, rather than after an inc
 
 **Make delivery idempotent.** Delivery is at-least-once. Deduplicate on message control ID, use unique file naming, or send an idempotency key — decided before go-live, not after.
 
-**Keep secrets out of scripts.** Put them in the project's **Credentials** tab with the **Secret** flag set, and reference them by name. A value in a `.lua` file is committed to the project's history.
+**Keep secrets out of scripts.** Put them in the project's **Variables** tab with the **Secret** flag set, and reference them by name. A value in a `.lua` file is committed to the project's history.
 
 **Make environment-specific values project variables.** Hostnames, directories, and account identifiers in the **Variables** tab are repointed in one place when you promote a project. The same values typed into every node are edited node by node.
 

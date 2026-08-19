@@ -25,7 +25,7 @@ Administration covers the complete Linkiir platform lifecycle.
 | Activate a license | [License ID and License Code](licensing/license-id-code.md) |
 | Move a project to another environment | [Import and Export](deployment/import-export.md) |
 | Add a user and control what they can do | [Users and Roles](configurations/user-roles.md) |
-| Set project variables and credentials | [Project Settings](configurations/project-settings.md) |
+| Set project variables and secrets | [Project Settings](configurations/project-settings.md) |
 | Connect my own Kafka cluster | [Kafka Configuration](configurations/kafka-redpanda.md) |
 | Replace the server Linkiir runs on | [Backup and Restore](backup-restore/index.md), then [License Transfer](licensing/license-transfer.md) |
 | Get alerted when an interface fails | [Alerting and Notifications](notifications/index.md) |
