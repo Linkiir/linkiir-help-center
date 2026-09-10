@@ -1,0 +1,1 @@
+{"parameters":[{"name":"name","in":"path","required":true,"schema":{"type":"string","description":"Username, matching the user's directory name under `users/`.","title":"Name"},"description":"Username, matching the user's directory name under `users/`."}]}

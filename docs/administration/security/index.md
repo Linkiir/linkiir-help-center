@@ -101,6 +101,28 @@ Keep connection secrets in a project's **Variables** tab with the **Secret** fla
 
 Secret values leave an export encrypted, and only the installation that exported them can read them back. Their names survive, so whoever imports the project elsewhere can see exactly what needs re-entering. See [Project Settings](../configurations/project-settings.md) and [Import and Export](../deployment/import-export.md).
 
+### Per-user SSH keys
+
+Git access is authenticated per user: every push, pull, and remote import uses the key belonging to whoever triggered it, and there is no shared project or administrative key to fall back on.
+
+Linkiir can generate that key for a user — **Settings → Users → Edit → the key button beside SSH private key path**. What that means for your security posture:
+
+| Aspect | Behaviour |
+| --- | --- |
+| Where the private key lives | In the user's own folder inside the Linkiir working directory, on the server only |
+| File permissions | Restricted to the account Linkiir runs as (`0600` on Linux and macOS, an equivalent ACL on Windows). The Grid reports it if that could not be applied. |
+| Passphrase | None. Nothing can type one during an unattended push; file permissions are the compensating control. |
+| Exposure | The private key is never returned by the API, shown in the interface, or downloadable. Only its path is recorded on the user's profile. |
+| Version history | Excluded from the instance repository, so it is never committed and never pushed to the configured backup remote |
+| Who can create one | The user themselves, or a holder of **Manage users** for somebody else |
+
+Two consequences to plan for:
+
+- **Grid's own instance backup does not carry keys**, by design — it pushes the instance repository, which excludes them. An instance restored from that remote comes back with profiles pointing at keys that no longer exist, so regenerate each one and register the new public half. A filesystem copy of the working directory *does* include the keys, which is the reason to encrypt and restrict those copies.
+- **Rotation is per user and per host.** Replacing a key stops the old public key working everywhere it is registered.
+
+Commits carry the acting user's name and email address from their account, so the instance and project history says who made each change. Keep those fields accurate.
+
 ### Service accounts
 
 Give Linkiir its own named accounts for the broker and the database, with the narrowest rights that work. Shared administrative credentials make an audit trail useless and widen the impact of a leak.
@@ -127,7 +149,11 @@ Test samples are stored with the project and visible to anyone who can open the 
 
 The same boundary applies when you raise a support ticket: payloads belong in your Log DB, not in a support request. Linkiir Support does not accept PHI and will never ask you for it — see [PHI in Support Requests](../../support/phi-policy.md).
 
-Apply the retention and purge policy your organisation requires to the Log DB, and restrict who can view payloads and perform replays. Note that the permission model is coarse: **View Logs** covers reading message history including payloads, and there is no separate permission for payload access. Where a stricter split matters, separate environments rather than relying on roles within one.
+Set the retention your organisation's policy requires: **Log Retention Days** under **Settings → Logging** purges records past that age daily, payloads included. A fresh installation keeps everything until you set it. See [Log Retention and Purge](../configurations/log-retention-purge.md).
+
+Restrict who can view payloads and perform replays. Note that the permission model is coarse: **View log messages** covers reading message history including payloads, and there is no separate permission for payload access — what *is* separate is **Unredact PHI**, which is what turns a masked HL7 payload into readable patient data and what a message must be revealed under before it can be edited for a resubmission. Where a stricter split than that matters, separate environments rather than relying on roles within one. See [Log Search and Message History](../logs/index.md).
+
+Search reaches message content, not only the summary line, so the search box on the Logs page can surface what is inside a payload to anyone holding **View log messages**. That is the same data those accounts can already open a record to read; it is worth knowing when you decide who holds it.
 
 ---
 
@@ -154,7 +180,8 @@ Rely on broker TLS, storage-level encryption, access control, and network isolat
 | Secrets in the Variables tab with **Secret** ticked, not in scripts | No secrets in any `.lua` file |
 | Samples are synthetic | No real identifiers in any sample |
 | Session timeouts suit your exposure | Reviewed rather than left at defaults |
-| Log DB retention and access reviewed | Policy applied, access restricted |
+| Log DB retention and access reviewed | **Log Retention Days** set from policy rather than left unlimited, access restricted |
+| SSH keys accounted for | Each key belongs to a named user who needs it, and you know they are not in the instance backup |
 | External monitoring in place | Health, lag, and disk alerts exist — see [Alerting and Notifications](../notifications/index.md) |
 
 ---

@@ -144,7 +144,7 @@ linkiir.link.web.get{ url=, headers=, params=, body=, auth=, timeout=, tls=, ver
 | `body` | string | No | Request body (POST/PUT/PATCH). |
 | `auth` | table | No | `{ type='basic'\|'bearer', user=, password=, token= }.` |
 | `timeout` | integer | No | Seconds. |
-| `tls` | table | No | `Client certificate for mutual TLS (mTLS): { certFile=, keyFile=, caFile= }. All three are filesystem paths to PEM files - certificate or key material is never accepted inline, so a private key never enters script memory. PEM is the only accepted format, matching the Linkiir web server's Certificate File and Private Key File settings; convert a PKCS#12 bundle or an encrypted key once with openssl before use. certFile and keyFile must be supplied together. caFile pins the trust anchor for verifying the server and may be used with or without a client certificate; it does not disable verification, which stays with verifyTls. Relative paths resolve against the working directory and may not escape it; absolute paths are used unchanged. Each path must be a readable file or the call raises before any request is made.` |
+| `tls` | table | No | `Client certificate for mutual TLS (mTLS): { certFile=, keyFile=, caFile= }. All three are filesystem paths to PEM files.` |
 | `verifyTls` | boolean | No | Default true. |
 | `live` | boolean | No | Default true. |
 

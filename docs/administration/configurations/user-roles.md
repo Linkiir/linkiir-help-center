@@ -21,7 +21,7 @@ A role granting **Edit node scripts** lets its holder edit scripts in the projec
 
 ## The permission set
 
-There are 37 permissions in six groups. The groups are a convenience for the role editor — each one gets a heading you can tick or clear in a single click — and grouping changes nothing about what a permission does.
+There are 38 permissions in six groups. The groups are a convenience for the role editor — each one gets a heading you can tick or clear in a single click — and grouping changes nothing about what a permission does.
 
 Every permission is a peer. None implies any other, there is no superuser, and a role grants exactly the boxes ticked on it: a role holding **Export log messages** without **View log messages** can export and not read.
 
@@ -80,6 +80,12 @@ Authoring: node code, shared libraries, and source control.
 | **Commit, push, and pull** | Stage, commit, restore, and exchange commits with the remote |
 
 Writing a script, giving it samples, running it against them, and stepping through it are one job and one permission. Splitting them produced roles that could write a script but not check it.
+
+**Reading node and library source needs one of these three.** Node files, library files, test samples, schemas, and file diffs — including the diffs shown in the project popout's commit history — are not part of the read floor every account gets. Any one of the three permissions above admits you to reading that code, which is the same set the Scripting page itself admits. A role with no scripting permission cannot read a node's script, from the page or from the Web API.
+
+What stays readable without them is the metadata around the code: which files a commit touched, the working tree's change list, and a library's name and versions. Those say nothing about what the code does.
+
+**Taking a copy off the grid is stricter.** Downloading a file from the Scripting page's Explorer needs **Edit node scripts** specifically — seeing a script takes any scripting permission, saving it to your own machine takes the one that would let you change it.
 
 ### Node Configuration
 
@@ -169,12 +175,14 @@ Withhold the Scripting and Node Configuration groups from operational roles. The
 
 1. Click **Add User**.
 2. Fill in **Username**, **Name**, and **Email address**. All three are required, and the email address must be well formed.
-3. Set a **Password**.
+3. Set a **Password**, and re-type it in **Confirm Password**. **Save** stays unavailable while the two do not match.
 4. Select **Roles**.
 5. Optionally set **SSH private key path**.
 6. Click **Save**.
 
-The username is the login identifier and cannot be changed afterwards.
+The username is the login identifier and cannot be changed afterwards. A new account is created needing a password change, so the password you set is replaced by the user at their first login.
+
+Commits are attributed to the **Name** and **Email address** on the account: every git commit Linkiir makes carries the identity of the user who triggered it. With no email address on record it falls back to `username@linkiir.local`. There is no instance-wide git identity.
 
 ### SSH private key path
 
@@ -185,12 +193,35 @@ This is how a user authenticates when pushing a project to a Git remote, pulling
 | It is a **path** | The path to a private key file on the Linkiir server, for example `/path/to/id_rsa`. Not pasted key material. |
 | It is per user | Every push and pull authenticates as whoever triggered it. There is no shared project or admin key. |
 | A browse button is provided | It starts at `~/.ssh/id_rsa`. |
+| Linkiir can create one for you | The key button beside the field generates a key pair in the user's own folder — see below. |
 
-A user with no key configured cannot push, pull, or import from a remote. They can still export and import zip bundles.
+A user with no key configured cannot push, pull, or import from a remote. They can still export and import zip bundles. Remotes must be SSH; `https://` remotes are not supported.
+
+### Generate an SSH key
+
+Edit the user, then click the key button beside **SSH private key path** (*Generate an SSH key, or test this one against a git server*). The account has to exist first, so this is on the Edit form rather than Add User.
+
+| Step | What happens |
+| --- | --- |
+| Choose **Ed25519** or **RSA 4096**, then **Generate SSH key** | A passphrase-less key pair is created in the user's folder on the server, and the user's profile is pointed at it |
+| **Copy public key** | Register this on the git host, against the account or repository Linkiir will use |
+| **Test connection** | Authenticates against a host with that key and reports the verdict. One-click buttons cover GitHub, GitLab, Bitbucket, and Azure DevOps; typing a host name, an `ssh://` URL, or `git@host:org/repo` all work, and the repository part is ignored |
+| **Regenerate** → **Replace key** | Creates a new pair. Confirmed in two clicks, because the old public key stops working everywhere it is registered |
+
+Points worth knowing before you use it:
+
+- **Ed25519 is the default.** Choose **RSA 4096** for Azure DevOps, which does not accept Ed25519 keys.
+- **The key has no passphrase**, because nothing can type one during an unattended push. Its protection is file permissions on the server, plus its exclusion from the instance repository.
+- **The private key is never shown, downloaded, or committed.** Only its path is stored on the profile.
+- **A key is per user and self-service.** Anyone can generate and test their own key from their own row; doing it for somebody else needs **Manage users**.
+- **A test can fail where a real push succeeds.** The test deliberately ignores the server's SSH configuration so that a pass proves *this* key works — a host reached through a jump host or a rewritten host name is the case to expect this on.
+- **Generated keys are not in the instance repository**, so they are not carried by the backup remote Linkiir pushes to. After restoring an instance from that remote, regenerate each user's key and register the new public half. A filesystem copy of the working directory does include them. See [Backup and Restore](../backup-restore/index.md).
 
 ### Change a password
 
-Edit the user and set **New Password**. Leaving it blank keeps the current password. An administrator can reset any user's password this way; there is no self-service password reset or "forgot password" flow.
+Edit the user, set **New Password**, and re-type it in **Confirm New Password**. Leaving both blank keeps the current password; once either is filled in they have to match before **Save** is available.
+
+Users can change their own password this way — the Edit button appears on your own row whether or not you hold **Manage users**. An administrator can reset any user's password the same way. There is no "forgot password" flow.
 
 ### Delete a user
 
@@ -233,7 +264,9 @@ Permissions are enforced by the Grid itself, not merely reflected in the interfa
 
 **Review assignments on a schedule.** Remove access when responsibilities change, not when someone leaves.
 
-**Set SSH keys only for the users who need them.** A key path on an account that never pushes is an unnecessary credential on the host.
+**Set SSH keys only for the users who need them.** A key on an account that never pushes is an unnecessary credential on the host, and each one has to be registered with the git host separately.
+
+**Withhold the Scripting group from roles that should not read interface code.** Node and library source is only readable by accounts holding one of those three permissions, so leaving them off a support or reporting role is what keeps scripts out of reach.
 
 ---
 
@@ -245,8 +278,8 @@ Being explicit so you can plan around it:
 | --- | --- |
 | Account lockout or login rate limiting | Protect the Grid at the network layer, and behind a reverse proxy if it is reachable remotely |
 | Password complexity or reuse rules | Only a minimum length of 8 characters and "not the current password" are enforced. Set your own standard by policy. |
-| Self-service password reset | An administrator resets passwords from the Users tab |
-| A self-service profile page | Users cannot set their own SSH key; an administrator does it |
+| Self-service password reset | A user can change their own password from the Users tab while signed in, but a forgotten one is reset by an administrator |
+| A profile page of its own | Managing your own name, password, and SSH key happens through your row on the Users tab rather than a separate profile screen |
 | External identity providers (LDAP, SAML, OIDC) | Accounts are local to the installation |
 | Per-project roles | Collaboration decides *which* projects a user reaches, not what they may do once inside. Permissions are the same in every project they collaborate on. |
 

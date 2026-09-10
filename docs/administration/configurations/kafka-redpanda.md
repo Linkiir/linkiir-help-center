@@ -6,6 +6,8 @@ title: Kafka Configuration
 
 Linkiir communicates with Apache Kafka through the Kafka protocol. Redpanda is also compatible as an alternative broker since it implements the same protocol, but the bundled and documented broker is Apache Kafka.
 
+In the Grid itself the broker is labelled **Queue** — that is the name on the sidebar's status indicator and on the Dashboard's system status card. This page uses "broker" for the software you administer and "queue" for what Linkiir puts on it.
+
 ## Which broker should be used?
 
 | Scenario | Recommendation |
@@ -83,6 +85,25 @@ Linkiir also reconciles retention at startup, reading back what the broker actua
 :::note
 Saving the setting always stores the value, even if the broker could not be reached. What did or did not reach the broker is reported back to you, and startup reconciliation picks up anything that was missed.
 :::
+
+## Consumer group offsets must outlive the records
+
+A broker expires a consumer group's committed offsets once that group has been empty for longer than `offsets.retention.minutes` — 7 days by default — and that window is entirely independent of how long the records themselves are kept. A node stopped for longer than a week, on a queue retaining 30 days of records, therefore ends up in a state the broker cannot describe: the records are still there, and nothing says they were ever consumed.
+
+Two things go wrong when that happens, and neither is cosmetic:
+
+| Symptom | Cause |
+| --- | --- |
+| A stopped node reports its entire retained history as queued, on the Monitor page, the Dashboard, and in queue-threshold alert rules | Queue depth is the log's end minus the committed position. With no committed position, the only floor left is the start of the log. |
+| Starting that node reprocesses everything still retained and re-sends it downstream | Consuming nodes read from the earliest available record when there is no position to resume from |
+
+What Linkiir does about it:
+
+- **Brokers installed by Linkiir** are configured with a group-offset retention of 3650 days, matching the maximum the Queue Retention setting allows. Nothing to do.
+- **On any broker**, Linkiir asks for group-offset retention at least as long as the record retention on its own topics.
+- **As a backstop**, Linkiir keeps its own record of the last committed position it observed for each node, and re-commits it when the node starts. That covers a cluster it is not allowed to reconfigure, or one that refuses dynamic configuration changes.
+
+On an external customer-operated cluster, set `offsets.retention.minutes` to at least your record retention. A cluster left at the 7-day default will show inflated queue depths for anything stopped longer than a week, even though Linkiir's own record usually prevents the replay.
 
 ## Tuning producer batching
 

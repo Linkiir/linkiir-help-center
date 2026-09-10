@@ -66,6 +66,22 @@ Two things prevent it:
 
 Records already written to the Log DB are safe, and a redelivery during recovery does not create duplicate rows in log search. See [Message History Is Not Being Recorded](../administration/troubleshooting/log-archiver-connectivity.md).
 
+The other way history goes away is the one you configure yourself: **Log Retention Days** purges archived records past a chosen age, payloads included, and purged records are not recoverable.
+
+## How long is message history kept?
+
+Until you decide otherwise. A fresh installation keeps everything, so the Log DB grows with your traffic.
+
+Set **Log Retention Days** under **Settings → Logging** to have records past that age deleted daily, and the space returned to the disk afterwards. **Purge Now** applies the same rule immediately, after telling you exactly what it would delete. See [Log Retention and Purge](../administration/configurations/log-retention-purge.md).
+
+Note that this is a different setting from **Queue Retention (days)**, which is how long the broker holds records before the Archiver has copied them.
+
+## Can I search inside a message, not just its metadata?
+
+Yes. The Logs page search box matches the archived message body as well as project, workflow, and node names, so an MRN or an accession number in any segment is findable.
+
+Two caveats: matching is a plain substring — there are no wildcards or operators, so narrow with the filters instead — and only messages whose payload is still archived can match on content. A payload above **Max Payload Size** was never stored, and one past your retention has been purged. See [Log Search and Message History](../administration/logs/index.md).
+
 ## Does Run Test send real messages?
 
 No. In both Run Test and Debug, `linkiir.flow.push` is non-live: it validates your call and returns a placeholder message ID without producing anything.
@@ -192,20 +208,20 @@ Renaming the host, changing its IP, or moving to different hardware does not cha
 
 ## Are there built-in user roles?
 
-No. You create the roles you need and tick which of 37 permissions each carries, grouped as Run Control, Projects, Logs, Scripting, Node Configuration, and Administration. A fresh install ships one built-in role, `admin`, holding every one of them.
+No. You create the roles you need and tick which of 38 permissions each carries, grouped as Run Control, Projects, Logs, Scripting, Node Configuration, and Administration. A fresh install ships one built-in role, `admin`, holding every one of them.
 
 Permissions say what a user may do; a project's **Collaborators** tab says which projects they may do it to. Both gates have to allow an action. See [Users and Roles](../administration/configurations/user-roles.md).
 
 ## Will Linkiir email me when an interface fails?
 
-Not on its own. There is no built-in notification or alerting feature — no Notifications settings page, no error alerts, no inactivity alerts.
+Yes, once you configure it. **Settings → Notifications** holds the email transport and the alert rules, and a rule can deliver by email or as JSON to a node you write yourself for Slack, Teams, PagerDuty, or anything else with a webhook.
 
-You have two routes, and most sites use both:
+Two things it does not replace:
 
-- **Alert from a script.** A Custom node can send email with `linkiir.link.mail.send` or call a webhook with `linkiir.link.web.post`. Good for data-level rejections a human needs to act on.
-- **Monitor from outside.** Point your existing monitoring at `/api/health`, at broker consumer lag, and at Log DB capacity. This is what catches the failures a script cannot report — including its own node stopping.
+- **Data-level messages a human must act on.** A Custom node can send those directly with `linkiir.link.mail.send` or `linkiir.link.web.post`.
+- **Watching Linkiir from outside Linkiir.** Point your existing monitoring at `/api/health`, at broker consumer lag, and at Log DB capacity. Nothing inside the Grid can reliably report that the Grid itself has stopped.
 
-See [Alerting and Notifications](../administration/notifications/index.md) for a minimum viable setup.
+See [Alerting and Notifications](../administration/notifications/index.md).
 
 ## Can I migrate scripts from another integration engine?
 

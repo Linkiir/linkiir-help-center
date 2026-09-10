@@ -1109,6 +1109,63 @@
           ]
         },
         {
+          "kind": "field",
+          "name": "linkiir.data.ELEMENT",
+          "signature": "linkiir.data.ELEMENT",
+          "usage": "N:append(linkiir.data.ELEMENT, 'Item')",
+          "summary": "Node-kind constant selecting an element for Node:append.",
+          "description": "A read-only sentinel passed as the `kind` argument to Node:append to append an Element_Node. One of the three mutually distinct node-kind constants (ELEMENT, ATTRIBUTE, TEXT); the element case applies every rule of Node:add.",
+          "returns": [
+            {
+              "description": "node-kind constant (opaque, read-only)"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Item = Order:append(linkiir.data.ELEMENT, 'Item')"
+            }
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "linkiir.data.ATTRIBUTE",
+          "signature": "linkiir.data.ATTRIBUTE",
+          "usage": "N:append(linkiir.data.ATTRIBUTE, 'id')",
+          "summary": "Node-kind constant selecting an attribute for Node:append.",
+          "description": "A read-only sentinel passed as the `kind` argument to Node:append to append an Attribute_Node. Creates an empty-valued attribute named by the `name` argument when absent, or leaves an existing attribute (and the child count) unchanged.",
+          "returns": [
+            {
+              "description": "node-kind constant (opaque, read-only)"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "Item:append(linkiir.data.ATTRIBUTE, 'sku')"
+            }
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "linkiir.data.TEXT",
+          "signature": "linkiir.data.TEXT",
+          "usage": "N:append(linkiir.data.TEXT, 'Widget')",
+          "summary": "Node-kind constant selecting a text node for Node:append.",
+          "description": "A read-only sentinel passed as the `kind` argument to Node:append to append a #text child carrying the `name` argument as its value.",
+          "returns": [
+            {
+              "description": "node-kind constant (opaque, read-only)"
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "Item:append(linkiir.data.TEXT, 'Widget')"
+            }
+          ]
+        },
+        {
           "kind": "method",
           "of": "Node",
           "name": "Node:value",
@@ -1349,6 +1406,256 @@
             {
               "language": "lua",
               "code": "print(Msg:protocol())  -- 101 (HL7), 102 (X12), 105 (XML), ..."
+            }
+          ]
+        },
+        {
+          "kind": "method",
+          "of": "Node",
+          "name": "Node:add",
+          "signature": "Node:add(name)",
+          "summary": "Add a child element (XML). Returns the new element.",
+          "description": "XML only. Appends a new empty Element_Node named `name` and returns it. The second call with the same name promotes the pair into a repeat group by moving the existing child, so any handle held on it stays valid. If the receiver held Text_Content, that text is first moved into a leading `#text` child so the new element follows it in document order; attributes are left in place. Raises on an absent, nil, non-string, empty or over-long (over 1024 chars) name, on a reserved name (one beginning with `@` or equal to `#text`), and on a receiver that is not an Element_Node.",
+          "returns": [
+            {
+              "name": "node",
+              "description": "the new child Element_Node."
+            }
+          ],
+          "usage": "local Item = Order:add('Item')",
+          "params": [
+            {
+              "name": "name",
+              "type": "string",
+              "required": true,
+              "description": "Element name (1-1024 chars; must not start with '@' or equal '#text')."
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Order = linkiir.data.create{ name = 'Order', type = 'xml' }\nlocal Item = Order:add('Item')\nItem:attr('sku', 'A-100')\nItem:set('Widget')\nprint(linkiir.data.serialize{ data = Order })\n-- <Order><Item sku=\"A-100\">Widget</Item></Order>"
+            }
+          ]
+        },
+        {
+          "kind": "method",
+          "of": "Node",
+          "name": "Node:attr",
+          "signature": "Node:attr(name [, value])",
+          "summary": "Read or write an attribute (XML).",
+          "description": "XML only. With one argument, reads attribute `name` (without the `@` prefix) and returns its value as a string, or nil when the attribute is absent. With two arguments, sets the attribute to `value` (created if absent, overwritten if present) and returns the receiver so calls chain; the element's child count changes only when a new attribute is created. Attributes never affect isLeaf(). Raises on an absent, nil, non-string, empty or invalid attribute name, and on a receiver that is not an Element_Node.",
+          "returns": [
+            {
+              "description": "string or nil on a read; Node (self) on a write"
+            }
+          ],
+          "usage": "N:attr('id', '9')   -- write\nlocal v = N:attr('id')  -- read",
+          "params": [
+            {
+              "name": "name",
+              "type": "string",
+              "required": true,
+              "description": "Attribute name, without the '@' prefix."
+            },
+            {
+              "name": "value",
+              "type": "string",
+              "required": false,
+              "description": "New attribute value. Omit to read."
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "N:attr('id', '9')       -- set @id\nprint(N:attr('id'))     -- \"9\"\nprint(N:attr('missing')) -- nil"
+            }
+          ]
+        },
+        {
+          "kind": "method",
+          "of": "Node",
+          "name": "Node:inner",
+          "signature": "Node:inner(xml)",
+          "summary": "Replace element content by parsing an XML fragment (XML).",
+          "description": "XML only. Parses `xml` as element content — zero or more top-level elements and character data — and replaces the receiver's element and #text children with the result, leaving the receiver's attributes in place. The fragment is parsed by the same parser used for whole documents, so escaping and structure round-trip identically. An empty string clears the content and keeps attributes without raising. Returns the receiver so calls chain. Raises on a non-string argument, on malformed fragment XML (with the parse position), and on a receiver that is not an Element_Node.",
+          "returns": [
+            {
+              "description": "Node (self)"
+            }
+          ],
+          "usage": "N:inner('<b>hi</b> there')",
+          "params": [
+            {
+              "name": "xml",
+              "type": "string",
+              "required": true,
+              "description": "XML fragment: top-level elements and/or character data."
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Text = Note:add('text')\nText:inner('See <ref value=\"1\"/> for details.')\n-- <text>See <ref value=\"1\"/> for details.</text>"
+            }
+          ]
+        },
+        {
+          "kind": "method",
+          "of": "Node",
+          "name": "Node:remove",
+          "signature": "Node:remove(key)",
+          "summary": "Remove children by name or 1-based index (XML).",
+          "description": "XML only. With a string key, removes every element child (and any repeat group) bearing that name; attributes are left in place. With an integer key, removes the child at that 1-based position in stored order. The tree left behind is what a re-parse of the serialized output would produce: adjacent same-named runs are re-merged and adjacent #text children are coalesced. Any node handle held on a removed child stays allocated until its former tree root is released and reads through it raise a detached-node error. Returns the receiver so calls chain. Raises on a receiver that is not an Element_Node.",
+          "returns": [
+            {
+              "description": "Node (self)"
+            }
+          ],
+          "usage": "Order:remove('Item')   -- by name\nOrder:remove(2)         -- by index",
+          "params": [
+            {
+              "name": "key",
+              "type": "string|integer",
+              "required": true,
+              "description": "Child name (removes all matches) or 1-based index (removes one)."
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "Order:remove('Item')  -- drop every <Item> child\nprint(linkiir.data.serialize{ data = Order })"
+            }
+          ]
+        },
+        {
+          "kind": "method",
+          "of": "Node",
+          "name": "Node:clear",
+          "signature": "Node:clear()",
+          "summary": "Remove all content, keep attributes (XML).",
+          "description": "XML only. Sets Text_Content to empty and drops every non-attribute child (elements, repeat groups and #text nodes), leaving every attribute in place. Returns the receiver so calls chain. Raises on a receiver that is not an Element_Node.",
+          "returns": [
+            {
+              "description": "Node (self)"
+            }
+          ],
+          "usage": "N:clear()",
+          "examples": [
+            {
+              "language": "lua",
+              "code": "N:clear()  -- empty the element but keep its attributes"
+            }
+          ]
+        },
+        {
+          "kind": "method",
+          "of": "Node",
+          "name": "Node:all",
+          "signature": "Node:all(name)",
+          "summary": "Array of every child element bearing a name (XML).",
+          "description": "XML only. Returns a Lua array table holding every Element_Node child named `name`, in document order, spanning every run so the result never depends on how the children are grouped. Returns an empty table when there are none. Reads only; changes nothing. Raises on an absent, nil, non-string or empty-string name, and on a receiver that is not an Element_Node.",
+          "returns": [
+            {
+              "description": "table — array of Node, empty when no child matches"
+            }
+          ],
+          "usage": "for _, item in ipairs(Order:all('Item')) do ... end",
+          "params": [
+            {
+              "name": "name",
+              "type": "string",
+              "required": true,
+              "description": "Element name to collect."
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "for _, Item in ipairs(Order:all('Item')) do\n   print(Item:attr('sku'))\nend"
+            }
+          ]
+        },
+        {
+          "kind": "method",
+          "of": "Node",
+          "name": "Node:el",
+          "signature": "Node:el(name)",
+          "summary": "First child element by name, bypassing method dispatch (XML).",
+          "description": "XML only. Returns the first Element_Node child named `name` (or the first run's repeat group when there is more than one), or nil when absent. This is the XML element read path that reaches a child whose name collides with a method name — e.g. `node:el('text')`, `node:el('set')` — where `node.text` / `node.set` would return the method instead. `node:child(name)` and `node:all(name)` also bypass method dispatch. Reads only; changes nothing. Raises on a non-empty-string argument requirement and on a receiver that is not an Element_Node.",
+          "returns": [
+            {
+              "description": "Node, or nil when absent"
+            }
+          ],
+          "usage": "local Text = Section:el('text')",
+          "params": [
+            {
+              "name": "name",
+              "type": "string",
+              "required": true,
+              "description": "Element name (non-empty)."
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "-- Section.text would return the :text() method; use :el to reach the child\nlocal Text = Section:el('text')\nif Text then print(Text:value()) end"
+            }
+          ]
+        },
+        {
+          "kind": "method",
+          "of": "Node",
+          "name": "Node:attrCount",
+          "signature": "Node:attrCount()",
+          "summary": "Number of attributes on the element (XML).",
+          "description": "XML only. Returns the number of Attribute_Nodes the element holds, and 0 when it holds none. `childCount()` counts attributes among its total; `attrCount()` lets generic traversal separate them. Reads only; changes nothing. Raises on a receiver that is not an Element_Node.",
+          "returns": [
+            {
+              "description": "integer"
+            }
+          ],
+          "usage": "local n = N:attrCount()",
+          "examples": [
+            {
+              "language": "lua",
+              "code": "print(N:attrCount())  -- number of @-attributes on N"
+            }
+          ]
+        },
+        {
+          "kind": "method",
+          "of": "Node",
+          "name": "Node:append",
+          "signature": "Node:append(kind, name)",
+          "summary": "Generic typed append: element, attribute or text (XML).",
+          "description": "XML only. The generic typed-append path behind node:add and node:attr. `kind` is one of the three module constants linkiir.data.ELEMENT, linkiir.data.ATTRIBUTE and linkiir.data.TEXT. ELEMENT behaves exactly as node:add(name), including the Text_Content-to-#text conversion and the reserved-name errors, and returns the new Element_Node. ATTRIBUTE creates an empty-valued attribute named `name` when absent (or leaves an existing one and the child count unchanged) and returns the Attribute_Node. TEXT appends a new #text child carrying `name` as its value and returns it. Raises on a kind that is not one of the three constants, on an invalid name for the element or attribute kind, and on a receiver that is not an Element_Node.",
+          "returns": [
+            {
+              "name": "node",
+              "description": "the appended node: the new Element_Node for ELEMENT, the Attribute_Node for ATTRIBUTE, the #text node for TEXT."
+            }
+          ],
+          "usage": "N:append(linkiir.data.ELEMENT, 'Item')",
+          "params": [
+            {
+              "name": "kind",
+              "type": "table",
+              "required": true,
+              "description": "linkiir.data.ELEMENT, linkiir.data.ATTRIBUTE or linkiir.data.TEXT."
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "required": true,
+              "description": "Element name, attribute name (without '@'), or text content, per kind."
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Item = Order:append(linkiir.data.ELEMENT, 'Item')\nItem:append(linkiir.data.ATTRIBUTE, 'sku')\nItem:append(linkiir.data.TEXT, 'Widget')\n-- <Order><Item sku=\"\">Widget</Item></Order>"
             }
           ]
         },
@@ -1686,7 +1993,7 @@
               "name": "tls",
               "type": "table",
               "required": false,
-              "description": "Client certificate for mutual TLS (mTLS): { certFile=, keyFile=, caFile= }. All three are filesystem paths to PEM files - certificate or key material is never accepted inline, so a private key never enters script memory. PEM is the only accepted format, matching the Linkiir web server's Certificate File and Private Key File settings; convert a PKCS#12 bundle or an encrypted key once with openssl before use. certFile and keyFile must be supplied together. caFile pins the trust anchor for verifying the server and may be used with or without a client certificate; it does not disable verification, which stays with verifyTls. Relative paths resolve against the working directory and may not escape it; absolute paths are used unchanged. Each path must be a readable file or the call raises before any request is made."
+              "description": "Client certificate for mutual TLS (mTLS): { certFile=, keyFile=, caFile= }. All three are filesystem paths to PEM files."
             },
             {
               "name": "verifyTls",
@@ -1780,7 +2087,7 @@
               "name": "tls",
               "type": "table",
               "required": false,
-              "description": "Client certificate for mutual TLS (mTLS): { certFile=, keyFile=, caFile= }. All three are filesystem paths to PEM files - certificate or key material is never accepted inline, so a private key never enters script memory. PEM is the only accepted format, matching the Linkiir web server's Certificate File and Private Key File settings; convert a PKCS#12 bundle or an encrypted key once with openssl before use. certFile and keyFile must be supplied together. caFile pins the trust anchor for verifying the server and may be used with or without a client certificate; it does not disable verification, which stays with verifyTls. Relative paths resolve against the working directory and may not escape it; absolute paths are used unchanged. Each path must be a readable file or the call raises before any request is made."
+              "description": "Client certificate for mutual TLS (mTLS): { certFile=, keyFile=, caFile= }. All three are filesystem paths to PEM files."
             },
             {
               "name": "verifyTls",
@@ -1874,7 +2181,7 @@
               "name": "tls",
               "type": "table",
               "required": false,
-              "description": "Client certificate for mutual TLS (mTLS): { certFile=, keyFile=, caFile= }. All three are filesystem paths to PEM files - certificate or key material is never accepted inline, so a private key never enters script memory. PEM is the only accepted format, matching the Linkiir web server's Certificate File and Private Key File settings; convert a PKCS#12 bundle or an encrypted key once with openssl before use. certFile and keyFile must be supplied together. caFile pins the trust anchor for verifying the server and may be used with or without a client certificate; it does not disable verification, which stays with verifyTls. Relative paths resolve against the working directory and may not escape it; absolute paths are used unchanged. Each path must be a readable file or the call raises before any request is made."
+              "description": "Client certificate for mutual TLS (mTLS): { certFile=, keyFile=, caFile= }. All three are filesystem paths to PEM files."
             },
             {
               "name": "verifyTls",
@@ -1964,7 +2271,7 @@
               "name": "tls",
               "type": "table",
               "required": false,
-              "description": "Client certificate for mutual TLS (mTLS): { certFile=, keyFile=, caFile= }. All three are filesystem paths to PEM files - certificate or key material is never accepted inline, so a private key never enters script memory. PEM is the only accepted format, matching the Linkiir web server's Certificate File and Private Key File settings; convert a PKCS#12 bundle or an encrypted key once with openssl before use. certFile and keyFile must be supplied together. caFile pins the trust anchor for verifying the server and may be used with or without a client certificate; it does not disable verification, which stays with verifyTls. Relative paths resolve against the working directory and may not escape it; absolute paths are used unchanged. Each path must be a readable file or the call raises before any request is made."
+              "description": "Client certificate for mutual TLS (mTLS): { certFile=, keyFile=, caFile= }. All three are filesystem paths to PEM files."
             },
             {
               "name": "verifyTls",
@@ -2054,7 +2361,7 @@
               "name": "tls",
               "type": "table",
               "required": false,
-              "description": "Client certificate for mutual TLS (mTLS): { certFile=, keyFile=, caFile= }. All three are filesystem paths to PEM files - certificate or key material is never accepted inline, so a private key never enters script memory. PEM is the only accepted format, matching the Linkiir web server's Certificate File and Private Key File settings; convert a PKCS#12 bundle or an encrypted key once with openssl before use. certFile and keyFile must be supplied together. caFile pins the trust anchor for verifying the server and may be used with or without a client certificate; it does not disable verification, which stays with verifyTls. Relative paths resolve against the working directory and may not escape it; absolute paths are used unchanged. Each path must be a readable file or the call raises before any request is made."
+              "description": "Client certificate for mutual TLS (mTLS): { certFile=, keyFile=, caFile= }. All three are filesystem paths to PEM files."
             },
             {
               "name": "verifyTls",
@@ -2144,7 +2451,7 @@
               "name": "tls",
               "type": "table",
               "required": false,
-              "description": "Client certificate for mutual TLS (mTLS): { certFile=, keyFile=, caFile= }. All three are filesystem paths to PEM files - certificate or key material is never accepted inline, so a private key never enters script memory. PEM is the only accepted format, matching the Linkiir web server's Certificate File and Private Key File settings; convert a PKCS#12 bundle or an encrypted key once with openssl before use. certFile and keyFile must be supplied together. caFile pins the trust anchor for verifying the server and may be used with or without a client certificate; it does not disable verification, which stays with verifyTls. Relative paths resolve against the working directory and may not escape it; absolute paths are used unchanged. Each path must be a readable file or the call raises before any request is made."
+              "description": "Client certificate for mutual TLS (mTLS): { certFile=, keyFile=, caFile= }. All three are filesystem paths to PEM files."
             },
             {
               "name": "verifyTls",
@@ -2234,7 +2541,7 @@
               "name": "tls",
               "type": "table",
               "required": false,
-              "description": "Client certificate for mutual TLS (mTLS): { certFile=, keyFile=, caFile= }. All three are filesystem paths to PEM files - certificate or key material is never accepted inline, so a private key never enters script memory. PEM is the only accepted format, matching the Linkiir web server's Certificate File and Private Key File settings; convert a PKCS#12 bundle or an encrypted key once with openssl before use. certFile and keyFile must be supplied together. caFile pins the trust anchor for verifying the server and may be used with or without a client certificate; it does not disable verification, which stays with verifyTls. Relative paths resolve against the working directory and may not escape it; absolute paths are used unchanged. Each path must be a readable file or the call raises before any request is made."
+              "description": "Client certificate for mutual TLS (mTLS): { certFile=, keyFile=, caFile= }. All three are filesystem paths to PEM files."
             },
             {
               "name": "verifyTls",

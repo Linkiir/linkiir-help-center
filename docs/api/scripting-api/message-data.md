@@ -148,6 +148,93 @@ local wire2 = Out:text()   -- identical result
 ```
 
 
+## `linkiir.data.ELEMENT`
+
+*field*
+
+```lua
+linkiir.data.ELEMENT
+```
+
+Node-kind constant selecting an element for Node:append.
+
+A read-only sentinel passed as the `kind` argument to Node:append to append an Element_Node. One of the three mutually distinct node-kind constants (ELEMENT, ATTRIBUTE, TEXT); the element case applies every rule of Node:add.
+
+**Usage**
+
+```lua
+N:append(linkiir.data.ELEMENT, 'Item')
+```
+
+**Returns**
+
+- node-kind constant (opaque, read-only)
+
+**Example**
+
+```lua
+local Item = Order:append(linkiir.data.ELEMENT, 'Item')
+```
+
+
+## `linkiir.data.ATTRIBUTE`
+
+*field*
+
+```lua
+linkiir.data.ATTRIBUTE
+```
+
+Node-kind constant selecting an attribute for Node:append.
+
+A read-only sentinel passed as the `kind` argument to Node:append to append an Attribute_Node. Creates an empty-valued attribute named by the `name` argument when absent, or leaves an existing attribute (and the child count) unchanged.
+
+**Usage**
+
+```lua
+N:append(linkiir.data.ATTRIBUTE, 'id')
+```
+
+**Returns**
+
+- node-kind constant (opaque, read-only)
+
+**Example**
+
+```lua
+Item:append(linkiir.data.ATTRIBUTE, 'sku')
+```
+
+
+## `linkiir.data.TEXT`
+
+*field*
+
+```lua
+linkiir.data.TEXT
+```
+
+Node-kind constant selecting a text node for Node:append.
+
+A read-only sentinel passed as the `kind` argument to Node:append to append a #text child carrying the `name` argument as its value.
+
+**Usage**
+
+```lua
+N:append(linkiir.data.TEXT, 'Widget')
+```
+
+**Returns**
+
+- node-kind constant (opaque, read-only)
+
+**Example**
+
+```lua
+Item:append(linkiir.data.TEXT, 'Widget')
+```
+
+
 ## `linkiir.data.codeset.get`
 
 *function*
@@ -568,6 +655,330 @@ local p = N:protocol()
 
 ```lua
 print(Msg:protocol())  -- 101 (HL7), 102 (X12), 105 (XML), ...
+```
+
+
+### `Node:add`
+
+*method of `Node`*
+
+```lua
+Node:add(name)
+```
+
+Add a child element (XML). Returns the new element.
+
+XML only. Appends a new empty Element_Node named `name` and returns it. The second call with the same name promotes the pair into a repeat group by moving the existing child, so any handle held on it stays valid. If the receiver held Text_Content, that text is first moved into a leading `#text` child so the new element follows it in document order; attributes are left in place. Raises on an absent, nil, non-string, empty or over-long (over 1024 chars) name, on a reserved name (one beginning with `@` or equal to `#text`), and on a receiver that is not an Element_Node.
+
+**Usage**
+
+```lua
+local Item = Order:add('Item')
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `name` | string | Yes | Element name (1-1024 chars; must not start with '@' or equal '#text'). |
+
+**Returns**
+
+- `node` — the new child Element_Node.
+
+**Example**
+
+```lua
+local Order = linkiir.data.create{ name = 'Order', type = 'xml' }
+local Item = Order:add('Item')
+Item:attr('sku', 'A-100')
+Item:set('Widget')
+print(linkiir.data.serialize{ data = Order })
+-- <Order><Item sku="A-100">Widget</Item></Order>
+```
+
+
+### `Node:attr`
+
+*method of `Node`*
+
+```lua
+Node:attr(name [, value])
+```
+
+Read or write an attribute (XML).
+
+XML only. With one argument, reads attribute `name` (without the `@` prefix) and returns its value as a string, or nil when the attribute is absent. With two arguments, sets the attribute to `value` (created if absent, overwritten if present) and returns the receiver so calls chain; the element's child count changes only when a new attribute is created. Attributes never affect isLeaf(). Raises on an absent, nil, non-string, empty or invalid attribute name, and on a receiver that is not an Element_Node.
+
+**Usage**
+
+```lua
+N:attr('id', '9')   -- write
+local v = N:attr('id')  -- read
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `name` | string | Yes | Attribute name, without the '@' prefix. |
+| `value` | string | No | New attribute value. Omit to read. |
+
+**Returns**
+
+- string or nil on a read; Node (self) on a write
+
+**Example**
+
+```lua
+N:attr('id', '9')       -- set @id
+print(N:attr('id'))     -- "9"
+print(N:attr('missing')) -- nil
+```
+
+
+### `Node:inner`
+
+*method of `Node`*
+
+```lua
+Node:inner(xml)
+```
+
+Replace element content by parsing an XML fragment (XML).
+
+XML only. Parses `xml` as element content — zero or more top-level elements and character data — and replaces the receiver's element and #text children with the result, leaving the receiver's attributes in place. The fragment is parsed by the same parser used for whole documents, so escaping and structure round-trip identically. An empty string clears the content and keeps attributes without raising. Returns the receiver so calls chain. Raises on a non-string argument, on malformed fragment XML (with the parse position), and on a receiver that is not an Element_Node.
+
+**Usage**
+
+```lua
+N:inner('<b>hi</b> there')
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `xml` | string | Yes | XML fragment: top-level elements and/or character data. |
+
+**Returns**
+
+- Node (self)
+
+**Example**
+
+```lua
+local Text = Note:add('text')
+Text:inner('See <ref value="1"/> for details.')
+-- <text>See <ref value="1"/> for details.</text>
+```
+
+
+### `Node:remove`
+
+*method of `Node`*
+
+```lua
+Node:remove(key)
+```
+
+Remove children by name or 1-based index (XML).
+
+XML only. With a string key, removes every element child (and any repeat group) bearing that name; attributes are left in place. With an integer key, removes the child at that 1-based position in stored order. The tree left behind is what a re-parse of the serialized output would produce: adjacent same-named runs are re-merged and adjacent #text children are coalesced. Any node handle held on a removed child stays allocated until its former tree root is released and reads through it raise a detached-node error. Returns the receiver so calls chain. Raises on a receiver that is not an Element_Node.
+
+**Usage**
+
+```lua
+Order:remove('Item')   -- by name
+Order:remove(2)         -- by index
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `key` | string\|integer | Yes | Child name (removes all matches) or 1-based index (removes one). |
+
+**Returns**
+
+- Node (self)
+
+**Example**
+
+```lua
+Order:remove('Item')  -- drop every <Item> child
+print(linkiir.data.serialize{ data = Order })
+```
+
+
+### `Node:clear`
+
+*method of `Node`*
+
+```lua
+Node:clear()
+```
+
+Remove all content, keep attributes (XML).
+
+XML only. Sets Text_Content to empty and drops every non-attribute child (elements, repeat groups and #text nodes), leaving every attribute in place. Returns the receiver so calls chain. Raises on a receiver that is not an Element_Node.
+
+**Usage**
+
+```lua
+N:clear()
+```
+
+**Returns**
+
+- Node (self)
+
+**Example**
+
+```lua
+N:clear()  -- empty the element but keep its attributes
+```
+
+
+### `Node:all`
+
+*method of `Node`*
+
+```lua
+Node:all(name)
+```
+
+Array of every child element bearing a name (XML).
+
+XML only. Returns a Lua array table holding every Element_Node child named `name`, in document order, spanning every run so the result never depends on how the children are grouped. Returns an empty table when there are none. Reads only; changes nothing. Raises on an absent, nil, non-string or empty-string name, and on a receiver that is not an Element_Node.
+
+**Usage**
+
+```lua
+for _, item in ipairs(Order:all('Item')) do ... end
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `name` | string | Yes | Element name to collect. |
+
+**Returns**
+
+- table — array of Node, empty when no child matches
+
+**Example**
+
+```lua
+for _, Item in ipairs(Order:all('Item')) do
+   print(Item:attr('sku'))
+end
+```
+
+
+### `Node:el`
+
+*method of `Node`*
+
+```lua
+Node:el(name)
+```
+
+First child element by name, bypassing method dispatch (XML).
+
+XML only. Returns the first Element_Node child named `name` (or the first run's repeat group when there is more than one), or nil when absent. This is the XML element read path that reaches a child whose name collides with a method name — e.g. `node:el('text')`, `node:el('set')` — where `node.text` / `node.set` would return the method instead. `node:child(name)` and `node:all(name)` also bypass method dispatch. Reads only; changes nothing. Raises on a non-empty-string argument requirement and on a receiver that is not an Element_Node.
+
+**Usage**
+
+```lua
+local Text = Section:el('text')
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `name` | string | Yes | Element name (non-empty). |
+
+**Returns**
+
+- Node, or nil when absent
+
+**Example**
+
+```lua
+-- Section.text would return the :text() method; use :el to reach the child
+local Text = Section:el('text')
+if Text then print(Text:value()) end
+```
+
+
+### `Node:attrCount`
+
+*method of `Node`*
+
+```lua
+Node:attrCount()
+```
+
+Number of attributes on the element (XML).
+
+XML only. Returns the number of Attribute_Nodes the element holds, and 0 when it holds none. `childCount()` counts attributes among its total; `attrCount()` lets generic traversal separate them. Reads only; changes nothing. Raises on a receiver that is not an Element_Node.
+
+**Usage**
+
+```lua
+local n = N:attrCount()
+```
+
+**Returns**
+
+- integer
+
+**Example**
+
+```lua
+print(N:attrCount())  -- number of @-attributes on N
+```
+
+
+### `Node:append`
+
+*method of `Node`*
+
+```lua
+Node:append(kind, name)
+```
+
+Generic typed append: element, attribute or text (XML).
+
+XML only. The generic typed-append path behind node:add and node:attr. `kind` is one of the three module constants linkiir.data.ELEMENT, linkiir.data.ATTRIBUTE and linkiir.data.TEXT. ELEMENT behaves exactly as node:add(name), including the Text_Content-to-#text conversion and the reserved-name errors, and returns the new Element_Node. ATTRIBUTE creates an empty-valued attribute named `name` when absent (or leaves an existing one and the child count unchanged) and returns the Attribute_Node. TEXT appends a new #text child carrying `name` as its value and returns it. Raises on a kind that is not one of the three constants, on an invalid name for the element or attribute kind, and on a receiver that is not an Element_Node.
+
+**Usage**
+
+```lua
+N:append(linkiir.data.ELEMENT, 'Item')
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `kind` | table | Yes | linkiir.data.ELEMENT, linkiir.data.ATTRIBUTE or linkiir.data.TEXT. |
+| `name` | string | Yes | Element name, attribute name (without '@'), or text content, per kind. |
+
+**Returns**
+
+- `node` — the appended node: the new Element_Node for ELEMENT, the Attribute_Node for ATTRIBUTE, the #text node for TEXT.
+
+**Example**
+
+```lua
+local Item = Order:append(linkiir.data.ELEMENT, 'Item')
+Item:append(linkiir.data.ATTRIBUTE, 'sku')
+Item:append(linkiir.data.TEXT, 'Widget')
+-- <Order><Item sku="">Widget</Item></Order>
 ```
 
 

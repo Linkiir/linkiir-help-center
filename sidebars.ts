@@ -33,8 +33,10 @@ const sidebars: SidebarsConfig = {
           'administration/configurations/project-settings', 'administration/configurations/user-roles',
           'administration/configurations/migration',
           'administration/configurations/http-server',
-          'administration/configurations/log-archive-database', 'administration/configurations/kafka-redpanda',
+          'administration/configurations/log-archive-database',
+          'administration/configurations/log-retention-purge', 'administration/configurations/kafka-redpanda',
         ]},
+        'administration/logs/index',
         'administration/backup-restore/index',
         {type: 'category', label: 'Alerting and Notifications', link: {type: 'doc', id: 'administration/notifications/index'}, items: [
           'administration/notifications/settings',

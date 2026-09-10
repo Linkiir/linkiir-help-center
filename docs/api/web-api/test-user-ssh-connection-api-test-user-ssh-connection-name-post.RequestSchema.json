@@ -1,0 +1,1 @@
+{"title":"Body","body":{"required":true,"content":{"application/json":{"schema":{"properties":{"host":{"type":"string","title":"Host","description":"Git server to authenticate against - a hostname (`github.com`), an `ssh://` or scp-like URL, or `user@host`. The SSH user defaults to `git`."}},"type":"object","required":["host"],"title":"TestUserSshConnectionRequest"}}}}}

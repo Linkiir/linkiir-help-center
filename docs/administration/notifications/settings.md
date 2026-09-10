@@ -25,6 +25,10 @@ A searchable dropdown of IANA timezone names (e.g. `America/New_York`, `Europe/L
 
 Pre-filled from the server's detected timezone on first save. Type to filter the list.
 
+:::note[On Windows, set this yourself]
+Windows does not name its timezone the way the IANA database does, so detection normally falls back to `UTC` on a Windows host and records why in the Grid's runtime log. Pick the zone explicitly here, or schedule windows will be evaluated in UTC.
+:::
+
 ---
 
 ## Global kill switch

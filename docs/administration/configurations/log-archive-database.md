@@ -59,3 +59,18 @@ Two things to expect while it runs:
 The Archiver creates the new indexes itself when it starts, so there is no Grid-side rebuild to wait behind and no banner. On a large existing database, plan for the index creation to take time and to load the server while it runs — treat it as part of the upgrade window.
 
 The superseded `idx_log_event_time` index is left in place rather than dropped for you. It is redundant once `idx_log_time_id` exists; drop it by hand if you would rather not carry the write cost.
+
+## Archived records are identified by position and time
+
+A record's identity in the archive is its topic, partition, offset **and** its event time. The timestamp is part of it deliberately: an offset is only unique for as long as the broker's log lives, so recreating a topic — a broker reinstall, a moved or wiped data directory — restarts offsets at zero. Without the timestamp, new records collide with rows the archive already holds, and a colliding row is ignored rather than reported: the Logs page simply shows nothing new for that topic until the new log passes the old one's high-water mark.
+
+| Backend | What an upgrade does |
+| --- | --- |
+| **SQLite** | Migrates itself at startup, before anything else touches the table. The Logs page reports *Upgrading log database* and then *Rebuilding log indexes*. No records are discarded, and a large archive makes for a noticeably longer first startup. |
+| **PostgreSQL / MS SQL** | The wider constraint is in the shipped schema, so a new database gets it automatically. An existing database needs its unique constraint altered by a DBA to include the event time. |
+
+Nothing else is required of an operator: the SQLite migration is idempotent, and if the Archiver happens to hold the write lock it rolls back cleanly and retries on the next start.
+
+## Retention
+
+Nothing removes archived records unless you configure it. See [Log Retention and Purge](log-retention-purge.md) for the retention setting, the daily purge, and how disk space is returned on each backend.

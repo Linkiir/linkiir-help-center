@@ -13,7 +13,8 @@ Administration covers the complete Linkiir platform lifecycle.
 - [Upgrades](upgrades/index.md): In-place procedures by operating system.
 - [Deployment](deployment/index.md): DEV, TEST, PROD, HA, and moving projects between environments.
 - [High Availability](../high-availability/index.md): Active/standby pairs, topologies, requirements, and how HA differs from backup and disaster recovery.
-- [Configurations](configurations/index.md): Project settings, users and roles, migration, Log Archive DB, and Kafka.
+- [Configurations](configurations/index.md): Project settings, users and roles, migration, Log Archive DB, log retention, and Kafka.
+- [Log Search and Message History](logs/index.md): Reading, searching, exporting, and resubmitting archived messages.
 - [Backup and Restore](backup-restore/index.md): Protect and recover the Linkiir working directory.
 - [Alerting and Notifications](notifications/index.md): Monitoring Linkiir, and alerting from a workflow.
 - [Security](security/index.md): First-login hardening, remote access, secrets, and patient data in logs.
@@ -31,6 +32,8 @@ Administration covers the complete Linkiir platform lifecycle.
 | Replace the server Linkiir runs on | [Backup and Restore](backup-restore/index.md), then [License Transfer](licensing/license-transfer.md) |
 | Survive a server failure without an outage | [High Availability](../high-availability/index.md) |
 | Get alerted when an interface fails | [Alerting and Notifications](notifications/index.md) |
+| Stop message history growing forever | [Log Retention and Purge](configurations/log-retention-purge.md) |
+| Find out whether a message arrived | [Log Search and Message History](logs/index.md) |
 
 ## Daily operational checks
 
@@ -42,6 +45,6 @@ Administration covers the complete Linkiir platform lifecycle.
 - Confirm scheduled backups completed and include the master encryption key.
 - Confirm production workflow changes were approved and auditable.
 
-:::note[Alerting is not built in]
-Linkiir has no built-in error or inactivity notifications. These checks need to come from your own monitoring system — see [Alerting and Notifications](notifications/index.md).
+:::note[Alert on these rather than checking them by hand]
+Linkiir's notification engine covers error and inactivity alerts on workflows — configure it in [Alerting and Notifications](notifications/index.md). What it cannot report is Linkiir itself being down, so keep external monitoring on `/api/health`, consumer lag, and Log DB capacity as well.
 :::

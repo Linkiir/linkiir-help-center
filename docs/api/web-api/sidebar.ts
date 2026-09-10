@@ -712,6 +712,12 @@ const sidebar: SidebarsConfig = {
           label: "Control an active Lua debug session",
           className: "api-method post",
         },
+        {
+          type: "doc",
+          id: "api/web-api/download-node-file-api-download-node-file-get",
+          label: "Download a node file",
+          className: "api-method get",
+        },
       ],
     },
     {
@@ -1018,6 +1024,24 @@ const sidebar: SidebarsConfig = {
           label: "Get version and directory info",
           className: "api-method get",
         },
+        {
+          type: "doc",
+          id: "api/web-api/get-user-ssh-key-api-user-ssh-key-name-get",
+          label: "Read a user's generated SSH key",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/generate-user-ssh-key-api-generate-user-ssh-key-name-post",
+          label: "Generate a user's SSH key",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/test-user-ssh-connection-api-test-user-ssh-connection-name-post",
+          label: "Test a user's SSH key against a git server",
+          className: "api-method post",
+        },
       ],
     },
     {
@@ -1281,6 +1305,24 @@ const sidebar: SidebarsConfig = {
           id: "api/web-api/test-connection-api-settings-logs-test-connection-post",
           label: "Test log database connectivity",
           className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/get-purge-status-api-settings-logs-purge-get",
+          label: "Get the retention purge schedule and status",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/run-purge-now-api-settings-logs-purge-post",
+          label: "Run the retention purge now, and reclaim the space it frees",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/preview-purge-api-settings-logs-purge-preview-get",
+          label: "Preview what a retention purge would delete",
+          className: "api-method get",
         },
       ],
     },

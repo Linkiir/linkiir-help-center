@@ -45,7 +45,7 @@ Content-Type: application/json
 {"patientId":"TEST-1001","status":"active"}
 ```
 
-Samples persist with the node, so they travel with the interface and are available to whoever maintains it next.
+Samples persist with the node, so they travel with the interface and are available to whoever maintains it next. Each one is a real file in the node's `samples` folder, which appears in the Explorer as soon as the first sample is added — so a sample can be opened, edited, and committed like any other file in the node.
 
 :::caution[Use synthetic data]
 Samples are stored with the project and are visible to anyone who can open the node. Use clearly fake identifiers — `TEST000001`, `TEST^PATIENT`, `19700101` — never real patient data.

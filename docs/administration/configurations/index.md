@@ -11,6 +11,7 @@ Configuration is divided between platform settings, environment-specific connect
 - [Migrating Existing Interfaces](migration.md)
 - [HTTP Server Settings](http-server.md) — the embedded server every Source HTTP node shares
 - [Log Archive Database](log-archive-database.md)
+- [Log Retention and Purge](log-retention-purge.md) — how long message history is kept, and how the space comes back
 - [Kafka Configuration](kafka-redpanda.md)
 
 ## Where a setting lives
@@ -23,7 +24,7 @@ Linkiir splits configuration between the installation and the individual project
 | **Project** | The project popout | Variables, credentials, node templates, libraries, Git remote |
 | **Node** | The node's configuration in the Workflow Builder | Route paths, listen ports, directories, hosts, intervals |
 
-The **Settings** tabs are **About**, **License**, **Database**, **Environment**, **Logging**, **Http Server**, **Notifications**, **Roles**, **Users**, and **Instance**. Each is described below.
+The **Settings** tabs are **About**, **License**, **Database**, **Environment**, **Logging**, **Notifications**, **Catalogs**, **Roles**, **Users**, **Http Server**, and **Instance**. Each is described below.
 
 Keep secrets out of project source. Back up configuration and the master encryption key together.
 
@@ -62,16 +63,36 @@ Use environment variables for values that change between TEST and PROD, so the s
 
 ### Logging
 
-Controls the Log Archiver fleet: how many archiver instances run, batch sizes, and flush intervals. Also shows the Kafka bootstrap address (read-only, from `config.ini`).
+Everything about recording message history: the archive database, the Log Archiver instances writing to it, how long records are kept, and how long the queue keeps them. Four cards, each edited and saved on its own.
+
+**Database Configuration** — the archive database connection. See [Log Archive Database](log-archive-database.md).
+
+**Instance Count & Policy Tuning**
 
 | Field | Description |
 | --- | --- |
-| Archiver Instances | Number of parallel archiver processes (default 1). |
-| Batch Size | Records batched per SQLite write (default 500). |
+| Archiver Instances | Number of parallel archiver processes (default 1; locked to 1 for SQLite). |
+| Max Payload Size (MB) | Largest single message payload archived. A larger payload is not archived — the record stays indexed and searchable, but its body is unavailable, so content search cannot reach it. |
+| Batch Size | Records batched per write (default 500). |
 | Batch Interval (ms) | Maximum wait before flushing a partial batch (default 1000). |
-| Kafka Bootstrap | The broker address the archivers connect to (read-only). |
 
-For archiver troubleshooting, see [Log Archiver Connectivity](../troubleshooting/log-archiver-connectivity.md).
+**Log Retention Purge**
+
+| Field | Description |
+| --- | --- |
+| Log Retention Days | How many days of archived records to keep. `0` keeps everything. |
+| Purge Time | Time of day the daily purge runs, in the server's local time (default `02:00`). |
+
+The card also reports when the next purge is due and what the last one did, and carries the **Purge Now** button. See [Log Retention and Purge](log-retention-purge.md).
+
+**Queue Configuration**
+
+| Field | Description |
+| --- | --- |
+| Queue Retention (days) | How long the broker keeps records on Linkiir's topics. `0` keeps them until the disk fills. Separate from Log Retention Days. |
+| Kafka Bootstrap Servers | The broker address the archivers connect to (read-only, from `config.ini`). |
+
+The fleet's status — each instance, its heartbeat, and its assigned partitions — sits above the cards, with **Restart All**. For archiver troubleshooting, see [Log Archiver Connectivity](../troubleshooting/log-archiver-connectivity.md).
 
 ### Http Server
 
@@ -94,6 +115,10 @@ Changing the port or any TLS field restarts the Runtime, so the button reads **S
 ### Notifications
 
 Configure alert delivery channels (Email, Alert Node), notification rules, and the notification engine. See [Notification Settings](../notifications/settings.md) for a full walkthrough.
+
+### Catalogs
+
+Subscribe to catalogs of adapter nodes and shared libraries, review and pull updates, and publish a catalog from this grid. Needs the **Manage catalogs** permission. See [Catalogs](../../catalogs/index.md).
 
 ### Roles
 

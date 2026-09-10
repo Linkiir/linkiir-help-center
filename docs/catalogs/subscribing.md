@@ -18,9 +18,10 @@ Click **Subscribe to a catalog** and fill in:
 | --- | --- |
 | **Repository URL or folder** | An `https://` URL, an SSH URL, or the absolute path of a folder on this server holding an exported catalog |
 | **Branch or tag** | The ref to track. Defaults to `main`. |
-| **Install as** | The name the catalog is installed under. Defaults to the repository name. |
-| **SSH key** | Private key for an SSH repository. Leave empty to use the admin user's key. |
+| **SSH key** | Private key for an SSH repository, as a path on this server. A browse button is provided, so the path does not have to be typed from memory. Leave empty to use the admin user's key. |
 | **CA bundle** | Only for a self-hosted HTTPS repository whose certificate this host does not already trust. |
+
+Catalogs are installed under their repository's own name — there is nothing to choose.
 
 The catalog is cloned into a staging area and validated before anything is installed. If validation fails, nothing is left behind — no directory and no registry entry — and the reason is reported.
 

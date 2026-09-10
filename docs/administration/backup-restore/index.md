@@ -72,6 +72,10 @@ Use it to move a project between environments or to keep a versioned artifact of
 8. Confirm **Settings → License** still shows your license. A restored working directory keeps the same License ID, so it should.
 9. Run controlled interface tests before accepting traffic.
 
+:::note[Generated SSH keys are not in the instance repository]
+Keys Linkiir generates for a user are deliberately excluded from the instance repository, so they are not carried by the backup remote Linkiir pushes to and do not come back with an instance restored from it. Regenerate each user's key afterwards and register the new public half with the git host. A filesystem copy of the working directory does include them, so encrypt and restrict those copies. See [Users and Roles](../configurations/user-roles.md#generate-an-ssh-key).
+:::
+
 :::note[Everyone is signed out after a restore]
 Sessions live in the running Grid process, so restarting it ends them. Users sign in again with their existing passwords — which are restored with the working directory and are not affected by the master key.
 :::
