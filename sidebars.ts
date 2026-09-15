@@ -87,6 +87,40 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
+      type: 'category', label: 'AI Assistant', link: {type: 'doc', id: 'ai-assistant/index'},
+      items: [
+        {type: 'category', label: 'Setup', link: {type: 'doc', id: 'ai-assistant/setup/index'}, items: [
+          'ai-assistant/setup/license-and-enable',
+          'ai-assistant/setup/roles-and-permissions',
+          {type: 'category', label: 'Model Providers', link: {type: 'doc', id: 'ai-assistant/setup/providers/index'}, items: [
+            'ai-assistant/setup/providers/aws-bedrock',
+            'ai-assistant/setup/providers/azure-openai',
+            'ai-assistant/setup/providers/azure-ai-foundry',
+            'ai-assistant/setup/providers/openai',
+            'ai-assistant/setup/providers/xai-grok',
+            'ai-assistant/setup/providers/minimax',
+            'ai-assistant/setup/providers/ollama',
+            'ai-assistant/setup/providers/openai-compatible',
+          ]},
+          'ai-assistant/setup/policy-and-limits',
+          'ai-assistant/setup/organization-skills',
+        ]},
+        {type: 'category', label: 'Using the Assistant', link: {type: 'doc', id: 'ai-assistant/using-the-assistant/index'}, items: [
+          'ai-assistant/using-the-assistant/modes-and-scope',
+          'ai-assistant/using-the-assistant/choosing-a-model',
+          'ai-assistant/using-the-assistant/attachments-and-context',
+          'ai-assistant/using-the-assistant/approvals',
+          'ai-assistant/using-the-assistant/conversations',
+          'ai-assistant/using-the-assistant/prompt-library',
+        ]},
+        {type: 'category', label: 'Project AI Knowledge', link: {type: 'doc', id: 'ai-assistant/project-knowledge/index'}, items: [
+          'ai-assistant/project-knowledge/documents',
+          'ai-assistant/project-knowledge/project-skills',
+        ]},
+        'ai-assistant/troubleshooting',
+      ],
+    },
+    {
       type: 'category', label: 'Catalogs', link: {type: 'doc', id: 'catalogs/index'},
       items: [
         'catalogs/subscribing',

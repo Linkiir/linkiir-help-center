@@ -1,8 +1,0 @@
-{
-  "label": "Interface Development",
-  "position": 3,
-  "link": {
-    "type": "generated-index",
-    "description": "Architecture, core interfaces, sample code, and Lua programming."
-  }
-}

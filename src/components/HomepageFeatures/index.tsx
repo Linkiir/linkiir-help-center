@@ -46,6 +46,18 @@ const FeatureList: FeatureItem[] = [
     ),
   },
   {
+    title: 'AI Assistant',
+    to: '/docs/ai-assistant/',
+    Svg: require('@site/static/img/feat-ai-assistant.svg').default,
+    description: (
+      <>
+        An assistant inside Linkiir Grid that reads real project state to
+        diagnose and build interfaces. Build mode asks before it changes
+        anything.
+      </>
+    ),
+  },
+  {
     title: 'Administration',
     to: '/docs/administration/',
     Svg: require('@site/static/img/feat-administration.svg').default,

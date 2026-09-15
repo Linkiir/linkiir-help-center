@@ -1,6 +1,6 @@
 ---
 title: Linkiir Documentation
-description: Install Linkiir, build your first interface, and operate it in production. Node reference, Lua scripting API, deployment, licensing, and troubleshooting.
+description: Install Linkiir, build your first interface, and operate it in production. Node reference, Lua scripting API, AI assistant, deployment, licensing, and troubleshooting.
 slug: /
 ---
 
@@ -60,6 +60,18 @@ About 20 minutes on a local machine.
   <span class="lnk-card__title">Adapters</span>
   <span class="lnk-card__body">Prebuilt connectors for EHR, CRM, medical device, cloud storage, messaging, and AI systems.</span>
 </a>
+
+<a class="lnk-card lnk-card-link" href="/docs/ai-assistant/">
+  <svg class="lnk-card__icon" viewBox="0 0 32 32" aria-hidden="true">
+    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12.8 4.5l2.2 6.1 6.1 2.2-6.1 2.2-2.2 6.1-2.2-6.1L4.5 12.8l6.1-2.2z" />
+      <path d="M23.2 19.5l1.2 3.3 3.3 1.2-3.3 1.2-1.2 3.3-1.2-3.3-3.3-1.2 3.3-1.2z" />
+    </g>
+  </svg>
+  <span class="lnk-card__title">AI Assistant</span>
+  <span class="lnk-card__body">Set up the AI assistant, connect a model provider, and use it to build and diagnose interfaces.</span>
+</a>
+
 <a class="lnk-card lnk-card-link" href="/docs/administration/">
   <svg class="lnk-card__icon" viewBox="0 0 32 32" aria-hidden="true">
     <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -125,6 +137,9 @@ About 20 minutes on a local machine.
 | Recover a lost administrator password | [Reset the Admin User](getting-started/first-login.md) |
 | Receive HL7 v2 over MLLP | [Source Nodes](interface-development/interfaces/source-nodes.md) |
 | Connect to Epic, Cerner, Salesforce, S3, or Slack | [Adapters](adapters/index.md) |
+| Turn on the AI assistant | [License and enable AI](ai-assistant/setup/license-and-enable.md) |
+| Connect the AI assistant to a model | [AI Model Providers](ai-assistant/setup/providers/index.md) |
+| Learn what to ask the AI assistant | [Prompt Library](ai-assistant/using-the-assistant/prompt-library.md) |
 | Look up a Lua function | [Linkiir Scripting API](api/scripting-api/index.md) |
 | Test a script before starting a node | [Testing and Debugging Lua](interface-development/lua-programming/testing-debugging.md) |
 | Copy a complete working interface | [Sample Code](interface-development/sample-code/index.md) |

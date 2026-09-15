@@ -26,6 +26,18 @@ const QUICK_LINKS: QuickLink[] = [
     to: '/docs/adapters/',
   },
   {
+    label: 'Turn on the AI assistant',
+    to: '/docs/ai-assistant/setup/license-and-enable',
+  },
+  {
+    label: 'Connect the AI assistant to a model',
+    to: '/docs/ai-assistant/setup/providers/',
+  },
+  {
+    label: 'Learn what to ask the AI assistant',
+    to: '/docs/ai-assistant/using-the-assistant/prompt-library',
+  },
+  {
     label: 'Look up a Lua function',
     to: '/docs/api/scripting-api',
   },
