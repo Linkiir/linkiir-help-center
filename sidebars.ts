@@ -106,6 +106,9 @@ const sidebars: SidebarsConfig = {
             {type: 'category', label: 'AI Adapters', link: {type: 'doc', id: 'adapters/catalogs/ai'}, items: [
               'adapters/azure-openai',
             ]},
+            {type: 'category', label: 'Developer Tools', link: {type: 'doc', id: 'adapters/catalogs/devtools'}, items: [
+              'adapters/data-simulator',
+            ]},
           ],
         },
       ],
@@ -230,6 +233,7 @@ const sidebars: SidebarsConfig = {
           type: 'category', label: 'Linkiir Catalogs Release Notes',
           link: {type: 'doc', id: 'release-notes/catalogs'},
           items: [
+            'release-notes/catalogs-2026-09-data-simulator',
             'release-notes/catalogs-2026-09',
           ],
         },

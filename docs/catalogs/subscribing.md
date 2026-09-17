@@ -25,6 +25,7 @@ they are public, so leave the SSH key empty.
 | [Transport Adapters](../adapters/catalogs/transport.md) | `https://github.com/Linkiir/linkiir-transport-adapters` |
 | [Notification Adapters](../adapters/catalogs/notification.md) | `https://github.com/Linkiir/linkiir-notification-adapters` |
 | [AI Adapters](../adapters/catalogs/ai.md) | `https://github.com/Linkiir/linkiir-ai-adapters` |
+| [Developer Tools](../adapters/catalogs/devtools.md) | `https://github.com/Linkiir/linkiir-devtools` |
 
 See [Adapter Catalogs](../adapters/catalogs/index.md) for what each one contains.
 The rest of this page applies to any catalog, including your own.

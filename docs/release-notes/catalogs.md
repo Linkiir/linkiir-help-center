@@ -52,6 +52,7 @@ Every adapter and library available today, by catalog.
 | [Transport Adapters](../adapters/catalogs/transport.md) | S3 Adapter (Destination) | 1.0.0 | `LKFLOW_S3_DESTINATION` |
 | [Notification Adapters](../adapters/catalogs/notification.md) | Slack Alert | 1.0.0 | `LKNOTIF_SLACK_ALERT` |
 | [AI Adapters](../adapters/catalogs/ai.md) | Azure OpenAI Adapter | 1.0.0 | `LKAI_AZURE_OPENAI_ADAPTER` |
+| [Developer Tools](../adapters/catalogs/devtools.md) | Data Simulator | 1.0.0 | `LKTOOL_DATA_SIMULATOR` |
 
 | Catalog | Library | Version |
 | --- | --- | --- |
@@ -74,6 +75,7 @@ Every adapter and library available today, by catalog.
 
 | Release | Date | Summary |
 | --- | --- | --- |
+| [Data Simulator 1.0.0](./catalogs-2026-09-data-simulator.md) | 2026-09-17 | New Developer Tools catalog — synthetic HL7 v2, C-CDA, FHIR and X12 test data |
 | [September 2026](./catalogs-2026-09.md) | 2026-09-17 | First public catalog release — 17 adapters and 14 libraries across 7 catalogs |
 
 ---
