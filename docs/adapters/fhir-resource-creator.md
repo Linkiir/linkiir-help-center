@@ -10,6 +10,8 @@ A **Transform Custom** node that maps inbound patient data onto a FHIR R4 Patien
 
 Published in the **[Linkiir FHIR Adapters](catalogs/fhir.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
+Current version and changelog: [FHIR Adapters release notes](../release-notes/catalogs-fhir.md).
+
 ## What it does
 
 When a message arrives, the node maps its fields onto a FHIR R4 Patient template, removes every field the message did not populate, and pushes the result. What comes out is a valid Patient resource with no empty scaffolding left in it.

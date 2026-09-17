@@ -16,6 +16,8 @@ Two nodes that connect a workflow to a PointClickCare organization.
 
 Published in the **[Linkiir EHR Adapters](catalogs/ehr.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
+Current version and changelog: [EHR Adapters release notes](../release-notes/catalogs-ehr.md).
+
 ## What it does
 
 ```text

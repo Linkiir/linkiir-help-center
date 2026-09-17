@@ -11,6 +11,8 @@ A **Source Custom** node that polls a Cerner FHIR endpoint on an interval and pu
 
 Published in the **[Linkiir FHIR Adapters](catalogs/fhir.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
+Current version and changelog: [FHIR Adapters release notes](../release-notes/catalogs-fhir.md).
+
 ## What it does
 
 On each interval the node discovers Cerner's token endpoint from the published SMART configuration, obtains an access token for the scopes you requested, runs your FHIR search, and pushes one message per resource returned. The token is cached and reused until it nears expiry.

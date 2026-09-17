@@ -81,5 +81,6 @@ Every adapter here ships with its credential fields **empty**, deliberately. Pas
 ## Next
 
 - [Adapter Catalogs](index.md) — every published Linkiir catalog
+- [Business Adapters release notes](../../release-notes/catalogs-business.md) — current version and changelog for every item here
 - [Using Catalog Content](../../catalogs/using-catalog-content.md) — build a node from an adapter and keep it updated
 - [How Adapters Work](../how-adapters-work.md)

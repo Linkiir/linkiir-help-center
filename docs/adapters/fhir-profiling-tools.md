@@ -10,6 +10,8 @@ A **Source HTTP** node that serves a page listing every FHIR resource and comple
 
 Published in the **[Linkiir FHIR Adapters](catalogs/fhir.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
+Current version and changelog: [FHIR Adapters release notes](../release-notes/catalogs-fhir.md).
+
 ## What it does
 
 Open the node's route in a browser and you get two lists: FHIR resources such as Patient and Encounter, and complex types such as HumanName and Address. Click any entry and you get its JSON template.

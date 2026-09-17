@@ -11,6 +11,8 @@ A **Source Custom** node that polls a ModMed FHIR endpoint on an interval and pu
 
 Published in the **[Linkiir FHIR Adapters](catalogs/fhir.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
+Current version and changelog: [FHIR Adapters release notes](../release-notes/catalogs-fhir.md).
+
 ## What it does
 
 On each interval the node exchanges the API account credentials for an access token, runs your FHIR search, and pushes one message per resource returned. The ModMed API key travels on every request, including the token exchange. The token is cached and reused until it nears expiry.

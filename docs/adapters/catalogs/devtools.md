@@ -73,5 +73,6 @@ None. The Data Simulator is self-contained, so there is nothing extra to install
 ## Next
 
 - [Adapter Catalogs](index.md) — every published Linkiir catalog
+- [Developer Tools release notes](../../release-notes/catalogs-devtools.md) — current version and changelog for every item here
 - [Using Catalog Content](../../catalogs/using-catalog-content.md) — build a node from a catalog item and keep it updated
 - [Interfaces and Core Nodes](../../interface-development/interfaces/index.md)

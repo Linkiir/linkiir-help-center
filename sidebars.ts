@@ -230,11 +230,22 @@ const sidebars: SidebarsConfig = {
           ],
         },
         {
+          // Catalog release notes are organised by catalog and then by item, not
+          // by release date. A customer arrives knowing which adapter they run
+          // and which version they are on; what they need is the current version
+          // and what changed. A dated list answers neither and does not scale as
+          // adapters accumulate.
           type: 'category', label: 'Linkiir Catalogs Release Notes',
           link: {type: 'doc', id: 'release-notes/catalogs'},
           items: [
-            'release-notes/catalogs-2026-09-data-simulator',
-            'release-notes/catalogs-2026-09',
+            'release-notes/catalogs-fhir',
+            'release-notes/catalogs-ehr',
+            'release-notes/catalogs-diagnostics',
+            'release-notes/catalogs-business',
+            'release-notes/catalogs-transport',
+            'release-notes/catalogs-notification',
+            'release-notes/catalogs-ai',
+            'release-notes/catalogs-devtools',
           ],
         },
       ],

@@ -17,6 +17,8 @@ Three nodes for moving messages through S3 or any S3-compatible object store:
 
 Published in the **[Linkiir Transport Adapters](catalogs/transport.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
+Current version and changelog: [Transport Adapters release notes](../release-notes/catalogs-transport.md).
+
 ```text
 bucket  →  S3 Source  →  your workflow  →  S3 Destination  →  bucket
 ```

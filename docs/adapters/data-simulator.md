@@ -14,6 +14,8 @@ Published in the **[Developer Tools](catalogs/devtools.md)** catalog. Subscribe 
 that catalog to add this node to your grid — see
 [Adapter Catalogs](catalogs/index.md).
 
+Current version and changelog: [Developer Tools release notes](../release-notes/catalogs-devtools.md).
+
 ## What it does
 
 On each interval the node builds the number of messages you asked for, fills each

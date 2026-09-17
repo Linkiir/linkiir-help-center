@@ -11,6 +11,8 @@ A **Source Custom** node that polls Microsoft Dynamics 365 CRM on an interval, u
 
 Published in the **[Linkiir Business Adapters](catalogs/business.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
+Current version and changelog: [Business Adapters release notes](../release-notes/catalogs-business.md).
+
 ## What it does
 
 On each interval the node signs in to Azure AD with the configured account, runs your FetchXML query against the Dynamics Web API, and pushes the records it returns. The entity named in the query determines what is queried, so changing what you pull is a query edit, not a code change.
