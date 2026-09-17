@@ -9,7 +9,7 @@ keywords: [Dynamics 365, Microsoft CRM, adapter, FetchXML, Azure AD]
 
 A **Source Custom** node that polls Microsoft Dynamics 365 CRM on an interval, using a FetchXML query, and pushes each record downstream.
 
-Part of the Linkiir Adapters package — see [requesting the package](index.md#requesting-the-adapters-package).
+Published in the **[Linkiir Business Adapters](catalogs/business.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
 ## What it does
 

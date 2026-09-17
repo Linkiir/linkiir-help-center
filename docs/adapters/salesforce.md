@@ -9,7 +9,7 @@ keywords: [Salesforce, CRM, adapter, connected app, client credentials]
 
 A **Transform Custom** node that queries and updates Salesforce records over the REST API as messages pass through a workflow.
 
-Part of the Linkiir Adapters package — see [requesting the package](index.md#requesting-the-adapters-package).
+Published in the **[Linkiir Business Adapters](catalogs/business.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
 ## What it does
 

@@ -9,7 +9,7 @@ keywords: [ModMed, Modernizing Medicine, FHIR, adapter, API key]
 
 A **Source Custom** node that polls a ModMed FHIR endpoint on an interval and pushes every matching resource downstream as JSON.
 
-Part of the Linkiir Adapters package — see [requesting the package](index.md#requesting-the-adapters-package).
+Published in the **[Linkiir FHIR Adapters](catalogs/fhir.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
 ## What it does
 

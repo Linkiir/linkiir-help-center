@@ -10,13 +10,35 @@ Adapters are prebuilt Linkiir nodes that connect a workflow to an external syste
 
 You configure credentials, endpoints, and what to fetch or send. The connection work — authentication, token refresh, request signing, retries, error reporting — is already done.
 
-## Requesting the Adapters package
+## Getting the adapters
 
-:::info
-Adapters are supplied separately from the Linkiir installation. To request them for your environment, email [support@linkiir.com](mailto:support@linkiir.com) with your Linkiir version, your platform, and the systems you need to connect to.
+Adapters are published as **catalogs** — public git repositories your grid
+subscribes to. Subscribing adds a catalog's adapters to the node palette and
+keeps them updatable in place afterwards, with no product upgrade and no support
+request.
 
-You receive either a **catalog** to subscribe to, which keeps its adapters updatable in place afterwards, or a **project** to import with the templates and libraries already attached to the nodes that use them. See [Catalogs](../catalogs/index.md) and [Project Import and Export](../administration/deployment/import-export.md).
+:::tip[Start here]
+**[Adapter Catalogs](catalogs/index.md)** lists every catalog with the public
+GitHub URL to paste into **Settings → Catalogs**. All the repositories are public
+and cloned anonymously, so no SSH key is needed.
 :::
+
+| Catalog | Covers | Repository |
+| --- | --- | --- |
+| [FHIR Adapters](catalogs/fhir.md) | Epic, Cerner, eCW, ModMed, Athena, FHIR tools | `https://github.com/Linkiir/linkiir-fhir-adapters` |
+| [EHR Adapters](catalogs/ehr.md) | PointClickCare and other non-FHIR EHR APIs | `https://github.com/Linkiir/linkiir-ehr-adapters` |
+| [Diagnostics Adapters](catalogs/diagnostics.md) | Dexcom CGM, labs, imaging, devices | `https://github.com/Linkiir/linkiir-diagnostics-adapters` |
+| [Business Adapters](catalogs/business.md) | Salesforce, Dynamics 365, ERP, identity | `https://github.com/Linkiir/linkiir-business-adapters` |
+| [Transport Adapters](catalogs/transport.md) | AWS S3, object storage, brokers | `https://github.com/Linkiir/linkiir-transport-adapters` |
+| [Notification Adapters](catalogs/notification.md) | Slack, chat, SMS, email, paging | `https://github.com/Linkiir/linkiir-notification-adapters` |
+| [AI Adapters](catalogs/ai.md) | Azure OpenAI and other model services | `https://github.com/Linkiir/linkiir-ai-adapters` |
+
+If your grid has no outbound route to GitHub, a catalog can be delivered on a
+mounted share or removable drive instead — see
+[Offline Delivery](../catalogs/offline-delivery.md). Adapters can also arrive as
+a **project** to import, with templates and libraries already attached to the
+nodes that use them; see
+[Project Import and Export](../administration/deployment/import-export.md).
 
 ## Available adapters
 
@@ -180,24 +202,27 @@ You receive either a **catalog** to subscribe to, which keeps its adapters updat
 </a>
 </div>
 
-## By category
+## By catalog
 
-| Adapter | Connects to | Palette group | Library |
+Which catalog publishes each adapter, and the library it uses. Subscribe to the
+catalog to get the adapter.
+
+| Adapter | Catalog | Connects to | Library |
 | --- | --- | --- | --- |
-| [Epic](epic.md) | Epic FHIR endpoint | Source Custom | `epic_fhir` |
-| [Cerner](cerner.md) | Cerner FHIR endpoint | Source Custom | `cerner_fhir` |
-| [eClinicalWorks](ecw.md) | eCW FHIR endpoint | Source Custom | `ecw_fhir` |
-| [ModMed](modmed.md) | ModMed FHIR endpoint | Source Custom | `modmed_fhir` |
-| [Athena Health](athena.md) | Athena Health platform | Source Custom | `athena_health` |
-| [Dexcom CGM](dexcom.md) | Dexcom CGM account | Source HTTP, Source Custom | `dexcom_cgm` |
-| [PointClickCare](pointclickcare.md) | PointClickCare organization | Source Custom, Transform Custom | `pcc_api` |
-| [Salesforce](salesforce.md) | Salesforce REST API | Transform Custom | `salesforce` |
-| [Dynamics 365](dynamics-365.md) | Microsoft Dynamics 365 CRM | Source Custom | `dynamics_crm` |
-| [AWS S3](aws-s3.md) | S3 and S3-compatible storage | Source Custom, Transform Custom, Source HTTP | `aws_s3` |
-| [Slack](slack.md) | Slack workspace | Transform Custom | `slack` |
-| [Azure OpenAI](azure-openai.md) | Azure OpenAI deployment | Transform Custom | `azure_openai` |
-| [FHIR Resource Creator](fhir-resource-creator.md) | Nothing — local transformation | Transform Custom | `fhir_resource` |
-| [FHIR Profiling Tools](fhir-profiling-tools.md) | Nothing — local HTTP service | Source HTTP | `fhir_profiling` |
+| [Epic](epic.md) | [FHIR Adapters](catalogs/fhir.md) | Epic FHIR endpoint | `epic_fhir` |
+| [Cerner](cerner.md) | [FHIR Adapters](catalogs/fhir.md) | Cerner FHIR endpoint | `cerner_fhir` |
+| [eClinicalWorks](ecw.md) | [FHIR Adapters](catalogs/fhir.md) | eCW FHIR endpoint | `ecw_fhir` |
+| [ModMed](modmed.md) | [FHIR Adapters](catalogs/fhir.md) | ModMed FHIR endpoint | `modmed_fhir` |
+| [Athena Health](athena.md) | [FHIR Adapters](catalogs/fhir.md) | Athena Health platform | `athena_health` |
+| [FHIR Resource Creator](fhir-resource-creator.md) | [FHIR Adapters](catalogs/fhir.md) | Nothing — local transformation | `fhir_resource` |
+| [FHIR Profiling Tools](fhir-profiling-tools.md) | [FHIR Adapters](catalogs/fhir.md) | Nothing — local HTTP service | `fhir_profiling` |
+| [PointClickCare](pointclickcare.md) | [EHR Adapters](catalogs/ehr.md) | PointClickCare organization | `pcc_api` |
+| [Dexcom CGM](dexcom.md) | [Diagnostics Adapters](catalogs/diagnostics.md) | Dexcom CGM account | `dexcom_cgm` |
+| [Salesforce](salesforce.md) | [Business Adapters](catalogs/business.md) | Salesforce REST API | `salesforce` |
+| [Dynamics 365](dynamics-365.md) | [Business Adapters](catalogs/business.md) | Microsoft Dynamics 365 CRM | `dynamics_crm` |
+| [AWS S3](aws-s3.md) | [Transport Adapters](catalogs/transport.md) | S3 and S3-compatible storage | `aws_s3` |
+| [Slack](slack.md) | [Notification Adapters](catalogs/notification.md) | Slack workspace | `slack` |
+| [Azure OpenAI](azure-openai.md) | [AI Adapters](catalogs/ai.md) | Azure OpenAI deployment | `azure_openai` |
 
 ## Start here
 
@@ -227,6 +252,8 @@ Point a new adapter at the vendor's sandbox or test environment, with synthetic 
 
 ## Next
 
+- [Adapter Catalogs](catalogs/index.md) — repository URLs and how to subscribe
 - [How Adapters Work](how-adapters-work.md)
+- [Linkiir Catalogs Release Notes](../release-notes/catalogs.md) — what changed in each catalog
 - [Interfaces and Core Nodes](../interface-development/interfaces/index.md)
 - [Project Settings](../administration/configurations/project-settings.md)

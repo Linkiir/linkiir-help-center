@@ -10,6 +10,25 @@ Subscribing installs a publisher's catalog on this grid, so its adapters appear 
 
 Catalogs are managed in **Settings → Catalogs**. Everything on this page needs the **Manage catalogs** permission.
 
+## Linkiir's published catalogs
+
+Linkiir publishes its adapters in public repositories you can subscribe to
+directly. Paste one of these into the **Repository URL or folder** field below —
+they are public, so leave the SSH key empty.
+
+| Catalog | Repository URL |
+| --- | --- |
+| [FHIR Adapters](../adapters/catalogs/fhir.md) | `https://github.com/Linkiir/linkiir-fhir-adapters` |
+| [EHR Adapters](../adapters/catalogs/ehr.md) | `https://github.com/Linkiir/linkiir-ehr-adapters` |
+| [Diagnostics Adapters](../adapters/catalogs/diagnostics.md) | `https://github.com/Linkiir/linkiir-diagnostics-adapters` |
+| [Business Adapters](../adapters/catalogs/business.md) | `https://github.com/Linkiir/linkiir-business-adapters` |
+| [Transport Adapters](../adapters/catalogs/transport.md) | `https://github.com/Linkiir/linkiir-transport-adapters` |
+| [Notification Adapters](../adapters/catalogs/notification.md) | `https://github.com/Linkiir/linkiir-notification-adapters` |
+| [AI Adapters](../adapters/catalogs/ai.md) | `https://github.com/Linkiir/linkiir-ai-adapters` |
+
+See [Adapter Catalogs](../adapters/catalogs/index.md) for what each one contains.
+The rest of this page applies to any catalog, including your own.
+
 ## Add a catalog
 
 Click **Subscribe to a catalog** and fill in:

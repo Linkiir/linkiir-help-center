@@ -67,23 +67,47 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
+      // Adapters are grouped by the catalog that publishes them, so the sidebar
+      // matches what a customer subscribes to. The adapter pages themselves stay
+      // at /docs/adapters/<name> — the grouping is sidebar-only, so no existing
+      // URL moves.
       type: 'category', label: 'Adapters', link: {type: 'doc', id: 'adapters/index'},
       items: [
         'adapters/how-adapters-work',
-        'adapters/epic',
-        'adapters/cerner',
-        'adapters/ecw',
-        'adapters/modmed',
-        'adapters/athena',
-        'adapters/dexcom',
-        'adapters/pointclickcare',
-        'adapters/salesforce',
-        'adapters/dynamics-365',
-        'adapters/aws-s3',
-        'adapters/slack',
-        'adapters/azure-openai',
-        'adapters/fhir-resource-creator',
-        'adapters/fhir-profiling-tools',
+        {
+          type: 'category', label: 'Adapter Catalogs',
+          link: {type: 'doc', id: 'adapters/catalogs/index'},
+          items: [
+            {type: 'category', label: 'FHIR Adapters', link: {type: 'doc', id: 'adapters/catalogs/fhir'}, items: [
+              'adapters/epic',
+              'adapters/cerner',
+              'adapters/ecw',
+              'adapters/modmed',
+              'adapters/athena',
+              'adapters/fhir-resource-creator',
+              'adapters/fhir-profiling-tools',
+            ]},
+            {type: 'category', label: 'EHR Adapters', link: {type: 'doc', id: 'adapters/catalogs/ehr'}, items: [
+              'adapters/pointclickcare',
+            ]},
+            {type: 'category', label: 'Diagnostics Adapters', link: {type: 'doc', id: 'adapters/catalogs/diagnostics'}, items: [
+              'adapters/dexcom',
+            ]},
+            {type: 'category', label: 'Business Adapters', link: {type: 'doc', id: 'adapters/catalogs/business'}, items: [
+              'adapters/salesforce',
+              'adapters/dynamics-365',
+            ]},
+            {type: 'category', label: 'Transport Adapters', link: {type: 'doc', id: 'adapters/catalogs/transport'}, items: [
+              'adapters/aws-s3',
+            ]},
+            {type: 'category', label: 'Notification Adapters', link: {type: 'doc', id: 'adapters/catalogs/notification'}, items: [
+              'adapters/slack',
+            ]},
+            {type: 'category', label: 'AI Adapters', link: {type: 'doc', id: 'adapters/catalogs/ai'}, items: [
+              'adapters/azure-openai',
+            ]},
+          ],
+        },
       ],
     },
     {
@@ -191,10 +215,24 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
+      // Two independent streams: Grid ships as an installable release, catalog
+      // content ships over git. Nothing unreleased is published here.
       type: 'category', label: 'Release Notes', link: {type: 'doc', id: 'release-notes/index'},
       items: [
-        'release-notes/unreleased',
-        'release-notes/linkiir-grid-v1.0.0',
+        {
+          type: 'category', label: 'Linkiir Product Release Notes',
+          link: {type: 'doc', id: 'release-notes/product'},
+          items: [
+            'release-notes/linkiir-grid-v1.0.0',
+          ],
+        },
+        {
+          type: 'category', label: 'Linkiir Catalogs Release Notes',
+          link: {type: 'doc', id: 'release-notes/catalogs'},
+          items: [
+            'release-notes/catalogs-2026-09',
+          ],
+        },
       ],
     },
   ],

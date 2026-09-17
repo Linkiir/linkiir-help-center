@@ -8,7 +8,7 @@ keywords: [FHIR, profiling, templates, resource types, mapping]
 
 A **Source HTTP** node that serves a page listing every FHIR resource and complex type, and returns a JSON template for any one of them with all fields present and unset.
 
-Part of the Linkiir Adapters package — see [requesting the package](index.md#requesting-the-adapters-package).
+Published in the **[Linkiir FHIR Adapters](catalogs/fhir.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
 ## What it does
 
