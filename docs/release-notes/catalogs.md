@@ -17,7 +17,7 @@ Release notes are organised **by catalog and by item**, not by date: you already
 
 | Catalog | Adapters | Libraries | Release notes |
 | --- | --- | --- | --- |
-| [FHIR Adapters](../adapters/catalogs/fhir.md) | 7 | 7 | [versions and changelogs](./catalogs-fhir.md) |
+| [FHIR Adapters](../adapters/catalogs/fhir.md) | 8 | 8 | [versions and changelogs](./catalogs-fhir.md) |
 | [EHR Adapters](../adapters/catalogs/ehr.md) | 2 | 1 | [versions and changelogs](./catalogs-ehr.md) |
 | [Diagnostics Adapters](../adapters/catalogs/diagnostics.md) | 2 | 1 | [versions and changelogs](./catalogs-diagnostics.md) |
 | [Business Adapters](../adapters/catalogs/business.md) | 2 | 2 | [versions and changelogs](./catalogs-business.md) |
@@ -26,7 +26,7 @@ Release notes are organised **by catalog and by item**, not by date: you already
 | [AI Adapters](../adapters/catalogs/ai.md) | 1 | 1 | [versions and changelogs](./catalogs-ai.md) |
 | [Developer Tools](../adapters/catalogs/devtools.md) | 1 | 0 | [versions and changelogs](./catalogs-devtools.md) |
 
-**18 adapters** and **14 libraries** across **8 catalogs**.
+**18 adapters** and **15 libraries** across **8 catalogs**.
 
 ## Finding the version you are on
 

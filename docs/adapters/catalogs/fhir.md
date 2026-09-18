@@ -12,8 +12,8 @@ Adapters Linkiir Grid speaks over FHIR: FHIR-native EHR and EMR APIs, and FHIR a
 | --- | --- |
 | **Repository** | [https://github.com/Linkiir/linkiir-fhir-adapters](https://github.com/Linkiir/linkiir-fhir-adapters) |
 | **Catalog id** | `lkfhir` |
-| **Adapters** | 7 |
-| **Libraries** | 7 |
+| **Adapters** | 8 |
+| **Libraries** | 8 |
 | **Publisher** | Linkiir Inc |
 
 ## Subscribe to this catalog
@@ -46,6 +46,7 @@ Administration-tier **Manage catalogs** permission. See
 
 | Adapter | Node type | Node type id | Documentation |
 | --- | --- | --- | --- |
+| [HAPI FHIR / OmniVera Adapter](../hapi-fhir.md) | source | `LKFHIR_HAPI_FHIR_ADAPTER` | see page |
 | [Epic FHIR Adapter](../epic.md) | source | `LKFHIR_EPIC_ADAPTER` | see page |
 | [Cerner FHIR Adapter](../cerner.md) | source | `LKFHIR_CERNER_FHIR_ADAPTER` | see page |
 | [eCW Adapter](../ecw.md) | source | `LKFHIR_ECW_ADAPTER` | see page |
@@ -53,6 +54,12 @@ Administration-tier **Manage catalogs** permission. See
 | [Athena Adapter](../athena.md) | source | `LKFHIR_ATHENA_ADAPTER` | see page |
 | [FHIR Resource Creator](../fhir-resource-creator.md) | transform | `LKFHIR_FHIR_RESOURCE_CREATOR` | see page |
 | [FHIR Profiling Tools](../fhir-profiling-tools.md) | source | `LKFHIR_FHIR_PROFILING_TOOLS` | see page |
+
+### HAPI FHIR / OmniVera Adapter
+
+Polls a HAPI FHIR or Smile OmniVera endpoint and pushes each returned resource downstream. Smile OmniVera is built on HAPI FHIR, so one adapter reaches both the open public sandbox and a production OmniVera deployment — the difference is the Authentication setting, not the code. Supports FHIR R4 and R5.
+
+`LKFHIR_HAPI_FHIR_ADAPTER` · source node · [Configuration and fields](../hapi-fhir.md)
 
 ### Epic FHIR Adapter
 
@@ -102,6 +109,7 @@ Shared Lua modules the adapters depend on. Grid installs the version an adapter 
 
 | Library | Version | What it does |
 | --- | --- | --- |
+| `hapi_fhir` | 1.0.0 | HAPI FHIR and Smile OmniVera client. Four authentication modes, Bundle paging, and read plus write (create, update, transaction) so the same client serves HL7 v2 to FHIR and FHIR to HL7 v2. |
 | `epic_fhir` | 1.0.0 | Epic FHIR client — SMART backend services authentication, search, read, create, update and operations. |
 | `cerner_fhir` | 1.0.0 | Cerner FHIR client — SMART backend services authentication with a signed JWT client assertion. |
 | `ecw_fhir` | 1.0.0 | eCW FHIR client — JWT client-credentials against a separate token endpoint, plus bulk export helpers. |

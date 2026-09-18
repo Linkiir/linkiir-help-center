@@ -79,6 +79,7 @@ const sidebars: SidebarsConfig = {
           link: {type: 'doc', id: 'adapters/catalogs/index'},
           items: [
             {type: 'category', label: 'FHIR Adapters', link: {type: 'doc', id: 'adapters/catalogs/fhir'}, items: [
+              'adapters/hapi-fhir',
               'adapters/epic',
               'adapters/cerner',
               'adapters/ecw',

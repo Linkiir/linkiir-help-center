@@ -24,6 +24,7 @@ FHIR-native EHR and EMR APIs, and FHIR authoring tools.
 
 | Adapter | Current version | Node type id | Changelog |
 | --- | --- | --- | --- |
+| [HAPI FHIR / OmniVera Adapter](../adapters/hapi-fhir.md) | **1.0.0** | `LKFHIR_HAPI_FHIR_ADAPTER` | [history](#hapi-fhir--omnivera-adapter) |
 | [Epic FHIR Adapter](../adapters/epic.md) | **1.0.0** | `LKFHIR_EPIC_ADAPTER` | [history](#epic-fhir-adapter) |
 | [Cerner FHIR Adapter](../adapters/cerner.md) | **1.0.0** | `LKFHIR_CERNER_FHIR_ADAPTER` | [history](#cerner-fhir-adapter) |
 | [eCW Adapter](../adapters/ecw.md) | **1.0.0** | `LKFHIR_ECW_ADAPTER` | [history](#ecw-adapter) |
@@ -36,6 +37,7 @@ FHIR-native EHR and EMR APIs, and FHIR authoring tools.
 
 | Library | Current version | Changelog |
 | --- | --- | --- |
+| `hapi_fhir` | **1.0.0** | [history](#hapi_fhir) |
 | `epic_fhir` | **1.0.0** | [history](#epic_fhir) |
 | `cerner_fhir` | **1.0.0** | [history](#cerner_fhir) |
 | `ecw_fhir` | **1.0.0** | [history](#ecw_fhir) |
@@ -51,6 +53,21 @@ Open the node in the Builder: the adapter version it was built from is shown on 
 ---
 
 ## Adapter history
+
+### HAPI FHIR / OmniVera Adapter
+
+`LKFHIR_HAPI_FHIR_ADAPTER` · current **1.0.0** · [configuration](../adapters/hapi-fhir.md)
+
+#### 1.0.0
+
+_Released 2026-09-17_
+
+- Initial release. Polls a HAPI FHIR or Smile OmniVera endpoint on an interval and pushes each returned resource downstream as JSON.
+- FHIR R4 (4.0.1) and R5 (5.0.0), selected by the FHIR Base URL and negotiated with the `fhirVersion` media-type parameter.
+- Four authentication modes: none for an open test endpoint, OAuth2 Backend Services for a production OmniVera deployment, a static bearer token, and basic auth.
+- OAuth2 discovers the token endpoint from `.well-known/smart-configuration` when no Token URL is configured.
+- Reads the server's CapabilityStatement once per start and warns when the release it reports differs from the configured FHIR Version.
+- Follows search-result Bundle paging up to Max Pages, and pushes what it collected even when a later page fails.
 
 ### Epic FHIR Adapter
 
@@ -125,6 +142,19 @@ _Released 2026-09-17_
 ## Library history
 
 Library versions are immutable: a published version is never edited, and a fix ships as a new version. A node stays pinned to the version it was built against until you move it forward.
+
+### `hapi_fhir`
+
+current **1.0.0**
+
+#### 1.0.0
+
+_Released 2026-09-17_
+
+- Initial release. HAPI FHIR and Smile OmniVera client. Takes the FHIR base URL whole rather than assembling a path, so it reaches the public sandbox, a self-hosted `hapi-fhir-jpaserver`, and an OmniVera deployment unchanged.
+- Read and write: `search`, `searchAll` with Bundle paging, `read`, `create`, `update`, `delete`, `transaction`, `operation`, `capabilities`, `serverVersion` and `authenticate`.
+- `transactionBundle()` builds an all-or-nothing Bundle, so an HL7 v2 message that maps to several resources lands completely or not at all.
+- Token caching with an expiry skew, keyed per credential and endpoint.
 
 ### `epic_fhir`
 

@@ -57,6 +57,7 @@ A subscription brings in the whole catalog, so subscribe to the catalogs coverin
 | [Dexcom Read EGV](../dexcom.md) | [Linkiir Diagnostics Adapters](diagnostics.md) | `LKDX_DEXCOM_READ_EGV` |
 | [Dynamics CRM Adapter](../dynamics-365.md) | [Linkiir Business Adapters](business.md) | `LKBZ_DYNAMICS_CRM_ADAPTER` |
 | [Epic FHIR Adapter](../epic.md) | [Linkiir FHIR Adapters](fhir.md) | `LKFHIR_EPIC_ADAPTER` |
+| [HAPI FHIR / OmniVera Adapter](../hapi-fhir.md) | [Linkiir FHIR Adapters](fhir.md) | `LKFHIR_HAPI_FHIR_ADAPTER` |
 | [FHIR Profiling Tools](../fhir-profiling-tools.md) | [Linkiir FHIR Adapters](fhir.md) | `LKFHIR_FHIR_PROFILING_TOOLS` |
 | [FHIR Resource Creator](../fhir-resource-creator.md) | [Linkiir FHIR Adapters](fhir.md) | `LKFHIR_FHIR_RESOURCE_CREATOR` |
 | [ModMed Adapter](../modmed.md) | [Linkiir FHIR Adapters](fhir.md) | `LKFHIR_MODMED_ADAPTER` |

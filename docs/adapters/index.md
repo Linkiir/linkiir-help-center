@@ -210,6 +210,7 @@ catalog to get the adapter.
 
 | Adapter | Catalog | Connects to | Library |
 | --- | --- | --- | --- |
+| [HAPI FHIR / OmniVera](hapi-fhir.md) | [FHIR Adapters](catalogs/fhir.md) | HAPI FHIR or Smile OmniVera endpoint | `hapi_fhir` |
 | [Epic](epic.md) | [FHIR Adapters](catalogs/fhir.md) | Epic FHIR endpoint | `epic_fhir` |
 | [Cerner](cerner.md) | [FHIR Adapters](catalogs/fhir.md) | Cerner FHIR endpoint | `cerner_fhir` |
 | [eClinicalWorks](ecw.md) | [FHIR Adapters](catalogs/fhir.md) | eCW FHIR endpoint | `ecw_fhir` |
