@@ -201,6 +201,16 @@ nodes that use them; see
   <span class="lnk-card__title">FHIR Profiling Tools</span>
   <span class="lnk-card__body">Browse FHIR resources and get a JSON template for any of them.</span>
 </a>
+<a class="lnk-card lnk-card-link" href="/docs/adapters/fhir-validator">
+  <svg class="lnk-card__icon" viewBox="0 0 32 32" aria-hidden="true">
+    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M27 7 13 21l-6-6" />
+      <path d="M27 15v8a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h13" />
+    </g>
+  </svg>
+  <span class="lnk-card__title">FHIR Validator</span>
+  <span class="lnk-card__body">Validate a resource against a FHIR server and forward it only when it validates.</span>
+</a>
 </div>
 
 ## By catalog
@@ -217,6 +227,7 @@ catalog to get the adapter.
 | [ModMed](modmed.md) | [FHIR Adapters](catalogs/fhir.md) | ModMed FHIR endpoint | `modmed_fhir` |
 | [Athena Health](athena.md) | [FHIR Adapters](catalogs/fhir.md) | Athena Health platform | `athena_health` |
 | [FHIR Resource Creator](fhir-resource-creator.md) | [FHIR Adapters](catalogs/fhir.md) | Nothing — local transformation | `fhir_resource` |
+| [FHIR Validator](fhir-validator.md) | [FHIR Adapters](catalogs/fhir.md) | A FHIR server's $validate operation | `fhir_validate` |
 | [FHIR Profiling Tools](fhir-profiling-tools.md) | [FHIR Adapters](catalogs/fhir.md) | Nothing — local HTTP service | `fhir_profiling` |
 | [PointClickCare](pointclickcare.md) | [EHR Adapters](catalogs/ehr.md) | PointClickCare organization | `pcc_api` |
 | [Dexcom CGM](dexcom.md) | [Diagnostics Adapters](catalogs/diagnostics.md) | Dexcom CGM account | `dexcom_cgm` |

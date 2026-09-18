@@ -6,7 +6,7 @@ keywords: [FHIR, profiling, templates, resource types, mapping]
 
 # FHIR Profiling Tools
 
-A **Source HTTP** node that serves a page listing every FHIR resource and complex type, and returns a JSON template for any one of them with all fields present and unset.
+A **Source HTTP** node that serves a page listing every FHIR resource and complex type, returns a JSON template for any one of them, and authors constrained profiles with the **Profile Designer**.
 
 Published in the **[Linkiir FHIR Adapters](catalogs/fhir.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
@@ -20,13 +20,54 @@ It is a mapping aid rather than an integration. Use a template to see the exact 
 
 | Request | You get |
 | --- | --- |
-| The route on its own | The browser page, with every resource and type as a link |
+| The route on its own | The browser page, with every resource and type as a link, and the Profile Designer |
 | The route with a resource name | That resource's JSON template |
+| `?action=elements&base=<Resource>` | The elements of a base resource you can constrain (JSON) |
+| `POST ?action=build` | A differential `StructureDefinition` built from a constraint spec (JSON) |
+| `POST ?action=import` | An existing `StructureDefinition`, parsed with its editable constraints (JSON) |
 | Anything else | A JSON not-found response |
 
 Resource names are not case-sensitive, so `patient` and `Patient` both work.
 
 No credentials and no outbound calls: the node answers from FHIR specification data held locally.
+
+## Profile Designer
+
+Beyond generating a template of a resource, the node authors a **profile** — a
+FHIR `StructureDefinition` that constrains a base resource. Pick a base
+(for example `Patient`), tighten cardinalities on the elements it offers, and the
+node compiles your choices into a differential StructureDefinition.
+
+| Action | Does |
+| --- | --- |
+| List elements | `?action=elements&base=Patient` returns the constrainable elements of the base resource, read from the loaded FHIR specification. |
+| Build | `POST ?action=build` with a constraint spec returns the generated differential `StructureDefinition`. |
+| Import | `POST ?action=import` with an existing StructureDefinition returns it parsed, with its differential constraints surfaced as editable — and the whole resource preserved so nothing this tool does not model is lost. |
+
+A constraint spec looks like:
+
+```json
+{
+  "canonicalUrl": "https://example.org/fhir/StructureDefinition/LabPatient",
+  "businessVersion": "1.0.0",
+  "name": "LabPatient",
+  "baseResource": "Patient",
+  "status": "draft",
+  "constraints": [
+    { "path": "Patient.identifier", "min": 1 },
+    { "path": "Patient.name", "min": 1, "mustSupport": true }
+  ]
+}
+```
+
+:::caution[It produces a differential, not a finished profile]
+The Profile Designer emits a **differential** — the list of elements your profile
+changes. That is a genuine FHIR StructureDefinition, but it is deliberately
+**not** a snapshot (the fully-resolved element list), and building one is **not**
+a conformance check. To confirm a profile is well-formed, validate it with the
+[FHIR Validator](fhir-validator.md) or a server that supports
+`StructureDefinition/$validate`.
+:::
 
 ## Set it up
 
@@ -69,6 +110,7 @@ Like any HTTP source node, this route answers anyone who can reach the port. It 
 
 ## Next
 
-- [FHIR Resource Creator](fhir-resource-creator.md) — build a Patient resource from your own data
+- [FHIR Resource Creator](fhir-resource-creator.md) — build a Patient or Observation resource from your own data
+- [FHIR Validator](fhir-validator.md) — validate a resource, or a profile you authored here
 - [How Adapters Work](how-adapters-work.md)
 - [Source Nodes](../interface-development/interfaces/source-nodes.md)

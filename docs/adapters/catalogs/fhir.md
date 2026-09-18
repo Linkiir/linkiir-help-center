@@ -12,8 +12,8 @@ Adapters Linkiir Grid speaks over FHIR: FHIR-native EHR and EMR APIs, and FHIR a
 | --- | --- |
 | **Repository** | [https://github.com/Linkiir/linkiir-fhir-adapters](https://github.com/Linkiir/linkiir-fhir-adapters) |
 | **Catalog id** | `lkfhir` |
-| **Adapters** | 8 |
-| **Libraries** | 8 |
+| **Adapters** | 9 |
+| **Libraries** | 9 |
 | **Publisher** | Linkiir Inc |
 
 ## Subscribe to this catalog
@@ -53,6 +53,7 @@ Administration-tier **Manage catalogs** permission. See
 | [ModMed Adapter](../modmed.md) | source | `LKFHIR_MODMED_ADAPTER` | see page |
 | [Athena Adapter](../athena.md) | source | `LKFHIR_ATHENA_ADAPTER` | see page |
 | [FHIR Resource Creator](../fhir-resource-creator.md) | transform | `LKFHIR_FHIR_RESOURCE_CREATOR` | see page |
+| [FHIR Validator](../fhir-validator.md) | transform | `LKFHIR_FHIR_VALIDATOR` | see page |
 | [FHIR Profiling Tools](../fhir-profiling-tools.md) | source | `LKFHIR_FHIR_PROFILING_TOOLS` | see page |
 
 ### HAPI FHIR / OmniVera Adapter
@@ -93,13 +94,19 @@ Poll the Athena Health platform for a practice and push each patient found.
 
 ### FHIR Resource Creator
 
-Turn inbound patient data into a clean FHIR R4 Patient resource. No network calls.
+Map an inbound JSON message onto a clean FHIR R4 Patient or Observation resource. No network calls.
 
 `LKFHIR_FHIR_RESOURCE_CREATOR` · transform node · [Configuration and fields](../fhir-resource-creator.md)
 
+### FHIR Validator
+
+Validate a FHIR resource against a server's `$validate` operation and forward it only when it validates. Strict valid / invalid / unknown, and fails closed. Put it before a FHIR destination, or call the library to validate before sending.
+
+`LKFHIR_FHIR_VALIDATOR` · transform node · [Configuration and fields](../fhir-validator.md)
+
 ### FHIR Profiling Tools
 
-Browse FHIR resources in a browser and get a JSON template for any of them.
+Browse FHIR resources and get a JSON template for any of them, and author constrained profiles with the Profile Designer.
 
 `LKFHIR_FHIR_PROFILING_TOOLS` · source node · [Configuration and fields](../fhir-profiling-tools.md)
 
@@ -115,8 +122,9 @@ Shared Lua modules the adapters depend on. Grid installs the version an adapter 
 | `ecw_fhir` | 1.0.0 | eCW FHIR client — JWT client-credentials against a separate token endpoint, plus bulk export helpers. |
 | `modmed_fhir` | 1.0.0 | ModMed FHIR client — password and refresh-token authentication with an API key. |
 | `athena_health` | 1.0.0 | Athena Health client — client_credentials OAuth for both the proprietary REST API and the FHIR R4 API. |
-| `fhir_resource` | 1.0.0 | FHIR Patient resource builder. Maps inbound data onto an R4 Patient template and strips unused fields. No network. |
-| `fhir_profiling` | 1.0.0 | FHIR profiling tool. Loads specification profiles from SQLite and generates JSON templates for any resource or type. |
+| `fhir_resource` | 1.1.0 | FHIR R4 resource builder. Maps inbound data onto a Patient or Observation template and strips unused fields, with correct array/object shapes. No network. (1.0.0 also shipped.) |
+| `fhir_profiling` | 1.1.0 | FHIR profiling and profile authoring tool. Generates JSON templates and compiles a differential StructureDefinition from a constraint spec. (1.0.0 also shipped.) |
+| `fhir_validate` | 1.0.0 | Remote FHIR $validate client. Returns a strict valid / invalid / unknown verdict and fails closed. Lets an adapter validate a resource before it sends. |
 
 :::tip[Library versions are immutable]
 A published library version is never changed. A fix ships as a new version, and each node stays pinned to the version it was built against, so updating a catalog cannot disturb a node already running.

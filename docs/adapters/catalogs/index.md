@@ -60,6 +60,7 @@ A subscription brings in the whole catalog, so subscribe to the catalogs coverin
 | [HAPI FHIR / OmniVera Adapter](../hapi-fhir.md) | [Linkiir FHIR Adapters](fhir.md) | `LKFHIR_HAPI_FHIR_ADAPTER` |
 | [FHIR Profiling Tools](../fhir-profiling-tools.md) | [Linkiir FHIR Adapters](fhir.md) | `LKFHIR_FHIR_PROFILING_TOOLS` |
 | [FHIR Resource Creator](../fhir-resource-creator.md) | [Linkiir FHIR Adapters](fhir.md) | `LKFHIR_FHIR_RESOURCE_CREATOR` |
+| [FHIR Validator](../fhir-validator.md) | [Linkiir FHIR Adapters](fhir.md) | `LKFHIR_FHIR_VALIDATOR` |
 | [ModMed Adapter](../modmed.md) | [Linkiir FHIR Adapters](fhir.md) | `LKFHIR_MODMED_ADAPTER` |
 | [PCC Connect](../pointclickcare.md) | [Linkiir EHR Adapters](ehr.md) | `LKEHR_PCC_CONNECT` |
 | [PCC Request](../pointclickcare.md) | [Linkiir EHR Adapters](ehr.md) | `LKEHR_PCC_REQUEST` |
