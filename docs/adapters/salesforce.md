@@ -11,6 +11,8 @@ A **Transform Custom** node that queries and updates Salesforce records over the
 
 Published in the **[Linkiir Business Adapters](catalogs/business.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
+Current version and changelog: [Business Adapters release notes](../release-notes/catalogs-business.md).
+
 ## What it does
 
 When a message reaches the node, it authenticates against your Salesforce org, runs the query or update the node is configured for, and passes the result downstream. Tokens are cached and reused until they near expiry.

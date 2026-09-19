@@ -11,6 +11,8 @@ A **Transform Custom** node that sends the message reaching it to an Azure OpenA
 
 Published in the **[Linkiir AI Adapters](catalogs/ai.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
+Current version and changelog: [AI Adapters release notes](../release-notes/catalogs-ai.md).
+
 ## What it does
 
 When a message arrives, the node combines your system prompt with the message content, calls your Azure OpenAI deployment, and pushes the response onward. The endpoint URL you configure decides which Azure API shape is used, so pointing at a different deployment style needs no other change.

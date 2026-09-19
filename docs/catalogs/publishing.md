@@ -36,7 +36,7 @@ Click **Add content**, choose the source project, and pick a **Node template** o
 
 Two things are rewritten on the way in:
 
-- **The node type identifier is re-namespaced** to the catalog's own identifier, so it cannot collide with another catalog's or with the types the Runtime handles specially.
+- **The adapter is given a namespaced identity.** A node keeps its base runtime type in `node_type_id` (`SOURCE_HTTP`, `SOURCE_CUSTOM`, `TRANSFORM_CUSTOM`, and so on — this is what the Runtime builds the node from), and gains a separate `catalog_type_id` that carries the catalog's own prefix. The `catalog_type_id` is what keeps two catalogs from colliding and what a subscriber's grid uses to lock the adapter's configured fields; the `node_type_id` stays a plain runtime type so the node runs anywhere. Keeping the two apart is why an imported adapter starts cleanly instead of failing with an "unsupported node type" error.
 - **Password fields are blanked.** Creating a node template encrypts password fields into it, so promoting one unchanged would ship an encrypted secret to every subscriber — who could not decrypt it against their own key, and would see an error blaming the key rather than the catalog.
 
 Published library versions are copied as they are, and never overwritten. A version is immutable, and a subscriber's node pins it by name and version.

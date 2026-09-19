@@ -32,6 +32,7 @@ and cloned anonymously, so no SSH key is needed.
 | [Transport Adapters](catalogs/transport.md) | AWS S3, object storage, brokers | `https://github.com/Linkiir/linkiir-transport-adapters` |
 | [Notification Adapters](catalogs/notification.md) | Slack, chat, SMS, email, paging | `https://github.com/Linkiir/linkiir-notification-adapters` |
 | [AI Adapters](catalogs/ai.md) | Azure OpenAI and other model services | `https://github.com/Linkiir/linkiir-ai-adapters` |
+| [Developer Tools](catalogs/devtools.md) | Data Simulator for HL7 v2, C-CDA, FHIR and X12 test data | `https://github.com/Linkiir/linkiir-devtools` |
 
 If your grid has no outbound route to GitHub, a catalog can be delivered on a
 mounted share or removable drive instead — see
@@ -211,6 +212,16 @@ nodes that use them; see
   <span class="lnk-card__title">FHIR Profiling Tools</span>
   <span class="lnk-card__body">Browse FHIR resources and get a JSON template for any of them.</span>
 </a>
+<a class="lnk-card lnk-card-link" href="/docs/adapters/fhir-validator">
+  <svg class="lnk-card__icon" viewBox="0 0 32 32" aria-hidden="true">
+    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M27 7 13 21l-6-6" />
+      <path d="M27 15v8a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h13" />
+    </g>
+  </svg>
+  <span class="lnk-card__title">FHIR Validator</span>
+  <span class="lnk-card__body">Validate a resource against a FHIR server and forward it only when it validates.</span>
+</a>
 </div>
 
 ## By catalog
@@ -220,12 +231,14 @@ catalog to get the adapter.
 
 | Adapter | Catalog | Connects to | Library |
 | --- | --- | --- | --- |
+| [HAPI FHIR / OmniVera](hapi-fhir.md) | [FHIR Adapters](catalogs/fhir.md) | HAPI FHIR or Smile OmniVera endpoint | `hapi_fhir` |
 | [Epic](epic.md) | [FHIR Adapters](catalogs/fhir.md) | Epic FHIR endpoint | `epic_fhir` |
 | [Cerner](cerner.md) | [FHIR Adapters](catalogs/fhir.md) | Cerner FHIR endpoint | `cerner_fhir` |
 | [eClinicalWorks](ecw.md) | [FHIR Adapters](catalogs/fhir.md) | eCW FHIR endpoint | `ecw_fhir` |
 | [ModMed](modmed.md) | [FHIR Adapters](catalogs/fhir.md) | ModMed FHIR endpoint | `modmed_fhir` |
 | [Athena Health](athena.md) | [FHIR Adapters](catalogs/fhir.md) | Athena Health platform | `athena_health` |
 | [FHIR Resource Creator](fhir-resource-creator.md) | [FHIR Adapters](catalogs/fhir.md) | Nothing — local transformation | `fhir_resource` |
+| [FHIR Validator](fhir-validator.md) | [FHIR Adapters](catalogs/fhir.md) | A FHIR server's $validate operation | `fhir_validate` |
 | [FHIR Profiling Tools](fhir-profiling-tools.md) | [FHIR Adapters](catalogs/fhir.md) | Nothing — local HTTP service | `fhir_profiling` |
 | [PointClickCare](pointclickcare.md) | [EHR Adapters](catalogs/ehr.md) | PointClickCare organization | `pcc_api` |
 | [Dexcom CGM](dexcom.md) | [Diagnostics Adapters](catalogs/diagnostics.md) | Dexcom CGM account | `dexcom_cgm` |

@@ -11,6 +11,8 @@ A **Transform Custom** node that posts the message reaching it into a Slack chan
 
 Published in the **[Linkiir Notification Adapters](catalogs/notification.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
+Current version and changelog: [Notification Adapters release notes](../release-notes/catalogs-notification.md).
+
 ## What it does
 
 When a message arrives, the node posts its content to the configured channel as your Slack app. It can prefix the post with a mention, resolved from an email address, so the right person is notified.

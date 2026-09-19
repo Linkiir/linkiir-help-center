@@ -11,6 +11,8 @@ A **Source Custom** node that polls an Epic FHIR endpoint on an interval and pus
 
 Published in the **[Linkiir FHIR Adapters](catalogs/fhir.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
+Current version and changelog: [FHIR Adapters release notes](../release-notes/catalogs-fhir.md).
+
 ## What it does
 
 On each interval the node authenticates against Epic, runs the FHIR search you configured, and pushes one message per resource returned. It caches the access token and reuses it until it nears expiry, so a short interval does not mean a token request every cycle. If the search matches nothing, it logs that and pushes nothing.

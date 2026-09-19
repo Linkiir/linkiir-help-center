@@ -11,6 +11,8 @@ A **Source Custom** node that polls an eClinicalWorks (eCW) FHIR endpoint on an 
 
 Published in the **[Linkiir FHIR Adapters](catalogs/fhir.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
+Current version and changelog: [FHIR Adapters release notes](../release-notes/catalogs-fhir.md).
+
 ## What it does
 
 On each interval the node obtains an access token from the eCW authorization server, runs your FHIR search against the FHIR base URL, and pushes one message per resource returned. The token is cached and reused until it nears expiry.

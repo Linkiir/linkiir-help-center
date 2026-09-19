@@ -11,6 +11,8 @@ A **Source Custom** node that polls the Athena Health platform on an interval an
 
 Published in the **[Linkiir FHIR Adapters](catalogs/fhir.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
+Current version and changelog: [FHIR Adapters release notes](../release-notes/catalogs-fhir.md).
+
 ## What it does
 
 On each interval the node obtains an access token with your client credentials, runs the configured patient search for a practice, and pushes one message per patient returned. The token is cached and reused until it nears expiry.

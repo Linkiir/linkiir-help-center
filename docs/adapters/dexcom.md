@@ -16,6 +16,8 @@ Two nodes that connect a workflow to a Dexcom account and read its continuous gl
 
 Published in the **[Linkiir Diagnostics Adapters](catalogs/diagnostics.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
+Current version and changelog: [Diagnostics Adapters release notes](../release-notes/catalogs-diagnostics.md).
+
 ## What it does
 
 ```text

@@ -10,7 +10,7 @@ Linkiir adapters are delivered as **catalogs** — public git repositories your 
 
 Every catalog below is a **public repository, cloned anonymously**. You do not need an SSH key, a token, or a support request to subscribe to one.
 
-Currently published: **17 adapters** and **14 libraries** across **7 catalogs**.
+Currently published: **17 adapters** and **14 libraries** across **8 catalogs**.
 
 ## Catalogs and repository URLs
 
@@ -23,6 +23,7 @@ Currently published: **17 adapters** and **14 libraries** across **7 catalogs**.
 | [Linkiir Transport Adapters](transport.md) | Adapters for moving bytes and messages: object storage, file transport, and streaming or message brokers | 2 | `https://github.com/Linkiir/linkiir-transport-adapters` |
 | [Linkiir Notification Adapters](notification.md) | Adapters that put a message in front of a person: chat, SMS, voice, email, paging and webhooks | 1 | `https://github.com/Linkiir/linkiir-notification-adapters` |
 | [Linkiir AI Adapters](ai.md) | Model and AI service adapters: hosted and on-premise LLMs, embeddings, and AI tooling | 1 | `https://github.com/Linkiir/linkiir-ai-adapters` |
+| [Developer Tools](devtools.md) | Data simulation and testing tools — not adapters | 1 | `https://github.com/Linkiir/linkiir-devtools` |
 
 ## How to subscribe
 
@@ -50,13 +51,16 @@ A subscription brings in the whole catalog, so subscribe to the catalogs coverin
 | --- | --- | --- |
 | [Athena Adapter](../athena.md) | [Linkiir FHIR Adapters](fhir.md) | `LKFHIR_ATHENA_ADAPTER` |
 | [Azure OpenAI Adapter](../azure-openai.md) | [Linkiir AI Adapters](ai.md) | `LKAI_AZURE_OPENAI_ADAPTER` |
+| Data Simulator | [Developer Tools](devtools.md) | `LKTOOL_DATA_SIMULATOR` |
 | [Cerner FHIR Adapter](../cerner.md) | [Linkiir FHIR Adapters](fhir.md) | `LKFHIR_CERNER_FHIR_ADAPTER` |
 | [Dexcom Authorize](../dexcom.md) | [Linkiir Diagnostics Adapters](diagnostics.md) | `LKDX_DEXCOM_AUTHORIZE` |
 | [Dexcom Read EGV](../dexcom.md) | [Linkiir Diagnostics Adapters](diagnostics.md) | `LKDX_DEXCOM_READ_EGV` |
 | [Dynamics CRM Adapter](../dynamics-365.md) | [Linkiir Business Adapters](business.md) | `LKBZ_DYNAMICS_CRM_ADAPTER` |
 | [Epic FHIR Adapter](../epic.md) | [Linkiir FHIR Adapters](fhir.md) | `LKFHIR_EPIC_ADAPTER` |
+| [HAPI FHIR / OmniVera Adapter](../hapi-fhir.md) | [Linkiir FHIR Adapters](fhir.md) | `LKFHIR_HAPI_FHIR_ADAPTER` |
 | [FHIR Profiling Tools](../fhir-profiling-tools.md) | [Linkiir FHIR Adapters](fhir.md) | `LKFHIR_FHIR_PROFILING_TOOLS` |
 | [FHIR Resource Creator](../fhir-resource-creator.md) | [Linkiir FHIR Adapters](fhir.md) | `LKFHIR_FHIR_RESOURCE_CREATOR` |
+| [FHIR Validator](../fhir-validator.md) | [Linkiir FHIR Adapters](fhir.md) | `LKFHIR_FHIR_VALIDATOR` |
 | [ModMed Adapter](../modmed.md) | [Linkiir FHIR Adapters](fhir.md) | `LKFHIR_MODMED_ADAPTER` |
 | [PCC Connect](../pointclickcare.md) | [Linkiir EHR Adapters](ehr.md) | `LKEHR_PCC_CONNECT` |
 | [PCC Request](../pointclickcare.md) | [Linkiir EHR Adapters](ehr.md) | `LKEHR_PCC_REQUEST` |
