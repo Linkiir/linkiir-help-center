@@ -237,7 +237,8 @@ catalog to get the adapter.
 | [eClinicalWorks](ecw.md) | [FHIR Adapters](catalogs/fhir.md) | eCW FHIR endpoint | `ecw_fhir` |
 | [ModMed](modmed.md) | [FHIR Adapters](catalogs/fhir.md) | ModMed FHIR endpoint | `modmed_fhir` |
 | [Athena Health](athena.md) | [FHIR Adapters](catalogs/fhir.md) | Athena Health platform | `athena_health` |
-| [FHIR Resource Creator](fhir-resource-creator.md) | [FHIR Adapters](catalogs/fhir.md) | Nothing — local transformation | `fhir_resource` |
+| [HAPI FHIR / OmniVera](hapi-fhir.md) | [FHIR Adapters](catalogs/fhir.md) | HAPI FHIR or Smile OmniVera endpoint | `hapi_fhir` |
+| [FHIR Resource Creator](fhir-resource-creator.md) | [FHIR Adapters](catalogs/fhir.md) | Nothing — local transformation | `fhir_creator` |
 | [FHIR Validator](fhir-validator.md) | [FHIR Adapters](catalogs/fhir.md) | A FHIR server's $validate operation | `fhir_validate` |
 | [FHIR Profiling Tools](fhir-profiling-tools.md) | [FHIR Adapters](catalogs/fhir.md) | Nothing — local HTTP service | `fhir_profiling` |
 | [PointClickCare](pointclickcare.md) | [EHR Adapters](catalogs/ehr.md) | PointClickCare organization | `pcc_api` |
