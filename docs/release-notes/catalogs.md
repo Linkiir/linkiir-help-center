@@ -40,8 +40,9 @@ Every adapter and library available today, by catalog.
 | [FHIR Adapters](../adapters/catalogs/fhir.md) | eCW Adapter | 1.0.0 | `LKFHIR_ECW_ADAPTER` |
 | [FHIR Adapters](../adapters/catalogs/fhir.md) | ModMed Adapter | 1.0.0 | `LKFHIR_MODMED_ADAPTER` |
 | [FHIR Adapters](../adapters/catalogs/fhir.md) | Athena Adapter | 1.0.0 | `LKFHIR_ATHENA_ADAPTER` |
-| [FHIR Adapters](../adapters/catalogs/fhir.md) | FHIR Resource Creator | 1.0.0 | `LKFHIR_FHIR_RESOURCE_CREATOR` |
-| [FHIR Adapters](../adapters/catalogs/fhir.md) | FHIR Profiling Tools | 1.0.0 | `LKFHIR_FHIR_PROFILING_TOOLS` |
+| [FHIR Adapters](../adapters/catalogs/fhir.md) | FHIR Resource Creator | 1.1.0 | `LKFHIR_FHIR_RESOURCE_CREATOR` |
+| [FHIR Adapters](../adapters/catalogs/fhir.md) | FHIR Validator | 1.0.0 | `LKFHIR_FHIR_VALIDATOR` |
+| [FHIR Adapters](../adapters/catalogs/fhir.md) | FHIR Profiling Tools | 1.1.0 | `LKFHIR_FHIR_PROFILING_TOOLS` |
 | [EHR Adapters](../adapters/catalogs/ehr.md) | PCC Connect | 1.0.0 | `LKEHR_PCC_CONNECT` |
 | [EHR Adapters](../adapters/catalogs/ehr.md) | PCC Request | 1.0.0 | `LKEHR_PCC_REQUEST` |
 | [Diagnostics Adapters](../adapters/catalogs/diagnostics.md) | Dexcom Authorize | 1.0.0 | `LKDX_DEXCOM_AUTHORIZE` |
@@ -60,8 +61,9 @@ Every adapter and library available today, by catalog.
 | [FHIR Adapters](../adapters/catalogs/fhir.md) | `ecw_fhir` | 1.0.0 |
 | [FHIR Adapters](../adapters/catalogs/fhir.md) | `modmed_fhir` | 1.0.0 |
 | [FHIR Adapters](../adapters/catalogs/fhir.md) | `athena_health` | 1.0.0 |
-| [FHIR Adapters](../adapters/catalogs/fhir.md) | `fhir_resource` | 1.0.0 |
-| [FHIR Adapters](../adapters/catalogs/fhir.md) | `fhir_profiling` | 1.0.0 |
+| [FHIR Adapters](../adapters/catalogs/fhir.md) | `fhir_creator` | 1.0.0 |
+| [FHIR Adapters](../adapters/catalogs/fhir.md) | `fhir_validate` | 1.0.0 |
+| [FHIR Adapters](../adapters/catalogs/fhir.md) | `fhir_profiling` | 1.1.0 |
 | [EHR Adapters](../adapters/catalogs/ehr.md) | `pcc_api` | 1.0.0 |
 | [Diagnostics Adapters](../adapters/catalogs/diagnostics.md) | `dexcom_cgm` | 1.0.0 |
 | [Business Adapters](../adapters/catalogs/business.md) | `salesforce` | 1.0.0 |
@@ -74,6 +76,7 @@ Every adapter and library available today, by catalog.
 
 | Release | Date | Summary |
 | --- | --- | --- |
+| [FHIR authoring update](./catalogs-fhir-authoring.md) | 2026-09-17 | FHIR Adapters: new FHIR Validator; simpler Resource Creator (1.1.0) and Profiling Tools (1.1.0) |
 | [September 2026](./catalogs-2026-09.md) | 2026-09-17 | First public catalog release — 17 adapters and 14 libraries across 7 catalogs |
 
 ---

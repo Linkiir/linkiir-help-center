@@ -231,6 +231,7 @@ const sidebars: SidebarsConfig = {
           type: 'category', label: 'Linkiir Catalogs Release Notes',
           link: {type: 'doc', id: 'release-notes/catalogs'},
           items: [
+            'release-notes/catalogs-fhir-authoring',
             'release-notes/catalogs-2026-09',
           ],
         },
