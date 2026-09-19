@@ -72,4 +72,4 @@ Background polling the Grid does on its own does not count as activity, so an un
 
 ## Next
 
-Continue with [Linkiir Demo Project](demo-project.md).
+Continue with the [Demo Projects](demo-project.md).

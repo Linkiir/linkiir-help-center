@@ -14,7 +14,7 @@ Linkiir is a healthcare integration platform for designing, testing, deploying, 
 
 1. [Download and install](getting-started/quick-install.md) — macOS Docker bundle, Windows installer, or Linux.
 2. [Reset the admin user](getting-started/first-login.md) — set the administrator password.
-3. [Import the Linkiir Demo Project](getting-started/demo-project.md) — four ready-made workflows that generate HL7, move it over LLP, store it, and serve it back as JSON.
+3. [Import a Demo Project](getting-started/demo-project.md) — a core-nodes Feature Demo (HL7 over LLP to a SQLite-backed JSON API), or an HL7 v2 to FHIR demo built on the FHIR adapter catalog.
 
 About 20 minutes on a local machine.
 

@@ -9,7 +9,14 @@ const sidebars: SidebarsConfig = {
         'getting-started/platform-overview',
         'getting-started/quick-install',
         'getting-started/first-login',
-        'getting-started/demo-project',
+        {
+          type: 'category', label: 'Demo Projects',
+          link: {type: 'doc', id: 'getting-started/demo-project'},
+          items: [
+            'getting-started/demo-feature',
+            'getting-started/demo-hl7v2-fhir',
+          ],
+        },
       ],
     },
     {

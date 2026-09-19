@@ -1,143 +1,30 @@
 ---
-title: Linkiir Demo Project
+title: Demo Projects
+description: Ready-to-run Linkiir projects you import as a zip bundle to learn the platform hands-on — a feature tour of the core nodes, and an HL7 v2 to FHIR integration built on the FHIR adapter catalog.
+keywords: [demo, sample project, HL7, FHIR, HAPI, getting started]
 ---
 
-# Linkiir Demo Project
+# Demo Projects
 
-**Linkiir Demo** is a ready-to-run project you import as a zip bundle. It generates HL7 messages, sends them over LLP, stores the patients in a SQLite database, and serves them back through an HTTP API — a complete round trip built entirely with the native Linkiir scripting API.
+Linkiir ships ready-to-run demo projects you import as a zip bundle. Each one is a complete, working project — import it, start the workflows, and read the node scripts to see how a real interface is built.
 
-Import it to get an understanding of how to create projects and workflows, as well as to get an understanding of how core nodes work.
-
-**[Download Linkiir_Demo.linkiir.zip](pathname:///downloads/Linkiir_Demo.linkiir.zip)** (78 KB)
-
----
-
-## What's inside
-
-The project contains four workflows.
-
-| Workflow | What it does |
-| --- | --- |
-| **Step 1: HL7 Message Generator** | Generates random HL7 ADT messages every 10 seconds and writes them to file |
-| **Step 2: HL7 File to LLP** | Reads HL7 files, maps message fields, stamps the sending application, and forwards via LLP socket |
-| **Step 3: HL7 LLP to Database** | Receives HL7 over LLP, filters for ADT events, extracts patient demographics, and writes them to a SQLite database |
-| **Step 4: Patient Lookup API** | An HTTP endpoint that queries the patient database and returns results as JSON, with an interactive web UI |
-
-Together they form a round trip: the generator produces messages, the file workflow sends them over LLP, the database workflow stores them, and the API reads them back.
-
----
-
-## Import the project
-
-1. Open the Linkiir Grid in your browser.
-2. Go to **Projects**.
-3. Click the chevron on **Add Project** and choose **From zip**.
-4. Drop [`Linkiir_Demo.linkiir.zip`](pathname:///downloads/Linkiir_Demo.linkiir.zip) on **Choose a project bundle**, or click to browse for it.
-5. Click **Import**.
-
-The project appears as **Linkiir Demo** with 4 workflows.
-
-No additional setup is required. Everything the project needs is created automatically on first run.
-
----
-
-## Start the workflows
-
-Click into the project. On the first start of the project, start the workflows in this order:
-
-1. **Step 3: HL7 LLP to Database** — starts the LLP listener and creates the database
-2. **Step 4: Patient Lookup API** — starts the web endpoint
-3. **Step 1: HL7 Message Generator** — begins producing HL7 messages
-4. **Step 2: HL7 File to LLP** — reads generated files and sends them to Step 3
-
-For all future starts, simply select **Start All**.
-
----
-
-## Try the Patient Lookup API
-
-Once Step 4 is running, open your browser to:
-
-```text
-http://localhost:8081/lookup
-```
-
-You'll see an interactive page where you can:
-
-- Search patients by last name
-- View all records in a table
-- Reset the database for a fresh demo
-
-The JSON API is also available:
-
-| URL | Returns |
-| --- | --- |
-| `http://localhost:8081/lookup?LastName=Smith` | Patients matching that last name |
-| `http://localhost:8081/lookup?all=1` | All patients as JSON |
-
----
-
-## Configuration you may want to change
-
-| Setting | Where | Default | Notes |
-| --- | --- | --- | --- |
-| LLP port | Step 2: **Send LLP** node config | `localhost:5145` | Must match Step 3's Receive LLP listen port |
-| Listen port | Step 3: **Receive LLP** node config | `5145` | Change if the port is in use |
-| HTTP route | Step 4: **Patient API** node config | `/lookup` | Change if it conflicts with another endpoint |
-| Generator interval | Step 1: **Generate HL7** node config | `10000` ms | Increase for a quieter demo |
-| File poll interval | Step 2: **Read HL7 Files** node config | `10000` ms | Match or exceed the generator interval |
-
----
-
-## Reset the demo
-
-To clear all patient data and start fresh:
-
-1. Stop **Step 3: HL7 LLP to Database**, to release the SQLite lock.
-2. Open the Patient Lookup page at `http://localhost:8081/lookup`.
-3. Click the red **Reset DB** button.
-4. Restart Step 3 and Step 1 to repopulate.
-
-Or simply delete the `demo/` folder and restart all workflows — everything will be recreated.
-
----
-
-## What the scripts demonstrate
-
-Each row is a technique you can lift into your own interfaces.
-
-| Technique | Where to see it |
-| --- | --- |
-| HL7 parsing and tree navigation | Step 2: **Map HL7** → `main.lua` |
-| Message filtering by type | Step 3: **Filter ADT** → `main.lua` |
-| SQLite database access | Step 3: **Write Patient DB** → `main.lua` |
-| HTTP request handling + JSON API | Step 4: `main.lua` + `patient_db.lua` |
-| Modular Lua with `require` | Step 4: three-file structure |
-| Random HL7 message generation | Step 1: `hl7_generator.lua` |
-| Self-provisioning (auto-create dirs/db) | `patient_db.lua` — `linkiir.sys.fs.mkdir` + `CREATE TABLE IF NOT EXISTS` |
-
-Open any node in the **Scripting** tab to see the code, set breakpoints, and run tests against sample data.
-
----
-
-## Troubleshooting
-
-| Symptom | Cause | Fix |
+| Demo | What you learn | Import bundle |
 | --- | --- | --- |
-| Patient count stays the same | Step 3 not running, or LLP connection refused | Start Step 3 before Step 2 |
-| "Connection refused" in logs | Step 3's LLP listener isn't up yet | Start Step 3, wait a moment, then start Step 2 |
-| No files in `demo/messages/` | Files are being deleted after processing (normal) | That's expected — check the patient database for proof of flow |
-| Patient API returns empty | No data written yet | Wait for the generator to produce a few messages |
-| "Database is locked" | Step 3 and Reset DB running simultaneously | Stop Step 3 before resetting |
+| [Feature Demo](demo-feature.md) | The core nodes end to end: generate HL7, move it over LLP, store it in SQLite, and serve it back as a JSON API | `Linkiir_Demo.linkiir.zip` |
+| [HL7 v2 to FHIR Demo](demo-hl7v2-fhir.md) | Converting HL7 v2 to FHIR and back, FHIR profiling, FHIR validation, and connecting to a public HAPI FHIR server — with the mapping in readable Lua modules | `HAPI_OmniVera_FHIR_Demo.linkiir.zip` |
 
----
+Both import the same way (**Projects → Add Project → From zip**) and run against a local grid with no extra setup.
 
+## Which to start with
+
+- New to Linkiir? Start with the **[Feature Demo](demo-feature.md)** — it introduces projects, workflows, and the core node types with a self-contained round trip.
+- Working with healthcare interoperability? The **[HL7 v2 to FHIR Demo](demo-hl7v2-fhir.md)** shows the FHIR adapter catalog in action: profiling, validation, a live HAPI FHIR connection, and HL7 v2 ↔ FHIR mapping you can read and edit.
 
 ## Where to go next
 
 | Goal | Read |
 | --- | --- |
-| Understand the node types the demo uses | [Interfaces and Core Nodes](../interface-development/interfaces/index.md) |
+| Understand the node types the demos use | [Interfaces and Core Nodes](../interface-development/interfaces/index.md) |
 | Look up the functions the scripts call | [Linkiir Scripting API](../api/scripting-api/index.md) |
-| Debug and test scripts the way the demo does | [Testing and Debugging](../interface-development/lua-programming/testing-debugging.md) |
-| Build the same kind of interface from scratch | [Create a Project, Workflow, and HTTP Source Node](create-project-workflow.md) |
+| The FHIR adapters the HL7-to-FHIR demo builds on | [Linkiir FHIR Adapters](../adapters/catalogs/fhir.md) |
+| Build an interface from scratch | [Create a Project, Workflow, and HTTP Source Node](create-project-workflow.md) |
