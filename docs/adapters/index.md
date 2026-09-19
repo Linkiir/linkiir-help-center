@@ -188,6 +188,17 @@ nodes that use them; see
   <span class="lnk-card__title">FHIR Resource Creator</span>
   <span class="lnk-card__body">Turn inbound patient data into a clean FHIR R4 Patient resource.</span>
 </a>
+<a class="lnk-card lnk-card-link" href="/docs/adapters/fhir-validator">
+  <svg class="lnk-card__icon" viewBox="0 0 32 32" aria-hidden="true">
+    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8.5 4h9l6 6v18a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" />
+      <path d="M17.5 4v6h6" />
+      <path d="M11 16.5l3 3 6-6.5" />
+    </g>
+  </svg>
+  <span class="lnk-card__title">FHIR Validator</span>
+  <span class="lnk-card__body">Validate a FHIR resource against a server and forward it only on a clean pass.</span>
+</a>
 <a class="lnk-card lnk-card-link" href="/docs/adapters/fhir-profiling-tools">
   <svg class="lnk-card__icon" viewBox="0 0 32 32" aria-hidden="true">
     <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

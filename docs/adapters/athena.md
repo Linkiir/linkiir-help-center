@@ -88,3 +88,4 @@ Register an application at the [Athena developer portal](https://developer.athen
 - [How Adapters Work](how-adapters-work.md)
 - [Epic Adapter](epic.md)
 - [FHIR Resource Creator](fhir-resource-creator.md)
+- [FHIR Validator](fhir-validator.md)

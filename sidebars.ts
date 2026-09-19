@@ -85,6 +85,7 @@ const sidebars: SidebarsConfig = {
               'adapters/modmed',
               'adapters/athena',
               'adapters/fhir-resource-creator',
+              'adapters/fhir-validator',
               'adapters/fhir-profiling-tools',
             ]},
             {type: 'category', label: 'EHR Adapters', link: {type: 'doc', id: 'adapters/catalogs/ehr'}, items: [

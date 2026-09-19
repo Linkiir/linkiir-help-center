@@ -104,3 +104,4 @@ Register `ecw_public.pem` with eCW. Put `ecw_private.pem` on the machine running
 - [How Adapters Work](how-adapters-work.md)
 - [ModMed Adapter](modmed.md)
 - [FHIR Resource Creator](fhir-resource-creator.md)
+- [FHIR Validator](fhir-validator.md)
