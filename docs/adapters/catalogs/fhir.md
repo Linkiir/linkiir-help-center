@@ -100,7 +100,7 @@ Map an inbound JSON message onto a clean FHIR R4 Patient or Observation resource
 
 ### FHIR Validator
 
-Validate a FHIR resource against a server's `$validate` operation and forward it only when it validates. Strict valid / invalid / unknown, and fails closed. Put it before a FHIR destination, or call the library to validate before sending.
+Validate a FHIR resource against a server's `$validate` operation and forward it only on a clean pass. Strict valid / invalid / unknown, and fails closed.
 
 `LKFHIR_FHIR_VALIDATOR` · transform node · [Configuration and fields](../fhir-validator.md)
 
@@ -122,9 +122,9 @@ Shared Lua modules the adapters depend on. Grid installs the version an adapter 
 | `ecw_fhir` | 1.0.0 | eCW FHIR client — JWT client-credentials against a separate token endpoint, plus bulk export helpers. |
 | `modmed_fhir` | 1.0.0 | ModMed FHIR client — password and refresh-token authentication with an API key. |
 | `athena_health` | 1.0.0 | Athena Health client — client_credentials OAuth for both the proprietary REST API and the FHIR R4 API. |
-| `fhir_resource` | 1.1.0 | FHIR R4 resource builder. Maps inbound data onto a Patient or Observation template and strips unused fields, with correct array/object shapes. No network. (1.0.0 also shipped.) |
-| `fhir_profiling` | 1.1.0 | FHIR profiling and profile authoring tool. Generates JSON templates and compiles a differential StructureDefinition from a constraint spec. (1.0.0 also shipped.) |
-| `fhir_validate` | 1.0.0 | Remote FHIR $validate client. Returns a strict valid / invalid / unknown verdict and fails closed. Lets an adapter validate a resource before it sends. |
+| `fhir_creator` | 1.0.0 | FHIR resource builder helpers. Start a resource and append name, identifier, telecom and address, adding only populated fields, then serialize to JSON. No network. |
+| `fhir_validate` | 1.0.0 | Remote FHIR `$validate` client. Checks a resource against a server and returns a strict valid / invalid / unknown verdict. Fails closed; the server is the authority. |
+| `fhir_profiling` | 1.1.0 | FHIR profiling and profile-authoring tool. Loads specification profiles from SQLite, powers the Profile Designer, and generates JSON templates for any resource or type. |
 
 :::tip[Library versions are immutable]
 A published library version is never changed. A fix ships as a new version, and each node stays pinned to the version it was built against, so updating a catalog cannot disturb a node already running.

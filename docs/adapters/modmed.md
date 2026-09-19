@@ -87,3 +87,4 @@ Both the password and the API key are entered as masked fields, so they are encr
 - [How Adapters Work](how-adapters-work.md)
 - [Athena Health Adapter](athena.md)
 - [FHIR Resource Creator](fhir-resource-creator.md)
+- [FHIR Validator](fhir-validator.md)

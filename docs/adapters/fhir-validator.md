@@ -1,161 +1,93 @@
 ---
 title: FHIR Validator
-sidebar_label: FHIR Validator
-description: "Use the Linkiir FHIR Validator to validate a resource against a FHIR server's $validate operation and forward it only when it validates. Strict valid / invalid / unknown, fail-closed."
-keywords: [FHIR, validation, $validate, OperationOutcome, adapter, transform, HAPI, conformance]
+description: Use the Linkiir FHIR Validator node to check an inbound FHIR resource against a FHIR server's $validate operation and forward it only on a clean pass.
+keywords: [FHIR, validation, $validate, OperationOutcome, R4, adapter, transform]
 ---
 
 # FHIR Validator
 
-A **Transform Custom** node that validates an inbound FHIR resource against a
-FHIR server's `$validate` operation and forwards it downstream **only when it
-validates**.
+A **Transform Custom** node that validates an inbound FHIR resource against a FHIR server's `$validate` operation and forwards it unchanged only when it passes. Anything else stops the node.
 
-Published in the **[Linkiir FHIR Adapters](catalogs/fhir.md)** catalog. Subscribe
-to that catalog to add this node to your grid — see
-[Adapter Catalogs](catalogs/index.md).
-
-Current version and changelog:
-[FHIR Adapters release notes](../release-notes/catalogs-fhir.md).
+Published in the **[Linkiir FHIR Adapters](catalogs/fhir.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
 ## What it does
 
-When a FHIR resource arrives, the node POSTs it to the configured server's
-type-level `$validate` operation, reads the `OperationOutcome` the server
-returns, and decides one of three things:
-
-| Verdict | Meaning | What happens |
-| --- | --- | --- |
-| **valid** | The server reported no errors | The resource is forwarded downstream, unchanged |
-| **invalid** | The server reported an error or fatal issue | The resource is **not** forwarded |
-| **unknown** | No reliable verdict could be obtained | The resource is **not** forwarded |
+The node reads the inbound FHIR JSON, sends it to a FHIR server's `$validate` operation, and looks at the `OperationOutcome` that comes back to decide the verdict:
 
 ```text
-FHIR Resource Creator  →  FHIR Validator  →  FHIR destination (Epic, HAPI, …)
-                              (only valid resources pass)
+Receive JSON  →  Validate  →  Pass or Stop
 ```
 
-Put it in front of a FHIR destination so an invalid resource never reaches the
-server that would reject or misstore it.
+- **Valid** (including valid with only warnings or information) → forward the original bytes, unchanged, to the next node.
+- **Invalid, or indeterminate** → stop the node with an error and forward nothing.
 
-### It fails closed
+It **fails closed**. An invalid resource, a timeout, an HTTP error, a malformed response, or a profile the server cannot resolve all stop the node, so a resource that was not cleanly validated never reaches the next node. Stopping is done by raising an error, which hands the failure to Linkiir's own error handling.
 
-This is the design's most important property. **Anything short of a conclusive
-pass is not forwarded.** A timeout, an HTTP 4xx or 5xx, a malformed response, or
-a profile the server cannot resolve all come back as **unknown**, and unknown
-does not pass. The node never guesses a resource is valid.
+The FHIR server is the authority. A `200` response is **not** treated as a pass on its own — the returned `OperationOutcome` decides, because `$validate` can return `200` for a resource that has errors.
 
-Two consequences worth knowing:
+The resource type is read from the resource itself, so one node validates Patient, Observation, Encounter, and others without any per-type setting.
 
-- **HTTP 200 is not the verdict.** `$validate` answers 200 and puts the result
-  in the `OperationOutcome`, so a 200 carrying an error issue is **invalid**, not
-  valid.
-- **A resource is validated remotely, never locally.** There is no built-in
-  validator — the FHIR server that will store the data is the authority on
-  whether it is acceptable.
+### Where it fits
 
-## Configuration reference
+Put it straight after the [FHIR Resource Creator](fhir-resource-creator.md), so only validated resources move on.
 
-| Field | Default | What it does |
-| --- | --- | --- |
-| **FHIR Base URL** | `https://hapi.fhir.org/baseR4` | The FHIR base URL whose `$validate` operation to call. For production use a PHI-approved endpoint — the public HAPI server must not receive real patient data. |
-| **Profile Canonical** | _(empty)_ | Optional. A profile canonical URL to validate against. Empty validates against the resource's base definition. The profile must actually be installed on the server; if it cannot be resolved the result is **unknown**, not a silent fall back to base validation. |
-| **On Invalid** | `Stop` | What to do when the server reports the resource is invalid. `Stop` logs the issues and forwards nothing. `Push to error route` forwards to the Error Topic. |
-| **On Unknown** | `Stop` | What to do when no verdict could be obtained. Fails closed either way — `Stop` forwards nothing, `Push to error route` sends to the Error Topic. Never forwards downstream. |
-| **Error Topic** | _(empty)_ | The topic to publish to when On Invalid or On Unknown is `Push to error route`. |
-| **Block Warnings** | off | When on, a resource that is valid but carries warning issues is treated like invalid and not forwarded. Off (default) forwards a resource that has only warnings, which is how FHIR defines validity. |
-| **Timeout** | `20` | How long to wait for the validation server, in seconds. |
-| **Live Mode** | on | When off, no request is sent. Because a resource cannot be confirmed valid without asking the server, Live Mode off yields **unknown** and forwards nothing — it is for wiring up the node, not passing traffic through untested. |
-| **Verify TLS** | on | Verify the server's certificate. Leave on; turn it off only for a local test server with a self-signed certificate. |
-
-No credential fields: the public HAPI endpoint needs none. If your endpoint
-requires authentication, that is a follow-up that reuses the auth handling from
-the FHIR adapters — talk to Linkiir.
-
-## The validate operation
-
-The node calls the FHIR type-level validate operation. It is a POST, it does
-**not** create the resource, and capitalization matters — the resource type is
-`Patient`, not `patient`:
-
-```http
-POST https://hapi.fhir.org/baseR4/Patient/$validate
-Content-Type: application/fhir+json
-Accept: application/fhir+json
-
-{ "resourceType": "Patient", "name": [{ "family": "Smith", "given": ["Jane"] }] }
+```text
+FHIR Resource Creator  →  FHIR Validator  →  a FHIR server, a file, or your next node
 ```
-
-To try it by hand (single-quote the URL so the shell does not expand `$validate`;
-use synthetic data only):
-
-```bash
-curl -s -X POST 'https://hapi.fhir.org/baseR4/Patient/$validate' \
-  -H 'Content-Type: application/fhir+json' \
-  -H 'Accept: application/fhir+json' \
-  --data-binary '{"resourceType":"Patient","name":[{"family":"Smith","given":["Jane"]}]}'
-```
-
-The server responds with an `OperationOutcome`. A valid resource returns
-informational or no issues; an invalid one returns issues with `severity` of
-`error` or `fatal`.
-
-## Validate before you send (the common use)
-
-The verdict logic lives in the **`fhir_validate`** library, which is installed
-into your project when you build the node. That means another node — or an
-adapter about to POST a resource — can validate first, without the Validator
-node being in the workflow at all:
-
-```lua
-package.path = linkiir.sys.nodeDir() .. '/fhir_validate/?.lua;' .. package.path
-local Validate = require 'fhir_validate'
-
-local V = Validate.new{ BaseUrl = 'https://hapi.fhir.org/baseR4' }
-local Status = V:check(PatientJson)
-
-if Status ~= 'valid' then
-   linkiir.log.error('refusing to send a resource that did not validate: ' .. Status)
-   return
-end
--- only now hand PatientJson to the Epic / HAPI adapter that will create it
-```
-
-This is how you stop an invalid resource reaching Epic, Cerner, HAPI or OmniVera:
-validate it against the same server first, and send only what passes.
 
 ## Set it up
 
-1. Add the **FHIR Validator** node to a workflow from the palette.
-2. Set **FHIR Base URL** to the server that will validate — the same server you
-   intend to send to, so its rules are the ones applied.
-3. Connect the node producing FHIR resources (for example the
-   [FHIR Resource Creator](fhir-resource-creator.md)) to its input, and the FHIR
-   destination to its output.
-4. Leave **Live Mode** off and send one message through to confirm wiring;
-   remember that with Live Mode off the verdict is always unknown and nothing is
-   forwarded.
-5. Turn **Live Mode** on.
+1. Add the **FHIR Validator** node to a workflow, or open the supplied one, and connect the node producing FHIR JSON to its input.
+2. Click **Edit** and set **FHIR Server URL** to a FHIR base URL. For synthetic development testing you can use `https://hapi.fhir.org/baseR4`.
+3. Optionally set **FHIR Profile** to a profile canonical URL, but only if that profile is installed on the server.
+4. Connect the node that should receive the validated resource to its output.
+5. **Save**, then send one message through with **Run Test** on the upstream node, and start the nodes.
 
-## Troubleshooting
+:::caution[Do not send real patient data to the public server]
+`https://hapi.fhir.org/baseR4` is a public development server and a **DEV example only**. In production, leave the server URL unset until an administrator selects a PHI-approved endpoint, and never point it at the public server for real patient data.
+:::
 
-| Symptom | Cause |
+## Configuration reference
+
+Two settings, and that is the whole node.
+
+| Field | Type | Default | Purpose |
+| --- | --- | --- | --- |
+| **FHIR Server URL** | string | *(empty)* | The FHIR base URL whose `$validate` operation to call, with no trailing resource path. Required |
+| **FHIR Profile** | string | *(empty)* | Optional profile canonical URL to validate against. Leave empty to validate against the resource's base definition |
+
+TLS verification is always on and the request timeout is an internal default (15 seconds). Neither is exposed, deliberately — there is no switch to weaken transport security in this catalog.
+
+If a profile is set but the server cannot resolve it, the resource is **not** forwarded. There is no silent fall back to base validation, so a requested profile is either honored or the node stops.
+
+## The samples
+
+The node ships a matched pair you can feed with **Run Test** to see both paths:
+
+| Sample | What happens |
 | --- | --- |
-| Everything comes out **unknown** | **Live Mode** is off, or the server is unreachable, or the base URL is not a FHIR endpoint. Confirm `<base>/metadata` returns a CapabilityStatement. |
-| A resource you expected to pass is **invalid** | The server found a real conformance error. The node log carries the `OperationOutcome` issues. |
-| A custom profile always yields **unknown** | The profile is not installed on that server, so it cannot be resolved. Install it on the server, or validate against a tenant that has it. |
-| Nothing is ever forwarded | Every verdict is invalid or unknown, and the node fails closed. Check the log for the reason on each message. |
-| Valid resources with warnings are dropped | **Block Warnings** is on. Turn it off to forward warning-only resources. |
+| `patient_valid.json` | A realistic Patient with a narrative. The server reports no issues, and the node forwards it |
+| `patient_invalid.json` | The same Patient with an element that is not part of the FHIR spec. The server returns an error, and the node stops |
 
-## Sample output
+## Verify it worked
 
-Real `$validate` responses captured from the public HAPI server ship with the
-node, under
-[`nodes/fhir_validator/samples/`](https://github.com/Linkiir/linkiir-fhir-adapters/tree/main/nodes/fhir_validator/samples):
-a valid outcome, an invalid outcome, and the Patient that produced them.
+- Feeding `patient_valid.json` logs `FHIR Validator: valid, forwarded.` and the downstream node receives the resource unchanged.
+- Feeding `patient_invalid.json` stops the node with `FHIR validation failed`, and nothing is forwarded.
+- The log line summarizes issues by severity — errors and warnings are listed, and routine information-level notes from the server are reported as a count rather than printed in full.
+
+## If it didn't work
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| `no FHIR Server URL is configured` at run | **FHIR Server URL** is empty | Set a FHIR base URL and try again |
+| Every resource stops with a timeout or HTTP error | The server URL is wrong or unreachable | Check the URL is a FHIR base with no trailing resource path, and that the server is reachable from the grid |
+| A resource you expected to pass stops on a profile | The **FHIR Profile** is not installed on the server, so it cannot be resolved | Install the profile on the server, or clear the field to validate against the base definition |
+| A resource passes elsewhere but fails here | This server enforces a rule or profile the other did not | Confirm the two servers and profiles match; the validating server is the authority |
+| The log line is long | The server returned many issues | Only errors and warnings are listed and the line is capped; information-level notes are counted, not printed |
 
 ## Next
 
-- [FHIR Resource Creator](fhir-resource-creator.md) — build the resource this validates
-- [HAPI FHIR / OmniVera Adapter](hapi-fhir.md) — a destination to guard
-- [Linkiir FHIR Adapters](catalogs/fhir.md) — the catalog this node comes from
+- [FHIR Resource Creator](fhir-resource-creator.md) — build the resource this node validates
+- [FHIR Profiling Tools](fhir-profiling-tools.md) — get a JSON template for any FHIR resource
+- [How Adapters Work](how-adapters-work.md)
+- [Custom Scripting Nodes](../interface-development/interfaces/custom-scripting-nodes.md)

@@ -109,3 +109,4 @@ Two Epic behaviors worth knowing: most resource types require at least one searc
 - [How Adapters Work](how-adapters-work.md)
 - [Cerner Adapter](cerner.md)
 - [FHIR Resource Creator](fhir-resource-creator.md)
+- [FHIR Validator](fhir-validator.md)

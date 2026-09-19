@@ -44,9 +44,9 @@ FHIR-native EHR and EMR APIs, and FHIR authoring tools.
 | `ecw_fhir` | **1.0.0** | [history](#ecw_fhir) |
 | `modmed_fhir` | **1.0.0** | [history](#modmed_fhir) |
 | `athena_health` | **1.0.0** | [history](#athena_health) |
-| `fhir_resource` | **1.1.0** | [history](#fhir_resource) |
-| `fhir_profiling` | **1.1.0** | [history](#fhir_profiling) |
+| `fhir_creator` | **1.0.0** | [history](#fhir_creator) |
 | `fhir_validate` | **1.0.0** | [history](#fhir_validate) |
+| `fhir_profiling` | **1.1.0** | [history](#fhir_profiling) |
 
 :::tip[Checking what you are on]
 Open the node in the Builder: the adapter version it was built from is shown on the node, and **Settings → Catalogs** lists every node whose adapter or library has a newer release. See [how to upgrade](./catalogs.md#upgrading-to-a-newer-version).
@@ -129,9 +129,8 @@ _Released 2026-09-17_
 
 _Released 2026-09-18_
 
-- Added an **Observation** resource type alongside Patient, selected by the new **Resource Type** field.
-- Added **Identifier System** and error-routing (**On Error**, **Error Topic**) configuration. With no configuration the node builds a Patient exactly as 1.0.0 did.
-- Array and object shapes are now tagged explicitly, so a sparse input can no longer serialise an object as an empty array.
+- Rebuilt on the new `fhir_creator` helper library with a small, readable mapping in the node script, replacing the previous mapping engine. It adds only the fields the message carries, so the output has no empty scaffolding and no `null` placeholders, and `active: false` is preserved rather than dropped.
+- No configuration fields — the mapping lives in the node script, and a template from the Profile Designer is the field reference.
 
 #### 1.0.0
 
@@ -148,8 +147,9 @@ _Released 2026-09-17_
 _Released 2026-09-18_
 
 - Initial release. Validates an inbound FHIR resource against a FHIR server's `$validate` operation and forwards it only when it validates.
+- Two settings — a FHIR Server URL and an optional profile canonical URL. TLS verification and the request timeout are internal defaults.
 - Strict tri-state verdict — valid, invalid, unknown — and fails closed: a timeout, an HTTP error, a malformed response, or an unresolvable profile all yield unknown, never a false verdict. HTTP 200 is not treated as the verdict (the OperationOutcome is).
-- The resource is sent byte-for-byte and forwarded unchanged on valid. Configurable routing on invalid and unknown, and an optional warnings policy.
+- The resource is sent byte-for-byte and forwarded unchanged on valid; anything short of a clean pass stops the node.
 
 ### FHIR Profiling Tools
 
@@ -235,21 +235,15 @@ _Released 2026-09-17_
 
 - Initial release. client_credentials OAuth for both the proprietary REST API and the FHIR R4 API.
 
-### `fhir_resource`
+### `fhir_creator`
 
-current **1.1.0**
-
-#### 1.1.0
-
-_Released 2026-09-18_
-
-- Maps onto a Patient **or** Observation template. Array and object shapes are tagged explicitly, so a sparse input cannot produce a wrong JSON shape. Reads the resource type and identifier system from node config. 1.0.0 remains published for nodes pinned to it.
+current **1.0.0**
 
 #### 1.0.0
 
-_Released 2026-09-17_
+_Released 2026-09-18_
 
-- Initial release. Builds a FHIR R4 Patient from inbound data. No network or authentication.
+- Initial release. Helpers for hand-building a FHIR resource in a node script: start a resource and append name, identifier, telecom and address, adding only populated fields, then serialize to JSON. Absent, empty and null inputs are omitted by construction, so the output needs no null cleanup. No network or authentication.
 
 ### `fhir_validate`
 
@@ -269,9 +263,7 @@ current **1.1.0**
 
 _Released 2026-09-18_
 
-- Added profile authoring: `baseElements`, `buildProfile` (differential `StructureDefinition`), and `importProfile` (preserves an imported definition whole). 1.0.0 remains published for nodes pinned to it.
-
-#### 1.0.0
+- Added profile authoring: `baseElements`, `buildProfile` (differential `StructureDefinition`), and `importProfile` (preserves an imported definition whole), and powers the Profile Designer. 1.0.0 remains published for nodes pinned to it.
 
 #### 1.0.0
 
