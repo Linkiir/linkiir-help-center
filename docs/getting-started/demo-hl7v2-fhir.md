@@ -1,33 +1,33 @@
 ---
 title: HL7 v2 to FHIR Demo
-description: A ready-to-run Linkiir project that converts HL7 v2 to FHIR and back, profiles and validates FHIR resources, and reads from and writes to a public HAPI FHIR server — with the mapping in plain, editable Lua modules.
-keywords: [demo, HL7 v2, FHIR, HAPI, OmniVera, FHIR validation, FHIR profiling, mapping, getting started]
+description: A ready-to-run Linkiir project that converts HL7 v2 to FHIR and back, profiles and validates FHIR resources, and reads from and writes to a FHIR server — with the mapping in plain, editable Lua modules.
+keywords: [demo, HL7 v2, FHIR, FHIR validation, FHIR profiling, mapping, getting started]
 ---
 
 # HL7 v2 to FHIR Demo
 
-A ready-to-run project that shows how Linkiir moves between **HL7 v2 and FHIR** in both directions, using the [Linkiir FHIR Adapters](../adapters/catalogs/fhir.md). It generates an HL7 v2 admit message, maps it to a FHIR Patient, validates the Patient against a FHIR server, and writes it to a public HAPI FHIR endpoint — then, separately, reads FHIR back from the server and maps it to HL7 v2.
+A ready-to-run project that shows how Linkiir moves between **HL7 v2 and FHIR** in both directions, using the [Linkiir FHIR Adapters](../adapters/catalogs/fhir.md). It generates an HL7 v2 admit message, maps it to a FHIR Patient, validates the Patient against a FHIR server, and writes it back — then, separately, reads FHIR from the server and maps it to HL7 v2.
 
 Import it to learn, hands-on:
 
 - How Linkiir **converts HL7 v2 to FHIR** and **FHIR back to HL7 v2**, with the field-by-field mapping kept in its own readable Lua module.
 - How the **FHIR Profiling Tools** build a FHIR JSON template.
 - How the **FHIR Validator** checks a resource against a server before it is sent.
-- How Linkiir **connects to a public HAPI FHIR server** to read and write real resources.
+- How Linkiir **connects to a FHIR server** to read and write resources.
 
-**[Download HAPI_OmniVera_FHIR_Demo.linkiir.zip](pathname:///downloads/HAPI_OmniVera_FHIR_Demo.linkiir.zip)** (770 KB)
+**[Download FHIR_Demo.linkiir.zip](pathname:///downloads/FHIR_Demo.linkiir.zip)** (770 KB)
 
 One of two [Demo Projects](demo-project.md). For a tour of the core nodes, see the [Feature Demo](demo-feature.md).
 
-:::info[This demo talks to the public HAPI test server]
-Out of the box it points at `https://hapi.fhir.org/baseR4`, a public FHIR sandbox, with authentication set to **None**. It is for learning only — send no real patient data to it. The same nodes point at a production Smile OmniVera endpoint by changing two settings (see [Point it at your own server](#point-it-at-your-own-server)).
+:::info[This demo uses a public FHIR test server]
+So it runs the moment you import it, the demo points at `https://hapi.fhir.org/baseR4` — a free public FHIR sandbox — with authentication set to **None**. It is for learning only; send no real patient data to it. Point the nodes at your own FHIR server by changing two settings (see [Point it at your own server](#point-it-at-your-own-server)).
 :::
 
 ---
 
 ## What's inside
 
-The project **HAPI OmniVera FHIR Demo** contains three independent workflows.
+The project **FHIR Demo** contains three independent workflows.
 
 | Workflow | Flow | What it shows |
 | --- | --- | --- |
@@ -44,13 +44,13 @@ Every node is self-contained — the project carries its own copy of the FHIR li
 1. Open the Linkiir Grid in your browser.
 2. Go to **Projects**.
 3. Click the chevron on **Add Project** and choose **From zip**.
-4. Drop [`HAPI_OmniVera_FHIR_Demo.linkiir.zip`](pathname:///downloads/HAPI_OmniVera_FHIR_Demo.linkiir.zip) on **Choose a project bundle**, or click to browse for it.
+4. Drop [`FHIR_Demo.linkiir.zip`](pathname:///downloads/FHIR_Demo.linkiir.zip) on **Choose a project bundle**, or click to browse for it.
 5. Click **Import**.
 
-The project appears as **HAPI OmniVera FHIR Demo** with three workflows. No additional setup is required.
+The project appears as **FHIR Demo** with three workflows. No additional setup is required.
 
 :::note[Outbound HTTPS]
-WK2 and WK3 call `https://hapi.fhir.org` over the network. On an air-gapped grid, those two workflows will report connection errors — WK1 (the Profiler) runs fully offline. Point WK2/WK3 at a reachable FHIR server to run them.
+WK2 and WK3 call the FHIR server over the network. On an air-gapped grid, those two workflows will report connection errors — WK1 (the Profiler) runs fully offline. Point WK2/WK3 at a reachable FHIR server to run them.
 :::
 
 ---
@@ -146,14 +146,14 @@ Each row is a technique you can lift into your own interfaces.
 
 ## Point it at your own server
 
-The same nodes work against a production Smile OmniVera (or any FHIR R4/R5) endpoint. On the **HAPI FHIR Source** (WK3) and **HAPI FHIR Destination** (WK2), change two settings:
+The same nodes work against any FHIR R4/R5 server. On the FHIR **source** (WK3) and FHIR **destination** (WK2) nodes, change two settings:
 
 | Setting | Public demo | Your server |
 | --- | --- | --- |
 | **FHIR Base URL** | `https://hapi.fhir.org/baseR4` | The endpoint your server provides |
 | **Authentication** | `None (public test endpoint)` | `OAuth2 Backend Services` (or Bearer / Basic), then fill the credential fields |
 
-The nodes ship their credential fields empty; enter yours after import. See the [HAPI FHIR Adapter](../adapters/hapi-fhir.md) for every field.
+The nodes ship their credential fields empty; enter yours after import. See the [FHIR adapter reference](../adapters/hapi-fhir.md) for every field.
 
 ---
 
