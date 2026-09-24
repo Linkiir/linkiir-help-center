@@ -235,6 +235,7 @@ const sidebars: SidebarsConfig = {
           type: 'category', label: 'Linkiir Product Release Notes',
           link: {type: 'doc', id: 'release-notes/product'},
           items: [
+            'release-notes/linkiir-grid-v1.1.0',
             'release-notes/linkiir-grid-v1.0.0',
           ],
         },
