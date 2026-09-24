@@ -1,7 +1,7 @@
 ---
 title: HL7 v2 to FHIR Demo
-description: A ready-to-run Linkiir project that converts HL7 v2 to FHIR and back, profiles and validates FHIR resources, and reads from and writes to a FHIR server — with the mapping in plain, editable Lua modules.
-keywords: [demo, HL7 v2, FHIR, FHIR validation, FHIR profiling, mapping, getting started]
+description: A ready-to-run Linkiir project that converts HL7 v2 to FHIR and back, profiles and validates FHIR resources, and reads from and writes to a FHIR server — with a schema-driven mapping in plain, editable Lua modules.
+keywords: [demo, HL7 v2, FHIR, FHIR validation, FHIR profiling, mapping, schema, code sets, getting started]
 ---
 
 # HL7 v2 to FHIR Demo
@@ -11,11 +11,12 @@ A ready-to-run project that shows how Linkiir moves between **HL7 v2 and FHIR** 
 Import it to learn, hands-on:
 
 - How Linkiir **converts HL7 v2 to FHIR** and **FHIR back to HL7 v2**, with the field-by-field mapping kept in its own readable Lua module.
+- How a **schema drives the mapping**: the HL7 v2 message is parsed against an HL7 v2.5.1 grammar, so the map is written in HL7's own field names and its code tables resolve coded values.
 - How the **FHIR Profiling Tools** build a FHIR JSON template.
 - How the **FHIR Validator** checks a resource against a server before it is sent.
 - How Linkiir **connects to a FHIR server** to read and write resources.
 
-**[Download FHIR_Demo.linkiir.zip](pathname:///downloads/FHIR_Demo.linkiir.zip)** (770 KB)
+**[Download FHIR_Demo.linkiir.zip](pathname:///downloads/FHIR_Demo.linkiir.zip)** (1.1 MB)
 
 One of two [Demo Projects](demo-project.md). For a tour of the core nodes, see the [Feature Demo](demo-feature.md).
 
@@ -73,7 +74,7 @@ See [FHIR Profiling Tools](../adapters/fhir-profiling-tools.md) for the full nod
 
 Start the workflow. Every interval the **Data Simulator** emits a synthetic HL7 v2.5.1 `ADT^A01` (admit), and the chain runs:
 
-1. **HL7v2 to FHIR Mapper** parses the HL7 message and builds a FHIR R4 Patient — MRN, name, gender (normalized from the HL7 code), birth date, phone, and address.
+1. **HL7v2 to FHIR Mapper** parses the HL7 message against an HL7 v2.5.1 `ADT^A01` schema and builds a FHIR R4 Patient — identifiers (MRN, account number, SSN), names, gender, birth date, telecom, and address. Repeating fields map in full: two patient identifiers become two `identifier` entries, two addresses two `address` entries.
 2. **FHIR Validator** posts the Patient to the server's `$validate` operation and only forwards it if the server reports no errors.
 3. **HAPI FHIR Destination** fetches an existing Patient from the server, applies the mapped address to it, and `PUT`s it back — demonstrating a real FHIR write.
 
@@ -92,11 +93,39 @@ The HL7-to-FHIR translation is deliberately kept in its own module, separate fro
 
 | File | Role |
 | --- | --- |
+| **HL7v2 to FHIR Mapper → `hl7v251_adt_a01.json`** | The HL7 v2.5.1 `ADT^A01` schema: segments, fields, composite data types, and the HL7 code tables they are bound to. |
 | **HL7v2 to FHIR Mapper → `hl7v2_to_fhir_map.lua`** | The field-by-field mapping (`toPatient`): HL7 PID → FHIR Patient. Edit this to change what maps where. |
-| **HL7v2 to FHIR Mapper → `main.lua`** | Node glue: receive the message, call the mapper, forward the result. |
+| **HL7v2 to FHIR Mapper → `main.lua`** | Node glue: receive the message, call the mapper, log, forward the result. |
 | **HAPI FHIR Destination → `main.lua`** | Reads the server connection from its own config and writes with the `hapi_fhir` library. |
 
-Open any node's **Scripting** tab to read the code, set breakpoints, and run tests against the sample messages.
+Open any node's **Scripting** tab to read the code, set breakpoints, and run tests against the sample messages. Opening `hl7v251_adt_a01.json` there shows the **Schema Editor**'s tree view in place of the text editor, so you can browse the grammar the mapping is written against.
+
+### How the schema drives the mapping
+
+The mapper does not split the message on `|` and `^` itself. It calls [`linkiir.data.extract`](../api/scripting-api/message-data.md) with the schema, and reads the parse tree by name:
+
+```lua
+local Family = valueAt(Xpn, Source.XPN.Family, Source.FN.Surname)   -- PID-5.1.1
+local City   = valueAt(Xad, Source.XAD.City)                        -- PID-11.3
+```
+
+That buys three things worth copying into your own mappings:
+
+- **Names instead of positions.** Every field and component the map reads is named at the top of `hl7v2_to_fhir_map.lua` in one `Source` table. Moving a value is a one-line change there, and the delimiters come from the message's own `MSH` rather than being hard-coded.
+- **Coded values resolved against HL7's own tables.** Administrative sex, name type, address type, telecom use and identifier type are looked up in the schema's [code sets](../interface-development/lua-programming/code-sets.md). A code HL7 does not define — or one with no FHIR equivalent — is logged as a warning instead of quietly becoming a default:
+
+  ```text
+  HL7v2->FHIR: PID Administrative Sex: 'Z' is not a code in HL7 table 0001
+  ```
+
+  Identifier type displays come straight from HL7 table 0203, so the mapping keeps no second copy of that vocabulary.
+- **A map that is checked against the schema.** On the first message the mapper verifies that every name and data type it declares exists in the grammar, and stops the node with a specific error if not:
+
+  ```text
+  hl7v2_to_fhir_map: PID has no field named 'Patient Adress' in schema 'hl7v251_adt_a01.json' (Source.Field.Address)
+  ```
+
+  A mistyped field name fails loudly rather than silently mapping nothing.
 
 ---
 
@@ -132,14 +161,18 @@ Each row is a technique you can lift into your own interfaces.
 
 | Technique | Where to see it |
 | --- | --- |
-| HL7 v2 parsing (segments, fields, components) | WK2: **HL7v2 to FHIR Mapper** → `hl7v2_to_fhir_map.lua` |
+| Schema-driven HL7 v2 parsing (`linkiir.data.extract`) | WK2: **HL7v2 to FHIR Mapper** → `hl7v2_to_fhir_map.lua` with `hl7v251_adt_a01.json` |
+| Reading a parse tree by HL7 field and component name | WK2: the `Source` table at the top of `hl7v2_to_fhir_map.lua` |
+| Translating coded values through a schema's code sets | WK2: `Source.Table` (HL7 tables 0001, 0190, 0200, 0201, 0202, 0203) |
+| Handling repeating fields, components and sub-components | WK2: `repeatsOf` — every PID-3, PID-5, PID-11 and PID-13 repeat maps |
+| Reporting what did *not* map, instead of defaulting silently | WK2: the warnings the mapper returns and `main.lua` logs |
 | Building a FHIR resource from mapped data | WK2: **HL7v2 to FHIR Mapper** → `hl7v2_to_fhir_map.lua` |
 | Keeping mapping in a separate, reviewable module | Both mappers: `*_map.lua` beside a thin `main.lua` |
 | Validating FHIR against a server before sending | WK2: **FHIR Validator** |
 | Writing to a FHIR server (read, modify, `PUT`) | WK2: **HAPI FHIR Destination** → `main.lua` |
 | Reading from a FHIR server on an interval | WK3: **HAPI FHIR Source** |
-| Mapping FHIR back to HL7 v2 | WK3: **FHIR to HL7v2 Mapper** → `fhir_to_hl7v2_map.lua` |
-| Cross-platform line-ending handling (CR/LF/CRLF) | Both mappers and the printer normalize newlines before parsing |
+| Building an HL7 v2 message from FHIR | WK3: **FHIR to HL7v2 Mapper** → `fhir_to_hl7v2_map.lua` |
+| Cross-platform line-ending handling (CR/LF/CRLF) | WK2: handled by the schema-driven parse; WK3: the printer normalizes before splitting |
 | Building a FHIR JSON template | WK1: **FHIR Profiling Tools** browser page |
 
 ---
@@ -162,6 +195,9 @@ The nodes ship their credential fields empty; enter yours after import. See the 
 | Symptom | Cause | Fix |
 | --- | --- | --- |
 | WK2/WK3 log connection or timeout errors | The grid can't reach `hapi.fhir.org`, or the server is busy | Check outbound HTTPS; the public server is sometimes slow — the next interval retries |
+| The mapper stops with `hl7v2_to_fhir_map: PID has no field named ...` | A name in the map's `Source` table isn't in the schema — usually a typo after an edit | Fix the name to match the grammar; open `hl7v251_adt_a01.json` on the Scripting tab to find the real one |
+| The mapper logs `... is not a code in HL7 table NNNN` | The sender used a code HL7 v2.5.1 doesn't define for that field | Expected on non-conformant feeds; add the code to the schema's table, or map it in `Vocabulary` |
+| A value is in the HL7 message but missing from the Patient | Nothing in `toPatient` maps that field yet | Add it: name the field in `Source.Field`, then read it in `toPatient` |
 | FHIR Validator stops the message | The server reported a real error on the resource | Read the node log; the summary lists the issues by severity |
 | A profile always fails validation | The profile isn't installed on the server | Clear the **FHIR Profile** field, or use a server that has it |
 | WK3 prints `PID` segments with empty name fields | The public Patient had no name/DOB | Expected with public test data; WK2 shows full messages |
@@ -174,6 +210,8 @@ The nodes ship their credential fields empty; enter yours after import. See the 
 | Goal | Read |
 | --- | --- |
 | The FHIR adapters this demo builds on | [Linkiir FHIR Adapters](../adapters/catalogs/fhir.md) |
+| Parsing and building messages against a schema | [Message Data](../api/scripting-api/message-data.md) |
+| Translating coded values between systems | [Code Sets](../interface-development/lua-programming/code-sets.md) |
 | The validation node in depth | [FHIR Validator](../adapters/fhir-validator.md) |
 | The profiling node in depth | [FHIR Profiling Tools](../adapters/fhir-profiling-tools.md) |
 | The read/write FHIR client | [HAPI FHIR Adapter](../adapters/hapi-fhir.md) |
