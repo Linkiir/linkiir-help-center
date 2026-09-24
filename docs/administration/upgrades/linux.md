@@ -4,6 +4,10 @@ title: Upgrade on Linux
 
 # Upgrade on Linux
 
+:::note
+Most Linux (systemd) installs upgrade themselves from **Settings ▸ About** — see [Upgrades](index.md) for the built-in rolling upgrade. Use this installer procedure when the built-in upgrade can't be used or won't complete, for example when staging a release on an air-gapped server or recovering from a failed rolling upgrade.
+:::
+
 Use the same package variant and queue mode as the installed system.
 
 ```bash

@@ -4,13 +4,17 @@ title: Upgrade on macOS
 
 # Upgrade on macOS
 
-Extract the new offline bundle, copy the existing `.env`, and run the new bundle’s upgrade command.
+:::note
+macOS runs as a Docker/container install, which upgrades by recreating the container rather than from the About page. See [Docker installs](index.md#docker-installs) in [Upgrades](index.md) for the overview; this page covers the command-line flow in detail.
+:::
+
+Extract the new offline bundle, copy the existing `.env`, and run the new bundle’s install command.
 
 ```bash
-unzip linkiir-1.1.0-macos-docker-kafka-arm64.zip
-cd linkiir-1.1.0-macos-docker-kafka-arm64
-cp ../linkiir-1.0.0-macos-docker-kafka-arm64/.env .
-./scripts/linkiirctl upgrade
+tar zxf linkiir-1.1.0-linux-docker-kafka-arm64.tar.gz
+cd linkiir-1.1.0-linux-docker-kafka-arm64
+cp ../linkiir-1.0.0-linux-docker-kafka-arm64/.env .
+./scripts/linkiirctl install
 ```
 
 Use the same broker variant and CPU architecture. The upgrade:
@@ -28,4 +32,4 @@ Verify:
 ./scripts/linkiirctl doctor
 ```
 
-For rollback, restore the previous image tag and `.env` backup, then run `upgrade` again while the previous image remains available.
+For rollback, restore the previous image tag and `.env` backup, then run `install` again while the previous image remains available.

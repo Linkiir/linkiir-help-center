@@ -4,6 +4,10 @@ title: Upgrade on Windows
 
 # Upgrade on Windows
 
+:::note
+Most Windows installs upgrade themselves from **Settings ▸ About** — see [Upgrades](index.md) for the built-in rolling upgrade. Use this installer procedure when the built-in upgrade can't be used or won't complete.
+:::
+
 Run the new installer over the existing installation. Do **not** uninstall first.
 
 ## Procedure
