@@ -76,7 +76,7 @@ After a rollback, the About page shows an **Update rolled back** notice with:
 - the reason it didn't complete,
 - the path to the apply log (useful if you contact support).
 
-You can try again later (for example after a newer release) or send the reason and log to support at **support@linkiir.com**. If the rolling upgrade repeatedly won't complete, upgrade with the platform-specific installer for your operating system instead.
+You can try again later (for example after a newer release). If the rolling upgrade repeatedly won't complete, upgrade with the platform-specific installer for your operating system instead.
 
 ## Docker installs
 
@@ -123,12 +123,10 @@ The About page reloads on its own once the Grid is reachable again. If it keeps 
 Grid couldn't reach the update server or verify the download. Check the server's internet access (or proxy setting), then click **Check now** to retry. On an offline server, download and install manually instead — see [Offline / air-gapped servers](#offline--air-gapped-servers).
 
 **The update rolled back.**
-The new version didn't pass its health check, so Grid restored the previous version automatically. See [If an update is rolled back](#if-an-update-is-rolled-back). Send the reason and apply-log path shown on the About page to **support@linkiir.com**.
+The new version didn't pass its health check, so Grid restored the previous version automatically. See [If an update is rolled back](#if-an-update-is-rolled-back).
 
 **My install is container-managed.**
 Docker installs upgrade by recreating the container, not from the About page. See [Docker installs](#docker-installs).
 
 **The rolling upgrade won't complete.**
 Fall back to the platform-specific installer for your operating system: [Windows](windows.md), [Linux](linux.md), or [macOS](macos.md).
-
-Still stuck? Contact **support@linkiir.com**.
