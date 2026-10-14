@@ -40,7 +40,12 @@ const SHOW_NOT_AVAILABLE = false;
 
 function mdxEscape(s) {
   if (s == null) return s;
-  return s.replace(/\{/g, '\\{').replace(/\}/g, '\\}').replace(/</g, '\\<').replace(/>/g, '\\>');
+  return s.replace(/\{/g, '\\{').replace(/\}/g, '\\}').replace(/</g, '\\<').replace(/>/g, '\\>')
+    // A colon opening a word (":value()", ":memory:") starts a Markdown
+    // directive; one after a word ("http:", "Note:") doesn't, unless a
+    // [label] follows the name ("HH:MM:SS[.fff]").
+    .replace(/(^|[^\w\\]):(?=[A-Za-z])/g, '$1\\:')
+    .replace(/(^|[^\\]):(?=[A-Za-z]\w*\[)/g, '$1\\:');
 }
 
 // Object-literal-like snippets (contain `{` or `<`) read better as inline code

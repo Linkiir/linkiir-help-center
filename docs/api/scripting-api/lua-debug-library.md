@@ -6,7 +6,7 @@ title: Lua Debug Library
 
 `debug`
 
-Standard Lua 5.1 debug library: introspection and instrumentation for the call stack, locals, upvalues, and metatables. debug.traceback is the one function commonly useful in workflow scripts (paired with xpcall to capture where an error occurred); the rest are low-level tools for advanced debugging.
+Lua 5.1's debug library for inspecting the call stack, locals, upvalues and metatables. debug.traceback with xpcall is the part most useful in workflow scripts.
 
 ---
 
@@ -275,7 +275,7 @@ debug.setmetatable(object, table)
 
 Set a value's metatable, bypassing __metatable.
 
-Sets the metatable for object to table (which can be nil). Returns object. Unlike setmetatable(), ignores the __metatable field.
+Sets object's metatable to table, or nil, ignoring any __metatable field, and returns object.
 
 **Usage**
 

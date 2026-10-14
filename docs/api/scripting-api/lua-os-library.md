@@ -6,7 +6,7 @@ title: Lua OS Library (time/env)
 
 `os`
 
-Time and environment functions from the standard Lua 5.1 os library, plus the file/process functions (os.execute, os.remove, os.rename, os.tmpname, os.exit). The file/process functions are fully functional but are a Linkiir convention to avoid in workflow scripts — they bypass logging/auditing and portability that linkiir.sys.fs (local filesystem) and linkiir.link.file (remote transfer) provide, and os.exit()/os.execute() can terminate or fork the worker process outright. Prefer the linkiir.* equivalents unless you specifically need raw OS access. os.remove and os.rename resolve paths the same way as linkiir.sys.fs: a relative path resolves against the Runtime's working directory (linkiir.sys.workingDir()), an absolute path is used unchanged, and a path that escapes the working directory via '..' raises an error. os.execute, os.exit and os.tmpname are unwrapped and still act on the raw process.
+Lua 5.1's time, environment, file and process functions. Prefer linkiir.sys.fs and linkiir.link.file over the file and process functions, which bypass logging and can end the worker process.
 
 ---
 
@@ -196,7 +196,7 @@ os.execute([command])
 
 Run a shell command.
 
-Passes command to the system shell (via C's system()) and returns its exit status. With no argument, returns whether a shell is available. Runs with the worker process's OS privileges — discouraged in workflow scripts; prefer linkiir.sys.fs / linkiir.link.file for file and transfer work.
+Runs a command in the system shell and returns its exit status. Discouraged in workflow scripts; use linkiir.sys.fs or linkiir.link.file instead.
 
 **Usage**
 
@@ -232,7 +232,7 @@ os.remove(filename)
 
 Delete a file.
 
-Deletes the file (or empty directory, on POSIX) at filename. Returns true on success, or nil plus an error message on failure. Prefer linkiir.sys.fs.remove, which is scoped to the node's working directories. A relative path resolves against the Runtime's working directory (linkiir.sys.workingDir()), not the process working directory; an absolute path is used unchanged, and a path escaping the working directory via '..' raises an error.
+Deletes a file, returning true or nil and an error message. A relative path resolves against linkiir.sys.workingDir(), and a path escaping it with .. raises an error.
 
 **Usage**
 
@@ -268,7 +268,7 @@ os.rename(oldname, newname)
 
 Rename/move a file.
 
-Renames the file or directory at oldname to newname. Returns true on success, or nil plus an error message on failure. A relative path resolves against the Runtime's working directory (linkiir.sys.workingDir()), not the process working directory; an absolute path is used unchanged, and a path escaping the working directory via '..' raises an error.
+Renames or moves a file, returning true or nil and an error message. A relative path resolves against linkiir.sys.workingDir(), and a path escaping it with .. raises an error.
 
 **Usage**
 

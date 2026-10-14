@@ -31,9 +31,9 @@ local conn, err = linkiir.store.open{ driver=, name=, user=, password=, timeout=
 | Name | Type | Required | Description |
 | --- | --- | --- | --- |
 | `driver` | integer | Yes | One of the linkiir.store.* driver constants (e.g. linkiir.store.SQLITE). These are integer values, not strings. |
-| `name` | string | Yes | DSN / host / database / file, per driver. For SQLITE this is a file path: a relative path resolves against the Runtime's working directory (linkiir.sys.workingDir()), never the process working directory, and an absolute path is used unchanged. The :memory: sentinel and file: URIs are passed to SQLite untouched. For every other driver the value is a server, DSN or database name and is never treated as a path. |
-| `user` | string | No | Username. |
-| `password` | string | No | Password. |
+| `name` | string | Yes | The DSN, host, database or file, per driver: for ODBC drivers a connection string or DSN name, for SQLITE a file path. A relative SQLite path resolves against linkiir.sys.workingDir(). |
+| `user` | string | No | Username. For the ODBC drivers it is added to the connection string as UID unless the string already sets UID. |
+| `password` | string | No | Password. For the ODBC drivers it is added to the connection string as PWD unless the string already sets PWD. |
 | `timeout` | integer | No | Connect timeout (seconds). |
 | `live` | boolean | No | Default true. |
 
@@ -62,12 +62,12 @@ if not Conn then error(Err.message) end
 *function*
 
 ```lua
-linkiir.store.tables{ name= }
+linkiir.store.tables{ name=, schema= }
 ```
 
 Create an empty database table node tree.
 
-Create an empty database table node tree for building rows to insert or update. The returned node is a Linkiir node (protocol code 103 = DB) that can be populated field by field, then passed to Connection:execute for INSERT/UPDATE operations.
+Creates an empty table tree to fill with rows (tbl[#tbl+1] = \{ id = 1, name = 'John' \}) and write with Connection:merge. With `schema`, each column is checked against the DB Schema as it's set.
 
 **Usage**
 
@@ -79,7 +79,8 @@ local tbl = linkiir.store.tables{ name = 'patients' }
 
 | Name | Type | Required | Description |
 | --- | --- | --- | --- |
-| `name` | string | Yes | Table name in the database. |
+| `name` | string | Yes | Table name in the database; with schema, a table of the schema. |
+| `schema` | string | No | DB Schema JSON file defining the table (e.g. db.json). |
 
 **Returns**
 
@@ -88,13 +89,51 @@ local tbl = linkiir.store.tables{ name = 'patients' }
 **Example**
 
 ```lua
-local tbl = linkiir.store.tables{ name = 'patients' }
-tbl.first_name = 'John'
-tbl.last_name = 'Smith'
-Conn:execute{ sql = 'insert into patients (first_name, last_name) values ('
-                    .. Conn:quote(tbl.first_name:value()) .. ', '
-                    .. Conn:quote(tbl.last_name:value()) .. ')' }
+local Patients = {
+   { id = 1, first_name = 'John', last_name = 'Smith' },
+   { id = 2, first_name = 'Jane', last_name = 'Doe' },
+}
+local Tbl = linkiir.store.tables{ name = 'patients' }
+for _, P in ipairs(Patients) do
+   Tbl[#Tbl + 1] = P
+end
+Tbl[1].dob = '1980-04-12'   -- add a column to one row
+local Merged, Err = Conn:merge{ data = Tbl, key = 'id' }
+if not Merged then error(Err.message) end
 ```
+
+```lua
+-- patients is defined in the node's db.json DB Schema.
+local Tbl = linkiir.store.tables{ schema = 'db.json', name = 'patients' }
+Tbl[#Tbl + 1] = { id = 1, mrn = 'A1', active = 'true', dob = '1980-04-12' }   -- active is stored as 1
+Tbl[1].dob = '1980-02-30'   -- raises: '1980-02-30' is not a date (YYYY-MM-DD)
+-- Upserts on the schema's primary key; key = false would INSERT instead.
+local Merged, Err = Conn:merge{ data = Tbl }
+if not Merged then error(Err.message) end
+```
+
+
+## `linkiir.store.NULL`
+
+*field*
+
+```lua
+linkiir.store.NULL
+```
+
+Column value that writes SQL NULL.
+
+A column value that writes SQL NULL, since Lua nil can't be stored in a row table. A NULL column in a query result reads as "", and \:isNull() returns true.
+
+**Usage**
+
+```lua
+tbl[#tbl+1] = { id = 1, middle_name = linkiir.store.NULL }
+```
+
+**Returns**
+
+- `sentinel` — A unique table; compare with ==.
 
 
 ## `linkiir.store.SQLITE`
@@ -107,7 +146,7 @@ linkiir.store.SQLITE
 
 Driver constant (1013).
 
-SQLite (file-based database). The name parameter is the file path. Pass as the driver= argument to linkiir.store.open.
+SQLite, a file-based database whose `name` is the file path. Pass it as `driver` to linkiir.store.open.
 
 **Usage**
 
@@ -199,7 +238,7 @@ linkiir.store.POSTGRES_ODBC
 
 Driver constant (1002).
 
-PostgreSQL via ODBC. The name parameter is the connection string or database name. Pass as the driver= argument to linkiir.store.open.
+PostgreSQL via ODBC, whose `name` is the connection string or DSN. Pass it as `driver` to linkiir.store.open.
 
 **Usage**
 
@@ -291,7 +330,9 @@ local driver = linkiir.store.MYSQL_ODBC
 conn:query{ sql=, live= }
 ```
 
-SELECT; rows navigable as a node tree. A params binding table is NOT supported: it is silently ignored, and $1 style placeholders are sent to the database verbatim. Interpolate values with conn:quote(), which escapes and quotes them for the driver in use.
+SELECT; rows navigable as a node tree.
+
+Runs a SELECT and returns its rows as a node tree: result[1].colname:value(), and #result for the row count. Parameter binding isn't supported, so add values with conn:quote().
 
 **Usage**
 
@@ -334,7 +375,9 @@ end
 conn:execute{ sql=, live= }
 ```
 
-INSERT/UPDATE/DELETE/DDL. A params binding table is NOT supported: it is silently ignored, and $1 style placeholders are sent to the database verbatim. Interpolate values with conn:quote(), which escapes and quotes them for the driver in use.
+INSERT/UPDATE/DELETE/DDL.
+
+Runs an INSERT, UPDATE, DELETE or DDL statement. Parameter binding isn't supported, so add values with conn:quote().
 
 **Usage**
 
@@ -371,32 +414,35 @@ As with `conn:query`, `sql` reaches the database exactly as written, and `$1`-st
 *method of `Connection`*
 
 ```lua
-conn:merge{ data=<tableTree>, live= }
+conn:merge{ data=<tableTree>, key=, live= }
 ```
 
-Upsert a table tree from linkiir.data.tables.
+Insert or upsert the rows of a linkiir.store.tables tree.
+
+Writes every row of a linkiir.store.tables tree in one transaction. Without `key` each row is inserted; with `key` each row is upserted on those columns.
 
 **Usage**
 
 ```lua
-local n, err = conn:merge{ data=<tableTree> }
+local n, err = conn:merge{ data=<tableTree>, key='id' }
 ```
 
 **Parameters**
 
 | Name | Type | Required | Description |
 | --- | --- | --- | --- |
-| `data` | node | Yes | A linkiir.data.tables node tree to upsert. |
+| `data` | node | Yes | A linkiir.store.tables node tree. |
+| `key` | string\|table\|false | No | Column name, or list of column names, to match existing rows on. Omit for plain inserts, or for a schema-built table to use the schema's primary key; false for plain inserts into a schema-built table. |
 | `live` | boolean | No | Default true; false simulates. |
 
 **Returns**
 
-- rows merged, err
+- number of rows written, or nil and err
 
 **Example**
 
 ```lua
-local Merged, Err = Conn:merge{ data = TableTree }
+local Merged, Err = Conn:merge{ data = TableTree, key = 'id' }
 if not Merged then error(Err.message) end
 ```
 
@@ -538,9 +584,9 @@ end
 conn:quote(s)
 ```
 
-Escape a value for use in a statement.
+Quote a string as a SQL literal for the driver in use.
 
-Escape a value so it can be included in the `sql` text passed to conn:query or conn:execute. Use it on every value that came from a message, a variable, or user input.
+Quotes a string as a SQL literal for the driver in use, as N'...' on SQL Server. Use it on every value that came from a message, a variable or user input.
 
 **Usage**
 

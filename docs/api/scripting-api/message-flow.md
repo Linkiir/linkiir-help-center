@@ -62,7 +62,9 @@ local MessageId = linkiir.flow.push{ data = Out:text(), topic = 'adt.out' }
 linkiir.flow.configure{ bootstrap=, project=, workflow=, node=, topic= }
 ```
 
-Configure the flow context (node identity and Kafka settings). Non-empty fields override the current value; empty fields are left unchanged. Context is also initialized from environment variables (LINKIIR_KAFKA_BOOTSTRAP, LINKIIR_PROJECT_ID, LINKIIR_WORKFLOW_ID, LINKIIR_NODE_ID, LINKIIR_OUTPUT_TOPIC).
+Configure the flow context (node identity and Kafka settings).
+
+Sets the flow context's node identity and Kafka settings; empty fields keep their current value. The context is also read from the LINKIIR_* environment variables.
 
 **Usage**
 

@@ -1,0 +1,1 @@
+{"title":"Body","body":{"content":{"application/json":{"schema":{"properties":{"url":{"type":"string","title":"Url","description":"Base URL of the other Grid, e.g. https://grid-b:8080"}},"type":"object","required":["url"],"title":"TestPeerRequest"}}},"required":true}}

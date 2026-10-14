@@ -97,7 +97,7 @@ table.concat(t [, sep [, i [, j]]])
 
 Join array elements into a string.
 
-Returns t[i] .. sep .. t[i+1] .. sep .. ... .. t[j]. sep defaults to the empty string; i defaults to 1; j defaults to #t.
+Returns t[i] .. sep .. t[i+1] .. ... .. t[j]. sep defaults to "", i to 1 and j to #t.
 
 **Usage**
 

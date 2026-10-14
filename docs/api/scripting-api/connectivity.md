@@ -6,7 +6,7 @@ title: Connectivity
 
 `linkiir.link`
 
-All connectivity to external systems, named for the heart of Linkiir. Sub-areas: web (HTTP), socket (TCP), mail (SMTP), file (FTP/FTPS/SFTP). All calls return result, err.
+All connectivity to external systems: web (HTTP), socket (TCP), mail (SMTP) and file (FTP/FTPS/SFTP). Every call returns result, err.
 
 
 Every outbound HTTP call can present a client certificate, for destinations that require mutual TLS. See [Client certificates (mutual TLS)](#client-certificates-mutual-tls).

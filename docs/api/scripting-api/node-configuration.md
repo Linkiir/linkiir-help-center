@@ -6,7 +6,7 @@ title: Node Configuration
 
 `linkiir.config`
 
-Read the current node's configuration fields. Values come from the config fields set on the node in the Node Parameters panel, flattened into a single label → value table. Password fields are decrypted automatically. The result is cached for the lifetime of the script VM: the first call reads and parses the configuration, every later call returns the same table with no I/O.
+Reads the current node's configuration fields as a single label → value table, with password fields decrypted. The table is read once per script and cached.
 
 ---
 
@@ -20,7 +20,7 @@ linkiir.config.node()
 
 Return this node's configuration as a label → value table.
 
-Reads the current node's configuration and returns a flat table keyed by each config entry's label. Strings, numbers, and booleans map straight across. Labels that are absent, null, or hold an object or array read as nil. The table is cached per script VM: the configuration is read once, and every later call returns that same table.
+Returns the node's configuration as a table keyed by each field's label. Absent or empty fields read as nil, and the table is cached after the first call.
 
 **Usage**
 

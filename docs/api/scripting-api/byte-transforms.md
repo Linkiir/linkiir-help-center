@@ -6,7 +6,7 @@ title: Byte Transforms
 
 `linkiir.codec`
 
-Everything that turns bytes into other bytes and back: text encodings, compression, and character-set conversion. Consistent verbs: encode/decode, compress/decompress. Pure functions (raise on error).
+Converts bytes to other bytes and back: text encodings, compression and character-set conversion. Functions raise on error.
 
 ---
 
@@ -313,7 +313,7 @@ linkiir.codec.html.decode(s)
 
 Decode using html.
 
-Decode HTML entities and numeric character references back to text. Handles the named entities &amp;, &lt;, &gt;, &quot; and &nbsp; (decoded as a plain space), decimal references (&#39;) and hex references (&#x27;, &#X27;). Numeric references are emitted as UTF-8, so codepoints above U+007F expand to multiple bytes. Unknown entities and malformed sequences (no closing semicolon within 12 characters) pass through verbatim, so decode(encode(s)) round-trips.
+Decodes HTML entities and numeric character references back to UTF-8 text. Unknown or malformed entities are left as they are.
 
 **Usage**
 

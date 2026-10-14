@@ -6,7 +6,7 @@ title: Runtime & System
 
 `linkiir.sys`
 
-Small runtime helpers and filesystem access in one place. Time/env helpers (os.date, os.time, os.getenv) stay as native Lua. Path resolution: every linkiir.sys.fs function resolves a relative path against the Runtime's working directory (linkiir.sys.workingDir()), never the process working directory. An absolute path is used unchanged. A relative path that escapes the working directory via .. is rejected.
+Runtime helpers and filesystem access. Relative linkiir.sys.fs paths resolve against linkiir.sys.workingDir(), and paths escaping it with .. are rejected.
 
 ---
 
@@ -20,7 +20,7 @@ linkiir.sys.guid(bits)
 
 Generate a random GUID of the requested bit length.
 
-Generate a random GUID. The bit count is required: it must be at least 128 and divisible by 8. Calling guid() with no argument, or with fewer than 128 bits, raises a Lua error.
+Generates a random GUID of the given bit count, which must be at least 128 and divisible by 8. Raises on a missing or invalid count.
 
 **Usage**
 
@@ -105,7 +105,7 @@ linkiir.sys.workingDir()
 
 Absolute path of the Runtime's working directory.
 
-Absolute path of the Runtime's working directory - the parent of projects/, users/, logs/ and run/. This is the base a relative linkiir.store or linkiir.sys.fs path resolves against, so a project built on it means the same thing regardless of how the service was started. Returns the same value under Run Test and Debug as the live Runtime reports for that node.
+Returns the absolute path of the Runtime's working directory, which relative linkiir.store and linkiir.sys.fs paths resolve against.
 
 **Usage**
 
@@ -142,7 +142,7 @@ linkiir.sys.nodeDir()
 
 Absolute path of the executing node's directory.
 
-Absolute path of the directory the executing node's files were loaded from. Under the live Runtime this is the staged run folder; under Run Test and Debug it is your dev clone. Replaces the deprecated __node_dir global. A relative schema path already resolves against this directory, so concatenation is not needed.
+Returns the absolute path of the directory the executing node's files were loaded from. Replaces the deprecated __node_dir global.
 
 **Usage**
 

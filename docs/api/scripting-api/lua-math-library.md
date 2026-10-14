@@ -500,7 +500,7 @@ math.random([m [, n]])
 
 Pseudo-random number.
 
-With no arguments, returns a float in [0, 1). With one integer argument m, returns an integer in [1, m]. With two integer arguments m, n, returns an integer in [m, n].
+Returns a float in [0, 1), or with integer arguments an integer in [1, m] or [m, n].
 
 **Usage**
 

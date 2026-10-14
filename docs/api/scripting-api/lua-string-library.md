@@ -6,7 +6,7 @@ title: Lua String Library
 
 `string`
 
-Standard Lua 5.1 string library. Available as both `string.fn(s, ...)` and object-style `s:fn(...)`, since every string has a metatable pointing back to this table. Pattern-matching functions (find, match, gmatch, gsub) use Lua patterns, not full regular expressions.
+Lua 5.1's string library, callable as string.fn(s, ...) or s:fn(...). find, match, gmatch and gsub use Lua patterns, not regular expressions.
 
 ---
 
@@ -93,7 +93,7 @@ string.dump(function)
 
 Serialize a function to a binary chunk.
 
-Returns a binary string containing a loadable, compiled representation (bytecode) of function. To load and run it again, pass the string to loadstring (or load). Only works on Lua functions defined in the script itself, not C functions exposed by the runtime (print, linkiir.*, etc.).
+Returns a function's compiled bytecode as a string, which loadstring can load again. Works only on Lua functions defined in the script.
 
 **Usage**
 
@@ -131,7 +131,7 @@ string.find(s, pattern [, init [, plain]])
 
 Find the first match of a pattern in a string.
 
-Looks for the first match of pattern in s, starting search at position init. Returns the start and end indices of the match, plus any captures. Returns nil if no match. If plain is true, pattern is matched as a literal substring (no Lua pattern special characters).
+Returns the start and end of the first match of pattern in s from position init, plus any captures, or nil. With plain true, the pattern is a literal string.
 
 **Usage**
 
@@ -250,7 +250,7 @@ string.gsub(s, pattern, repl [, n])
 
 Global substitution by pattern.
 
-Returns a copy of s in which all (or, if n is given, at most n) occurrences of pattern have been replaced by repl. repl may be a string (with %1..%9 capture references and %0 for the whole match), a table (indexed by the first capture), or a function (called with the captures; its result replaces the match, or the match is kept unchanged if it returns nil/false).
+Returns a copy of s with every match of pattern (or the first n) replaced by repl, and the number of matches. repl may be a string with %1-%9 captures, a table or a function.
 
 **Usage**
 

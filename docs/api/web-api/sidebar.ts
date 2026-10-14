@@ -534,6 +534,12 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "api/web-api/update-node-permissions-api-update-node-permissions-project-guid-workflow-guid-node-guid-put",
+          label: "Update a node's runtime permissions",
+          className: "api-method put",
+        },
+        {
+          type: "doc",
           id: "api/web-api/update-node-details-api-update-node-details-project-guid-workflow-guid-node-guid-put",
           label: "Update a node's name, type, and description",
           className: "api-method put",
@@ -630,6 +636,12 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "api/web-api/download-node-file-api-download-node-file-get",
+          label: "Download a node file",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
           id: "api/web-api/create-node-file-api-create-node-file-post",
           label: "Create a node file",
           className: "api-method post",
@@ -714,9 +726,21 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
-          id: "api/web-api/download-node-file-api-download-node-file-get",
-          label: "Download a node file",
+          id: "api/web-api/generate-data-map-api-generate-data-map-post",
+          label: "Read a Data Map node and generate its Lua",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/get-data-map-catalog-api-get-data-map-catalog-get",
+          label: "The Map view's functions and standard placements",
           className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/build-data-map-schema-api-build-data-map-schema-post",
+          label: "Add catalog messages or resource types to a Data Map schema",
+          className: "api-method post",
         },
       ],
     },
@@ -848,6 +872,66 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
+      label: "Schemas",
+      items: [
+        {
+          type: "doc",
+          id: "api/web-api/get-schema-catalog-api-get-schema-catalog-get",
+          label: "List a standard catalog's messages",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/import-schema-message-api-import-schema-message-post",
+          label: "Import a standard message into a schema",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/import-schema-sample-api-import-schema-sample-post",
+          label: "Build a JSON or XML structure from a sample",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/get-db-connection-form-api-get-db-connection-form-get",
+          label: "Describe the Schema Editor's database connection form",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/test-db-connection-api-test-db-connection-post",
+          label: "Check that a database connection works",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/list-db-tables-api-list-db-tables-post",
+          label: "List the tables in a database",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/import-db-table-api-import-db-table-post",
+          label: "Read a table from a database into a database schema",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/db-table-sql-api-db-table-sql-post",
+          label: "Write a database schema's table as CREATE TABLE",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/export-db-table-api-export-db-table-post",
+          label: "Create a database schema's table in a database",
+          className: "api-method post",
+        },
+      ],
+    },
+    {
+      type: "category",
       label: "Settings",
       items: [
         {
@@ -954,6 +1038,18 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "api/web-api/get-phi-masking-settings-route-api-phi-masking-settings-get",
+          label: "Get PHI masking settings",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/update-phi-masking-settings-api-phi-masking-settings-put",
+          label: "Update PHI masking settings",
+          className: "api-method put",
+        },
+        {
+          type: "doc",
           id: "api/web-api/get-http-server-settings-api-http-server-settings-get",
           label: "Get HTTP server settings",
           className: "api-method get",
@@ -1020,12 +1116,6 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
-          id: "api/web-api/get-version-info-api-version-info-get",
-          label: "Get version and directory info",
-          className: "api-method get",
-        },
-        {
-          type: "doc",
           id: "api/web-api/get-user-ssh-key-api-user-ssh-key-name-get",
           label: "Read a user's generated SSH key",
           className: "api-method get",
@@ -1041,6 +1131,54 @@ const sidebar: SidebarsConfig = {
           id: "api/web-api/test-user-ssh-connection-api-test-user-ssh-connection-name-post",
           label: "Test a user's SSH key against a git server",
           className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/get-version-info-api-version-info-get",
+          label: "Get version and directory info",
+          className: "api-method get",
+        },
+      ],
+    },
+    {
+      type: "category",
+      label: "Updates",
+      items: [
+        {
+          type: "doc",
+          id: "api/web-api/get-update-status-api-update-status-get",
+          label: "Get Update Status",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/post-update-check-api-update-check-post",
+          label: "Post Update Check",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/post-update-download-api-update-download-post",
+          label: "Post Update Download",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/post-update-apply-api-update-apply-post",
+          label: "Post Update Apply",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/get-update-settings-api-settings-updates-get",
+          label: "Get Update Settings",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/put-update-settings-api-settings-updates-put",
+          label: "Put Update Settings",
+          className: "api-method put",
         },
       ],
     },
@@ -1131,6 +1269,84 @@ const sidebar: SidebarsConfig = {
           id: "api/web-api/get-items-api-items-get",
           label: "Get Items",
           className: "api-method get",
+        },
+      ],
+    },
+    {
+      type: "category",
+      label: "High Availability",
+      items: [
+        {
+          type: "doc",
+          id: "api/web-api/ha-status-api-ha-status-get",
+          label: "Ha Status",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/health-active-api-health-active-get",
+          label: "Health Active",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/ha-ping-api-ha-ping-get",
+          label: "Ha Ping",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/ha-preflight-api-ha-preflight-get",
+          label: "Ha Preflight",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/ha-enable-api-ha-enable-post",
+          label: "Ha Enable",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/ha-disable-api-ha-disable-post",
+          label: "Ha Disable",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/ha-stepdown-api-ha-stepdown-post",
+          label: "Ha Stepdown",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/ha-pair-api-ha-pair-get",
+          label: "Ha Pair",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/ha-set-node-api-ha-pair-node-id-put",
+          label: "Ha Set Node",
+          className: "api-method put",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/ha-forget-node-api-ha-pair-node-id-delete",
+          label: "Ha Forget Node",
+          className: "api-method delete",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/ha-test-peer-api-ha-test-peer-post",
+          label: "Ha Test Peer",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/ha-set-timings-api-ha-settings-put",
+          label: "Ha Set Timings",
+          className: "api-method put",
         },
       ],
     },

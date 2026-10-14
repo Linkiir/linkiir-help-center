@@ -6,7 +6,7 @@ title: Message Data
 
 `linkiir.data`
 
-Parse (extract), build (create), and serialize messages of any supported format (HL7, X12, XML), plus the node-tree interface returned by those calls. XML supports schema-free parsing (schema optional).
+Parses, builds and serializes messages in HL7 v2, X12, FHIR, CDA and XML as node trees. Documents of a plain JSON or XML schema are read into Lua tables with parse and written back with serialize.
 
 ---
 
@@ -20,7 +20,7 @@ linkiir.data.extract{ schema=, data=, type= }
 
 Parse a wire message into a node tree.
 
-Parse a raw wire message into a Linkiir node tree, identify the matched message definition from the grammar, and return both. The tree is read/write.
+Parses a raw message into a read/write node tree and returns it with the message definition the schema matched. For documents of a plain JSON or XML schema, use linkiir.data.parse.
 
 **Usage**
 
@@ -33,13 +33,13 @@ linkiir.data.extract{ schema = <string>, data = <string> [, type = <string>] }
 | Name | Type | Required | Description |
 | --- | --- | --- | --- |
 | `schema` | string | Yes | Linkiir grammar JSON file (e.g. demo.json). |
-| `data` | string | Yes | Raw message text (HL7 v2, X12, XML, or JSON). |
-| `type` | string | No | Protocol override: "hl7", "x12", "xml", "json". Defaults to the grammar's protocol. |
+| `data` | string | Yes | Raw message text (HL7 v2, X12, FHIR JSON or XML, CDA, or XML). |
+| `type` | string | No | Protocol override: "hl7", "x12", "fhir", "cda" or "xml" (schema-free), defaulting to the schema's protocol. |
 
 **Returns**
 
 - `node` — root of the parsed tree (Linkiir node) — see the Node:* methods in this module.
-- `messageType` — grammar message-definition name (e.g. "ADT", "837").
+- `messageType` — grammar message-definition name (e.g. "ADT", "837", "Patient", "ContinuityofCareDocumentCCD"), or "unknown" when no match rule or message definition identifies the message.
 
 **Errors**
 
@@ -59,23 +59,98 @@ local ok, msg, mtype = pcall(linkiir.data.extract, { schema = 'demo.json', data 
 if not ok then error('extract failed: ' .. tostring(msg)) end
 ```
 
+```lua
+-- FHIR (JSON or XML). 'name' is also a node method, so use :child.
+local Pat, ResType = linkiir.data.extract{ schema = 'fhir.json', data = Data }
+print(ResType)                                 -- "Patient"
+print(Pat:child('name')[1].family:value())     -- "Chalmers"
+Pat.active = true                              -- written as a JSON boolean
+
+-- CDA: an XML tree, typed by its templateId.
+local Doc, DocType = linkiir.data.extract{ schema = 'cda.json', data = Data }
+print(DocType)                                 -- "ContinuityofCareDocumentCCD"
+print(Doc.code:attr('code'))                   -- "34133-9"
+```
+
+
+## `linkiir.data.parse`
+
+*function*
+
+```lua
+linkiir.data.parse{ schema=, data=, name= }
+```
+
+Read a JSON or XML document into plain Lua tables, typed by its schema.
+
+Reads a JSON or XML document into plain Lua tables, typed by a plain JSON or XML schema from the Schema Editor. Repeating properties are always arrays, and JSON null is linkiir.json.null.
+
+**Usage**
+
+```lua
+linkiir.data.parse{ schema = <string>, data = <string> [, name = <string>] }
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `schema` | string | Yes | A plain JSON or XML schema file (protocol "json" or "xml"). Message schemas (HL7, X12, FHIR, CDA) raise; use linkiir.data.extract for those. |
+| `data` | string | Yes | The JSON or XML document text. |
+| `name` | string | No | The structure to read it as. Defaults to the schema's only structure; otherwise, for JSON, the one whose properties best match the document (raises when two match equally) and, for XML, the one named after the root element. |
+
+**Returns**
+
+- `table` — the document as plain Lua tables (an array of them when the JSON document is an array of the structure's objects).
+- `structureName` — the name of the structure it was read as (for XML, the root element name).
+
+**Errors**
+
+Raises a Lua error on failure (trap with pcall).
+
+Codes: `MISSING_PARAMETER`, `SCHEMA_NOT_FOUND`, `PARSE_ERROR`, `INVALID_VALUE`, `UNSUPPORTED_TYPE`
+
+**Example**
+
+```lua
+-- demo_order.json: an Order with a customer and repeating items.
+local Order = linkiir.data.parse{ schema = 'demo_order.json', data = Data }
+local Total = 0
+for _, Item in ipairs(Order.items) do
+   Total = Total + Item.quantity * Item.unitPrice   -- already numbers
+end
+Order.total = Total
+Order.tags[#Order.tags + 1] = 'priced'
+local Json = linkiir.data.serialize(Order)
+```
+
+```lua
+-- demo_patient.json: <patient id="MRN-1" active="true"> with <name> and <observation unit="kg">54.5</observation>
+local Patient, Root = linkiir.data.parse{ schema = 'demo_patient.json', data = Data }
+print(Root)                          -- "patient"
+print(Patient.id, Patient.active)    -- MRN-1   true
+print(Patient.name[1].family)        -- repeating elements are arrays
+print(Patient.observation[1].unit, Patient.observation[1].xmlText)   -- kg   54.5
+local Xml = linkiir.data.serialize(Patient)
+```
+
 
 ## `linkiir.data.create`
 
 *function*
 
 ```lua
-linkiir.data.create{ schema=, name=, type= }
+linkiir.data.create{ schema=, name=, type=, format= }
 ```
 
 Build an empty message tree for a definition.
 
-Create an empty message tree for a named grammar definition, with all schema segments/groups/fields pre-allocated so they can be populated by assignment or :map.
+Creates an empty message tree for a schema's message definition, ready to fill by assignment. FHIR and CDA messages come with their root and fixed values already set.
 
 **Usage**
 
 ```lua
-linkiir.data.create{ schema = <string>, name = <string> [, type = <string>] }
+linkiir.data.create{ schema = <string>, name = <string> [, type = <string>] [, format = <string>] }
 ```
 
 **Parameters**
@@ -85,6 +160,7 @@ linkiir.data.create{ schema = <string>, name = <string> [, type = <string>] }
 | `schema` | string | Yes | Linkiir grammar JSON file. |
 | `name` | string | Yes | Grammar message-definition name (usually the 2nd return of linkiir.data.extract). |
 | `type` | string | No | Protocol override; defaults to the grammar's protocol. |
+| `format` | string | No | FHIR only: "json" (default) or "xml". Raises for any other type. |
 
 **Returns**
 
@@ -105,30 +181,42 @@ Out:map(Msg)
 Out.PID[5][1][1][1] = Msg.PID[5][1][1][1]:value()
 ```
 
+```lua
+local Pat = linkiir.data.create{ schema = 'fhir.json', name = 'Patient' }
+Pat.gender = 'female'
+Pat:add('name').family = 'Doe'
+print(Pat:S())  -- {"resourceType":"Patient","gender":"female","name":[{"family":"Doe"}]}
+
+local Doc = linkiir.data.create{ schema = 'cda.json', name = 'DischargeSummary' }
+print(Doc.templateId:attr('root'))  -- "2.16.840.1.113883.10.20.22.1.8"
+```
+
 
 ## `linkiir.data.serialize`
 
 *function*
 
 ```lua
-linkiir.data.serialize{ data=node }
+linkiir.data.serialize{ data=node|table, schema=, name= }
 ```
 
-Serialize a node tree back to wire text.
+Serialize a node tree, or a plain JSON/XML table, back to text.
 
-Serialize a node tree back to its wire representation (HL7 pipe-delimited text, X12 segment stream, etc.). Equivalent to node:text() / node:S().
+Serializes a node tree back to message text, or a plain JSON or XML table to compact JSON or XML. A table built by hand needs `schema`, and `name` when the schema has more than one structure.
 
 **Usage**
 
 ```lua
-linkiir.data.serialize{ data = <node> }   -- or linkiir.data.serialize(<node>)
+linkiir.data.serialize{ data = <node|table> [, schema = <string>] [, name = <string>] }   -- or linkiir.data.serialize(<node|table>)
 ```
 
 **Parameters**
 
 | Name | Type | Required | Description |
 | --- | --- | --- | --- |
-| `data` | node | Yes | The node to serialize (root or subtree). |
+| `data` | node\|table | Yes | The node to serialize (root or subtree), or a plain Lua table following a JSON or XML schema. |
+| `schema` | string | No | Plain tables only: the JSON or XML schema the table follows. Not needed for a table linkiir.data.parse returned. |
+| `name` | string | No | Plain tables only: the structure to write it as (for XML, the root element). Defaults to the schema's only structure. |
 
 **Returns**
 
@@ -138,13 +226,109 @@ linkiir.data.serialize{ data = <node> }   -- or linkiir.data.serialize(<node>)
 
 Raises a Lua error on failure.
 
-Codes: `INVALID_PARAMETER`
+Codes: `INVALID_PARAMETER`, `SCHEMA_NOT_FOUND`, `INVALID_VALUE`
 
 **Example**
 
 ```lua
 local wire  = linkiir.data.serialize{ data = Out }
 local wire2 = Out:text()   -- identical result
+```
+
+```lua
+-- A new document from a table built by hand.
+local Ack = linkiir.data.serialize{
+   schema = 'demo_order.json', name = 'Order',
+   data = { orderId = 'WEB-1', status = 'received', items = {} },
+}
+-- {"orderId":"WEB-1","status":"received","items":[]}
+```
+
+
+## `linkiir.data.unescape`
+
+*function*
+
+```lua
+linkiir.data.unescape(value [, node])
+```
+
+Decode HL7 escape sequences in a value.
+
+Decodes the HL7 v2 escape sequences in a value, using the delimiters the message declares. Node values keep the text as received, so call this when a script needs the decoded text.
+
+**Usage**
+
+```lua
+linkiir.data.unescape(<string|node> [, <node>])
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `value` | string\|node | Yes | The text to decode, or an HL7 node whose value is decoded. nil returns nil. |
+| `node` | node | No | Any node of the HL7 message whose delimiters apply. |
+
+**Returns**
+
+- `string` — the decoded text.
+
+**Errors**
+
+Raises a Lua error when the node is not an HL7 node.
+
+Codes: `INVALID_PARAMETER`
+
+**Example**
+
+```lua
+local Msg = linkiir.data.extract{ schema = 'demo.json', data = Data }
+local family = linkiir.data.unescape(Msg.PID[5][1][1])   -- O'BRIEN\T\SMITH -> O'BRIEN&SMITH
+```
+
+
+## `linkiir.data.escape`
+
+*function*
+
+```lua
+linkiir.data.escape(text [, node])
+```
+
+Encode a value as HL7 escape sequences, for writing into a message.
+
+Encodes HL7 delimiters in text as escape sequences, the opposite of linkiir.data.unescape. Escape any value that may contain ^ ~ & before assigning it to an HL7 field.
+
+**Usage**
+
+```lua
+linkiir.data.escape(<string> [, <node>])
+```
+
+**Parameters**
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `text` | string | Yes | The text to encode. nil returns nil. |
+| `node` | node | No | Any node of the HL7 message the text is written into. |
+
+**Returns**
+
+- `string` — the encoded text.
+
+**Errors**
+
+Raises a Lua error when the node is not an HL7 node.
+
+Codes: `INVALID_PARAMETER`
+
+**Example**
+
+```lua
+local Out = linkiir.data.create{ schema = 'demo.json', name = 'ADT', type = 'hl7' }
+Out.PID[11][1][1] = linkiir.data.escape('1 MAIN ST ^ REAR', Out)
+print(Out.PID:text())   -- PID|||||||||||1 MAIN ST \S\ REAR
 ```
 
 
@@ -245,7 +429,7 @@ linkiir.data.codeset.get{ schema=, table= }
 
 Load a code set from a schema.
 
-Retrieve a code set (Table object) from the given schema by its id. Returns nil when the code set id is not present in the schema — callers can branch without pcall. The schema path resolves relative to the current node directory, the same as linkiir.data.extract.
+Returns the code set with the given id from a schema, or nil if the schema has none. The schema path resolves against the node directory.
 
 **Usage**
 
@@ -297,7 +481,7 @@ linkiir.data.codeset.match(sourceTable, destTable)
 
 Map source code values to destination code values by description.
 
-Build a plain Lua table that maps each source code value to the destination code value whose description matches (case-insensitive, whitespace-collapsed). Source codes with no matching description in the destination are omitted — use an 'or default' fallback at the call site to handle gaps. Cross-format mapping is intentionally the developer's job; match provides description-based joining to automate the common case, while developers handle the remaining gaps via fallback values or manual overrides.
+Builds a table mapping each source code to the destination code with the same description, ignoring case and spacing. Codes with no match are left out, so use an `or` default for gaps.
 
 **Usage**
 
@@ -376,6 +560,8 @@ Node:set(v)
 
 Set the scalar value (chainable).
 
+Sets the node's value and returns the node. On HL7 v2, text containing ~ ^ & is split into parts, as when a message is parsed.
+
 **Usage**
 
 ```lua
@@ -386,7 +572,7 @@ N:set('12345')
 
 | Name | Type | Required | Description |
 | --- | --- | --- | --- |
-| `v` | string | Yes | New scalar value. |
+| `v` | string\|number\|boolean | Yes | New scalar value. |
 
 **Returns**
 
@@ -397,6 +583,14 @@ N:set('12345')
 ```lua
 N:set('12345')       -- write a new scalar value
 print(N:value())    -- "12345"
+```
+
+```lua
+local Out = linkiir.data.create{ schema = 'demo.json', name = 'ADT', type = 'hl7' }
+Out.PID[5][1][1] = 'DOE'
+Out.PID[5][1][4] = 'JR'      -- components 2-3 are made, empty
+Out.PID[3][2] = 'X1'          -- a second repetition
+print(Out.PID:text())         -- PID|||~X1||DOE^^^JR
 ```
 
 
@@ -496,7 +690,7 @@ Out:map(Msg)  -- copy matching values from Msg into Out
 Node:child(k)
 ```
 
-Child by name or 1-based index (= Node[k]).
+Child by name or 1-based index (= Node[k]). Bypasses method dispatch, so it reaches an element whose name matches a node method — common in FHIR (Patient.name, Bundle.type, Quantity.value).
 
 **Usage**
 
@@ -518,6 +712,37 @@ local child = N:child(k)
 
 ```lua
 local Field = Msg.PID:child(3)  -- same as Msg.PID[3]
+local Names = Pat:child('name')   -- Pat.name would return the :name() method
+```
+
+
+### `Node:parent`
+
+*method of `Node`*
+
+```lua
+Node:parent()
+```
+
+The node holding this one; nil for the root.
+
+The node holding this one, or nil for a tree's root. On an X12 tree it climbs from a segment to its loop instance, then to the container a repeating loop's instances sit in, and so on up to the message.
+
+**Usage**
+
+```lua
+local Loop = Seg:parent()
+```
+
+**Returns**
+
+- Node, or nil for the root
+
+**Example**
+
+```lua
+-- X12: the subscriber loop a claim belongs to
+local Subscriber = Claim:parent():parent()   -- 2300 instance -> 2300 container -> 2000B instance
 ```
 
 
@@ -641,6 +866,8 @@ Node:protocol()
 
 Protocol code (101 HL7 … 105 XML).
 
+Protocol code: 101 HL7, 102 X12, 103 DB, 104 JSON (FHIR JSON), 105 XML (XML, FHIR XML and CDA).
+
 **Usage**
 
 ```lua
@@ -654,7 +881,7 @@ local p = N:protocol()
 **Example**
 
 ```lua
-print(Msg:protocol())  -- 101 (HL7), 102 (X12), 105 (XML), ...
+print(Msg:protocol())  -- 101 (HL7), 102 (X12), 104 (FHIR JSON), 105 (XML, FHIR XML, CDA)
 ```
 
 
@@ -663,17 +890,20 @@ print(Msg:protocol())  -- 101 (HL7), 102 (X12), 105 (XML), ...
 *method of `Node`*
 
 ```lua
-Node:add(name)
+Node:add(name [, after | before])
 ```
 
-Add a child element (XML). Returns the new element.
+Add a child element (XML, FHIR JSON), a segment (HL7 v2), or a segment or loop (X12). Returns it.
 
-XML only. Appends a new empty Element_Node named `name` and returns it. The second call with the same name promotes the pair into a repeat group by moving the existing child, so any handle held on it stays valid. If the receiver held Text_Content, that text is first moved into a leading `#text` child so the new element follows it in document order; attributes are left in place. Raises on an absent, nil, non-string, empty or over-long (over 1024 chars) name, on a reserved name (one beginning with `@` or equal to `#text`), and on a receiver that is not an Element_Node.
+Appends a new empty child element named `name` and returns it; on XML, `before` places it before a given child. On HL7 v2 and X12 it inserts a segment (or X12 loop) where the structure puts it, or after `after`.
 
 **Usage**
 
 ```lua
 local Item = Order:add('Item')
+local Realm = Doc:add('realmCode', Doc.typeId)   -- XML, before typeId
+local Obx = Msg:add('OBX', PrevObx)   -- HL7 v2
+local Claim = Subscriber:add('2300')   -- X12
 ```
 
 **Parameters**
@@ -681,6 +911,7 @@ local Item = Order:add('Item')
 | Name | Type | Required | Description |
 | --- | --- | --- | --- |
 | `name` | string | Yes | Element name (1-1024 chars; must not start with '@' or equal '#text'). |
+| `after` | node | No | HL7 v2 and X12: the segment to insert after, defaulting to where the structure puts it. XML: a child to insert before instead. |
 
 **Returns**
 
@@ -697,6 +928,20 @@ print(linkiir.data.serialize{ data = Order })
 -- <Order><Item sku="A-100">Widget</Item></Order>
 ```
 
+```lua
+-- HL7 v2: an OBX and its note for each result
+local Out = linkiir.data.create{ schema = 'demo.json', name = 'Lab', type = 'hl7' }
+local Prev = Out.OBX
+Prev[1] = '1'
+for i = 2, 3 do
+  local Nte = Out:add('NTE', Prev)
+  Nte[3] = 'note ' .. (i - 1)
+  Prev = Out:add('OBX', Nte)
+  Prev[1] = tostring(i)
+end
+-- ... OBX|1 / NTE|||note 1 / OBX|2 / NTE|||note 2 / OBX|3
+```
+
 
 ### `Node:attr`
 
@@ -708,7 +953,7 @@ Node:attr(name [, value])
 
 Read or write an attribute (XML).
 
-XML only. With one argument, reads attribute `name` (without the `@` prefix) and returns its value as a string, or nil when the attribute is absent. With two arguments, sets the attribute to `value` (created if absent, overwritten if present) and returns the receiver so calls chain; the element's child count changes only when a new attribute is created. Attributes never affect isLeaf(). Raises on an absent, nil, non-string, empty or invalid attribute name, and on a receiver that is not an Element_Node.
+Reads attribute `name`, or with a `value` sets it and returns the receiver. XML only, including FHIR XML and CDA.
 
 **Usage**
 
@@ -747,7 +992,7 @@ Node:inner(xml)
 
 Replace element content by parsing an XML fragment (XML).
 
-XML only. Parses `xml` as element content — zero or more top-level elements and character data — and replaces the receiver's element and #text children with the result, leaving the receiver's attributes in place. The fragment is parsed by the same parser used for whole documents, so escaping and structure round-trip identically. An empty string clears the content and keeps attributes without raising. Returns the receiver so calls chain. Raises on a non-string argument, on malformed fragment XML (with the parse position), and on a receiver that is not an Element_Node.
+Replaces an element's content with a parsed XML fragment, keeping its attributes, and returns the receiver. XML only, including FHIR XML and CDA.
 
 **Usage**
 
@@ -782,15 +1027,18 @@ Text:inner('See <ref value="1"/> for details.')
 Node:remove(key)
 ```
 
-Remove children by name or 1-based index (XML).
+Remove children by name or 1-based index (XML, FHIR JSON), segments and repetitions (HL7 v2), or segments and loops (X12).
 
-XML only. With a string key, removes every element child (and any repeat group) bearing that name; attributes are left in place. With an integer key, removes the child at that 1-based position in stored order. The tree left behind is what a re-parse of the serialized output would produce: adjacent same-named runs are re-merged and adjacent #text children are coalesced. Any node handle held on a removed child stays allocated until its former tree root is released and reads through it raise a detached-node error. Returns the receiver so calls chain. Raises on a receiver that is not an Element_Node.
+Removes the children with a given name, or the child at a 1-based index, and returns the receiver. On HL7 v2 it removes segments or repetitions, and on X12 segments or loops.
 
 **Usage**
 
 ```lua
 Order:remove('Item')   -- by name
 Order:remove(2)         -- by index
+Msg:remove('EVN')       -- HL7 v2: a segment
+Msg.PID[3]:remove(2)    -- HL7 v2: a repetition
+Subscriber['2300']:remove(1)   -- X12: a loop instance
 ```
 
 **Parameters**
@@ -810,6 +1058,13 @@ Order:remove('Item')  -- drop every <Item> child
 print(linkiir.data.serialize{ data = Order })
 ```
 
+```lua
+-- HL7 v2: drop the event segment and every ID but the first
+Msg:remove('EVN')
+for r = Msg.PID[3]:count(), 2, -1 do Msg.PID[3]:remove(r) end
+Msg.PID[19] = ''   -- blank the SSN
+```
+
 
 ### `Node:clear`
 
@@ -819,9 +1074,9 @@ print(linkiir.data.serialize{ data = Order })
 Node:clear()
 ```
 
-Remove all content, keep attributes (XML).
+Remove all content, keep attributes (XML, FHIR JSON).
 
-XML only. Sets Text_Content to empty and drops every non-attribute child (elements, repeat groups and #text nodes), leaving every attribute in place. Returns the receiver so calls chain. Raises on a receiver that is not an Element_Node.
+Removes all of an element's content but keeps its attributes, and returns the receiver. XML and FHIR JSON.
 
 **Usage**
 
@@ -848,9 +1103,9 @@ N:clear()  -- empty the element but keep its attributes
 Node:all(name)
 ```
 
-Array of every child element bearing a name (XML).
+Array of every child element bearing a name (XML, FHIR JSON).
 
-XML only. Returns a Lua array table holding every Element_Node child named `name`, in document order, spanning every run so the result never depends on how the children are grouped. Returns an empty table when there are none. Reads only; changes nothing. Raises on an absent, nil, non-string or empty-string name, and on a receiver that is not an Element_Node.
+Returns an array of every child element named `name` in document order, or an empty table. XML and FHIR JSON.
 
 **Usage**
 
@@ -885,9 +1140,9 @@ end
 Node:el(name)
 ```
 
-First child element by name, bypassing method dispatch (XML).
+First child element by name, bypassing method dispatch (XML, FHIR JSON).
 
-XML only. Returns the first Element_Node child named `name` (or the first run's repeat group when there is more than one), or nil when absent. This is the XML element read path that reaches a child whose name collides with a method name — e.g. `node:el('text')`, `node:el('set')` — where `node.text` / `node.set` would return the method instead. `node:child(name)` and `node:all(name)` also bypass method dispatch. Reads only; changes nothing. Raises on a non-empty-string argument requirement and on a receiver that is not an Element_Node.
+Returns the first child element named `name`, or nil, even when the name matches a method such as `text`. XML and FHIR JSON.
 
 **Usage**
 
@@ -922,9 +1177,9 @@ if Text then print(Text:value()) end
 Node:attrCount()
 ```
 
-Number of attributes on the element (XML).
+Number of attributes on the element (XML, FHIR JSON).
 
-XML only. Returns the number of Attribute_Nodes the element holds, and 0 when it holds none. `childCount()` counts attributes among its total; `attrCount()` lets generic traversal separate them. Reads only; changes nothing. Raises on a receiver that is not an Element_Node.
+Returns the number of attributes on the element; always 0 on FHIR JSON. XML and FHIR JSON.
 
 **Usage**
 
@@ -951,9 +1206,9 @@ print(N:attrCount())  -- number of @-attributes on N
 Node:append(kind, name)
 ```
 
-Generic typed append: element, attribute or text (XML).
+Generic typed append: element, attribute or text (XML, FHIR JSON).
 
-XML only. The generic typed-append path behind node:add and node:attr. `kind` is one of the three module constants linkiir.data.ELEMENT, linkiir.data.ATTRIBUTE and linkiir.data.TEXT. ELEMENT behaves exactly as node:add(name), including the Text_Content-to-#text conversion and the reserved-name errors, and returns the new Element_Node. ATTRIBUTE creates an empty-valued attribute named `name` when absent (or leaves an existing one and the child count unchanged) and returns the Attribute_Node. TEXT appends a new #text child carrying `name` as its value and returns it. Raises on a kind that is not one of the three constants, on an invalid name for the element or attribute kind, and on a receiver that is not an Element_Node.
+Appends a child of the given kind (linkiir.data.ELEMENT, ATTRIBUTE or TEXT) and returns it. XML and FHIR JSON.
 
 **Usage**
 

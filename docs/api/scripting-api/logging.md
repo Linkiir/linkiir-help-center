@@ -6,7 +6,7 @@ title: Logging
 
 `linkiir.log`
 
-Emit structured log events to the workflow event topic. Each call produces a SCRIPT_LOG record at the named level. These are annotations — they never raise, never stop the node, and are independent of Lua's error(). Gated by the node's log_level setting: a call below the threshold is dropped inside the runtime and never reaches the broker.
+Writes log events at a level to the workflow's log, without raising or stopping the node. Calls below the node's log level are dropped.
 
 ---
 
@@ -18,7 +18,9 @@ Emit structured log events to the workflow event topic. Each call produces a SCR
 linkiir.log.error(message)
 ```
 
-Emit a SCRIPT_LOG event at ERROR level. Does not stop the node (unlike Lua's error()). This is an annotation, not a fault — it never raises, never halts execution. Gated by the node's log_level setting.
+Emit a SCRIPT_LOG event at ERROR level.
+
+Logs a message at ERROR level. Unlike Lua's error(), it doesn't stop the node.
 
 **Usage**
 
@@ -51,7 +53,9 @@ linkiir.log.error('Failed to parse inbound HL7: ' .. tostring(Err))
 linkiir.log.warn(message)
 ```
 
-Emit a SCRIPT_LOG event at WARN level. This is an annotation, not a fault — it never raises, never halts execution. Gated by the node's log_level setting.
+Emit a SCRIPT_LOG event at WARN level.
+
+Logs a message at WARN level, without raising or stopping the node.
 
 **Usage**
 
@@ -84,7 +88,9 @@ linkiir.log.warn('Missing optional field PID[8], defaulting to Unknown')
 linkiir.log.info(message)
 ```
 
-Emit a SCRIPT_LOG event at INFO level. This is an annotation, not a fault — it never raises, never halts execution. Gated by the node's log_level setting.
+Emit a SCRIPT_LOG event at INFO level.
+
+Logs a message at INFO level, without raising or stopping the node.
 
 **Usage**
 
@@ -117,7 +123,9 @@ linkiir.log.info('Processed ' .. tostring(Count) .. ' segments')
 linkiir.log.debug(message)
 ```
 
-Emit a SCRIPT_LOG event at DEBUG level. Dropped by the runtime if the node's log_level is above DEBUG. This is an annotation, not a fault — it never raises, never halts execution. Gated by the node's log_level setting.
+Emit a SCRIPT_LOG event at DEBUG level.
+
+Logs a message at DEBUG level, dropped unless the node's log level is DEBUG.
 
 **Usage**
 

@@ -1,0 +1,60 @@
+---
+id: get-data-map-catalog-api-get-data-map-catalog-get
+title: "The Map view's functions and standard placements"
+description: "The functions a Data Map rule can use (label, what it does, the FHIR type it gives, its options), the standard HL7 v2 -> FHIR placements auto-map adds per resource type, and the references and repeating segment a new resource of each type starts with; under hl7v2, the functions a rule of a map building HL7 v2 can use, and under fhir_hl7v2, x12_fhir, x12_hl7v2, x12, fhir_x12, cda, x12_cda, fhir_cda, cda_cda, cda_fhir, cda_hl7v2, cda_x12, db (anything to database rows), db_fhir, db_hl7v2, db_x12, db_cda, struct (anything to JSON or XML), struct_fhir, struct_hl7v2, struct_x12 and struct_cda those for each other pair of source and target; under cda_sections, the C-CDA sections a document's body holds, and under cda_documents each C-CDA document type's template and the sections it must have."
+sidebar_label: "The Map view's functions and standard placements"
+hide_title: true
+hide_table_of_contents: true
+api: eJztV+tu2zYUfpUD7Ucus5XLnw7uUiDrLs2WdkGSYgOiNKYl2uYikxpJ2QmMDHuIPeGeZN8hKTu3dhiwn02ARKJ47t/5DrnMvJi4bHCRvTOVdNllL8O/0qrGK6OzQXY+lTRudcmvjgR9K7ygt6Ih29aSSqGpdZI2azGSdY8WU+FJeaqMdD3ykP3+zdEp+dtG8vJEzXldeUcmGHBbcZfzQlfCVvTm+AXN96n/Kgo2tSjlTGoIiNab/gyGRVU5aqQlK51pbSmD+h5BQ9Bl5VhaqUvpwpKVjRRe6Qk5OWFVCELLxVrajEmKchqdhCMWxhbKT19SqyuYmdYv5vvRzfuJCPFDVhA7NWpVXbGRFEBKTPQq6hlPlb1Kym729q/4PT6tF3txV3gqKxE/h4ewHp7wZ/0QlfBTUsKPQbwa0abQt37KXnlDFQo3EqiVNQtOezVKwnhIsnhKotGA87Yt/UM1P579/I6MpV/fHm91O5Ki9JKUpTcoDDlIr9CLTBq4MYaSkHeDzFpqhLKczlSUUExhJ9J3ZeDAnIzpj9V43X/97SF1ayhEZcqWK7zhaGSqW5qaunL3S8A6uk0uWo9KusUAAoh7OQP0vFyBamUFKJ61ztNUzGWe9TIDJAr+dFShW+DvFSf6Cpi4KvFQm8mVaNTVsx+wCA0AYgPNaL7BMtvf3eV/D3vwrC2BZjduazpNmyFXGu3hMm8XTVOrMrix85tjmWXmyqmcifC1qhR/EvWJZXe9Yluoh+xlHC8smNFvCBBKvfI1L3R26Afp1z3/OjpOh416/gMWszv+6WU3/RKMciaQSDZ3scxqoSdQfaz0tVIWxgJpPFiJ1cdSbUpRc482PZLW0gHVcVPO//OFHOXI3rLQRNTaGt+LbOp9M9jZ2dt/ke/id2/w1e5XuzvI/s5z2S+yXpDu9+kMyUV+XhtzreQAtZbQdtii7tqntBYZGR2QcKS9NVUb4ADUTmQe1EylAMIcHFnSRZFFXUV2iYUH6ukOZu8KrcakjQ8RslodlCBSYzfxN59BBrq3Ci11VejGKu03eXPOWe0FuZxBvpXdgbNnEk2VAIg0NsJP8fLR2LFF6bFhcHQFTzWgw5MjfJ0jlIi9vXwv382emwqdxC9yxFKkXMjPm/Pzk/Du7+1x0kIlE7+sQbc3DRjA0d9//sW7Cu3ETK5kUFt6f8Ts6ZhwZkIjEdRYwxBFOy+MvR7XILEeMljxPKnVyAqrZOx1qIvWnPTM+w4FKvQXX9A3zH7vT4/5FQFYbnRtaKxuZEVNO0IL0SjtGaxcR1jsdB+k5WUFXjNI/u+tdGCQiYGHhb4FasksdAozJ06PvInQj7iBFsZKGJbDZ4E6hPOFnliFkdVqzXQbmqC+7fx/hEj8fgdrtwSENAb4CH4pG+Yej8tuM6JzEYI5HaNJlYZP4Ni5gsHhyc9n5xSQAmAoPeScAzOg0yREZQBu4FwOMTAixnxc5vAku1HolBYSY4/shz2pwl2qnWyEZVoNtTbXUofYhsNh3cIXtOLeykW4wWiIRMBpwWwTjW+tTIR83zmoiRtDDKefog1A7x5v/AtxBHUdUzxp8cC//XNQaGz04gkRgzbuonAYSAe0sSwyYMBqIL7IBkW2QXlO79MKP2+wOXSwcwB6td5zklbSnruNBzyyivsxmRRZ+NRhlsZC1bIawFdW9AzVQOFKWSAb+uOAMJY+rpj7MnSGF751SfMjHVhBKE++BQZLhrsSom0TVR7c25mSj7yfSd9f0esqAWupj/jpeIjKCs0waj2Dca0nVZYWwiEcQExLJL7zq/PqPokfrO0NZsKXU5j5cPHh5eWXkAszBWavD74OGH9VZBwdFvdzDHCmAEZw6h/gnLv8ac8GKkCjrLC9mob7/8M47Pj0o+Bezy/33+fX/n8YYKH/n2GzwJc4IJgFuSnoHoy0vX189O6no6PT7W0KsHKBY8Pp20da4C5aiFtmHpgO50uNY5xzON+xiuGDaTxM/CJqi/jTiRG7Om4beaEABshjqkyZ4sXIzGXHyKeSD4kBu326OIsDEsSNql1u5vmO61b6nHaFM+hNPqu2OlqkYVfF7WEAgeP5UEUbaZZRZNd4/pY1sCPmaGExQthKO4UkiDAHKRqDaxlOX8xymJw84ZlY0sjmo9pcyQXY+N5VJpzO0/1rfeF6PPOX6wPn50vh50vh50vhJy6F6Vbl5Y3fgYgKLQle5i6KZ/MLHBUUdj57OseBnk+bvGu55PK8t/XdHS9jhttbrONxjhMvswC/QXvk73DPupbYkh1i3DV8GZiLumVvnlwSH1wcfvjuHDe3fwANljxl
+sidebar_class_name: "get api-method"
+info_path: docs/api/web-api/linkiir-api
+custom_edit_url: null
+hide_send_button: true
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"The Map view's functions and standard placements"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/api/get_data_map_catalog"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+The functions a Data Map rule can use (label, what it does, the FHIR type it gives, its options), the standard HL7 v2 -&gt; FHIR placements auto-map adds per resource type, and the references and repeating segment a new resource of each type starts with; under hl7v2, the functions a rule of a map building HL7 v2 can use, and under fhir_hl7v2, x12_fhir, x12_hl7v2, x12, fhir_x12, cda, x12_cda, fhir_cda, cda_cda, cda_fhir, cda_hl7v2, cda_x12, db (anything to database rows), db_fhir, db_hl7v2, db_x12, db_cda, struct (anything to JSON or XML), struct_fhir, struct_hl7v2, struct_x12 and struct_cda those for each other pair of source and target; under cda_sections, the C-CDA sections a document's body holds, and under cda_documents each C-CDA document type's template and the sections it must have.
+
+<ParamsDetails>
+  
+</ParamsDetails>
+
+<RequestSchema
+  {...require("./get-data-map-catalog-api-get-data-map-catalog-get.RequestSchema.json")}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  {...require("./get-data-map-catalog-api-get-data-map-catalog-get.StatusCodes.json")}
+>
+  
+</StatusCodes>
+
+
+      

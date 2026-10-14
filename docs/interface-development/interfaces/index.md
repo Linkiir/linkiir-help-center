@@ -21,10 +21,11 @@ In the Workflow Builder, the palette groups node types under three headings. Dra
 | **Source** | **File/FTP** | A timer, polling a directory or FTP/FTPS/SFTP server | Not used |
 | **Source** | **Custom** | A timer | Required |
 | **Transform** | **Custom** | An inbound message from an upstream node | Required |
+| **Transform** | **Data Map** | An inbound message from an upstream node | Generated from the map |
 | **Destination** | **File/FTP** | An inbound message from an upstream node | Not used |
 | **Destination** | **LLP** | An inbound message from an upstream node | Not used |
 
-Transport nodes are configured with fields, not code. You write Lua only where the work is genuinely yours: HTTP handling, transformation, and generated or fetched messages.
+Transport nodes are configured with fields, not code. You write Lua only where the work is genuinely yours: HTTP handling, transformation, and generated or fetched messages. Converting a message from one format to another needn't be code either: a [Data Map node](data-map/index.md) generates it from a map you draw.
 
 :::note[How this documentation names nodes]
 The palette shows a group heading and a short name. In running text, naming a node type needs both, so this documentation writes them together — "Source HTTP", "Destination File/FTP". In the Grid you will see **HTTP** under **Source**.

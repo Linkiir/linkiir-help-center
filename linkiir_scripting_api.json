@@ -34,7 +34,7 @@
           "signature": "__node_dir",
           "usage": "local nodeDir = linkiir.sys.nodeDir()",
           "summary": "Deprecated. Filesystem path to the current node directory - use linkiir.sys.nodeDir().",
-          "description": "Deprecated: use linkiir.sys.nodeDir() instead. Filesystem path to the current node directory, set by the runtime before script execution. Still populated and not scheduled for removal, but linkiir.sys.nodeDir() is the documented form. Concatenating it onto a schema name is no longer needed either - a relative schema path already resolves against the node directory.",
+          "description": "Deprecated: use linkiir.sys.nodeDir() instead. The filesystem path to the current node directory, still set before the script runs.",
           "returns": [
             {
               "name": "string",
@@ -192,7 +192,7 @@
           "signature": "tonumber(e [, base])",
           "usage": "tonumber(e, base)",
           "summary": "Convert a value to a number.",
-          "description": "Tries to convert its argument to a number. If the argument is already a number or a string convertible to a number, returns that number; otherwise returns nil. An optional base (2-36) interprets e as an integer in that base.",
+          "description": "Converts a number or numeric string to a number, or returns nil. An optional base (2-36) reads it as an integer in that base.",
           "params": [
             {
               "name": "e",
@@ -279,7 +279,7 @@
           "signature": "next(t [, k])",
           "usage": "next(t, k)",
           "summary": "Low-level table iterator.",
-          "description": "Returns the next key/value pair after key k in table t, in an undefined order; returns nil when there are no more. Called with k = nil (or omitted) returns the first pair. Underlies pairs().",
+          "description": "Returns the key/value pair after key k in table t, or the first pair when k is nil. Returns nil when there are no more; pairs() is built on it.",
           "params": [
             {
               "name": "t",
@@ -687,7 +687,7 @@
           "signature": "collectgarbage([opt [, arg]])",
           "usage": "collectgarbage(opt, arg)",
           "summary": "Control the garbage collector.",
-          "description": "Runs garbage-collector actions. With no arguments, performs a full collection cycle. opt selects the action (e.g. \"collect\", \"count\", \"step\").",
+          "description": "Runs a garbage-collector action selected by opt, such as \"collect\", \"count\" or \"step\". With no arguments, runs a full collection.",
           "params": [
             {
               "name": "opt",
@@ -758,7 +758,7 @@
           "signature": "dofile([filename])",
           "usage": "dofile(path)",
           "summary": "Execute a Lua file as a chunk.",
-          "description": "Loads and immediately runs the Lua chunk in filename (or stdin, if omitted), in the global environment. Errors propagate to the caller, unprotected. Prefer require for loading reusable modules — dofile re-runs the file every call and has no module caching.",
+          "description": "Runs the Lua file filename in the global environment, with errors passed to the caller. Prefer require for reusable modules, since dofile re-runs the file on every call.",
           "params": [
             {
               "name": "filename",
@@ -812,7 +812,7 @@
           "signature": "loadstring(string [, chunkname])",
           "usage": "local chunk, err = loadstring(code)",
           "summary": "Compile a Lua chunk from a string.",
-          "description": "Loads a chunk from the given string without running it. Returns the compiled chunk as a function, or nil plus an error message on a syntax error. chunkname is used in error messages and debug info.",
+          "description": "Compiles a chunk from a string without running it, returning it as a function, or nil and an error message. chunkname is used in error messages.",
           "params": [
             {
               "name": "string",
@@ -938,7 +938,7 @@
           "signature": "module(name [, ...])",
           "usage": "module('mymodule')",
           "summary": "Create or enter a named module.",
-          "description": "Legacy Lua 5.1 module system: creates (or reuses) a table for module name, sets it as the value of the global name and of package.loaded[name], and sets it as the new environment of the running function, so subsequent top-level function/variable definitions become fields of the module. Optional arguments are 'module modifiers' such as package.seeall. Superseded in most modern Lua code by returning a table from a plain chunk loaded via require.",
+          "description": "Lua 5.1's legacy module system: makes a module table named name the environment of the running function. Modern code returns a table from a chunk loaded with require instead.",
           "params": [
             {
               "name": "name",
@@ -970,7 +970,7 @@
     {
       "name": "linkiir.data",
       "title": "Message Data",
-      "description": "Parse (extract), build (create), and serialize messages of any supported format (HL7, X12, XML), plus the node-tree interface returned by those calls. XML supports schema-free parsing (schema optional).",
+      "description": "Parses, builds and serializes messages in HL7 v2, X12, FHIR, CDA and XML as node trees. Documents of a plain JSON or XML schema are read into Lua tables with parse and written back with serialize.",
       "items": [
         {
           "kind": "function",
@@ -978,7 +978,7 @@
           "signature": "linkiir.data.extract{ schema=, data=, type= }",
           "usage": "linkiir.data.extract{ schema = <string>, data = <string> [, type = <string>] }",
           "summary": "Parse a wire message into a node tree.",
-          "description": "Parse a raw wire message into a Linkiir node tree, identify the matched message definition from the grammar, and return both. The tree is read/write.",
+          "description": "Parses a raw message into a read/write node tree and returns it with the message definition the schema matched. For documents of a plain JSON or XML schema, use linkiir.data.parse.",
           "params": [
             {
               "name": "schema",
@@ -990,13 +990,13 @@
               "name": "data",
               "type": "string",
               "required": true,
-              "description": "Raw message text (HL7 v2, X12, XML, or JSON)."
+              "description": "Raw message text (HL7 v2, X12, FHIR JSON or XML, CDA, or XML)."
             },
             {
               "name": "type",
               "type": "string",
               "required": false,
-              "description": "Protocol override: \"hl7\", \"x12\", \"xml\", \"json\". Defaults to the grammar's protocol."
+              "description": "Protocol override: \"hl7\", \"x12\", \"fhir\", \"cda\" or \"xml\" (schema-free), defaulting to the schema's protocol."
             }
           ],
           "returns": [
@@ -1006,7 +1006,7 @@
             },
             {
               "name": "messageType",
-              "description": "grammar message-definition name (e.g. \"ADT\", \"837\")."
+              "description": "grammar message-definition name (e.g. \"ADT\", \"837\", \"Patient\", \"ContinuityofCareDocumentCCD\"), or \"unknown\" when no match rule or message definition identifies the message."
             }
           ],
           "errors": {
@@ -1022,16 +1022,78 @@
             {
               "language": "lua",
               "code": "local Msg, MsgType = linkiir.data.extract{ schema = 'demo.json', data = Data, type = 'hl7' }\nprint(MsgType)                               -- \"ADT\"\nprint(Msg.MSH[9][1]:value(), Msg.PID[3][1][1]:value())\n\n-- Trap failures explicitly.\nlocal ok, msg, mtype = pcall(linkiir.data.extract, { schema = 'demo.json', data = Data })\nif not ok then error('extract failed: ' .. tostring(msg)) end"
+            },
+            {
+              "language": "lua",
+              "code": "-- FHIR (JSON or XML). 'name' is also a node method, so use :child.\nlocal Pat, ResType = linkiir.data.extract{ schema = 'fhir.json', data = Data }\nprint(ResType)                                 -- \"Patient\"\nprint(Pat:child('name')[1].family:value())     -- \"Chalmers\"\nPat.active = true                              -- written as a JSON boolean\n\n-- CDA: an XML tree, typed by its templateId.\nlocal Doc, DocType = linkiir.data.extract{ schema = 'cda.json', data = Data }\nprint(DocType)                                 -- \"ContinuityofCareDocumentCCD\"\nprint(Doc.code:attr('code'))                   -- \"34133-9\""
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "linkiir.data.parse",
+          "signature": "linkiir.data.parse{ schema=, data=, name= }",
+          "usage": "linkiir.data.parse{ schema = <string>, data = <string> [, name = <string>] }",
+          "summary": "Read a JSON or XML document into plain Lua tables, typed by its schema.",
+          "description": "Reads a JSON or XML document into plain Lua tables, typed by a plain JSON or XML schema from the Schema Editor. Repeating properties are always arrays, and JSON null is linkiir.json.null.",
+          "params": [
+            {
+              "name": "schema",
+              "type": "string",
+              "required": true,
+              "description": "A plain JSON or XML schema file (protocol \"json\" or \"xml\"). Message schemas (HL7, X12, FHIR, CDA) raise; use linkiir.data.extract for those."
+            },
+            {
+              "name": "data",
+              "type": "string",
+              "required": true,
+              "description": "The JSON or XML document text."
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "required": false,
+              "description": "The structure to read it as. Defaults to the schema's only structure; otherwise, for JSON, the one whose properties best match the document (raises when two match equally) and, for XML, the one named after the root element."
+            }
+          ],
+          "returns": [
+            {
+              "name": "table",
+              "description": "the document as plain Lua tables (an array of them when the JSON document is an array of the structure's objects)."
+            },
+            {
+              "name": "structureName",
+              "description": "the name of the structure it was read as (for XML, the root element name)."
+            }
+          ],
+          "errors": {
+            "description": "Raises a Lua error on failure (trap with pcall).",
+            "codes": [
+              "MISSING_PARAMETER",
+              "SCHEMA_NOT_FOUND",
+              "PARSE_ERROR",
+              "INVALID_VALUE",
+              "UNSUPPORTED_TYPE"
+            ]
+          },
+          "examples": [
+            {
+              "language": "lua",
+              "code": "-- demo_order.json: an Order with a customer and repeating items.\nlocal Order = linkiir.data.parse{ schema = 'demo_order.json', data = Data }\nlocal Total = 0\nfor _, Item in ipairs(Order.items) do\n   Total = Total + Item.quantity * Item.unitPrice   -- already numbers\nend\nOrder.total = Total\nOrder.tags[#Order.tags + 1] = 'priced'\nlocal Json = linkiir.data.serialize(Order)"
+            },
+            {
+              "language": "lua",
+              "code": "-- demo_patient.json: <patient id=\"MRN-1\" active=\"true\"> with <name> and <observation unit=\"kg\">54.5</observation>\nlocal Patient, Root = linkiir.data.parse{ schema = 'demo_patient.json', data = Data }\nprint(Root)                          -- \"patient\"\nprint(Patient.id, Patient.active)    -- MRN-1   true\nprint(Patient.name[1].family)        -- repeating elements are arrays\nprint(Patient.observation[1].unit, Patient.observation[1].xmlText)   -- kg   54.5\nlocal Xml = linkiir.data.serialize(Patient)"
             }
           ]
         },
         {
           "kind": "function",
           "name": "linkiir.data.create",
-          "signature": "linkiir.data.create{ schema=, name=, type= }",
-          "usage": "linkiir.data.create{ schema = <string>, name = <string> [, type = <string>] }",
+          "signature": "linkiir.data.create{ schema=, name=, type=, format= }",
+          "usage": "linkiir.data.create{ schema = <string>, name = <string> [, type = <string>] [, format = <string>] }",
           "summary": "Build an empty message tree for a definition.",
-          "description": "Create an empty message tree for a named grammar definition, with all schema segments/groups/fields pre-allocated so they can be populated by assignment or :map.",
+          "description": "Creates an empty message tree for a schema's message definition, ready to fill by assignment. FHIR and CDA messages come with their root and fixed values already set.",
           "params": [
             {
               "name": "schema",
@@ -1050,6 +1112,12 @@
               "type": "string",
               "required": false,
               "description": "Protocol override; defaults to the grammar's protocol."
+            },
+            {
+              "name": "format",
+              "type": "string",
+              "required": false,
+              "description": "FHIR only: \"json\" (default) or \"xml\". Raises for any other type."
             }
           ],
           "returns": [
@@ -1071,22 +1139,38 @@
             {
               "language": "lua",
               "code": "local Msg, MsgType = linkiir.data.extract{ schema = 'demo.json', data = Data, type = 'hl7' }\nlocal Out = linkiir.data.create{ schema = 'demo.json', name = MsgType, type = 'hl7' }\nOut:map(Msg)\nOut.PID[5][1][1][1] = Msg.PID[5][1][1][1]:value()"
+            },
+            {
+              "language": "lua",
+              "code": "local Pat = linkiir.data.create{ schema = 'fhir.json', name = 'Patient' }\nPat.gender = 'female'\nPat:add('name').family = 'Doe'\nprint(Pat:S())  -- {\"resourceType\":\"Patient\",\"gender\":\"female\",\"name\":[{\"family\":\"Doe\"}]}\n\nlocal Doc = linkiir.data.create{ schema = 'cda.json', name = 'DischargeSummary' }\nprint(Doc.templateId:attr('root'))  -- \"2.16.840.1.113883.10.20.22.1.8\""
             }
           ]
         },
         {
           "kind": "function",
           "name": "linkiir.data.serialize",
-          "signature": "linkiir.data.serialize{ data=node }",
-          "usage": "linkiir.data.serialize{ data = <node> }   -- or linkiir.data.serialize(<node>)",
-          "summary": "Serialize a node tree back to wire text.",
-          "description": "Serialize a node tree back to its wire representation (HL7 pipe-delimited text, X12 segment stream, etc.). Equivalent to node:text() / node:S().",
+          "signature": "linkiir.data.serialize{ data=node|table, schema=, name= }",
+          "usage": "linkiir.data.serialize{ data = <node|table> [, schema = <string>] [, name = <string>] }   -- or linkiir.data.serialize(<node|table>)",
+          "summary": "Serialize a node tree, or a plain JSON/XML table, back to text.",
+          "description": "Serializes a node tree back to message text, or a plain JSON or XML table to compact JSON or XML. A table built by hand needs `schema`, and `name` when the schema has more than one structure.",
           "params": [
             {
               "name": "data",
-              "type": "node",
+              "type": "node|table",
               "required": true,
-              "description": "The node to serialize (root or subtree)."
+              "description": "The node to serialize (root or subtree), or a plain Lua table following a JSON or XML schema."
+            },
+            {
+              "name": "schema",
+              "type": "string",
+              "required": false,
+              "description": "Plain tables only: the JSON or XML schema the table follows. Not needed for a table linkiir.data.parse returned."
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "required": false,
+              "description": "Plain tables only: the structure to write it as (for XML, the root element). Defaults to the schema's only structure."
             }
           ],
           "returns": [
@@ -1098,13 +1182,99 @@
           "errors": {
             "description": "Raises a Lua error on failure.",
             "codes": [
-              "INVALID_PARAMETER"
+              "INVALID_PARAMETER",
+              "SCHEMA_NOT_FOUND",
+              "INVALID_VALUE"
             ]
           },
           "examples": [
             {
               "language": "lua",
               "code": "local wire  = linkiir.data.serialize{ data = Out }\nlocal wire2 = Out:text()   -- identical result"
+            },
+            {
+              "language": "lua",
+              "code": "-- A new document from a table built by hand.\nlocal Ack = linkiir.data.serialize{\n   schema = 'demo_order.json', name = 'Order',\n   data = { orderId = 'WEB-1', status = 'received', items = {} },\n}\n-- {\"orderId\":\"WEB-1\",\"status\":\"received\",\"items\":[]}"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "linkiir.data.unescape",
+          "signature": "linkiir.data.unescape(value [, node])",
+          "usage": "linkiir.data.unescape(<string|node> [, <node>])",
+          "summary": "Decode HL7 escape sequences in a value.",
+          "description": "Decodes the HL7 v2 escape sequences in a value, using the delimiters the message declares. Node values keep the text as received, so call this when a script needs the decoded text.",
+          "params": [
+            {
+              "name": "value",
+              "type": "string|node",
+              "required": true,
+              "description": "The text to decode, or an HL7 node whose value is decoded. nil returns nil."
+            },
+            {
+              "name": "node",
+              "type": "node",
+              "required": false,
+              "description": "Any node of the HL7 message whose delimiters apply."
+            }
+          ],
+          "returns": [
+            {
+              "name": "string",
+              "description": "the decoded text."
+            }
+          ],
+          "errors": {
+            "description": "Raises a Lua error when the node is not an HL7 node.",
+            "codes": [
+              "INVALID_PARAMETER"
+            ]
+          },
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Msg = linkiir.data.extract{ schema = 'demo.json', data = Data }\nlocal family = linkiir.data.unescape(Msg.PID[5][1][1])   -- O'BRIEN\\T\\SMITH -> O'BRIEN&SMITH"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "linkiir.data.escape",
+          "signature": "linkiir.data.escape(text [, node])",
+          "usage": "linkiir.data.escape(<string> [, <node>])",
+          "summary": "Encode a value as HL7 escape sequences, for writing into a message.",
+          "description": "Encodes HL7 delimiters in text as escape sequences, the opposite of linkiir.data.unescape. Escape any value that may contain ^ ~ & before assigning it to an HL7 field.",
+          "params": [
+            {
+              "name": "text",
+              "type": "string",
+              "required": true,
+              "description": "The text to encode. nil returns nil."
+            },
+            {
+              "name": "node",
+              "type": "node",
+              "required": false,
+              "description": "Any node of the HL7 message the text is written into."
+            }
+          ],
+          "returns": [
+            {
+              "name": "string",
+              "description": "the encoded text."
+            }
+          ],
+          "errors": {
+            "description": "Raises a Lua error when the node is not an HL7 node.",
+            "codes": [
+              "INVALID_PARAMETER"
+            ]
+          },
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Out = linkiir.data.create{ schema = 'demo.json', name = 'ADT', type = 'hl7' }\nOut.PID[11][1][1] = linkiir.data.escape('1 MAIN ST ^ REAR', Out)\nprint(Out.PID:text())   -- PID|||||||||||1 MAIN ST \\S\\ REAR"
             }
           ]
         },
@@ -1191,7 +1361,7 @@
           "name": "Node:set",
           "signature": "Node:set(v)",
           "summary": "Set the scalar value (chainable).",
-          "description": "Set the scalar value (chainable).",
+          "description": "Sets the node's value and returns the node. On HL7 v2, text containing ~ ^ & is split into parts, as when a message is parsed.",
           "returns": [
             {
               "description": "Node (self)"
@@ -1201,7 +1371,7 @@
           "params": [
             {
               "name": "v",
-              "type": "string",
+              "type": "string|number|boolean",
               "required": true,
               "description": "New scalar value."
             }
@@ -1210,6 +1380,10 @@
             {
               "language": "lua",
               "code": "N:set('12345')       -- write a new scalar value\nprint(N:value())    -- \"12345\""
+            },
+            {
+              "language": "lua",
+              "code": "local Out = linkiir.data.create{ schema = 'demo.json', name = 'ADT', type = 'hl7' }\nOut.PID[5][1][1] = 'DOE'\nOut.PID[5][1][4] = 'JR'      -- components 2-3 are made, empty\nOut.PID[3][2] = 'X1'          -- a second repetition\nprint(Out.PID:text())         -- PID|||~X1||DOE^^^JR"
             }
           ]
         },
@@ -1287,7 +1461,7 @@
           "name": "Node:child",
           "signature": "Node:child(k)",
           "summary": "Child by name or 1-based index (= Node[k]).",
-          "description": "Child by name or 1-based index (= Node[k]).",
+          "description": "Child by name or 1-based index (= Node[k]). Bypasses method dispatch, so it reaches an element whose name matches a node method — common in FHIR (Patient.name, Bundle.type, Quantity.value).",
           "returns": [
             {
               "description": "Node / nil"
@@ -1305,7 +1479,27 @@
           "examples": [
             {
               "language": "lua",
-              "code": "local Field = Msg.PID:child(3)  -- same as Msg.PID[3]"
+              "code": "local Field = Msg.PID:child(3)  -- same as Msg.PID[3]\nlocal Names = Pat:child('name')   -- Pat.name would return the :name() method"
+            }
+          ]
+        },
+        {
+          "kind": "method",
+          "of": "Node",
+          "name": "Node:parent",
+          "signature": "Node:parent()",
+          "summary": "The node holding this one; nil for the root.",
+          "description": "The node holding this one, or nil for a tree's root. On an X12 tree it climbs from a segment to its loop instance, then to the container a repeating loop's instances sit in, and so on up to the message.",
+          "returns": [
+            {
+              "description": "Node, or nil for the root"
+            }
+          ],
+          "usage": "local Loop = Seg:parent()",
+          "examples": [
+            {
+              "language": "lua",
+              "code": "-- X12: the subscriber loop a claim belongs to\nlocal Subscriber = Claim:parent():parent()   -- 2300 instance -> 2300 container -> 2000B instance"
             }
           ]
         },
@@ -1395,7 +1589,7 @@
           "name": "Node:protocol",
           "signature": "Node:protocol()",
           "summary": "Protocol code (101 HL7 … 105 XML).",
-          "description": "Protocol code (101 HL7 … 105 XML).",
+          "description": "Protocol code: 101 HL7, 102 X12, 103 DB, 104 JSON (FHIR JSON), 105 XML (XML, FHIR XML and CDA).",
           "returns": [
             {
               "description": "integer"
@@ -1405,7 +1599,7 @@
           "examples": [
             {
               "language": "lua",
-              "code": "print(Msg:protocol())  -- 101 (HL7), 102 (X12), 105 (XML), ..."
+              "code": "print(Msg:protocol())  -- 101 (HL7), 102 (X12), 104 (FHIR JSON), 105 (XML, FHIR XML, CDA)"
             }
           ]
         },
@@ -1413,28 +1607,38 @@
           "kind": "method",
           "of": "Node",
           "name": "Node:add",
-          "signature": "Node:add(name)",
-          "summary": "Add a child element (XML). Returns the new element.",
-          "description": "XML only. Appends a new empty Element_Node named `name` and returns it. The second call with the same name promotes the pair into a repeat group by moving the existing child, so any handle held on it stays valid. If the receiver held Text_Content, that text is first moved into a leading `#text` child so the new element follows it in document order; attributes are left in place. Raises on an absent, nil, non-string, empty or over-long (over 1024 chars) name, on a reserved name (one beginning with `@` or equal to `#text`), and on a receiver that is not an Element_Node.",
+          "signature": "Node:add(name [, after | before])",
+          "summary": "Add a child element (XML, FHIR JSON), a segment (HL7 v2), or a segment or loop (X12). Returns it.",
+          "description": "Appends a new empty child element named `name` and returns it; on XML, `before` places it before a given child. On HL7 v2 and X12 it inserts a segment (or X12 loop) where the structure puts it, or after `after`.",
           "returns": [
             {
               "name": "node",
               "description": "the new child Element_Node."
             }
           ],
-          "usage": "local Item = Order:add('Item')",
+          "usage": "local Item = Order:add('Item')\nlocal Realm = Doc:add('realmCode', Doc.typeId)   -- XML, before typeId\nlocal Obx = Msg:add('OBX', PrevObx)   -- HL7 v2\nlocal Claim = Subscriber:add('2300')   -- X12",
           "params": [
             {
               "name": "name",
               "type": "string",
               "required": true,
               "description": "Element name (1-1024 chars; must not start with '@' or equal '#text')."
+            },
+            {
+              "name": "after",
+              "type": "node",
+              "required": false,
+              "description": "HL7 v2 and X12: the segment to insert after, defaulting to where the structure puts it. XML: a child to insert before instead."
             }
           ],
           "examples": [
             {
               "language": "lua",
               "code": "local Order = linkiir.data.create{ name = 'Order', type = 'xml' }\nlocal Item = Order:add('Item')\nItem:attr('sku', 'A-100')\nItem:set('Widget')\nprint(linkiir.data.serialize{ data = Order })\n-- <Order><Item sku=\"A-100\">Widget</Item></Order>"
+            },
+            {
+              "language": "lua",
+              "code": "-- HL7 v2: an OBX and its note for each result\nlocal Out = linkiir.data.create{ schema = 'demo.json', name = 'Lab', type = 'hl7' }\nlocal Prev = Out.OBX\nPrev[1] = '1'\nfor i = 2, 3 do\n  local Nte = Out:add('NTE', Prev)\n  Nte[3] = 'note ' .. (i - 1)\n  Prev = Out:add('OBX', Nte)\n  Prev[1] = tostring(i)\nend\n-- ... OBX|1 / NTE|||note 1 / OBX|2 / NTE|||note 2 / OBX|3"
             }
           ]
         },
@@ -1444,7 +1648,7 @@
           "name": "Node:attr",
           "signature": "Node:attr(name [, value])",
           "summary": "Read or write an attribute (XML).",
-          "description": "XML only. With one argument, reads attribute `name` (without the `@` prefix) and returns its value as a string, or nil when the attribute is absent. With two arguments, sets the attribute to `value` (created if absent, overwritten if present) and returns the receiver so calls chain; the element's child count changes only when a new attribute is created. Attributes never affect isLeaf(). Raises on an absent, nil, non-string, empty or invalid attribute name, and on a receiver that is not an Element_Node.",
+          "description": "Reads attribute `name`, or with a `value` sets it and returns the receiver. XML only, including FHIR XML and CDA.",
           "returns": [
             {
               "description": "string or nil on a read; Node (self) on a write"
@@ -1478,7 +1682,7 @@
           "name": "Node:inner",
           "signature": "Node:inner(xml)",
           "summary": "Replace element content by parsing an XML fragment (XML).",
-          "description": "XML only. Parses `xml` as element content — zero or more top-level elements and character data — and replaces the receiver's element and #text children with the result, leaving the receiver's attributes in place. The fragment is parsed by the same parser used for whole documents, so escaping and structure round-trip identically. An empty string clears the content and keeps attributes without raising. Returns the receiver so calls chain. Raises on a non-string argument, on malformed fragment XML (with the parse position), and on a receiver that is not an Element_Node.",
+          "description": "Replaces an element's content with a parsed XML fragment, keeping its attributes, and returns the receiver. XML only, including FHIR XML and CDA.",
           "returns": [
             {
               "description": "Node (self)"
@@ -1505,14 +1709,14 @@
           "of": "Node",
           "name": "Node:remove",
           "signature": "Node:remove(key)",
-          "summary": "Remove children by name or 1-based index (XML).",
-          "description": "XML only. With a string key, removes every element child (and any repeat group) bearing that name; attributes are left in place. With an integer key, removes the child at that 1-based position in stored order. The tree left behind is what a re-parse of the serialized output would produce: adjacent same-named runs are re-merged and adjacent #text children are coalesced. Any node handle held on a removed child stays allocated until its former tree root is released and reads through it raise a detached-node error. Returns the receiver so calls chain. Raises on a receiver that is not an Element_Node.",
+          "summary": "Remove children by name or 1-based index (XML, FHIR JSON), segments and repetitions (HL7 v2), or segments and loops (X12).",
+          "description": "Removes the children with a given name, or the child at a 1-based index, and returns the receiver. On HL7 v2 it removes segments or repetitions, and on X12 segments or loops.",
           "returns": [
             {
               "description": "Node (self)"
             }
           ],
-          "usage": "Order:remove('Item')   -- by name\nOrder:remove(2)         -- by index",
+          "usage": "Order:remove('Item')   -- by name\nOrder:remove(2)         -- by index\nMsg:remove('EVN')       -- HL7 v2: a segment\nMsg.PID[3]:remove(2)    -- HL7 v2: a repetition\nSubscriber['2300']:remove(1)   -- X12: a loop instance",
           "params": [
             {
               "name": "key",
@@ -1525,6 +1729,10 @@
             {
               "language": "lua",
               "code": "Order:remove('Item')  -- drop every <Item> child\nprint(linkiir.data.serialize{ data = Order })"
+            },
+            {
+              "language": "lua",
+              "code": "-- HL7 v2: drop the event segment and every ID but the first\nMsg:remove('EVN')\nfor r = Msg.PID[3]:count(), 2, -1 do Msg.PID[3]:remove(r) end\nMsg.PID[19] = ''   -- blank the SSN"
             }
           ]
         },
@@ -1533,8 +1741,8 @@
           "of": "Node",
           "name": "Node:clear",
           "signature": "Node:clear()",
-          "summary": "Remove all content, keep attributes (XML).",
-          "description": "XML only. Sets Text_Content to empty and drops every non-attribute child (elements, repeat groups and #text nodes), leaving every attribute in place. Returns the receiver so calls chain. Raises on a receiver that is not an Element_Node.",
+          "summary": "Remove all content, keep attributes (XML, FHIR JSON).",
+          "description": "Removes all of an element's content but keeps its attributes, and returns the receiver. XML and FHIR JSON.",
           "returns": [
             {
               "description": "Node (self)"
@@ -1553,8 +1761,8 @@
           "of": "Node",
           "name": "Node:all",
           "signature": "Node:all(name)",
-          "summary": "Array of every child element bearing a name (XML).",
-          "description": "XML only. Returns a Lua array table holding every Element_Node child named `name`, in document order, spanning every run so the result never depends on how the children are grouped. Returns an empty table when there are none. Reads only; changes nothing. Raises on an absent, nil, non-string or empty-string name, and on a receiver that is not an Element_Node.",
+          "summary": "Array of every child element bearing a name (XML, FHIR JSON).",
+          "description": "Returns an array of every child element named `name` in document order, or an empty table. XML and FHIR JSON.",
           "returns": [
             {
               "description": "table — array of Node, empty when no child matches"
@@ -1581,8 +1789,8 @@
           "of": "Node",
           "name": "Node:el",
           "signature": "Node:el(name)",
-          "summary": "First child element by name, bypassing method dispatch (XML).",
-          "description": "XML only. Returns the first Element_Node child named `name` (or the first run's repeat group when there is more than one), or nil when absent. This is the XML element read path that reaches a child whose name collides with a method name — e.g. `node:el('text')`, `node:el('set')` — where `node.text` / `node.set` would return the method instead. `node:child(name)` and `node:all(name)` also bypass method dispatch. Reads only; changes nothing. Raises on a non-empty-string argument requirement and on a receiver that is not an Element_Node.",
+          "summary": "First child element by name, bypassing method dispatch (XML, FHIR JSON).",
+          "description": "Returns the first child element named `name`, or nil, even when the name matches a method such as `text`. XML and FHIR JSON.",
           "returns": [
             {
               "description": "Node, or nil when absent"
@@ -1609,8 +1817,8 @@
           "of": "Node",
           "name": "Node:attrCount",
           "signature": "Node:attrCount()",
-          "summary": "Number of attributes on the element (XML).",
-          "description": "XML only. Returns the number of Attribute_Nodes the element holds, and 0 when it holds none. `childCount()` counts attributes among its total; `attrCount()` lets generic traversal separate them. Reads only; changes nothing. Raises on a receiver that is not an Element_Node.",
+          "summary": "Number of attributes on the element (XML, FHIR JSON).",
+          "description": "Returns the number of attributes on the element; always 0 on FHIR JSON. XML and FHIR JSON.",
           "returns": [
             {
               "description": "integer"
@@ -1629,8 +1837,8 @@
           "of": "Node",
           "name": "Node:append",
           "signature": "Node:append(kind, name)",
-          "summary": "Generic typed append: element, attribute or text (XML).",
-          "description": "XML only. The generic typed-append path behind node:add and node:attr. `kind` is one of the three module constants linkiir.data.ELEMENT, linkiir.data.ATTRIBUTE and linkiir.data.TEXT. ELEMENT behaves exactly as node:add(name), including the Text_Content-to-#text conversion and the reserved-name errors, and returns the new Element_Node. ATTRIBUTE creates an empty-valued attribute named `name` when absent (or leaves an existing one and the child count unchanged) and returns the Attribute_Node. TEXT appends a new #text child carrying `name` as its value and returns it. Raises on a kind that is not one of the three constants, on an invalid name for the element or attribute kind, and on a receiver that is not an Element_Node.",
+          "summary": "Generic typed append: element, attribute or text (XML, FHIR JSON).",
+          "description": "Appends a child of the given kind (linkiir.data.ELEMENT, ATTRIBUTE or TEXT) and returns it. XML and FHIR JSON.",
           "returns": [
             {
               "name": "node",
@@ -1665,7 +1873,7 @@
           "signature": "linkiir.data.codeset.get{ schema=, table= }",
           "usage": "linkiir.data.codeset.get{ schema = <string>, table = <string> }",
           "summary": "Load a code set from a schema.",
-          "description": "Retrieve a code set (Table object) from the given schema by its id. Returns nil when the code set id is not present in the schema — callers can branch without pcall. The schema path resolves relative to the current node directory, the same as linkiir.data.extract.",
+          "description": "Returns the code set with the given id from a schema, or nil if the schema has none. The schema path resolves against the node directory.",
           "params": [
             {
               "name": "schema",
@@ -1706,7 +1914,7 @@
           "signature": "linkiir.data.codeset.match(sourceTable, destTable)",
           "usage": "linkiir.data.codeset.match(<Table>, <Table>)",
           "summary": "Map source code values to destination code values by description.",
-          "description": "Build a plain Lua table that maps each source code value to the destination code value whose description matches (case-insensitive, whitespace-collapsed). Source codes with no matching description in the destination are omitted — use an 'or default' fallback at the call site to handle gaps. Cross-format mapping is intentionally the developer's job; match provides description-based joining to automate the common case, while developers handle the remaining gaps via fallback values or manual overrides.",
+          "description": "Builds a table mapping each source code to the destination code with the same description, ignoring case and spacing. Codes with no match are left out, so use an `or` default for gaps.",
           "params": [
             {
               "name": "sourceTable",
@@ -1878,7 +2086,7 @@
           "signature": "linkiir.flow.configure{ bootstrap=, project=, workflow=, node=, topic= }",
           "usage": "linkiir.flow.configure{ project = <string> [, workflow=] [, node=] [, bootstrap=] [, topic=] }",
           "summary": "Configure the flow context (node identity and Kafka settings).",
-          "description": "Configure the flow context (node identity and Kafka settings). Non-empty fields override the current value; empty fields are left unchanged. Context is also initialized from environment variables (LINKIIR_KAFKA_BOOTSTRAP, LINKIIR_PROJECT_ID, LINKIIR_WORKFLOW_ID, LINKIIR_NODE_ID, LINKIIR_OUTPUT_TOPIC).",
+          "description": "Sets the flow context's node identity and Kafka settings; empty fields keep their current value. The context is also read from the LINKIIR_* environment variables.",
           "params": [
             {
               "name": "bootstrap",
@@ -1943,7 +2151,7 @@
     {
       "name": "linkiir.link",
       "title": "Connectivity",
-      "description": "All connectivity to external systems, named for the heart of Linkiir. Sub-areas: web (HTTP), socket (TCP), mail (SMTP), file (FTP/FTPS/SFTP). All calls return result, err.",
+      "description": "All connectivity to external systems: web (HTTP), socket (TCP), mail (SMTP) and file (FTP/FTPS/SFTP). Every call returns result, err.",
       "items": [
         {
           "kind": "function",
@@ -3173,19 +3381,19 @@
               "name": "name",
               "type": "string",
               "required": true,
-              "description": "DSN / host / database / file, per driver. For SQLITE this is a file path: a relative path resolves against the Runtime's working directory (linkiir.sys.workingDir()), never the process working directory, and an absolute path is used unchanged. The :memory: sentinel and file: URIs are passed to SQLite untouched. For every other driver the value is a server, DSN or database name and is never treated as a path."
+              "description": "The DSN, host, database or file, per driver: for ODBC drivers a connection string or DSN name, for SQLITE a file path. A relative SQLite path resolves against linkiir.sys.workingDir()."
             },
             {
               "name": "user",
               "type": "string",
               "required": false,
-              "description": "Username."
+              "description": "Username. For the ODBC drivers it is added to the connection string as UID unless the string already sets UID."
             },
             {
               "name": "password",
               "type": "string",
               "required": false,
-              "description": "Password."
+              "description": "Password. For the ODBC drivers it is added to the connection string as PWD unless the string already sets PWD."
             },
             {
               "name": "timeout",
@@ -3227,16 +3435,22 @@
         {
           "kind": "function",
           "name": "linkiir.store.tables",
-          "signature": "linkiir.store.tables{ name= }",
+          "signature": "linkiir.store.tables{ name=, schema= }",
           "usage": "local tbl = linkiir.store.tables{ name = 'patients' }",
           "summary": "Create an empty database table node tree.",
-          "description": "Create an empty database table node tree for building rows to insert or update. The returned node is a Linkiir node (protocol code 103 = DB) that can be populated field by field, then passed to Connection:execute for INSERT/UPDATE operations.",
+          "description": "Creates an empty table tree to fill with rows (tbl[#tbl+1] = { id = 1, name = 'John' }) and write with Connection:merge. With `schema`, each column is checked against the DB Schema as it's set.",
           "params": [
             {
               "name": "name",
               "type": "string",
               "required": true,
-              "description": "Table name in the database."
+              "description": "Table name in the database; with schema, a table of the schema."
+            },
+            {
+              "name": "schema",
+              "type": "string",
+              "required": false,
+              "description": "DB Schema JSON file defining the table (e.g. db.json)."
             }
           ],
           "returns": [
@@ -3248,7 +3462,25 @@
           "examples": [
             {
               "language": "lua",
-              "code": "local tbl = linkiir.store.tables{ name = 'patients' }\ntbl.first_name = 'John'\ntbl.last_name = 'Smith'\nConn:execute{ sql = 'insert into patients (first_name, last_name) values ('\n                    .. Conn:quote(tbl.first_name:value()) .. ', '\n                    .. Conn:quote(tbl.last_name:value()) .. ')' }"
+              "code": "local Patients = {\n   { id = 1, first_name = 'John', last_name = 'Smith' },\n   { id = 2, first_name = 'Jane', last_name = 'Doe' },\n}\nlocal Tbl = linkiir.store.tables{ name = 'patients' }\nfor _, P in ipairs(Patients) do\n   Tbl[#Tbl + 1] = P\nend\nTbl[1].dob = '1980-04-12'   -- add a column to one row\nlocal Merged, Err = Conn:merge{ data = Tbl, key = 'id' }\nif not Merged then error(Err.message) end"
+            },
+            {
+              "language": "lua",
+              "code": "-- patients is defined in the node's db.json DB Schema.\nlocal Tbl = linkiir.store.tables{ schema = 'db.json', name = 'patients' }\nTbl[#Tbl + 1] = { id = 1, mrn = 'A1', active = 'true', dob = '1980-04-12' }   -- active is stored as 1\nTbl[1].dob = '1980-02-30'   -- raises: '1980-02-30' is not a date (YYYY-MM-DD)\n-- Upserts on the schema's primary key; key = false would INSERT instead.\nlocal Merged, Err = Conn:merge{ data = Tbl }\nif not Merged then error(Err.message) end"
+            }
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "linkiir.store.NULL",
+          "signature": "linkiir.store.NULL",
+          "usage": "tbl[#tbl+1] = { id = 1, middle_name = linkiir.store.NULL }",
+          "summary": "Column value that writes SQL NULL.",
+          "description": "A column value that writes SQL NULL, since Lua nil can't be stored in a row table. A NULL column in a query result reads as \"\", and :isNull() returns true.",
+          "returns": [
+            {
+              "name": "sentinel",
+              "description": "A unique table; compare with ==."
             }
           ]
         },
@@ -3258,7 +3490,7 @@
           "signature": "linkiir.store.SQLITE",
           "usage": "local driver = linkiir.store.SQLITE",
           "summary": "Driver constant (1013).",
-          "description": "SQLite (file-based database). The name parameter is the file path. Pass as the driver= argument to linkiir.store.open.",
+          "description": "SQLite, a file-based database whose `name` is the file path. Pass it as `driver` to linkiir.store.open.",
           "returns": [
             {
               "name": "integer",
@@ -3314,7 +3546,7 @@
           "signature": "linkiir.store.POSTGRES_ODBC",
           "usage": "local driver = linkiir.store.POSTGRES_ODBC",
           "summary": "Driver constant (1002).",
-          "description": "PostgreSQL via ODBC. The name parameter is the connection string or database name. Pass as the driver= argument to linkiir.store.open.",
+          "description": "PostgreSQL via ODBC, whose `name` is the connection string or DSN. Pass it as `driver` to linkiir.store.open.",
           "returns": [
             {
               "name": "integer",
@@ -3370,7 +3602,7 @@
           "name": "Connection:query",
           "signature": "conn:query{ sql=, live= }",
           "summary": "SELECT; rows navigable as a node tree.",
-          "description": "SELECT; rows navigable as a node tree. A params binding table is NOT supported: it is silently ignored, and $1 style placeholders are sent to the database verbatim. Interpolate values with conn:quote(), which escapes and quotes them for the driver in use.",
+          "description": "Runs a SELECT and returns its rows as a node tree: result[1].colname:value(), and #result for the row count. Parameter binding isn't supported, so add values with conn:quote().",
           "returns": [
             {
               "description": "result node tree, err"
@@ -3404,7 +3636,7 @@
           "name": "Connection:execute",
           "signature": "conn:execute{ sql=, live= }",
           "summary": "INSERT/UPDATE/DELETE/DDL.",
-          "description": "INSERT/UPDATE/DELETE/DDL. A params binding table is NOT supported: it is silently ignored, and $1 style placeholders are sent to the database verbatim. Interpolate values with conn:quote(), which escapes and quotes them for the driver in use.",
+          "description": "Runs an INSERT, UPDATE, DELETE or DDL statement. Parameter binding isn't supported, so add values with conn:quote().",
           "returns": [
             {
               "description": "affected count, err"
@@ -3436,21 +3668,27 @@
           "kind": "method",
           "of": "Connection",
           "name": "Connection:merge",
-          "signature": "conn:merge{ data=<tableTree>, live= }",
-          "summary": "Upsert a table tree from linkiir.data.tables.",
-          "description": "Upsert a table tree from linkiir.data.tables.",
+          "signature": "conn:merge{ data=<tableTree>, key=, live= }",
+          "summary": "Insert or upsert the rows of a linkiir.store.tables tree.",
+          "description": "Writes every row of a linkiir.store.tables tree in one transaction. Without `key` each row is inserted; with `key` each row is upserted on those columns.",
           "returns": [
             {
-              "description": "rows merged, err"
+              "description": "number of rows written, or nil and err"
             }
           ],
-          "usage": "local n, err = conn:merge{ data=<tableTree> }",
+          "usage": "local n, err = conn:merge{ data=<tableTree>, key='id' }",
           "params": [
             {
               "name": "data",
               "type": "node",
               "required": true,
-              "description": "A linkiir.data.tables node tree to upsert."
+              "description": "A linkiir.store.tables node tree."
+            },
+            {
+              "name": "key",
+              "type": "string|table|false",
+              "required": false,
+              "description": "Column name, or list of column names, to match existing rows on. Omit for plain inserts, or for a schema-built table to use the schema's primary key; false for plain inserts into a schema-built table."
             },
             {
               "name": "live",
@@ -3462,7 +3700,7 @@
           "examples": [
             {
               "language": "lua",
-              "code": "local Merged, Err = Conn:merge{ data = TableTree }\nif not Merged then error(Err.message) end"
+              "code": "local Merged, Err = Conn:merge{ data = TableTree, key = 'id' }\nif not Merged then error(Err.message) end"
             }
           ]
         },
@@ -3575,8 +3813,8 @@
           "of": "Connection",
           "name": "Connection:quote",
           "signature": "conn:quote(s)",
-          "summary": "Escape a value for use in a statement.",
-          "description": "Escape a value so it can be included in the `sql` text passed to conn:query or conn:execute. Use it on every value that came from a message, a variable, or user input.",
+          "summary": "Quote a string as a SQL literal for the driver in use.",
+          "description": "Quotes a string as a SQL literal for the driver in use, as N'...' on SQL Server. Use it on every value that came from a message, a variable or user input.",
           "returns": [
             {
               "description": "string"
@@ -3623,7 +3861,7 @@
     {
       "name": "linkiir.codec",
       "title": "Byte Transforms",
-      "description": "Everything that turns bytes into other bytes and back: text encodings, compression, and character-set conversion. Consistent verbs: encode/decode, compress/decompress. Pure functions (raise on error).",
+      "description": "Converts bytes to other bytes and back: text encodings, compression and character-set conversion. Functions raise on error.",
       "items": [
         {
           "kind": "function",
@@ -3869,7 +4107,7 @@
           "signature": "linkiir.codec.html.decode(s)",
           "usage": "linkiir.codec.html.decode(s)   -- or linkiir.codec.html.decode{ data = s }",
           "summary": "Decode using html.",
-          "description": "Decode HTML entities and numeric character references back to text. Handles the named entities &amp;, &lt;, &gt;, &quot; and &nbsp; (decoded as a plain space), decimal references (&#39;) and hex references (&#x27;, &#X27;). Numeric references are emitted as UTF-8, so codepoints above U+007F expand to multiple bytes. Unknown entities and malformed sequences (no closing semicolon within 12 characters) pass through verbatim, so decode(encode(s)) round-trips.",
+          "description": "Decodes HTML entities and numeric character references back to UTF-8 text. Unknown or malformed entities are left as they are.",
           "params": [
             {
               "name": "data",
@@ -4320,7 +4558,7 @@
     {
       "name": "linkiir.json",
       "title": "JSON",
-      "description": "JSON parse and serialize operating on plain Lua tables. Unlike linkiir.data, which returns the node-tree interface, linkiir.json works with native Lua values. json.array() and json.object() tag a table so its JSON shape is explicit rather than inferred.",
+      "description": "Parses and serializes JSON as plain Lua values rather than node trees. json.array() and json.object() fix a table's JSON shape.",
       "items": [
         {
           "kind": "function",
@@ -4328,7 +4566,7 @@
           "signature": "linkiir.json.parse(str)",
           "usage": "local value = linkiir.json.parse(str)",
           "summary": "Parse a JSON string into a Lua value.",
-          "description": "Parse a JSON string into a Lua value. Objects become tables with string keys; arrays become tables with integer keys 1..N. JSON null becomes linkiir.json.null. Raises on invalid JSON.",
+          "description": "Parses a JSON string into Lua tables, with JSON null as linkiir.json.null. Raises on invalid JSON.",
           "params": [
             {
               "name": "str",
@@ -4361,7 +4599,7 @@
           "signature": "linkiir.json.serialize(value)",
           "usage": "local str = linkiir.json.serialize(value)",
           "summary": "Serialize a Lua value to a JSON string.",
-          "description": "Serialize a Lua value to a JSON string. Tables with consecutive integer keys emit as arrays; otherwise as objects, unless the table was tagged with linkiir.json.array() or linkiir.json.object(). nil and json.null become null. Raises on circular references, NaN/Infinity, or non-serializable types (functions, userdata).",
+          "description": "Serializes a Lua value to JSON, writing tables with keys 1..N as arrays unless tagged with json.array() or json.object(). Raises on circular references, NaN, Infinity, functions and userdata.",
           "params": [
             {
               "name": "value",
@@ -4395,7 +4633,7 @@
           "signature": "linkiir.json.array([t])",
           "usage": "local arr = linkiir.json.array()   -- or linkiir.json.array(t)",
           "summary": "Tag a table so it always serializes as a JSON array.",
-          "description": "Mark a Lua table as a JSON array. Called with no argument (or nil) it creates and tags a new empty table; called with a table it tags that table in place and returns it. The tag overrides the usual shape heuristic, so a tagged table emits as [ ... ] even when empty or when it holds string keys (array serialization walks integer keys 1..N and ignores the rest). Tables returned by linkiir.json.parse are already tagged, so an empty array survives a parse/serialize round-trip.",
+          "description": "Tags a table, or a new empty one, so it always serializes as a JSON array, even when empty. Tables from linkiir.json.parse are already tagged.",
           "params": [
             {
               "name": "t",
@@ -4428,7 +4666,7 @@
           "signature": "linkiir.json.object([t])",
           "usage": "local obj = linkiir.json.object()   -- or linkiir.json.object(t)",
           "summary": "Tag a table so it always serializes as a JSON object.",
-          "description": "Mark a Lua table as a JSON object. Called with no argument (or nil) it creates and tags a new empty table; called with a table it tags that table in place and returns it. The tag overrides the usual shape heuristic: an untagged empty table serializes as [], while a tagged one serializes as {}. A tagged table holding a sequence emits its integer keys as the object keys \"1\", \"2\", ... Tables returned by linkiir.json.parse are already tagged.",
+          "description": "Tags a table, or a new empty one, so it always serializes as a JSON object, even when empty. Tables from linkiir.json.parse are already tagged.",
           "params": [
             {
               "name": "t",
@@ -4461,7 +4699,7 @@
           "signature": "linkiir.json.null",
           "usage": "if obj.x == linkiir.json.null then print('null') end",
           "summary": "Sentinel representing JSON null.",
-          "description": "A unique sentinel table that represents JSON null. Distinguishes 'key is null' (obj.x == json.null) from 'key is absent' (obj.x == nil). Serializes as null.",
+          "description": "A sentinel for JSON null that tells a null value (obj.x == json.null) from a missing one (obj.x == nil). Serializes as null.",
           "returns": [
             {
               "description": "The sentinel table (identity-checked via ==)."
@@ -4982,7 +5220,7 @@
     {
       "name": "linkiir.sys",
       "title": "Runtime & System",
-      "description": "Small runtime helpers and filesystem access in one place. Time/env helpers (os.date, os.time, os.getenv) stay as native Lua. Path resolution: every linkiir.sys.fs function resolves a relative path against the Runtime's working directory (linkiir.sys.workingDir()), never the process working directory. An absolute path is used unchanged. A relative path that escapes the working directory via .. is rejected.",
+      "description": "Runtime helpers and filesystem access. Relative linkiir.sys.fs paths resolve against linkiir.sys.workingDir(), and paths escaping it with .. are rejected.",
       "items": [
         {
           "kind": "function",
@@ -4990,7 +5228,7 @@
           "signature": "linkiir.sys.guid(bits)",
           "usage": "local id = linkiir.sys.guid(128)",
           "summary": "Generate a random GUID of the requested bit length.",
-          "description": "Generate a random GUID. The bit count is required: it must be at least 128 and divisible by 8. Calling guid() with no argument, or with fewer than 128 bits, raises a Lua error.",
+          "description": "Generates a random GUID of the given bit count, which must be at least 128 and divisible by 8. Raises on a missing or invalid count.",
           "returns": [
             {
               "description": "GUID string."
@@ -5056,7 +5294,7 @@
           "signature": "linkiir.sys.workingDir()",
           "usage": "local wd = linkiir.sys.workingDir()",
           "summary": "Absolute path of the Runtime's working directory.",
-          "description": "Absolute path of the Runtime's working directory - the parent of projects/, users/, logs/ and run/. This is the base a relative linkiir.store or linkiir.sys.fs path resolves against, so a project built on it means the same thing regardless of how the service was started. Returns the same value under Run Test and Debug as the live Runtime reports for that node.",
+          "description": "Returns the absolute path of the Runtime's working directory, which relative linkiir.store and linkiir.sys.fs paths resolve against.",
           "returns": [
             {
               "name": "string",
@@ -5079,7 +5317,7 @@
           "signature": "linkiir.sys.nodeDir()",
           "usage": "local nd = linkiir.sys.nodeDir()",
           "summary": "Absolute path of the executing node's directory.",
-          "description": "Absolute path of the directory the executing node's files were loaded from. Under the live Runtime this is the staged run folder; under Run Test and Debug it is your dev clone. Replaces the deprecated __node_dir global. A relative schema path already resolves against this directory, so concatenation is not needed.",
+          "description": "Returns the absolute path of the directory the executing node's files were loaded from. Replaces the deprecated __node_dir global.",
           "returns": [
             {
               "name": "string",
@@ -5452,7 +5690,7 @@
     {
       "name": "linkiir.log",
       "title": "Logging",
-      "description": "Emit structured log events to the workflow event topic. Each call produces a SCRIPT_LOG record at the named level. These are annotations — they never raise, never stop the node, and are independent of Lua's error(). Gated by the node's log_level setting: a call below the threshold is dropped inside the runtime and never reaches the broker.",
+      "description": "Writes log events at a level to the workflow's log, without raising or stopping the node. Calls below the node's log level are dropped.",
       "items": [
         {
           "kind": "function",
@@ -5460,7 +5698,7 @@
           "signature": "linkiir.log.error(message)",
           "usage": "linkiir.log.error(message)",
           "summary": "Emit a SCRIPT_LOG event at ERROR level.",
-          "description": "Emit a SCRIPT_LOG event at ERROR level. Does not stop the node (unlike Lua's error()). This is an annotation, not a fault — it never raises, never halts execution. Gated by the node's log_level setting.",
+          "description": "Logs a message at ERROR level. Unlike Lua's error(), it doesn't stop the node.",
           "params": [
             {
               "name": "message",
@@ -5487,7 +5725,7 @@
           "signature": "linkiir.log.warn(message)",
           "usage": "linkiir.log.warn(message)",
           "summary": "Emit a SCRIPT_LOG event at WARN level.",
-          "description": "Emit a SCRIPT_LOG event at WARN level. This is an annotation, not a fault — it never raises, never halts execution. Gated by the node's log_level setting.",
+          "description": "Logs a message at WARN level, without raising or stopping the node.",
           "params": [
             {
               "name": "message",
@@ -5514,7 +5752,7 @@
           "signature": "linkiir.log.info(message)",
           "usage": "linkiir.log.info(message)",
           "summary": "Emit a SCRIPT_LOG event at INFO level.",
-          "description": "Emit a SCRIPT_LOG event at INFO level. This is an annotation, not a fault — it never raises, never halts execution. Gated by the node's log_level setting.",
+          "description": "Logs a message at INFO level, without raising or stopping the node.",
           "params": [
             {
               "name": "message",
@@ -5541,7 +5779,7 @@
           "signature": "linkiir.log.debug(message)",
           "usage": "linkiir.log.debug(message)",
           "summary": "Emit a SCRIPT_LOG event at DEBUG level.",
-          "description": "Emit a SCRIPT_LOG event at DEBUG level. Dropped by the runtime if the node's log_level is above DEBUG. This is an annotation, not a fault — it never raises, never halts execution. Gated by the node's log_level setting.",
+          "description": "Logs a message at DEBUG level, dropped unless the node's log level is DEBUG.",
           "params": [
             {
               "name": "message",
@@ -5567,7 +5805,7 @@
     {
       "name": "linkiir.config",
       "title": "Node Configuration",
-      "description": "Read the current node's configuration fields. Values come from the config fields set on the node in the Node Parameters panel, flattened into a single label → value table. Password fields are decrypted automatically. The result is cached for the lifetime of the script VM: the first call reads and parses the configuration, every later call returns the same table with no I/O.",
+      "description": "Reads the current node's configuration fields as a single label → value table, with password fields decrypted. The table is read once per script and cached.",
       "items": [
         {
           "kind": "function",
@@ -5575,7 +5813,7 @@
           "signature": "linkiir.config.node()",
           "usage": "local Cfg = linkiir.config.node()",
           "summary": "Return this node's configuration as a label → value table.",
-          "description": "Reads the current node's configuration and returns a flat table keyed by each config entry's label. Strings, numbers, and booleans map straight across. Labels that are absent, null, or hold an object or array read as nil. The table is cached per script VM: the configuration is read once, and every later call returns that same table.",
+          "description": "Returns the node's configuration as a table keyed by each field's label. Absent or empty fields read as nil, and the table is cached after the first call.",
           "returns": [
             {
               "name": "table",
@@ -5685,7 +5923,7 @@
           "signature": "table.concat(t [, sep [, i [, j]]])",
           "usage": "table.concat(t, sep, i, j)",
           "summary": "Join array elements into a string.",
-          "description": "Returns t[i] .. sep .. t[i+1] .. sep .. ... .. t[j]. sep defaults to the empty string; i defaults to 1; j defaults to #t.",
+          "description": "Returns t[i] .. sep .. t[i+1] .. ... .. t[j]. sep defaults to \"\", i to 1 and j to #t.",
           "params": [
             {
               "name": "t",
@@ -6171,7 +6409,7 @@
           "signature": "math.random([m [, n]])",
           "usage": "math.random(m, n)",
           "summary": "Pseudo-random number.",
-          "description": "With no arguments, returns a float in [0, 1). With one integer argument m, returns an integer in [1, m]. With two integer arguments m, n, returns an integer in [m, n].",
+          "description": "Returns a float in [0, 1), or with integer arguments an integer in [1, m] or [m, n].",
           "params": [
             {
               "name": "m",
@@ -6620,7 +6858,7 @@
     {
       "name": "os",
       "title": "Lua OS Library (time/env)",
-      "description": "Time and environment functions from the standard Lua 5.1 os library, plus the file/process functions (os.execute, os.remove, os.rename, os.tmpname, os.exit). The file/process functions are fully functional but are a Linkiir convention to avoid in workflow scripts — they bypass logging/auditing and portability that linkiir.sys.fs (local filesystem) and linkiir.link.file (remote transfer) provide, and os.exit()/os.execute() can terminate or fork the worker process outright. Prefer the linkiir.* equivalents unless you specifically need raw OS access. os.remove and os.rename resolve paths the same way as linkiir.sys.fs: a relative path resolves against the Runtime's working directory (linkiir.sys.workingDir()), an absolute path is used unchanged, and a path that escapes the working directory via '..' raises an error. os.execute, os.exit and os.tmpname are unwrapped and still act on the raw process.",
+      "description": "Lua 5.1's time, environment, file and process functions. Prefer linkiir.sys.fs and linkiir.link.file over the file and process functions, which bypass logging and can end the worker process.",
       "items": [
         {
           "kind": "function",
@@ -6767,7 +7005,7 @@
           "signature": "os.execute([command])",
           "usage": "os.execute(command)",
           "summary": "Run a shell command.",
-          "description": "Passes command to the system shell (via C's system()) and returns its exit status. With no argument, returns whether a shell is available. Runs with the worker process's OS privileges — discouraged in workflow scripts; prefer linkiir.sys.fs / linkiir.link.file for file and transfer work.",
+          "description": "Runs a command in the system shell and returns its exit status. Discouraged in workflow scripts; use linkiir.sys.fs or linkiir.link.file instead.",
           "params": [
             {
               "name": "command",
@@ -6794,7 +7032,7 @@
           "signature": "os.remove(filename)",
           "usage": "os.remove(filename)",
           "summary": "Delete a file.",
-          "description": "Deletes the file (or empty directory, on POSIX) at filename. Returns true on success, or nil plus an error message on failure. Prefer linkiir.sys.fs.remove, which is scoped to the node's working directories. A relative path resolves against the Runtime's working directory (linkiir.sys.workingDir()), not the process working directory; an absolute path is used unchanged, and a path escaping the working directory via '..' raises an error.",
+          "description": "Deletes a file, returning true or nil and an error message. A relative path resolves against linkiir.sys.workingDir(), and a path escaping it with .. raises an error.",
           "params": [
             {
               "name": "filename",
@@ -6821,7 +7059,7 @@
           "signature": "os.rename(oldname, newname)",
           "usage": "os.rename(oldname, newname)",
           "summary": "Rename/move a file.",
-          "description": "Renames the file or directory at oldname to newname. Returns true on success, or nil plus an error message on failure. A relative path resolves against the Runtime's working directory (linkiir.sys.workingDir()), not the process working directory; an absolute path is used unchanged, and a path escaping the working directory via '..' raises an error.",
+          "description": "Renames or moves a file, returning true or nil and an error message. A relative path resolves against linkiir.sys.workingDir(), and a path escaping it with .. raises an error.",
           "params": [
             {
               "name": "oldname",
@@ -6905,7 +7143,7 @@
     {
       "name": "io",
       "title": "Lua IO Library (files/stdio)",
-      "description": "Standard Lua 5.1 io library: local file and standard-stream I/O, available exactly as in stock Lua/LuaJIT (registered by the runtime alongside table/math/os/string). For directory listings, metadata, and simple file management, prefer linkiir.sys.fs, which is purpose-built for the node's working directories; for reading/writing remote files (FTP/SFTP), use linkiir.link.file. io.* is the right tool when you need actual byte-level read/write access to a local file or stdin/stdout/stderr. io.popen spawns a shell process and should be avoided in workflow scripts. Paths are resolved the same way as linkiir.sys.fs: io.open, io.lines, io.input and io.output take a relative path as relative to the Runtime's working directory (linkiir.sys.workingDir()), never the process working directory. Absolute paths are used unchanged, and a relative path that escapes the working directory via '..' raises an error.",
+      "description": "Lua 5.1's io library for byte-level reading and writing of local files and the standard streams. Prefer linkiir.sys.fs for file management and linkiir.link.file for remote files.",
       "items": [
         {
           "kind": "function",
@@ -6913,7 +7151,7 @@
           "signature": "io.open(filename [, mode])",
           "usage": "local f, err = io.open(filename, mode)",
           "summary": "Open a file.",
-          "description": "Opens filename in the given mode (\"r\" read, \"w\" write/truncate, \"a\" append, with optional \"b\" for binary and \"+\" for update; default \"r\"). Returns a new file handle on success, or nil plus an error message on failure. A relative path resolves against the Runtime's working directory (linkiir.sys.workingDir()), not the process working directory; an absolute path is used unchanged, and a path escaping the working directory via '..' raises an error.",
+          "description": "Opens a file in the given mode (\"r\" by default) and returns a file handle, or nil and an error message. A relative path resolves against linkiir.sys.workingDir(), and a path escaping it with .. raises an error.",
           "params": [
             {
               "name": "filename",
@@ -7027,7 +7265,7 @@
           "signature": "io.lines([filename, ...])",
           "usage": "for line in io.lines(filename) do ... end",
           "summary": "Iterate the lines of a file.",
-          "description": "Opens filename (or uses the default input file if omitted), and returns an iterator function that returns a new line each time it is called, per the given format(s). The file is closed automatically when the iterator finishes (only when a filename is given). A relative path resolves against the Runtime's working directory (linkiir.sys.workingDir()), not the process working directory; an absolute path is used unchanged, and a path escaping the working directory via '..' raises an error.",
+          "description": "Returns an iterator over the lines of a file, closing it at the end. A relative path resolves against linkiir.sys.workingDir(), and a path escaping it with .. raises an error.",
           "params": [
             {
               "name": "filename",
@@ -7060,7 +7298,7 @@
           "signature": "io.input([file])",
           "usage": "io.input(file)",
           "summary": "Get/set the default input file.",
-          "description": "With a string, opens the named file in read mode and sets it as the default input file. With a file handle, sets it as the default input file. With no argument, returns the current default input file. A relative path resolves against the Runtime's working directory (linkiir.sys.workingDir()), not the process working directory; an absolute path is used unchanged, and a path escaping the working directory via '..' raises an error.",
+          "description": "Sets the default input file from a file name or handle, or returns it. A relative path resolves against linkiir.sys.workingDir(), and a path escaping it with .. raises an error.",
           "params": [
             {
               "name": "file",
@@ -7087,7 +7325,7 @@
           "signature": "io.output([file])",
           "usage": "io.output(file)",
           "summary": "Get/set the default output file.",
-          "description": "With a string, opens the named file in write mode and sets it as the default output file. With a file handle, sets it as the default output file. With no argument, returns the current default output file. A relative path resolves against the Runtime's working directory (linkiir.sys.workingDir()), not the process working directory; an absolute path is used unchanged, and a path escaping the working directory via '..' raises an error.",
+          "description": "Sets the default output file from a file name or handle, or returns it. A relative path resolves against linkiir.sys.workingDir(), and a path escaping it with .. raises an error.",
           "params": [
             {
               "name": "file",
@@ -7114,7 +7352,7 @@
           "signature": "io.popen(prog [, mode])",
           "usage": "local f = io.popen(prog, mode)",
           "summary": "Run a shell command, connected via a pipe.",
-          "description": "Starts prog in a separate process (via the system shell) and returns a file handle for reading its output (mode \"r\", the default) or writing to its input (mode \"w\"). Runs with the worker process's OS privileges — avoid in workflow scripts; prefer linkiir.link.file / linkiir.link.web for external I/O.",
+          "description": "Runs a shell command and returns a file handle to read its output or write its input. Avoid it in workflow scripts; use linkiir.link.file or linkiir.link.web instead.",
           "params": [
             {
               "name": "prog",
@@ -7354,7 +7592,7 @@
           "name": "File:seek",
           "signature": "file:seek([whence [, offset]])",
           "summary": "Get/set the file position.",
-          "description": "Sets and/or gets the current file position, measured from the start of the file. whence is \"set\" (from the start), \"cur\" (from the current position, the default), or \"end\" (from the end of the file); offset defaults to 0. With no arguments, returns the current position without changing it.",
+          "description": "Gets or sets the file position, from \"set\" (start), \"cur\" (current, the default) or \"end\". With no arguments, returns the current position.",
           "returns": [
             {
               "description": "the new file position (bytes from the start); nil, errorMessage on failure"
@@ -7441,7 +7679,7 @@
     {
       "name": "string",
       "title": "Lua String Library",
-      "description": "Standard Lua 5.1 string library. Available as both `string.fn(s, ...)` and object-style `s:fn(...)`, since every string has a metatable pointing back to this table. Pattern-matching functions (find, match, gmatch, gsub) use Lua patterns, not full regular expressions.",
+      "description": "Lua 5.1's string library, callable as string.fn(s, ...) or s:fn(...). find, match, gmatch and gsub use Lua patterns, not regular expressions.",
       "items": [
         {
           "kind": "function",
@@ -7515,7 +7753,7 @@
           "signature": "string.dump(function)",
           "usage": "string.dump(fn)",
           "summary": "Serialize a function to a binary chunk.",
-          "description": "Returns a binary string containing a loadable, compiled representation (bytecode) of function. To load and run it again, pass the string to loadstring (or load). Only works on Lua functions defined in the script itself, not C functions exposed by the runtime (print, linkiir.*, etc.).",
+          "description": "Returns a function's compiled bytecode as a string, which loadstring can load again. Works only on Lua functions defined in the script.",
           "params": [
             {
               "name": "function",
@@ -7542,7 +7780,7 @@
           "signature": "string.find(s, pattern [, init [, plain]])",
           "usage": "string.find(s, pattern, init, plain)",
           "summary": "Find the first match of a pattern in a string.",
-          "description": "Looks for the first match of pattern in s, starting search at position init. Returns the start and end indices of the match, plus any captures. Returns nil if no match. If plain is true, pattern is matched as a literal substring (no Lua pattern special characters).",
+          "description": "Returns the start and end of the first match of pattern in s from position init, plus any captures, or nil. With plain true, the pattern is a literal string.",
           "params": [
             {
               "name": "s",
@@ -7653,7 +7891,7 @@
           "signature": "string.gsub(s, pattern, repl [, n])",
           "usage": "string.gsub(s, pattern, repl, n)",
           "summary": "Global substitution by pattern.",
-          "description": "Returns a copy of s in which all (or, if n is given, at most n) occurrences of pattern have been replaced by repl. repl may be a string (with %1..%9 capture references and %0 for the whole match), a table (indexed by the first capture), or a function (called with the captures; its result replaces the match, or the match is kept unchanged if it returns nil/false).",
+          "description": "Returns a copy of s with every match of pattern (or the first n) replaced by repl, and the number of matches. repl may be a string with %1-%9 captures, a table or a function.",
           "params": [
             {
               "name": "s",
@@ -7927,7 +8165,7 @@
     {
       "name": "debug",
       "title": "Lua Debug Library",
-      "description": "Standard Lua 5.1 debug library: introspection and instrumentation for the call stack, locals, upvalues, and metatables. debug.traceback is the one function commonly useful in workflow scripts (paired with xpcall to capture where an error occurred); the rest are low-level tools for advanced debugging.",
+      "description": "Lua 5.1's debug library for inspecting the call stack, locals, upvalues and metatables. debug.traceback with xpcall is the part most useful in workflow scripts.",
       "items": [
         {
           "kind": "function",
@@ -8172,7 +8410,7 @@
           "signature": "debug.setmetatable(object, table)",
           "usage": "debug.setmetatable(object, meta)",
           "summary": "Set a value's metatable, bypassing __metatable.",
-          "description": "Sets the metatable for object to table (which can be nil). Returns object. Unlike setmetatable(), ignores the __metatable field.",
+          "description": "Sets object's metatable to table, or nil, ignoring any __metatable field, and returns object.",
           "params": [
             {
               "name": "object",

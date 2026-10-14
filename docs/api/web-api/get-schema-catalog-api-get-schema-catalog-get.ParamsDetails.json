@@ -1,0 +1,1 @@
+{"parameters":[{"name":"protocol","in":"query","required":true,"schema":{"type":"string","title":"Protocol"}},{"name":"version","in":"query","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Version"}},{"name":"category","in":"query","required":false,"schema":{"type":"string","default":"all","title":"Category"}}]}

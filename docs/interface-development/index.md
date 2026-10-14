@@ -16,6 +16,8 @@ Project → Workflow → Node
 | --- | --- |
 | Understand the structure you build within | [How Interfaces Are Organized](architecture.md) |
 | Pick and configure a transport | [Interfaces and Core Nodes](interfaces/index.md) |
+| Convert between HL7 v2, FHIR, X12, CDA, database rows, JSON and XML without writing code | [Data Map Nodes](interfaces/data-map/index.md) |
+| Describe the messages a node reads and writes | [Schema Editor](schema-editor.md) |
 | Write transformation logic | [Lua Programming](lua-programming/index.md) |
 | Copy a complete working interface | [Sample Code](sample-code/index.md) |
 | Connect to an EHR, CRM, cloud store, or AI service | [Adapters](../adapters/index.md) |
@@ -48,6 +50,8 @@ You configure transports with fields and write Lua only where the logic is yours
   - [Source Nodes](interfaces/source-nodes.md)
   - [Destination Nodes](interfaces/destination-nodes.md)
   - [Custom Scripting Nodes](interfaces/custom-scripting-nodes.md)
+  - [Data Map Nodes](interfaces/data-map/index.md)
+- [Schema Editor](schema-editor.md)
 - [Sample Code](sample-code/index.md)
   - [Demo: HTTP Source to File](sample-code/http-source-demo.md)
   - [Demo: HL7 LLP to Scripting to LLP](sample-code/hl7-llp-scripting-llp.md)

@@ -1,0 +1,62 @@
+---
+id: health-active-api-health-active-get
+title: "Health Active"
+description: "Return 200 only when this node is the active member of the HA pair."
+sidebar_label: "Health Active"
+hide_title: true
+hide_table_of_contents: true
+api: eJzFVt1O40YUfpUj7wW7NHECVdVVtqxEq1WJilpEQL3ALJnYk3iWyYzrGSdEUao+RJ+wT9LvjO2EANtq1YsSiTjjM+f3O98568iLmYsGN9GZmuV0uhBKi4nSyq+i206USZeWqvDKmmgQXUpflYaO+32yRq9omUtDPleOjM0k4dvnkkTq1ULSXM4nsiQ7DYdnp1QIVcaJSczIC5NNVtR9T9/0v37XXrAlpLqZcmKiZcZvYSiOOpEtZCnYhWEGJ3IptM/v6kt3olB3+ycz6XGnlK6wxkmEto6gh7/2gxlVaSqdm1aaLhth3Eut8dJ4FhdFoVUaDPc+Ob6zjlyay7nA04b/OtFDN0XkIzEvNJu6WUdamBm0nytzr1QJjUin1HsnzlZlKnGkbSo0sasdkmVJJ6RroZi/46WcxIhmnRgiqkqN90mUe18Mer2j42/jPj5Hg7f9t/0e0tCr09Cr05BEnXCt26URokQMP1h7r+SAnJRQc1qhKsY38SURChrqNDS+tFmV8ikqNpNxUAPdmSwdPFjTTRLVupLoFgd76mkDs5vEqCkg4UNorNYEJQjRlq/xP57jDnS/SYw0WWKKUhn/moVjTmcn3IsnNlu9iTZA4Vz63HLt69oWwuf48TxovFNmarlQXnktd1mn04sh3i4QQ139o/go7kdPAX6FDLQ3fpUTvtWi+uzq6iL89o9knCyhkpR3Uk9JPhQWiKO//viTpRLjxFxu76CadD2kiiW8pbkwyAAVpf0kU+86tLTl/VTbJR65m/Cl1aQUpeJHwWlqrDnpvTIzF3rp1Sv6XjhJ15fn/BMBlPKA+5Gm6gFdVFQTgJgmjcxg6zrCYqe7uXVeZh1yFln/rZLOO5pZeJiYFXBKdmmaMGPi9MiHGuw1YKCFQcJR0fhFaI7hfGJmpcqorIyB4xRgr1et/0+giM8HWFsRoFFYACP4pQAJZIHEThjRuRp7MZ3bGSkDn1JJCwWD44tfRlcUIKLtTJkx5xzwIdFeojQgthPwiUOT4Un45pjDk+xGYpq0kJh6ZD/INBVuU+1kIcBQTa3tvTQhtvF4rCv4gh482roINxgNdetzWjqUigK8KsP5vnNQUwuGGC7/iSgAvUdM8S9UEdS1FPGstwMDdq9WRdPhyTMqBF9s6svcpBA5WCcRMFAaID6JBkl0QHFM180JPx+wObSucwB6tpO5aE4amc3BHoFs437KIkkUXrWYpSnmlswG8JUVvcAxULhVFliGfj8Jk+yzirkvQ2d44SvXaH6iAycI5dm7QF2N4baEaNuGI08eSTbJR95H0ne3vLpNwO7WZ/x0PMZkhmaYVJ7BuNPTVJaWwiEcHt0SiW/9ar16zN4nO3uDufBpDjMfbz6+u/0K98Iwgdn7k+8Cxt8nEUeHw+MYI5QpgBHc9A9wzl3+vGcDFaBRttjezr/j/zgAIXrX8ulnwb0bXO7LB9fxF0yu0P8vsFngS6wEdkkuB92DkQ4Pz4c//zQcXh4eUoCVCxyLiirta1rgLlqKFTMPTIs0B0Fh1XKumjMx0nhvDI8bfhG6RPwryq3OWKrltokXCmDAfUyVnCleTOxCtox8KTWXKlSXbkb1gARxo2q3r+O459qTLqddmUw+xPPsTUuLNG6reDgOIHA8H7LaRjPLqGZXTBDolRrYEfXqibCVcQpJEPVWWRuDaxH2LWY5TE6e8EwsGNlnYQGg03YB2Bvo690+938trx40CutePvheoZF2DgNYZufqReYG9KogWa8yeGiWGSw+PJxZYL3mAX5d6s2Gj0F55QrneFxgQWCT/GsTdADuYRG9lxCJTsEOBS9NC6ErduTZVru3YP344SrabP4Gd/Ylyg==
+sidebar_class_name: "get api-method"
+info_path: docs/api/web-api/linkiir-api
+custom_edit_url: null
+hide_send_button: true
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Health Active"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/api/health/active"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Return 200 only when this node is the active member of the HA pair.
+
+Standby -&gt; 503; active or HA-disabled -&gt; 200.
+
+<ParamsDetails>
+  
+</ParamsDetails>
+
+<RequestSchema
+  {...require("./health-active-api-health-active-get.RequestSchema.json")}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  {...require("./health-active-api-health-active-get.StatusCodes.json")}
+>
+  
+</StatusCodes>
+
+
+      

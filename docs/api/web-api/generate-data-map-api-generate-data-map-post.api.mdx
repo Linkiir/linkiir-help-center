@@ -1,0 +1,68 @@
+---
+id: generate-data-map-api-generate-data-map-post
+title: "Read a Data Map node and generate its Lua"
+description: "Reads a Data Map node's maps from its files and turns them into the Lua the node runs: mapping.lua, each map's code and the helper modules, with the code each rule becomes, what to do about each generated file in the node (write it, or leave a hand edit alone), and the checks on each map. Nothing is read from disk, written or run - the caller sends the files and saves what it writes."
+sidebar_label: "Read a Data Map node and generate its Lua"
+hide_title: true
+hide_table_of_contents: true
+api: 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
+sidebar_class_name: "post api-method"
+info_path: docs/api/web-api/linkiir-api
+custom_edit_url: null
+hide_send_button: true
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Read a Data Map node and generate its Lua"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/api/generate_data_map"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Reads a Data Map node's maps from its files and turns them into the Lua the node runs: mapping.lua, each map's code and the helper modules, with the code each rule becomes, what to do about each generated file in the node (write it, or leave a hand edit alone), and the checks on each map. Nothing is read from disk, written or run - the caller sends the files and saves what it writes.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<ParamsDetails>
+  
+</ParamsDetails>
+
+<RequestSchema
+  {...require("./generate-data-map-api-generate-data-map-post.RequestSchema.json")}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  {...require("./generate-data-map-api-generate-data-map-post.StatusCodes.json")}
+>
+  
+</StatusCodes>
+
+
+      

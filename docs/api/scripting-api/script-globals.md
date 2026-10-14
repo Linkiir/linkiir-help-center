@@ -50,7 +50,7 @@ __node_dir
 
 Deprecated. Filesystem path to the current node directory - use linkiir.sys.nodeDir().
 
-Deprecated: use linkiir.sys.nodeDir() instead. Filesystem path to the current node directory, set by the runtime before script execution. Still populated and not scheduled for removal, but linkiir.sys.nodeDir() is the documented form. Concatenating it onto a schema name is no longer needed either - a relative schema path already resolves against the node directory.
+Deprecated: use linkiir.sys.nodeDir() instead. The filesystem path to the current node directory, still set before the script runs.
 
 **Usage**
 
@@ -266,7 +266,7 @@ tonumber(e [, base])
 
 Convert a value to a number.
 
-Tries to convert its argument to a number. If the argument is already a number or a string convertible to a number, returns that number; otherwise returns nil. An optional base (2-36) interprets e as an integer in that base.
+Converts a number or numeric string to a number, or returns nil. An optional base (2-36) reads it as an integer in that base.
 
 **Usage**
 
@@ -380,7 +380,7 @@ next(t [, k])
 
 Low-level table iterator.
 
-Returns the next key/value pair after key k in table t, in an undefined order; returns nil when there are no more. Called with k = nil (or omitted) returns the first pair. Underlies pairs().
+Returns the key/value pair after key k in table t, or the first pair when k is nil. Returns nil when there are no more; pairs() is built on it.
 
 **Usage**
 
@@ -826,7 +826,7 @@ collectgarbage([opt [, arg]])
 
 Control the garbage collector.
 
-Runs garbage-collector actions. With no arguments, performs a full collection cycle. opt selects the action (e.g. "collect", "count", "step").
+Runs a garbage-collector action selected by opt, such as "collect", "count" or "step". With no arguments, runs a full collection.
 
 **Usage**
 
@@ -922,7 +922,7 @@ dofile([filename])
 
 Execute a Lua file as a chunk.
 
-Loads and immediately runs the Lua chunk in filename (or stdin, if omitted), in the global environment. Errors propagate to the caller, unprotected. Prefer require for loading reusable modules — dofile re-runs the file every call and has no module caching.
+Runs the Lua file filename in the global environment, with errors passed to the caller. Prefer require for reusable modules, since dofile re-runs the file on every call.
 
 **Usage**
 
@@ -993,7 +993,7 @@ loadstring(string [, chunkname])
 
 Compile a Lua chunk from a string.
 
-Loads a chunk from the given string without running it. Returns the compiled chunk as a function, or nil plus an error message on a syntax error. chunkname is used in error messages and debug info.
+Compiles a chunk from a string without running it, returning it as a function, or nil and an error message. chunkname is used in error messages.
 
 **Usage**
 
@@ -1141,7 +1141,7 @@ module(name [, ...])
 
 Create or enter a named module.
 
-Legacy Lua 5.1 module system: creates (or reuses) a table for module name, sets it as the value of the global name and of package.loaded[name], and sets it as the new environment of the running function, so subsequent top-level function/variable definitions become fields of the module. Optional arguments are 'module modifiers' such as package.seeall. Superseded in most modern Lua code by returning a table from a plain chunk loaded via require.
+Lua 5.1's legacy module system: makes a module table named name the environment of the running function. Modern code returns a table from a chunk loaded with require instead.
 
 **Usage**
 

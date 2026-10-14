@@ -38,6 +38,7 @@ const sidebars: SidebarsConfig = {
         ]},
         {type: 'category', label: 'Configurations', link: {type: 'doc', id: 'administration/configurations/index'}, items: [
           'administration/configurations/project-settings', 'administration/configurations/user-roles',
+          'administration/configurations/phi-masking',
           'administration/configurations/migration',
           'administration/configurations/http-server',
           'administration/configurations/log-archive-database',
@@ -62,7 +63,14 @@ const sidebars: SidebarsConfig = {
         {type: 'category', label: 'Interfaces and Core Nodes', link: {type: 'doc', id: 'interface-development/interfaces/index'}, items: [
           'interface-development/interfaces/source-nodes', 'interface-development/interfaces/destination-nodes',
           'interface-development/interfaces/custom-scripting-nodes',
+          {type: 'category', label: 'Data Map Nodes', link: {type: 'doc', id: 'interface-development/interfaces/data-map/index'}, items: [
+            'interface-development/interfaces/data-map/building-maps',
+            'interface-development/interfaces/data-map/conditions',
+            'interface-development/interfaces/data-map/formats',
+            'interface-development/interfaces/data-map/testing-and-errors',
+          ]},
         ]},
+        'interface-development/schema-editor',
         {type: 'category', label: 'Sample Code', link: {type: 'doc', id: 'interface-development/sample-code/index'}, items: [
           'interface-development/sample-code/http-source-demo', 'interface-development/sample-code/hl7-llp-scripting-llp',
         ]},

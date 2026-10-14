@@ -53,6 +53,8 @@ Two limits worth knowing:
 - **Only archived bodies can match.** A message whose payload exceeded the archiver's maximum payload size, or whose payload has since been purged by retention, cannot be found by its content. Its index row still matches on the summary.
 - **A term that matches nothing is the slow case.** No index covers message text, so a search that finds no rows walks the whole table. A search that does match stops as soon as it has filled a page.
 
+Without **Unredact PHI**, a row only counts as a match when the term is in what you would be shown, so a masked identifier can't be found by searching for it. Such a search can stop before filling a page; the table then says **Older messages haven't been searched yet**, and **Keep searching** carries on. See [Searching masked messages](../configurations/phi-masking.md#searching-masked-messages).
+
 Tracing one message end to end is still the correlation ID: every node it passes through records the same one, so searching it returns the whole journey.
 
 ---
@@ -76,9 +78,9 @@ There is nothing to switch on or off. Tailing does not count as user activity, s
 
 ## Reading a message
 
-Selecting a row opens it, with its metadata, its related messages, and its raw body. HL7 messages render one segment per line whether or not PHI is revealed.
+Selecting a row opens it, with its metadata, its related messages, and its raw body. HL7 messages render one segment per line whether or not PHI is masked.
 
-Patient identifiers in an HL7 payload are **masked for everyone without Unredact PHI**. Holding that permission adds a reveal control; without it the payload stays masked.
+Patient identifiers in a payload are **masked for everyone without Unredact PHI**: HL7 v2 fields, and values in JSON and XML (FHIR included), as **Settings → Instance → PHI Masking** sets out. The masking is done on the server, so the identifiers never reach the browser. Holding **Unredact PHI** shows the payload in full, with a **Hide PHI** button that masks it again by the same rules, for reading a message with someone looking over your shoulder. See [PHI Masking](../configurations/phi-masking.md).
 
 ---
 

@@ -67,7 +67,7 @@ Reading message history.
 | **Export log messages** | Download selected messages as a file |
 | **Resubmit messages** | Re-produce a stored message onto its originating topic |
 
-Reading a message includes reading its body — the index row already names the identifiers the payload carries, so gating the two separately drew a line where there was not one. What *is* separate is seeing PHI unmasked: payloads render redacted for everyone without **Unredact PHI**.
+Reading a message includes reading its body — the index row already names the identifiers the payload carries, so gating the two separately drew a line where there was not one. What *is* separate is seeing PHI unmasked: payloads render redacted for everyone without **Unredact PHI**. What is redacted is set in [PHI Masking](phi-masking.md).
 
 ### Scripting
 
@@ -107,7 +107,7 @@ Instance-wide settings. Nothing here grants access to projects, logs, or the Bui
 | --- | --- |
 | **Manage users** | Create and delete users, and assign roles to them |
 | **Manage roles** | Create, edit, and delete roles and their permissions |
-| **Security settings** | Session timeouts and password policy |
+| **Security settings** | Session timeouts and password policy, and the PHI masking policy (which also needs **Unredact PHI**) |
 | **Server settings** | Instance label, port, and TLS certificates |
 | **Database settings** | The instance's database connection |
 | **Environment variables** | Instance-wide environment variables |

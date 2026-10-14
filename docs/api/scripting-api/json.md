@@ -6,7 +6,7 @@ title: JSON
 
 `linkiir.json`
 
-JSON parse and serialize operating on plain Lua tables. Unlike linkiir.data, which returns the node-tree interface, linkiir.json works with native Lua values. json.array() and json.object() tag a table so its JSON shape is explicit rather than inferred.
+Parses and serializes JSON as plain Lua values rather than node trees. json.array() and json.object() fix a table's JSON shape.
 
 ---
 
@@ -18,7 +18,9 @@ JSON parse and serialize operating on plain Lua tables. Unlike linkiir.data, whi
 linkiir.json.parse(str)
 ```
 
-Parse a JSON string into a Lua value. Objects become tables with string keys; arrays become tables with integer keys 1..N. JSON null becomes linkiir.json.null. Raises on invalid JSON.
+Parse a JSON string into a Lua value.
+
+Parses a JSON string into Lua tables, with JSON null as linkiir.json.null. Raises on invalid JSON.
 
 **Usage**
 
@@ -59,7 +61,9 @@ print(obj.age)   -- 30
 linkiir.json.serialize(value)
 ```
 
-Serialize a Lua value to a JSON string. Tables with consecutive integer keys emit as arrays; otherwise as objects, unless the table was tagged with linkiir.json.array() or linkiir.json.object(). nil and json.null become null. Raises on circular references, NaN/Infinity, or non-serializable types (functions, userdata).
+Serialize a Lua value to a JSON string.
+
+Serializes a Lua value to JSON, writing tables with keys 1..N as arrays unless tagged with json.array() or json.object(). Raises on circular references, NaN, Infinity, functions and userdata.
 
 **Usage**
 
@@ -101,7 +105,7 @@ linkiir.json.array([t])
 
 Tag a table so it always serializes as a JSON array.
 
-Mark a Lua table as a JSON array. Called with no argument (or nil) it creates and tags a new empty table; called with a table it tags that table in place and returns it. The tag overrides the usual shape heuristic, so a tagged table emits as [ ... ] even when empty or when it holds string keys (array serialization walks integer keys 1..N and ignores the rest). Tables returned by linkiir.json.parse are already tagged, so an empty array survives a parse/serialize round-trip.
+Tags a table, or a new empty one, so it always serializes as a JSON array, even when empty. Tables from linkiir.json.parse are already tagged.
 
 **Usage**
 
@@ -144,7 +148,7 @@ linkiir.json.object([t])
 
 Tag a table so it always serializes as a JSON object.
 
-Mark a Lua table as a JSON object. Called with no argument (or nil) it creates and tags a new empty table; called with a table it tags that table in place and returns it. The tag overrides the usual shape heuristic: an untagged empty table serializes as [], while a tagged one serializes as \{\}. A tagged table holding a sequence emits its integer keys as the object keys "1", "2", ... Tables returned by linkiir.json.parse are already tagged.
+Tags a table, or a new empty one, so it always serializes as a JSON object, even when empty. Tables from linkiir.json.parse are already tagged.
 
 **Usage**
 
@@ -189,7 +193,7 @@ linkiir.json.null
 
 Sentinel representing JSON null.
 
-A unique sentinel table that represents JSON null. Distinguishes 'key is null' (obj.x == json.null) from 'key is absent' (obj.x == nil). Serializes as null.
+A sentinel for JSON null that tells a null value (obj.x == json.null) from a missing one (obj.x == nil). Serializes as null.
 
 **Usage**
 

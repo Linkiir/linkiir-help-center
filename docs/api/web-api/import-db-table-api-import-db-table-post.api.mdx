@@ -1,0 +1,70 @@
+---
+id: import-db-table-api-import-db-table-post
+title: "Read a table from a database into a database schema"
+description: "Reads table `table`'s columns, types, sizes, NOT NULL and primary key"
+sidebar_label: "Read a table from a database into a database schema"
+hide_title: true
+hide_table_of_contents: true
+api: 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
+sidebar_class_name: "post api-method"
+info_path: docs/api/web-api/linkiir-api
+custom_edit_url: null
+hide_send_button: true
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Read a table from a database into a database schema"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/api/import_db_table"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Reads table `table`'s columns, types, sizes, NOT NULL and primary key
+and adds it to the schema sent, in the schema's database's types. Returns
+the new schema; nothing is saved.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<ParamsDetails>
+  
+</ParamsDetails>
+
+<RequestSchema
+  {...require("./import-db-table-api-import-db-table-post.RequestSchema.json")}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  {...require("./import-db-table-api-import-db-table-post.StatusCodes.json")}
+>
+  
+</StatusCodes>
+
+
+      
