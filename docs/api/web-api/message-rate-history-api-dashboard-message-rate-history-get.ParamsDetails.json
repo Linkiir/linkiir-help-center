@@ -1,0 +1,1 @@
+{"parameters":[{"name":"minutes","in":"query","required":false,"schema":{"type":"integer","maximum":1440,"minimum":1,"description":"How far back to return, in minutes (up to 24 hours).","default":1440,"title":"Minutes"},"description":"How far back to return, in minutes (up to 24 hours)."}]}

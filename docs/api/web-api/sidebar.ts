@@ -1201,7 +1201,7 @@ const sidebar: SidebarsConfig = {
         {
           type: "doc",
           id: "api/web-api/message-rate-history-api-dashboard-message-rate-history-get",
-          label: "Get 24-hour message rate history",
+          label: "Get message rate history",
           className: "api-method get",
         },
         {
