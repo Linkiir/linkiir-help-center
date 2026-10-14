@@ -81,7 +81,7 @@ Click a node on the canvas to open **Node Parameters** on the right. Everything 
 | **Run From Commit** | Which commit of the node's files the Runtime executes |
 | Configuration fields | The node type's own fields, plus any you added |
 
-The panel is read-only until you click **Edit** in its header, and **Save** writes the name, description, debug logging, and configuration fields together. The permissions behind them are separate: changing a field's value needs **Edit config values**, adding or redefining a field needs **Edit config fields**, and the name, description, and debug logging need **Edit node details**. A refused save says which permission it wanted rather than failing quietly. See [Users and Roles](../../administration/configurations/user-roles.md).
+The panel is read-only until you click **Edit** in its header, and **Save** writes the name, description, debug logging, and configuration fields together. The permissions behind them are separate: changing a field's value needs **Edit config values**, adding, removing, redefining, or reordering fields needs **Edit config fields**, and the name, description, and debug logging need **Edit node details**. A refused save says which permission it wanted rather than failing quietly. See [Users and Roles](../../administration/configurations/user-roles.md).
 
 **Run From Commit** is the exception: it saves the moment you pick a commit, because pinning reloads the node in the Runtime. Choosing the newest commit means "follow the latest" — the node keeps picking up new commits instead of freezing on that one. Pinning needs the **Set run commit** permission.
 
@@ -103,7 +103,9 @@ This is why **Run Test** followed by starting a single node is the right order w
 
 Beyond the fields a node type defines, you can add your own to a node's configuration and read them from your script. Useful for values you want configurable without editing code.
 
-Nodes created from a Linkiir-supplied template have their built-in fields locked: you can change a value, but not a label, type, or option list, and you cannot remove one. Fields you add yourself remain fully editable.
+Nodes created from a Linkiir-supplied template have their built-in fields locked: you can change a value, but not a label, type, or option list, and you cannot remove or move one. Fields you add yourself remain fully editable.
+
+To reorder fields in **Edit** mode, drag a field by the grip to the left of its name. To use the keyboard, focus the grip, press Space, move the field with the arrow keys, and press Space again. Locked fields have no grip and keep their order. Fields you added can go above, below, or between them. The new order is saved with everything else when you click **Save**.
 
 ## Editing the canvas
 

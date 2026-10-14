@@ -94,7 +94,7 @@ Changing how an existing node is set up, without authoring it.
 | Permission | Grants |
 | --- | --- |
 | **Edit config values** | Change the value of a node's existing config fields |
-| **Edit config fields** | Add, remove, or redefine the config fields themselves |
+| **Edit config fields** | Add, remove, redefine, or reorder the config fields themselves |
 | **Edit node details** | Change a node's name, description, and other details |
 
 Any one of the three opens the Builder's Node Parameters panel, and what you actually changed decides which one the save needs. See [The Node Parameters panel](../../interface-development/interfaces/index.md).

@@ -76,7 +76,7 @@ Holding **any one** of these is enough for the run to be granted the build tier:
 | `libraries.manage` | **Manage shared libraries** | Create, edit, publish, and delete shared libraries and their dependencies |
 | `workflows.edit` | **Edit workflows** | Create and delete workflows, and add, remove, connect, and move nodes on the canvas |
 | `node.config_values` | **Edit config values** | Change the value of a node's existing config fields |
-| `node.config_fields` | **Edit config fields** | Add, remove, or redefine the config fields themselves |
+| `node.config_fields` | **Edit config fields** | Add, remove, redefine, or reorder the config fields themselves |
 | `node.details` | **Edit node details** | Change a node's name, description, and other details |
 | `templates.manage` | **Manage node templates** | Create, import, edit, and delete node templates and template groups |
 | `git.manage` | **Commit, push, and pull** | Stage, commit, restore, and exchange commits with the remote |
