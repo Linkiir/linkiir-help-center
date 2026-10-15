@@ -48,6 +48,9 @@ const sidebars: SidebarsConfig = {
         {type: 'category', label: 'Alerting and Notifications', link: {type: 'doc', id: 'administration/notifications/index'}, items: [
           'administration/notifications/settings',
         ]},
+        {type: 'category', label: 'External Authentication', link: {type: 'doc', id: 'administration/external-auth/index'}, items: [
+          'administration/external-auth/ldap', 'administration/external-auth/saml', 'administration/external-auth/openid',
+        ]},
         'administration/security/index',
         {type: 'category', label: 'Troubleshooting', link: {type: 'doc', id: 'administration/troubleshooting/index'}, items: [
           'administration/troubleshooting/runtime-crash', 'administration/troubleshooting/crash-report',

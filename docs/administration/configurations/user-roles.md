@@ -21,7 +21,7 @@ A role granting **Edit node scripts** lets its holder edit scripts in the projec
 
 ## The permission set
 
-There are 38 permissions in six groups. The groups are a convenience for the role editor — each one gets a heading you can tick or clear in a single click — and grouping changes nothing about what a permission does.
+The permissions are arranged in six groups. The groups are a convenience for the role editor — each one gets a heading you can tick or clear in a single click — and grouping changes nothing about what a permission does.
 
 Every permission is a peer. None implies any other, there is no superuser, and a role grants exactly the boxes ticked on it: a role holding **Export log messages** without **View log messages** can export and not read.
 
@@ -118,6 +118,7 @@ Instance-wide settings. Nothing here grants access to projects, logs, or the Bui
 | **Manage archivers** | Add, remove, start, and stop log archiver instances |
 | **Manage license** | Apply, release, and remove the instance license |
 | **Manage catalogs** | Subscribe to, update, and publish catalogs of adapter nodes and libraries |
+| **Manage external authentication** | Configure LDAP, OpenID Connect, or SAML sign-in, and clean up external users. See [External Authentication](../external-auth/index.md). |
 
 ---
 
@@ -223,6 +224,16 @@ Edit the user, set **New Password**, and re-type it in **Confirm New Password**.
 
 Users can change their own password this way — the Edit button appears on your own row whether or not you hold **Manage users**. An administrator can reset any user's password the same way. There is no "forgot password" flow.
 
+### External users
+
+When [External Authentication](../external-auth/index.md) is set up, people who sign in through Active Directory, Entra ID, or Okta get an account automatically at their first sign-in. They are marked **External** in the list, and their row offers **View** instead of **Edit**.
+
+Their name, email address, and roles come from the identity provider and are read-only here: their roles are replaced from their IdP groups at every sign-in, so change group membership in the IdP rather than in Linkiir. You can still add them to projects as collaborators, and deleting one is harmless — their next sign-in creates the account again.
+
+### A user's activity
+
+The **Activity** button (the pulse icon) on each row opens the Logs page filtered to that user's audit events for the last 30 days. See [Audit events](../security/index.md#audit-events).
+
 ### Delete a user
 
 The trash icon, with a confirmation. Deleting an account ends its sessions.
@@ -276,11 +287,10 @@ Being explicit so you can plan around it:
 
 | Not available | Consequence |
 | --- | --- |
-| Account lockout or login rate limiting | Protect the Grid at the network layer, and behind a reverse proxy if it is reachable remotely |
+| Account lockout | Repeated failures pause sign-ins for 15 minutes rather than locking the account (see [Security](../security/index.md#1-complete-the-administrator-password-change)). Protect the Grid at the network layer as well, and behind a reverse proxy if it is reachable remotely. |
 | Password complexity or reuse rules | Only a minimum length of 8 characters and "not the current password" are enforced. Set your own standard by policy. |
 | Self-service password reset | A user can change their own password from the Users tab while signed in, but a forgotten one is reset by an administrator |
 | A profile page of its own | Managing your own name, password, and SSH key happens through your row on the Users tab rather than a separate profile screen |
-| External identity providers (LDAP, SAML, OIDC) | Accounts are local to the installation |
 | Per-project roles | Collaboration decides *which* projects a user reaches, not what they may do once inside. Permissions are the same in every project they collaborate on. |
 
 ---

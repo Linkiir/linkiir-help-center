@@ -4,7 +4,7 @@ title: Security
 
 # Security
 
-What a fresh Linkiir installation gives you, what it does not, and what to do about each before you put patient data through it.
+What a fresh Linkiir installation gives you, what it does not, and what to do about each before you put patient data through it. It ends with [audit events](#audit-events): how to see who did what.
 
 ## Where a fresh install starts
 
@@ -27,7 +27,11 @@ A fresh installation seeds `admin` with the password `password` and blocks every
 
 Then stop using it for daily work. Create named accounts with the narrowest roles that let people do their jobs, and keep `admin` in your privileged-access system for recovery. See [Users and Roles](../configurations/user-roles.md).
 
-Enforced password rules are a minimum length of 8 characters and "not the same as the current password". There is no complexity requirement, no reuse history, and no account lockout — so the strength of your credentials is a matter of your own policy, and protecting the login surface is a network-layer job.
+Enforced password rules are a minimum length of 8 characters and "not the same as the current password". There is no complexity requirement and no reuse history, so the strength of your credentials is a matter of your own policy.
+
+Repeated failed sign-ins are slowed down rather than locking the account. Within any 15 minutes, Linkiir pauses sign-ins after 5 failures for one username from one address, or 20 failures from one address, and the user sees *Too many sign-in attempts*. Each pause is recorded as a **Login Throttled** [audit event](#audit-events). It is a brake on password guessing, not a substitute for restricting who can reach the login page at the network layer.
+
+To use your organisation's own accounts, MFA, and password policy instead of Linkiir passwords, set up [External Authentication](../external-auth/index.md) with Active Directory, Entra ID, or Okta.
 
 ---
 
@@ -167,6 +171,113 @@ Rely on broker TLS, storage-level encryption, access control, and network isolat
 
 ---
 
+## Audit events
+
+Linkiir records what people do in it as **audit events**: who signed in, who started or stopped an interface, who changed access, and who searched, opened, exported, or resubmitted patient data. An auditor can follow one person's trail through the instance without wading through the platform's own health messages.
+
+Audit events are archived in the Log DB alongside message history, and read on the **Logs** page.
+
+### Review one user's activity
+
+The quickest way is from the user list:
+
+1. Open **Settings → Users**.
+2. Click the **Activity** button (the pulse icon) on the user's row.
+
+Linkiir opens the **Logs** page showing that user's audit trail for the **last 30 days**. To look further back, change **Time Range** in the sidebar to **All Time** or a custom **From**/**To**.
+
+You can also do it from the Logs page directly:
+
+1. Open **Logs**.
+2. Set **Type** to **Audit Events (user actions)**.
+3. Type `user:` and the username in the search box, for example `user:alice`, or `user:"alice smith"` for a name with spaces. The match is exact and ignores case, and it still finds people who have since been deleted.
+4. Optionally narrow by **Event Type**, **Project**, and **Time Range**.
+
+Select an event to see its details. Download selected events with **Download** for an auditor or a ticket.
+
+### What each event records
+
+| Field | Holds |
+| --- | --- |
+| Timestamp | When it happened |
+| Level | `INFO` for routine actions, `WARN` for ones worth a second look, such as a break-glass sign-in or an external-user cleanup |
+| Event type | What happened, for example `USER_LOGIN` or `WORKFLOW_STOP` |
+| User | Who did it |
+| Message | A one-line description |
+| Project, workflow, node | What it was done to, where that applies |
+| Source IP | The address the request came from |
+
+User and source IP are shown in the event's details, not as table columns.
+
+No event ever contains a password, token, secret, or SSO assertion. Events also keep patient data out: a log search records the search term under a field that is masked for anyone without **Unredact PHI**, and opening an unmasked payload records *that* it was opened, never the payload itself.
+
+### What is tracked
+
+**Sign-in and sessions**
+
+| Event | Recorded when |
+| --- | --- |
+| `USER_LOGIN` / `USER_LOGOUT` | A user signs in or out |
+| `EXTERNAL_AUTH_SUCCEEDED` / `EXTERNAL_AUTH_FAILED` | An LDAP, SAML, or OpenID Connect sign-in succeeds or fails, with the reason for a failure |
+| `BREAK_GLASS_LOGIN` | A local account, such as `admin`, signs in while external authentication is active |
+| `LOGIN_THROTTLED` | Sign-ins are paused after too many failures |
+| `SESSION_REVOKED` | A user's sessions are ended: disabled or deleted by an administrator, removed by an external-user cleanup, or left with no matching IdP group |
+
+**Users and access**
+
+| Event | Recorded when |
+| --- | --- |
+| `USER_DISABLED` / `USER_ENABLED` | An administrator disables or re-enables an account |
+| `EXTERNAL_USER_PROVISIONED` | Someone's first external sign-in creates their Linkiir account |
+| `EXTERNAL_ROLE_CHANGED` | An external user's roles change because their IdP groups changed, with the roles before and after |
+| `EXTERNAL_USER_CLEANUP` | An administrator removes external users with **Clean up** |
+| `EXTERNAL_AUTH_SETTINGS_CHANGED` | External authentication settings are saved |
+| `PROJECT_COLLABORATORS` | Collaborators are added to or removed from a project |
+
+**Projects, workflows, and nodes**
+
+| Event | Recorded when |
+| --- | --- |
+| `PROJECT_CREATE` / `PROJECT_DELETE` | A project is created, imported, or deleted |
+| `PROJECT_START` / `PROJECT_STOP` | A project is started or stopped |
+| `WORKFLOW_CREATE` / `WORKFLOW_DELETE` | A workflow is created or deleted |
+| `WORKFLOW_START` / `WORKFLOW_STOP` / `WORKFLOW_RESTART` | A workflow is started, stopped, or restarted |
+| `NODE_CREATE` / `NODE_DELETE` | A node is added or removed |
+| `NODE_START` / `NODE_STOP` / `NODE_RESTART` | A node is started, stopped, or restarted |
+| `NODE_CONFIG_UPDATE` | A node's configuration is changed |
+| `SCRIPT_COMMIT` | Script changes are committed |
+
+**Queues and patient data**
+
+| Event | Recorded when |
+| --- | --- |
+| `QUEUE_CLEAR` | Messages waiting on a node's queue are discarded |
+| `QUEUE_REPOSITION` | A node's queue position is moved, skipping or replaying messages |
+| `LOG_SEARCH` | Message content is searched by someone without **Unredact PHI** |
+| `LOG_PHI_UNMASKED_VIEW` | Someone with **Unredact PHI** opens a payload unmasked. Recorded once per session per project. |
+| `LOG_EXPORT` | Log records are downloaded |
+| `MESSAGE_RESUBMIT` | Archived messages are resubmitted |
+
+The **Event Type** filter lists the most common of these by name. Every one of them appears when **Event Type** is left at **All Event Types**.
+
+Events the platform raises on its own — runtime and archiver health, high availability, updates, and licence changes — are kept apart under **Type → System Events (platform)**.
+
+### Who can see audit events
+
+Reading them needs **View log messages**, the same permission as message history. There is no separate audit permission. Like the rest of the Logs page, a user sees events for the projects they collaborate on, plus instance-wide events such as sign-ins. Give auditors their own role holding **View log messages** and, if they need to hand records over, **Export log messages**. See [Users and Roles](../configurations/user-roles.md).
+
+### How long audit events are kept
+
+Audit events are purged by the same **Log Retention Days** setting as all other archived records, under **Settings → Logging → Log Retention Purge**. A fresh installation keeps everything (`0`, unlimited) until you set it.
+
+Set **Log Retention Days** to at least the period your audit policy requires. A value shorter than that, chosen to keep message payloads small, deletes the audit trail with them. See [Log Retention and Purge](../configurations/log-retention-purge.md).
+
+:::note
+The **Activity** button shows the last 30 days to keep the view quick. That is a view, not the retention period: older events are still there, up to your **Log Retention Days**, and you reach them by widening **Time Range**.
+:::
+
+---
+
 ## Pre-production checklist
 
 | Item | Done when |
@@ -181,6 +292,8 @@ Rely on broker TLS, storage-level encryption, access control, and network isolat
 | Samples are synthetic | No real identifiers in any sample |
 | Session timeouts suit your exposure | Reviewed rather than left at defaults |
 | Log DB retention and access reviewed | **Log Retention Days** set from policy rather than left unlimited, access restricted |
+| Audit trail reviewed | **Log Retention Days** covers your audit period, and an auditor role holding **View log messages** exists |
+| External authentication tested, if used | A test user signs in and gets the expected roles, and `admin` still signs in with the local form — see [External Authentication](../external-auth/index.md) |
 | SSH keys accounted for | Each key belongs to a named user who needs it, and you know they are not in the instance backup |
 | External monitoring in place | Health, lag, and disk alerts exist — see [Alerting and Notifications](../notifications/index.md) |
 
@@ -189,5 +302,7 @@ Rely on broker TLS, storage-level encryption, access control, and network isolat
 ## Next
 
 - [Users and Roles](../configurations/user-roles.md)
+- [External Authentication](../external-auth/index.md)
+- [Log Search and Message History](../logs/index.md)
 - [Backup and Restore](../backup-restore/index.md)
 - [Error Handling and Retry](../../interface-development/error-handling.md)

@@ -17,7 +17,8 @@ Administration covers the complete Linkiir platform lifecycle.
 - [Log Search and Message History](logs/index.md): Reading, searching, exporting, and resubmitting archived messages.
 - [Backup and Restore](backup-restore/index.md): Protect and recover the Linkiir working directory.
 - [Alerting and Notifications](notifications/index.md): Monitoring Linkiir, and alerting from a workflow.
-- [Security](security/index.md): First-login hardening, remote access, secrets, and patient data in logs.
+- [External Authentication](external-auth/index.md): Sign in with Windows Active Directory (LDAP), or Microsoft Entra ID and Okta (SAML 2.0 or OpenID Connect), with IdP groups mapped to Linkiir roles.
+- [Security](security/index.md): First-login hardening, remote access, secrets, patient data in logs, and audit events.
 - [Troubleshooting](troubleshooting/index.md): Runtime crashes, crash reports, and Log Archiver connectivity.
 
 ## Common tasks
@@ -27,6 +28,8 @@ Administration covers the complete Linkiir platform lifecycle.
 | Activate a license | [License ID and License Code](licensing/license-id-code.md) |
 | Move a project to another environment | [Import and Export](deployment/import-export.md) |
 | Add a user and control what they can do | [Users and Roles](configurations/user-roles.md) |
+| Let people sign in with their company account | [External Authentication](external-auth/index.md) |
+| See what a user did in Linkiir | [Audit events](security/index.md#audit-events) |
 | Set project variables and secrets | [Project Settings](configurations/project-settings.md) |
 | Connect my own Kafka cluster | [Kafka Configuration](configurations/kafka-redpanda.md) |
 | Replace the server Linkiir runs on | [Backup and Restore](backup-restore/index.md), then [License Transfer](licensing/license-transfer.md) |
