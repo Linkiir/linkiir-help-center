@@ -19,6 +19,7 @@ In the explorer and the editor tabs, message schemas have their own icon, and fi
 | **Search across the node's files** | The search panel in the sidebar. Selecting a result opens that file and jumps to the line, with the match selected. |
 | **Download a file** | Right-click it in the Explorer and choose **Download**. Needs **Edit node scripts** — see [Users and Roles](../../administration/configurations/user-roles.md#scripting). |
 | **Upload a file** | The Explorer's upload action, into the node's directory |
+| **Run Test or Debug the node** | The **Run Test** and **Debug** buttons at the top of the page, or <kbd>Ctrl</kbd>+<kbd>Enter</kbd> and <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Enter</kbd> (<kbd>⌘</kbd> in place of <kbd>Ctrl</kbd> on a Mac). See [Keyboard shortcuts](testing-debugging.md#keyboard-shortcuts) |
 | **Manage samples** | **Samples** at the top of the page, in every view. See [Testing and Debugging](testing-debugging.md#create-samples-first) |
 
 Reading a node's files at all takes one of the three Scripting permissions. An account with none of them cannot open the page onto a node's code, even in a project it collaborates on.

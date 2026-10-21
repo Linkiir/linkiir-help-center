@@ -11,12 +11,26 @@ The script editor runs your code against a sample without opening a port, consum
 | | **Run Test** | **Debug** |
 | --- | --- | --- |
 | Button | Blue **Run Test** | Grey **Debug**, bug icon |
+| Keyboard | <kbd>Ctrl</kbd>+<kbd>Enter</kbd> (<kbd>⌘</kbd>+<kbd>Enter</kbd> on a Mac) | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Enter</kbd> (<kbd>⇧</kbd>+<kbd>⌘</kbd>+<kbd>Enter</kbd> on a Mac) |
 | Breakpoints | Ignored | Honoured — execution pauses |
 | Execution | Runs to completion | Pauses and steps |
 | Variables shown | Final locals of `main` | Locals of the paused frame |
 | Call stack | Not shown | Full stack, frames selectable |
 
 Reach for Run Test first. It answers "does this parse, and what did it produce?" in one click. Switch to Debug when you need to know *why* a value is what it is.
+
+### Keyboard shortcuts
+
+Both work anywhere on the Scripting page, including while you are typing in the editor, on Windows, Linux and macOS:
+
+| Action | Windows and Linux | macOS |
+| --- | --- | --- |
+| **Run Test** | <kbd>Ctrl</kbd>+<kbd>Enter</kbd> or <kbd>Ctrl</kbd>+<kbd>F5</kbd> | <kbd>⌘</kbd>+<kbd>Enter</kbd> or <kbd>Ctrl</kbd>+<kbd>F5</kbd> |
+| **Debug** | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Enter</kbd> or <kbd>F5</kbd> | <kbd>⇧</kbd>+<kbd>⌘</kbd>+<kbd>Enter</kbd> or <kbd>F5</kbd> |
+
+The <kbd>F5</kbd> forms match VS Code. On a laptop keyboard you may need to hold <kbd>Fn</kbd> for them. The tooltips on the **Run Test** and **Debug** buttons show the shortcuts too.
+
+The shortcuts do nothing while a window such as **Samples** or **Commit** is open. In a Data Map's Map view, which has no **Debug** button, the Debug shortcuts do nothing either, and <kbd>F5</kbd> reloads the page as usual.
 
 ---
 
@@ -58,7 +72,7 @@ Samples are stored with the project and are visible to anyone who can open the n
 ## Run Test
 
 1. Select a sample from the toolbar dropdown.
-2. Click **Run Test**.
+2. Click **Run Test**, or press <kbd>Ctrl</kbd>+<kbd>Enter</kbd> (<kbd>⌘</kbd>+<kbd>Enter</kbd> on a Mac).
 
 The Debug panel shows every local variable as it stood at the end of `main`, plus anything your script printed.
 
@@ -75,7 +89,7 @@ Use it to confirm:
 
 1. Click the editor gutter, left of the line numbers, to place breakpoints. Any open file works — `main.lua` or a module it requires.
 2. Select a sample.
-3. Click **Debug**.
+3. Click **Debug**, or press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Enter</kbd> (<kbd>⇧</kbd>+<kbd>⌘</kbd>+<kbd>Enter</kbd> on a Mac).
 
 Execution starts at `main` and pauses at the first breakpoint. From there:
 
