@@ -24,8 +24,10 @@ Reach for Run Test first. It answers "does this parse, and what did it produce?"
 
 Both modes run against a sample, so you need at least one.
 
-1. Open the **Samples** panel in the Scripting tab.
-2. Add a sample and paste the content your node would actually receive.
+1. Click **Samples** at the top of the Scripting page.
+2. Add a sample and paste the content your node would actually receive, or upload a file (`.txt`, `.hl7` or `.json`). The same window is where samples are read, edited and renamed later.
+
+A Data Map node can also take samples while you create a map, in the **New map** wizard.
 
 What a sample contains depends on the node type:
 
@@ -85,7 +87,7 @@ Execution starts at `main` and pauses at the first breakpoint. From there:
 | **Step Out** | Run until the current function returns |
 | **Stop** | End the session immediately |
 
-The **Call Stack** lists the active frames, such as `mapPID @ mapping.lua:16`. Click a frame to inspect its variables; the editor jumps to that file and line. Step Into switches files automatically.
+The **Call Stack** lists the active frames, such as `mapPID @ mapping/maps/adt.lua:16`. Click a frame to inspect its variables; the editor jumps to that file and line. Step Into switches files automatically.
 
 Variables always reflect the **paused frame**, not the end of `main`. That is the point: it is how you catch a value that is correct at the end but wrong in the middle.
 

@@ -8,7 +8,7 @@ keywords: [data map, conditions, when, routing, filter, multiple maps, custom Lu
 
 Every map has a **condition**: what a message must meet for the map to take it. Conditions let several maps share a message type. For example, inpatient admissions can be mapped one way and outpatient admissions another, both from ADT^A01.
 
-The toolbar shows the condition of the map on the board after **When**, such as `PV1-2 is I and PID-3 has a value`. Clicking it opens the condition for editing.
+The toolbar shows the condition of the map on the board, such as `PV1-2 is I and PID-3 has a value`. Clicking it opens the condition for editing.
 
 ---
 
@@ -38,7 +38,7 @@ A condition is built from one or more checks. Each check reads a value from the 
 | **has a value** | Is not empty |
 | **is empty** | Is empty or absent |
 
-The value is read with the same paths as rules:
+Pick the field from the list, which shows each field's name and its value in the sample, and by default only fields the sample has a value in. You can also type a path. The value is read with the same paths as rules:
 
 | Source | Example path |
 | --- | --- |
@@ -82,24 +82,24 @@ Right-click a field in the source column and select **Use this map only when…*
 
 ## Every new map needs a condition
 
-**New map** asks for the condition along with the message the map takes and builds, and won't create the map without one. If a map should take every message of its type, give it a condition every message meets, such as `MSH-9 has a value`.
+The **New map** wizard asks for the condition in its **Filters** step, after the message the map takes, and won't create the map without one. If a map should take every message of its type, give it a condition every message meets, such as `MSH-9 has a value`.
 
 ---
 
 ## In the map files
 
-Conditions are saved in `datamap.lua`, beside each map:
+Conditions are saved in `mapping/datamap.lua`, beside each map:
 
 ```lua
 {
   name = 'Inpatient admits',
-  file = 'maps/inpatient.map.lua',
+  file = 'mapping/maps/inpatient.map.lua',
   messages = { 'ADT_A01' },
   when = { all = { { from = 'PV1-2', op = 'is', value = 'I' }, { from = 'PID-3', op = 'has_value' } } },
 },
 ```
 
-The generated `mapping.lua` turns each condition into a small Lua function with a comment saying what it checks, so the order and outcome can be read and debugged like any other code.
+The generated `mapping/init.lua` turns each condition into a small Lua function with a comment saying what it checks, so the order and outcome can be read and debugged like any other code.
 
 ## Next
 

@@ -8,7 +8,9 @@ Node logic is written in Lua. The editor gives you static IntelliSense, schema-a
 
 ## The editor
 
-Scripts are written on the **Scripting** page. The file explorer on the left lists the node's own files, the project's shared files, and its libraries; the editor fills the rest.
+Scripts are written on the **Scripting** page. The file explorer on the left lists the node's own files, the project's shared files, and its libraries; the editor fills the rest. Clicking the active icon in the bar at the far left hides the sidebar to give the editor the full width, and clicking any icon brings it back. The page remembers which way you left it.
+
+In the explorer and the editor tabs, message schemas have their own icon, and files you can't edit, such as a Data Map node's generated code or a file in a node linked to a catalog, show a lock.
 
 | Action | How |
 | --- | --- |
@@ -17,6 +19,7 @@ Scripts are written on the **Scripting** page. The file explorer on the left lis
 | **Search across the node's files** | The search panel in the sidebar. Selecting a result opens that file and jumps to the line, with the match selected. |
 | **Download a file** | Right-click it in the Explorer and choose **Download**. Needs **Edit node scripts** — see [Users and Roles](../../administration/configurations/user-roles.md#scripting). |
 | **Upload a file** | The Explorer's upload action, into the node's directory |
+| **Manage samples** | **Samples** at the top of the page, in every view. See [Testing and Debugging](testing-debugging.md#create-samples-first) |
 
 Reading a node's files at all takes one of the three Scripting permissions. An account with none of them cannot open the page onto a node's code, even in a project it collaborates on.
 
@@ -34,6 +37,8 @@ The **Source Control** tab is the open node's view of the project repository: th
 - When the project has pending commits from elsewhere too, the tooltip spells out the difference — *"2 of the 5 commits pending in this project are from this node; a push sends all 5"* — and a line under the buttons repeats it.
 
 Use the project card's own Push when you mean the project as a whole; that is the same operation, viewed at the level it actually works on.
+
+To throw away work you haven't committed, use **Discard change** on a file in the **Changes** list, or **Discard all changes** in its header. A changed file goes back to its last committed version, and a new file is deleted. You are asked to confirm first. Only unstaged changes are discarded: unstage a file first to discard it.
 
 ## Every script has one entry point
 

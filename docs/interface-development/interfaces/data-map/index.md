@@ -36,16 +36,16 @@ One node builds one output format: two output formats means two nodes. Within th
 ## Adding one
 
 1. In the Workflow Builder, drag **Data Map** from the **Transform** group onto the canvas, and connect it between a source and a destination.
-2. Open the node's **Scripting** tab. Its `mapping.lua` opens in the **Map** view.
-3. Open the map picker, select **New map**, and choose:
-   - **Source**: the format and version it reads, and the message it takes (`ADT_A01`, `Patient`, `837P`, a table, a structure).
-   - **Target**: the format and version it builds, and the message it builds.
-   - **When**: the condition a message must meet for this map to take it. See [Conditions](conditions.md).
-4. Add a sample with **+ Sample** at the top of the page, so the board shows real values.
-5. Link fields, or select **Auto-map** to add the standard mappings. See [Building a Map](building-maps.md).
-6. Run it on a sample. See [Testing and Errors](testing-and-errors.md).
+2. Open the node's **Scripting** tab. It opens in the **Map** view, on a **Create your first map** card.
+3. Select **+ New map**. A short wizard asks, one step at a time:
+   1. **Source message**: the protocol and version it reads, and the message it takes (`ADT_A01`, `Patient`, `837P`, a table, a structure).
+   2. **Sample data** (optional): paste or upload one or more samples, so the board shows real values. For JSON and XML, the structure can be read from the first sample.
+   3. **Filters**: the condition a message must meet for this map to take it. See [Conditions](conditions.md).
+   4. **Target message**: the protocol and version it builds, the message it builds, how the output starts, and the map's name. A later map can start as a copy of an existing one.
+4. Link fields, or select **Auto-map** to add the standard mappings. See [Building a Map](building-maps.md).
+5. Run it on a sample. See [Testing and Errors](testing-and-errors.md).
 
-The first map decides the formats the node reads and builds. The node's later maps use the same formats.
+The first map decides the formats the node reads and builds. The node's later maps use the same formats. When the first map is ready, the node's files are committed for you, so later changes show as changes against that starting point.
 
 ---
 
@@ -64,24 +64,39 @@ A message is unknown when it matches none of the messages in the source schema, 
 
 ## The node's files
 
+Your own code sits at the top of the node. Everything the Map view manages is in the `mapping` folder.
+
 | File | What it is | Edited by |
 | --- | --- | --- |
 | `main.lua` | Reads each message, hands it to its map, pushes the result, and applies the two settings above | You, if you need to |
-| `datamap.lua` | The list of maps: name, the message each takes, its condition, and the formats | The Map view (or by hand) |
-| `maps/<name>.map.lua` | One map's rules, as a Lua table | The Map view (or by hand) |
+| `custom.lua` | Your own Lua functions, which the maps call by name (see [Custom Lua](building-maps.md#custom-lua)) | You. The Map view only adds an empty function for a name a map uses that isn't there yet |
+| `premap.lua` | `PreMap`, which runs on each message just before its map | You |
+| `postmap.lua` | `PostMap`, which runs on what the map built | You |
 | `source.json`, `target.json` | The source and target [schemas](../../schema-editor.md) | The Map view and the Schema Editor |
-| `mapping.lua`, `maps/<name>.lua` | The code generated from the maps | Generated: don't edit |
-| `helpers/*.lua` | Conversion helpers the generated code uses (`hl7.lua`, `fhir.lua`, `convert.lua`, …) | Kept up to date by the Map view |
+| `mapping/datamap.lua` | The list of maps: name, the message each takes, its condition, and the formats | The Map view (or by hand) |
+| `mapping/maps/<name>.map.lua` | One map's rules, as a Lua table | The Map view (or by hand) |
+| `mapping/init.lua`, `mapping/maps/<name>.lua` | The code generated from the maps | Generated: don't edit |
+| `mapping/helpers/*.lua` | Conversion helpers the generated code uses (`hl7v2.lua`, `fhir.lua`, `convert.lua`, `normalize.lua`, …) | Kept up to date by the Map view |
 
-`main.lua` is the place for anything a map can't express, such as an extra log line or a header on the outgoing message:
+Nodes made before the `mapping` folder existed are moved into it the first time they are opened, and any custom Lua inside their maps is moved into `custom.lua` as named functions. The move shows in Source Control: commit it when you're ready.
+
+### PreMap and PostMap
+
+For anything that applies to every message, rather than to one field, use `premap.lua` and `postmap.lua`. The **PreMap** and **PostMap** buttons in the Map view's toolbar open them.
 
 ```lua
-local MsgOut = mapper.map(MsgIn, MsgType)
-if MsgOut then
-    linkiir.flow.push{ data = MsgOut:S() }
+-- premap.lua: runs once a map has been found for the message, just before it.
+-- Change MsgIn, or return another message to map in its place.
+function PreMap(MsgIn, MsgType)
+end
+
+-- postmap.lua: runs on what the map built (nil when it built nothing).
+-- Change MsgOut, or return another message to send in its place.
+function PostMap(MsgOut, MsgIn, MsgType)
 end
 ```
 
+The Map view never changes either file. `main.lua` is still there for anything else, such as an extra log line or a header on the outgoing message.
 The generated files say **Do not edit by hand** in their first lines. If one is edited anyway, see [Hand edits to generated code](testing-and-errors.md#hand-edits-to-generated-code).
 
 ---
@@ -90,7 +105,7 @@ The generated files say **Do not edit by hand** in their first lines. If one is 
 
 | Page | Covers |
 | --- | --- |
-| [Building a Map](building-maps.md) | The Map view, links, functions, Auto-map, fixed values and custom Lua |
+| [Building a Map](building-maps.md) | The Map view, links, functions, normalizing values, Auto-map, fixed values, custom Lua, schema changes, undo and committing |
 | [Conditions](conditions.md) | Several maps for one message type, and which one takes a message |
 | [Formats](formats.md) | What is particular to HL7 v2, FHIR, X12, CDA and C-CDA, database rows, JSON and XML |
 | [Testing and Errors](testing-and-errors.md) | Samples, runs, checks, generated code, and committing |

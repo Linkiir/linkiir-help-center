@@ -1,0 +1,68 @@
+---
+id: move-data-map-files-api-move-data-map-files-post
+title: "Bring an older Data Map node's files up to date"
+description: "Moves an older Data Map node's datamap.lua, mapping.lua (as init.lua), maps/ and helpers/ into its mapping/ folder, in the caller's working copy, and points the requires in the user's own Lua at them; moves PreMap and PostMap out of custom.lua into premap.lua and postmap.lua, and the Lua its map files hold into custom.lua, as functions the maps name. A node already laid out that way is left alone. Nothing is committed or run."
+sidebar_label: "Bring an older Data Map node's files up to date"
+hide_title: true
+hide_table_of_contents: true
+api: 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
+sidebar_class_name: "post api-method"
+info_path: docs/api/web-api/linkiir-api
+custom_edit_url: null
+hide_send_button: true
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Bring an older Data Map node's files up to date"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/api/move_data_map_files"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Moves an older Data Map node's datamap.lua, mapping.lua (as init.lua), maps/ and helpers/ into its mapping/ folder, in the caller's working copy, and points the requires in the user's own Lua at them; moves PreMap and PostMap out of custom.lua into premap.lua and postmap.lua, and the Lua its map files hold into custom.lua, as functions the maps name. A node already laid out that way is left alone. Nothing is committed or run.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<ParamsDetails>
+  
+</ParamsDetails>
+
+<RequestSchema
+  {...require("./move-data-map-files-api-move-data-map-files-post.RequestSchema.json")}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  {...require("./move-data-map-files-api-move-data-map-files-post.StatusCodes.json")}
+>
+  
+</StatusCodes>
+
+
+      

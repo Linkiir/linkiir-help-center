@@ -895,7 +895,7 @@ Node:add(name [, after | before])
 
 Add a child element (XML, FHIR JSON), a segment (HL7 v2), or a segment or loop (X12). Returns it.
 
-Appends a new empty child element named `name` and returns it; on XML, `before` places it before a given child. On HL7 v2 and X12 it inserts a segment (or X12 loop) where the structure puts it, or after `after`.
+Appends a new empty child element named `name` and returns it; on XML, `before` places it before a given child. On a CDA document (which keeps the schema it was created or read with) an element added without `before` goes where the schema puts it among its siblings. On HL7 v2 and X12 it inserts a segment (or X12 loop) where the structure puts it, or after `after`.
 
 **Usage**
 

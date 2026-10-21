@@ -1,0 +1,1 @@
+{"title":"Body","body":{"required":true,"content":{"application/json":{"schema":{"properties":{"paths":{"items":{"type":"string"},"type":"array","title":"Paths","description":"Repo-relative paths of the files whose unstaged changes to discard."}},"type":"object","required":["paths"],"title":"GitDiscardRequest"}}}}}

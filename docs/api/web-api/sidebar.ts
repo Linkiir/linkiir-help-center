@@ -186,6 +186,12 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "api/web-api/discard-project-git-paths-api-discard-project-git-paths-guid-post",
+          label: "Discard unstaged changes to files in a project's dev clone",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
           id: "api/web-api/start-project-api-start-project-post",
           label: "Start every workflow in a project",
           className: "api-method post",
@@ -926,6 +932,24 @@ const sidebar: SidebarsConfig = {
           type: "doc",
           id: "api/web-api/export-db-table-api-export-db-table-post",
           label: "Create a database schema's table in a database",
+          className: "api-method post",
+        },
+      ],
+    },
+    {
+      type: "category",
+      label: "Data Map",
+      items: [
+        {
+          type: "doc",
+          id: "api/web-api/get-data-map-changes-api-get-data-map-changes-guid-get",
+          label: "What changed in a Data Map node since its last commit",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/move-data-map-files-api-move-data-map-files-post",
+          label: "Bring an older Data Map node's files up to date",
           className: "api-method post",
         },
       ],

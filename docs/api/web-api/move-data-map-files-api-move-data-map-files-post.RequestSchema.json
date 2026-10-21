@@ -1,0 +1,1 @@
+{"title":"Body","body":{"content":{"application/json":{"schema":{"properties":{"workflow_guid":{"type":"string","title":"Workflow Guid","description":"GUID of the node's workflow."},"node_guid":{"type":"string","title":"Node Guid","description":"GUID of the Data Map node."}},"type":"object","required":["workflow_guid","node_guid"],"title":"MoveDataMapRequest"}}},"required":true}}

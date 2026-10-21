@@ -1,7 +1,7 @@
 ---
 title: Building a Map
-description: Use the Data Map node's Map view to link source fields to target fields, convert values, fill fixed values, and add custom Lua.
-keywords: [data map, map view, auto-map, rules, functions, code lookup, custom Lua, fixed value]
+description: Use the Data Map node's Map view to link source fields to target fields, convert and normalize values, fill fixed values, add custom Lua, change the schemas, and commit.
+keywords: [data map, map view, auto-map, rules, functions, code map, normalize, date format, custom Lua, custom.lua, fixed value, undo, commit]
 ---
 
 # Building a Map
@@ -12,17 +12,23 @@ A **map** turns one message type into another: an ADT^A01 into a FHIR Bundle, or
 
 ## The Map view
 
-Opening a Data Map node's `mapping.lua` shows the **Map** view. The buttons above the editor switch between **Map**, **Source schema**, **Target schema** and **Code**.
+Opening a Data Map node on the Scripting page shows the **Map** view. The switch at the right of its toolbar moves between **Map**, **Source schema**, **Target schema** and **Code**. In the Map view, **Code** opens `custom.lua`, where your own functions live.
 
 | Area | Shows |
 | --- | --- |
-| **Toolbar** | The map on the board, what it reads (**Source**) and builds (**Target**), and its condition (**When**) |
+| **Toolbar** | The map picker, a button reading what the map takes and builds (such as **HL7 ADT_A01 → FHIR Bundle**), the map's condition, **Auto-map**, and the **PreMap** and **PostMap** buttons |
 | **Source column**, left | The message the map takes, from `source.json`, with the selected sample's values beside each field |
 | **Target column**, right | The message it builds, from `target.json` |
-| **Links** between the columns | One per rule. Hover over a field to highlight its links |
-| **Bottom panel** | **Rule**: the selected rule's settings. **Output**: the last run and the map's problems |
+| **Links** between the columns | One per rule. Hover over a field to highlight its links. Scrolling over the links scrolls both columns together. The **Undo** and **Redo** buttons sit at the top |
+| **Bottom panel** | **Rule**: the selected rule's settings, what it read and wrote on the last run, and the map's problems. **Output**: running the map on a sample |
 
 The toolbar also counts the fields mapped and the target's required fields that are filled (**required 12/14**). The filter box at the top of each column narrows it, and the filter button limits it to fields that have a value in the sample or are mapped.
+
+The bottom panel opens when you select a rule or run the map, and closes with its **×** to give the board more room. While it is closed, a **problems** button shows when the map has any, and opens it.
+
+### Source and target settings
+
+The toolbar button that reads what the map takes and builds opens the map's source and target settings: the version, the message it takes and builds, how the output starts, and, for CDA, how strictly documents are checked. The node's protocols can't be changed while a map has content.
 
 ### Picking a map
 
@@ -30,10 +36,10 @@ The map picker in the toolbar lists the node's maps. With a map selected, its me
 
 | Action | Does |
 | --- | --- |
-| **New map** | Adds a map: the message it takes, the message it builds, and its condition |
+| **New map** | Opens the **New map** wizard: the message it takes, optional samples, its condition, and what it builds. A new map can start empty or as a copy of an existing map |
 | **Condition** | Changes when the map takes a message. See [Conditions](conditions.md) |
 | The up and down arrows | For maps that share a message type, change the order they are tried in |
-| **Rename** | Renames the map. Its files in `maps/` are renamed to match |
+| **Rename** | Renames the map. Its files in `mapping/maps/` are renamed to match |
 | **Delete** | Removes the map and its files |
 
 ---
@@ -56,10 +62,11 @@ To remove a rule, right-click its link and select **Delete link**, or right-clic
 | --- | --- |
 | **Function** | How the value is converted (see below) |
 | **Source**, **Target** | The two ends, as paths: `PID-5`, `Patient.name[]`, `2010BA/NM1-3`, `patients.mrn` |
-| Function options | For example, a code lookup's table, a date's format, or a fixed value |
+| Function options | For example, a code map's codes, a date's **Output format**, or a fixed value |
+| **Normalize data** | Clean-up applied to the value before it is written (see below) |
 | **When empty** | When the source has no value: **skip the field**, or **reject the message** |
 | **Applies to** | In a map that takes several message types, which of them the rule applies to |
-| **Note** | Your own comment. It is written into the generated code above the rule |
+| **Note** | Your own comment. It is written into the generated code beside the rule |
 
 ---
 
@@ -70,16 +77,61 @@ The functions on offer depend on the formats being mapped. The common ones:
 | Function | Converts |
 | --- | --- |
 | **Copy** | The value as it is |
-| **Date**, **Date & time** | Between HL7 `DT`/`DTM`, FHIR `date`/`dateTime`, X12 and CDA dates |
+| **Date**, **Date & time** | Between HL7 `DT`/`DTM`, FHIR `date`/`dateTime`, X12 and CDA dates. **Output format** picks how it is written (see below) |
 | **Gender** | HL7 table 0001 to and from FHIR administrative-gender |
-| **Code lookup** | Translates codes through a table you fill in, with a default for anything not listed |
+| **Code map** | Translates codes through a table you fill in, with a default for anything not listed |
 | **Identifier**, **Name**, **Address**, **Phone / email** | Whole data types between formats: `CX` ↔ `Identifier`, `XPN` ↔ `HumanName`, `XAD` ↔ `Address`, `XTN` ↔ `ContactPoint` |
 | **Coding**, **Coded concept**, **Coded value** | `CE`/`CWE` ↔ `Coding` and `CodeableConcept` |
 | **Number**, **Yes / No** | Text to numbers, and `Y`/`N`, `T`/`F` and `1`/`0` to booleans |
 | **Set ID** | 1, 2, 3… for a segment made once per item |
-| **Custom Lua** | Your own code (see below) |
+| **Custom Lua** | Your own function (see below) |
 
 The **Rule** tab describes the chosen function as it works for the formats in this map.
+
+### Code map
+
+A **Code map** rule shows its codes as a two-column table: the **Code** that arrives and what it **Becomes**. Type in the **+ add a code** row to add one, and use a row's **×** to remove it. When the source field has an HL7 table, a link under the table adds all of that table's codes at once. Anything not in the table gets the rule's default.
+
+### Date output formats
+
+**Output format** on a date or time rule picks how the value is written, such as `YYYY-MM-DD`, `MM/DD/YYYY` or `YYYYMMDDHHmmss`. Each target format has its own default. **Custom…** takes your own pattern, built from these tokens:
+
+| Token | Gives |
+| --- | --- |
+| `YYYY`, `YY` | Year: `2026`, `26` |
+| `MMMM`, `MMM`, `MM`, `M` | Month: `October`, `Oct`, `10`, `10` |
+| `DD`, `D` | Day: `05`, `5` |
+| `HH`, `H`, `hh`, `h` | Hour, 24-hour or 12-hour |
+| `mm`, `ss`, `SSS` | Minutes, seconds, milliseconds |
+| `A`, `a` | `AM`/`PM`, `am`/`pm` |
+| `ZZ`, `Z` | Time zone offset: `-0400`, `-04:00` |
+| `[text]` | The text as it is, such as `[T]` |
+
+The Map view warns when a pattern is written into a field whose own format it doesn't match, such as a FHIR `date`.
+
+---
+
+## Normalizing values
+
+**Normalize data** on a rule cleans the value before it is written. Tick the steps you need:
+
+| Group | Steps |
+| --- | --- |
+| Characters | **Remove invisible characters**, **Remove accents** (José to Jose), **Remove punctuation** |
+| Keep only | **Digits only**, **Letters only** |
+| Spaces | **Remove all spaces**, **Collapse spaces**, **Trim spaces** |
+| Case | **lower case**, **UPPER CASE**, **Title Case** |
+| Length | **Strip leading zeros**, **Pad with zeros** to a length, **Cut to length** |
+
+The steps always run in a fixed order, whatever order you tick them in, with **Cut to length** last. Steps that contradict each other can't be chosen together. For a database target, **Cut to length** can't exceed the column's length. On structured values, such as a FHIR identifier or a CDA code, normalizing changes the text but leaves systems, URLs and code system IDs alone.
+
+**+ Add custom normalization** adds your own step, as a function in `custom.lua` that takes the text and returns it cleaned. It runs after the ticked steps:
+
+```lua
+function NoDashes(text)
+  return (text:gsub('-', ''))
+end
+```
 
 ---
 
@@ -93,7 +145,7 @@ Right-click a target field and choose **Set value** to fill it without a source:
 | **Current date/time** | The time the message is mapped, in a format you choose, optionally shifted (`-1d`, `+2h`, `+30min`, `+1mo`, `-1y`) |
 | **New UUID** | A new random UUID per message |
 | **New control ID** | A new unique ID, such as for MSH-10 (HL7 and X12 targets) |
-| **Custom Lua** | Whatever your code returns |
+| **Custom Lua** | Whatever your function returns |
 
 ---
 
@@ -122,31 +174,73 @@ See [Formats](formats.md) for each format's paths and particulars.
 
 ---
 
+## Changing the schemas from the board
+
+When a message carries something the schema doesn't have, such as a Z-segment field or an extra JSON property, add it without leaving the Map view. Right-click a row in either column:
+
+| Action | Does |
+| --- | --- |
+| **Add field to …** (or element, column, property) | Opens a form for its name, description and type, and whether it repeats or is required (or, in XML, is an attribute). When the row is part of a data type used in several places, the new part is added everywhere that type is used |
+| **Remove field** | Removes it from the schema |
+| **Remove segment** | On an HL7 source, removes a segment the map doesn't need. MSH can't be removed |
+
+HL7 v2 and X12 fields are numbered by position, so a new field goes on the end and only the last one can be removed. Nothing is removed while a rule, a segment or resource made per item, or a condition still uses it. The change is saved to `source.json` or `target.json`, the same file the [Schema Editor](../../schema-editor.md) edits.
+
+---
+
 ## Custom Lua
 
-When no function does what you need, use **Custom Lua**: as a rule's function, as a **Set value**, or as a custom step that runs after a segment or resource is built. The editor explains what the code receives, and completes the names as you type:
+When no function does what you need, use **Custom Lua**: as a rule's function, as a **Set value**, or as a custom step that runs after a segment, resource or loop is built. Your code lives in `custom.lua`, as ordinary Lua functions. The map only stores the function's name.
 
-| Name | Holds |
+When you choose Custom Lua, the Rule tab suggests a name, such as `PatientNameGiven`, which you can change. It shows the function's parameters and where it is in `custom.lua`. Once the map is saved, `custom.lua` gets an empty function with that name, and **Edit** opens it there. The Map view never changes a function once it exists.
+
+A rule's function is called for each value and returns what to write, or `nil` to write nothing:
+
+| Parameter | Holds |
 | --- | --- |
-| `field` | The source of this rule. From HL7 v2, X12, CDA or FHIR it is the parsed field or element, read like the message: `field:value()`, or `field[2]:value()` for its second component. From database rows, JSON or XML it is the plain value. A repeating source is handed over one repetition at a time. With no source, `field` is `nil` |
+| `field` | The source of this rule. From HL7 v2, X12, CDA or FHIR it is the parsed field or element, read like the message: from HL7, `field[2]` is its second component. From database rows, JSON or XML it is the plain value. A repeating source is handed over one repetition at a time. With no source, `field` is `nil` |
 | `MsgIn` | The whole incoming message |
 | `MsgType` | Its type (`ADT_A01`, `Patient`, …) |
 | `SegIn`, `ItemIn`, `LoopIn` | In a segment, resource or loop made per item: the item it is made from |
 
 ```lua
 -- HL7 source: the attending doctor's ID, lower-cased, without a trailing -X.
-return (field:value():lower():gsub('%-x$', ''))
+function AttendingId(field, MsgIn, MsgType)
+  return (hl7.part(field, 1):lower():gsub('%-x$', ''))
+end
 ```
 
-Typing `MsgIn.` lists what the message holds: HL7 segments, JSON or XML members, or database tables. Hovering over a name shows what it is.
+`custom.lua` starts with the helpers the map's code uses, such as `hl7`, so your functions can use them too. `hl7.part(field, i, j)` gives component `i` (and subcomponent `j`) as plain text, with HL7 escapes decoded. The functions are global, so one function can serve several rules, and PreMap and PostMap can call them.
 
-Custom Lua is part of the map, so it is saved in `maps/<name>.map.lua` and generated into the map's code like any other rule.
+A custom step after a segment, resource or loop gets what was built, then `MsgIn`, `MsgType` and, when it is made per item, the item:
+
+```lua
+function FinishPV1(segment, MsgIn, MsgType)
+  hl7.put(segment, '3.4', 'MAIN')
+end
+```
+
+---
+
+## Undo and redo
+
+**Undo** and **Redo**, at the top of the links column, step back and forward through your changes in the Map view: links, rule settings, segments and resources, conditions, schema changes, and adding, renaming or deleting maps. The keyboard works too: <kbd>Ctrl</kbd>+<kbd>Z</kbd> (<kbd>⌘</kbd>+<kbd>Z</kbd> on a Mac) to undo, and <kbd>Ctrl</kbd>+<kbd>Y</kbd> or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd> to redo.
+
+The history lasts while the Map view is open. If a file changes outside the Map view, for example after a revert in Source Control, the history is cleared rather than undo something it no longer matches.
 
 ---
 
 ## Saving and committing
 
 Every change in the Map view is written to the node's files at once: the map's `.map.lua` and its regenerated code. As with any node, the runtime only runs committed code, so **commit** the node's files to put a change into service.
+
+**Commit** at the top of the page opens the commit dialog. It describes what changed in the terms of the Map view, rather than as a list of files:
+
+- **This node**: changes to the formats and the maps' order.
+- **Each map**: links added, removed or changed, segments, resources and loops, and its condition, with **New map**, **Removed** or **Renamed** where that applies.
+- **Custom Lua**: functions added, changed or removed in `custom.lua`, `premap.lua`, `postmap.lua` and `main.lua`.
+
+**Use the summary** turns it into the commit message, which you can then edit. When only generated files changed, the dialog lists the files instead. **Revert** sets changes back to the last commit; a new file is deleted.
 
 ## Next
 
