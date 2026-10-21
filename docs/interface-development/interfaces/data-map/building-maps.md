@@ -24,6 +24,8 @@ Opening a Data Map node on the Scripting page shows the **Map** view. The switch
 
 The toolbar also counts the fields mapped and the target's required fields that are filled (**required 12/14**). The filter box at the top of each column narrows it, and the filter button limits it to fields that have a value in the sample or are mapped.
 
+**Expand all** and **Collapse all**, at the right of each column's toolbar, open or close the whole column at once. **Collapse all** folds everything back to its top-level rows: segments, resources, loops, tables or sections. **Expand all** opens those top-level rows one level down, so a large message stays readable. Open a row further with its own arrow. Links to a folded field end on the nearest row still showing, such as its segment.
+
 The bottom panel opens when you select a rule or run the map, and closes with its **×** to give the board more room. While it is closed, a **problems** button shows when the map has any, and opens it.
 
 ### Source and target settings
@@ -283,7 +285,7 @@ The history lasts while the Map view is open. If a file changes outside the Map 
 
 Every change in the Map view is written to the node's files at once: the map's `.map.lua` and its regenerated code. As with any node, the runtime only runs committed code, so **commit** the node's files to put a change into service.
 
-**Commit** at the top of the page opens the commit dialog. It describes what changed in the terms of the Map view, rather than as a list of files:
+**Commit** at the top of the page opens the commit dialog. While the node has changes that aren't committed yet, the button turns amber and shows how many files have changed. It describes what changed in the terms of the Map view, rather than as a list of files:
 
 - **This node**: changes to the formats and the maps' order.
 - **Each map**: links added, removed or changed, segments, resources and loops, and its condition, with **New map**, **Removed** or **Renamed** where that applies.
