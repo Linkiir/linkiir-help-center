@@ -14,11 +14,12 @@ Reading anything on it needs **View log messages**. The page itself also opens f
 
 | Type | Holds |
 | --- | --- |
+| **Audit Events (user actions)** | What people did: sign-ins and sign-outs, access changes, project, workflow, and node lifecycle, configuration changes and commits, queue clears and repositions, log searches, PHI views, exports, and message resubmits |
+| **System Events (platform)** | What the platform did on its own: runtime and archiver health, high availability, updates, licence changes, and external-authentication notices |
 | **Data (Messages)** | The messages themselves, with their archived payload |
 | **Node Events** | What a node did: state changes, messages enqueued and dequeued, script `print` output, errors |
-| **System Events** | What the platform did: logins and logouts, project, workflow, and node lifecycle, configuration changes, queue clears and repositions, message resubmits, log exports, and licence changes |
 
-System events are the instance's own audit trail. They are archived on every installation, including brokers configured to refuse topic auto-creation — Linkiir creates the topic they travel on at startup.
+Audit events are the instance's audit trail. See [Audit events](../security/index.md#audit-events) for the full list and how to follow one user's activity. Audit and system events are archived on every installation, including brokers configured to refuse topic auto-creation — Linkiir creates the topic they travel on at startup.
 
 ---
 
@@ -27,7 +28,7 @@ System events are the instance's own audit trail. They are archived on every ins
 The left sidebar narrows the table, and every filter combines with the others:
 
 - **Project**, **Workflow**, and **Node**. The project list offers every project you collaborate on, whether or not it has archived anything yet, so a brand-new interface is selectable before its first message lands.
-- **Type**, and for Node and System events an **Event Type**.
+- **Type**, and once a type is chosen, an **Event Type**.
 - **Level** — Info, Warning, Error, Debug, Data.
 - **Time Range** — last hour, 24 hours, 7 days, 30 days, or a custom **From**/**To**.
 
@@ -46,7 +47,9 @@ The search box matches **message content as well as names**:
 | Event detail bodies | Node and system event text |
 | Project, workflow, and node **names** | Matched on the name you see, not the underlying identifier |
 
-Matching is a plain substring: there are no wildcards, quoting, boolean operators, or field prefixes. Narrow a search with the sidebar filters rather than with search syntax.
+Matching is a plain substring: there are no wildcards or boolean operators. Narrow a search with the sidebar filters rather than with search syntax.
+
+The one exception is `user:`. Typing `user:alice` (or `user:"alice smith"` for a name with spaces) shows that user's audit events instead of a text search. It matches the username exactly, ignoring case. See [Audit events](../security/index.md#audit-events).
 
 Two limits worth knowing:
 
@@ -86,7 +89,7 @@ Patient identifiers in a payload are **masked for everyone without Unredact PHI*
 
 ## Downloading
 
-**Download** exports the selected rows as a text or JSON file, and needs **Export log messages**. Each export is itself recorded as a system event.
+**Download** exports the selected rows as a text or JSON file, and needs **Export log messages**. Each export is itself recorded as an audit event.
 
 ---
 
