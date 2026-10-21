@@ -37,7 +37,7 @@ One node builds one output format: two output formats means two nodes. Within th
 
 1. In the Workflow Builder, drag **Data Map** from the **Transform** group onto the canvas, and connect it between a source and a destination.
 2. Open the node's **Scripting** tab. It opens in the **Map** view, on a **Create your first map** card.
-3. Select **+ New map**. A short wizard asks, one step at a time:
+3. Select **+ New map**, or **Import existing map** to start from a map built in another node or saved to a file (see [Moving maps between nodes](building-maps.md#moving-maps-between-nodes)). **New map** opens a short wizard that asks, one step at a time:
    1. **Source message**: the protocol and version it reads, and the message it takes (`ADT_A01`, `Patient`, `837P`, a table, a structure).
    2. **Sample data** (optional): paste or upload one or more samples, so the board shows real values. For JSON and XML, the structure can be read from the first sample.
    3. **Filters**: the condition a message must meet for this map to take it. See [Conditions](conditions.md).
@@ -105,7 +105,7 @@ The generated files say **Do not edit by hand** in their first lines. If one is 
 
 | Page | Covers |
 | --- | --- |
-| [Building a Map](building-maps.md) | The Map view, links, functions, normalizing values, Auto-map, fixed values, custom Lua, schema changes, undo and committing |
+| [Building a Map](building-maps.md) | The Map view, links, functions, normalizing values, Auto-map, fixed values, custom Lua, schema changes, moving maps between nodes, undo and committing |
 | [Conditions](conditions.md) | Several maps for one message type, and which one takes a message |
 | [Formats](formats.md) | What is particular to HL7 v2, FHIR, X12, CDA and C-CDA, database rows, JSON and XML |
 | [Testing and Errors](testing-and-errors.md) | Samples, runs, checks, generated code, and committing |

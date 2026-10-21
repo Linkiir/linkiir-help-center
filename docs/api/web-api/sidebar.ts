@@ -952,6 +952,30 @@ const sidebar: SidebarsConfig = {
           label: "Bring an older Data Map node's files up to date",
           className: "api-method post",
         },
+        {
+          type: "doc",
+          id: "api/web-api/export-data-map-api-export-data-map-post",
+          label: "Export a data map with what it needs",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/import-data-map-api-import-data-map-post",
+          label: "Work out a data map import",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/list-data-map-nodes-route-api-list-data-map-nodes-get",
+          label: "List the Data Map nodes the caller can import maps from",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/export-data-map-from-node-api-export-data-map-from-node-get",
+          label: "Export a data map from another node",
+          className: "api-method get",
+        },
       ],
     },
     {

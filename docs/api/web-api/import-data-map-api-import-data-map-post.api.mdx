@@ -1,0 +1,68 @@
+---
+id: import-data-map-api-import-data-map-post
+title: "Work out a data map import"
+description: "Works out what a Data Map node needs to take in a map from export_data_map: the map's file and entry, the schema parts it lacks, and the functions custom.lua lacks, with any name the node already uses for something else changed. Nothing is written - the caller saves the files - and nothing is run."
+sidebar_label: "Work out a data map import"
+hide_title: true
+hide_table_of_contents: true
+api: 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
+sidebar_class_name: "post api-method"
+info_path: docs/api/web-api/linkiir-api
+custom_edit_url: null
+hide_send_button: true
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Work out a data map import"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/api/import_data_map"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Works out what a Data Map node needs to take in a map from export_data_map: the map's file and entry, the schema parts it lacks, and the functions custom.lua lacks, with any name the node already uses for something else changed. Nothing is written - the caller saves the files - and nothing is run.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<ParamsDetails>
+  
+</ParamsDetails>
+
+<RequestSchema
+  {...require("./import-data-map-api-import-data-map-post.RequestSchema.json")}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  {...require("./import-data-map-api-import-data-map-post.StatusCodes.json")}
+>
+  
+</StatusCodes>
+
+
+      

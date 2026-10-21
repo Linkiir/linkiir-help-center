@@ -1,7 +1,7 @@
 ---
 title: Building a Map
-description: Use the Data Map node's Map view to link source fields to target fields, convert and normalize values, fill fixed values, add custom Lua, change the schemas, and commit.
-keywords: [data map, map view, auto-map, rules, functions, code map, normalize, date format, custom Lua, custom.lua, fixed value, undo, commit]
+description: Use the Data Map node's Map view to link source fields to target fields, convert and normalize values, fill fixed values, add custom Lua, change the schemas, move maps between nodes, and commit.
+keywords: [data map, map view, auto-map, rules, functions, code map, normalize, date format, custom Lua, custom.lua, fixed value, export map, import map, undo, commit]
 ---
 
 # Building a Map
@@ -41,6 +41,8 @@ The map picker in the toolbar lists the node's maps. With a map selected, its me
 | The up and down arrows | For maps that share a message type, change the order they are tried in |
 | **Rename** | Renames the map. Its files in `mapping/maps/` are renamed to match |
 | **Delete** | Removes the map and its files |
+| **Export** | Saves the map as a file, with the samples you choose, to import into another node. See [Moving maps between nodes](#moving-maps-between-nodes) |
+| **Import** | Adds a map from another Data Map node, or from a file saved with **Export**. See [Moving maps between nodes](#moving-maps-between-nodes) |
 
 ---
 
@@ -222,9 +224,56 @@ end
 
 ---
 
+## Moving maps between nodes
+
+A map built in one Data Map node can be reused in another: in the same project, in another project, or on another Linkiir grid. The map travels with what it needs: the parts of the source and target schemas it reads and builds, and the functions it calls in `custom.lua`. The receiving node generates the map's code itself, as after any change.
+
+### Exporting a map
+
+1. Select the map in the map picker, then **Export**.
+2. Choose the samples to include. Samples of the messages the map takes are ticked to start with; **Select all** and **Select none** change them all at once.
+3. Select **Export**. The map is saved as a file named after it, such as `lab_results.linkiir-map.json`.
+
+:::warning[Use test data]
+Samples go into the file exactly as they are, so anyone with the file can read them. Include test data only, never real patient data.
+:::
+
+**Export** also works on a node you can't edit.
+
+### Importing a map
+
+Select **Import** in the map picker or, in a node with no maps yet, **Import existing map** beside **New map** on the **Create your first map** card. The **Import existing map** window offers two sources:
+
+- **Another Data Map node.** Your projects' Data Map nodes are listed by project, each with what it converts and how many maps it has; select a node to see its maps, then select a map. The search box finds projects, nodes, maps and message types. A node whose formats differ from this one is shown, but its maps can't be picked, and the reason is given. A node that hasn't been opened in the Map view since an update is listed under **can't be read yet**: open it once on the Scripting page to list its maps.
+- **A map file.** **Open a map file** takes a file saved with **Export**.
+
+The **Import map** window then shows, before anything changes:
+
+| Section | Shows |
+| --- | --- |
+| Summary | What the map converts, the messages it takes, and its condition |
+| **Map name** | The name it gets in this node. A name already in use gets a number added |
+| **This node gains** | The source and target schema messages and the **Custom Lua functions** the node doesn't have yet. When it already has everything, only the map is added |
+| **Add its samples to this node** | For a file with samples: they are added to the node's samples, a name already in use getting a number, such as `Lab result (2)`. Untick it to leave them out |
+| **Check before importing** | Anything to look at after importing, such as a function renamed or a schema part this node defines differently |
+
+Select **Import** to add the map. The whole import is one change: one **Undo** takes it back. As with any change, commit the node's files to put it into service.
+
+### What happens to differences
+
+An import never changes what the node already has, since its other maps depend on it:
+
+- **Formats.** A node with no maps takes on the formats of the map imported. Otherwise the map must convert the same kinds of message as the node, such as HL7 v2 to FHIR. A different version, such as HL7 v2 2.3 into a 2.5 node, is allowed and listed under **Check before importing**.
+- **Schemas.** Messages, segments and types the node lacks are added. Where the node already defines one differently, the node's own definition stays, and the map's problems show any field it no longer finds.
+- **Functions.** A function the node already has, with the same code, is shared. A different function of the same name is added under a new one, such as `LabNote_2`, and the imported map is pointed at it. A function the map calls that wasn't in its original node gets an empty function in `custom.lua` for you to fill in.
+
+An imported map is a copy: later changes to the original don't reach it, and importing the same map again adds a second one. A map taken straight from another node doesn't bring that node's samples. To carry samples, export the map to a file and import the file.
+
+---
+
 ## Undo and redo
 
-**Undo** and **Redo**, at the top of the links column, step back and forward through your changes in the Map view: links, rule settings, segments and resources, conditions, schema changes, and adding, renaming or deleting maps. The keyboard works too: <kbd>Ctrl</kbd>+<kbd>Z</kbd> (<kbd>⌘</kbd>+<kbd>Z</kbd> on a Mac) to undo, and <kbd>Ctrl</kbd>+<kbd>Y</kbd> or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd> to redo.
+**Undo** and **Redo**, at the top of the links column, step back and forward through your changes in the Map view: links, rule settings, segments and resources, conditions, schema changes, and adding, importing, renaming or deleting maps. The keyboard works too: <kbd>Ctrl</kbd>+<kbd>Z</kbd> (<kbd>⌘</kbd>+<kbd>Z</kbd> on a Mac) to undo, and <kbd>Ctrl</kbd>+<kbd>Y</kbd> or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd> to redo.
 
 The history lasts while the Map view is open. If a file changes outside the Map view, for example after a revert in Source Control, the history is cleared rather than undo something it no longer matches.
 

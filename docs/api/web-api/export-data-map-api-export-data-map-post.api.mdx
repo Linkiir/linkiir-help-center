@@ -1,0 +1,68 @@
+---
+id: export-data-map-api-export-data-map-post
+title: "Export a data map with what it needs"
+description: "Gathers one map of a Data Map node into a package another node can import: its file and entry, the parts of the schemas it reads and builds, and the custom.lua functions it names. The node's files travel in the body; nothing is read from or written to a node, and nothing is run."
+sidebar_label: "Export a data map with what it needs"
+hide_title: true
+hide_table_of_contents: true
+api: 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
+sidebar_class_name: "post api-method"
+info_path: docs/api/web-api/linkiir-api
+custom_edit_url: null
+hide_send_button: true
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Export a data map with what it needs"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/api/export_data_map"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Gathers one map of a Data Map node into a package another node can import: its file and entry, the parts of the schemas it reads and builds, and the custom.lua functions it names. The node's files travel in the body; nothing is read from or written to a node, and nothing is run.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<ParamsDetails>
+  
+</ParamsDetails>
+
+<RequestSchema
+  {...require("./export-data-map-api-export-data-map-post.RequestSchema.json")}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  {...require("./export-data-map-api-export-data-map-post.StatusCodes.json")}
+>
+  
+</StatusCodes>
+
+
+      
