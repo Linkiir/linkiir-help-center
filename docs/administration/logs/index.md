@@ -23,6 +23,30 @@ Audit events are the instance's audit trail. See [Audit events](../security/inde
 
 ---
 
+## The log table
+
+Each row shows when the record was archived, its level and type, where it came from, and a **Message** column previewing what it says, so you can scan the table without opening each row:
+
+| Record | The Message column shows |
+| --- | --- |
+| HL7 v2 | The message type as a tag, such as `ADT^A04`, then the message from `MSH` onwards, its segments separated by `⏎` |
+| X12 | The transaction as a tag, such as `X12 837`, then the message from `ISA` onwards |
+| FHIR and other JSON | The resource type as a tag, such as `Patient`, then the JSON on one line |
+| XML, including CDA | The root element as a tag, such as `ClinicalDocument`, then the XML on one line |
+| Node and system events | The event's message, such as `Node created: Sink` |
+| Alert deliveries | An `Alert` tag and the name of the rule that fired |
+| Script `print` output and other text | The text on one line |
+
+The preview is the first 75 characters, taken from the summary recorded on the index row, so it costs nothing extra to load. Select the row to read the whole message.
+
+Previews are **always masked**, including for users holding **Unredact PHI**, by the same rules as the payload view: a table of patient names is more exposure than one opened message. A preview that can't be masked safely — usually a FHIR or other JSON message cut off partway — shows only its tag and *Content hidden (PHI) — select to view*. See [Messages that can't be read](../configurations/phi-masking.md#messages-that-cant-be-read).
+
+### Choosing columns
+
+**Columns**, beside the search box, shows or hides each column. The choice is remembered in your browser, so it stays the same next time you open the page on that computer. At least one column always stays showing. Hiding a column doesn't change the sort: a table sorted by **Node** keeps that order with **Node** hidden.
+
+---
+
 ## Filtering
 
 The left sidebar narrows the table, and every filter combines with the others:

@@ -18,6 +18,7 @@ The masking happens on the server: a user without **Unredact PHI** never receive
 | --- | --- | --- |
 | **Logs**: a message's payload | Always masked | Shown in full. **Hide PHI** masks it again with the same rules |
 | **Logs**: the summary on each row | Masked | Shown in full |
+| **Logs**: the **Message** preview on each row | Always masked | Always masked. Select the row to read it in full |
 | **Logs**: search | Matches only what you are shown (see [Searching](#searching-masked-messages)) | Matches the whole message |
 | **Logs**: Download | Exported masked | Exported in full |
 | **Logs**: Resubmit | Read only, masked | Reveal a message to edit it before resubmitting |
@@ -102,7 +103,7 @@ That requires reading the whole document. If any rule could apply to a JSON or X
 ██████ Hidden: this message could not be read to mask its PHI
 ```
 
-This happens with malformed messages, and with summaries and queue previews that are cut off partway. Masking the part that could be read would risk showing the rest.
+This happens with malformed messages, and with summaries and queue previews that are cut off partway. Masking the part that could be read would risk showing the rest. In the Logs table, such a row's **Message** preview reads *Content hidden (PHI) — select to view*.
 
 ---
 
