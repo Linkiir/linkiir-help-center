@@ -23,6 +23,8 @@ SQLite is the default single-machine DEV profile and should have exactly one wri
 
 ## Configuration process
 
+MS SQL needs Microsoft **ODBC Driver 18 for SQL Server** (any 18.x release) and SQL Server 2017 or later. See [Database Drivers](database-drivers.md).
+
 1. Create an empty database, for example `linkiir_logs`.
 2. Create a least-privilege Log Archiver database user.
 3. Open **Settings → Logs**.

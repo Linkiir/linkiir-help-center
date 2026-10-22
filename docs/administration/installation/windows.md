@@ -10,6 +10,7 @@ title: Install on Windows
 - Administrator privileges.
 - 4 GB RAM minimum; 8 GB recommended with bundled Kafka.
 - 2 GB free disk minimum; 4 GB with bundled Kafka.
+- To connect to SQL Server (for the Log Archive database, the Schema Editor or a Database node): Microsoft **ODBC Driver 18 for SQL Server**, which Microsoft supports on Windows 11 and Windows Server 2016 and later. PostgreSQL needs the 64-bit psqlODBC driver. See [Database Drivers](../configurations/database-drivers.md).
 
 The installer supplies the Linkiir application dependencies. A bundled-Kafka installation also includes Java and Kafka.
 

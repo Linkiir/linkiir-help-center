@@ -52,6 +52,7 @@ A connection test is available without any Kafka tooling installed. See [Kafka C
 ## Log DB side
 
 - Verify host, port, database name, and credentials.
+- On MS SQL, confirm Microsoft **ODBC Driver 18 for SQL Server** is installed. See [Database Drivers](../configurations/database-drivers.md).
 - Confirm the account can read and write the Linkiir schema, and could create it during installation or upgrade.
 - Check free disk space and, on PostgreSQL or MS SQL, transaction log capacity. A full disk stops history cleanly and silently.
 - Confirm firewall and TLS rules between the Linkiir host and the database.

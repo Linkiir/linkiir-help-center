@@ -11,6 +11,7 @@ Configuration is divided between platform settings, environment-specific connect
 - [PHI Masking](phi-masking.md) — which fields, keys and paths are masked for anyone without Unredact PHI
 - [Migrating Existing Interfaces](migration.md)
 - [HTTP Server Settings](http-server.md) — the embedded server every Source HTTP node shares
+- [Database Drivers](database-drivers.md) — what SQL Server, PostgreSQL and Oracle need installed
 - [Log Archive Database](log-archive-database.md)
 - [Log Retention and Purge](log-retention-purge.md) — how long message history is kept, and how the space comes back
 - [Kafka Configuration](kafka-redpanda.md)
@@ -45,7 +46,9 @@ Manage your Linkiir license: view current state, apply a license code, and handl
 
 ### Database
 
-Configure the Log Archive database connection (SQLite, PostgreSQL, or MS SQL). The Log Archiver writes message history here. See [Log Archive Database](log-archive-database.md).
+The **Database Drivers** card: the absolute paths of the database client libraries, for a library that isn't where Linkiir looks (**MySQL**, **PostgreSQL**, **OCI Oracle**, **ODBC**). Leave a path empty to let Linkiir find it. Oracle Instant Client is only loaded from the path set here. See [Database Drivers](database-drivers.md).
+
+The Log Archive connection itself is under **Logging**.
 
 ### Environment
 

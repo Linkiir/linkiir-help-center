@@ -14,6 +14,7 @@ Use the native systemd package when the target distribution meets the package gl
 - Root privileges.
 - 4 GB RAM minimum; 8 GB recommended with a bundled broker.
 - The current native package is built on Ubuntu 24.04 and requires glibc 2.38 or later.
+- To connect to SQL Server or PostgreSQL (for the Log Archive database, the Schema Editor or a Database node): unixODBC and the database's ODBC driver. SQL Server needs Microsoft **ODBC Driver 18 for SQL Server**. See [Database Drivers](../configurations/database-drivers.md).
 
 Check glibc:
 

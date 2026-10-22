@@ -17,6 +17,7 @@ A healthy response reports queue, Runtime, and Archiver checks. A short `degrade
 - [Linkiir Runtime Crashed](runtime-crash.md)
 - [Crash Report Collection](crash-report.md)
 - [Log Archiver Cannot Reach Queue or Database](log-archiver-connectivity.md)
+- [A database driver is missing](../configurations/database-drivers.md#when-a-driver-is-missing) — `No ODBC driver manager was found` or `The ODBC driver "…" is not installed`
 
 ## First response checklist
 

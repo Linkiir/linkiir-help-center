@@ -106,6 +106,8 @@ A **DB Schema** describes tables: each column's name, type and size, whether it 
 
 The connection details are used for that request only and are not saved in the schema.
 
+Connecting needs the database's driver installed on the Linkiir server. SQL Server needs Microsoft **ODBC Driver 18 for SQL Server**. See [Database Drivers](../administration/configurations/database-drivers.md).
+
 In a script, `linkiir.store.tables{ name = 'patients', schema = 'clinic.json' }` checks each value you set against its column as you set it. See [Database](../api/scripting-api/database.md).
 
 ---
