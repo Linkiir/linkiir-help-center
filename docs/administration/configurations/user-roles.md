@@ -62,8 +62,8 @@ Reading message history.
 
 | Permission | Grants |
 | --- | --- |
-| **View log messages** | Browse and filter the log index, and open a message's payload |
-| **Unredact PHI** | Reveal the patient identifiers a payload is masked to hide |
+| **View log messages** | Browse, search and filter the log index, and open a message's payload |
+| **Unredact PHI** | Show the patient identifiers the Logs page masks, with its **PHI** buttons |
 | **Export log messages** | Download selected messages as a file |
 | **Resubmit messages** | Re-produce a stored message onto its originating topic |
 

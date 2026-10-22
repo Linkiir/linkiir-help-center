@@ -184,14 +184,13 @@ The quickest way is from the user list:
 1. Open **Settings → Users**.
 2. Click the **Activity** button (the pulse icon) on the user's row.
 
-Linkiir opens the **Logs** page showing that user's audit trail for the **last 30 days**. To look further back, change **Time Range** in the sidebar to **All Time** or a custom **From**/**To**.
+Linkiir opens the **Logs** page showing that user's audit trail for the **last 30 days**. To look further back, edit the time filter in the search box: remove `range:30d` to search all time, or replace it with `after:` and `before:` dates, or pick **Custom range…** from the suggestions.
 
 You can also do it from the Logs page directly:
 
 1. Open **Logs**.
-2. Set **Type** to **Audit Events (user actions)**.
-3. Type `user:` and the username in the search box, for example `user:alice`, or `user:"alice smith"` for a name with spaces. The match is exact and ignores case, and it still finds people who have since been deleted.
-4. Optionally narrow by **Event Type**, **Project**, and **Time Range**.
+2. In the search box, type `user:` and the username, for example `user:alice`, or `user:"alice smith"` for a name with spaces. The match is exact and ignores case, and it still finds people who have since been deleted.
+3. Optionally narrow further in the same box, for example with `project:` or a time filter such as `range:7d` or `after:2026-10-01`. See [Searching and filtering](../logs/index.md#searching-and-filtering).
 
 Select an event to see its details. Download selected events with **Download** for an auditor or a ticket.
 
@@ -273,7 +272,7 @@ Audit events are purged by the same **Log Retention Days** setting as all other 
 Set **Log Retention Days** to at least the period your audit policy requires. A value shorter than that, chosen to keep message payloads small, deletes the audit trail with them. See [Log Retention and Purge](../configurations/log-retention-purge.md).
 
 :::note
-The **Activity** button shows the last 30 days to keep the view quick. That is a view, not the retention period: older events are still there, up to your **Log Retention Days**, and you reach them by widening **Time Range**.
+The **Activity** button shows the last 30 days to keep the view quick. That is a view, not the retention period: older events are still there, up to your **Log Retention Days**, and you reach them by widening the time filter in the search box.
 :::
 
 ---

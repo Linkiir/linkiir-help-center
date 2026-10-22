@@ -23,46 +23,71 @@ Audit events are the instance's audit trail. See [Audit events](../security/inde
 
 ---
 
+## The page at a glance
+
+Everything is driven from the **search box** at the top of the page. There is no separate filter panel: you narrow the table by typing into the search box, either plain words or `qualifier:value` filters such as `level:error`. See [Searching and filtering](#searching-and-filtering).
+
+Under the search box is a toolbar:
+
+| On the left | On the right |
+| --- | --- |
+| **Live** / **Paused**, whether new records are arriving (hover for why it is paused) | **Select All**, and once rows are selected, **_n_ selected** and **Clear** |
+| **Columns**, to show or hide table columns | **Resubmit**, for the selected data messages |
+| The **PHI** button, to show or hide patient identifiers in the table's previews | **Download**, as Plain Text or JSON |
+
+Below that is the log table. Click a row to open it in the message inspector at the side; tick a row's checkbox to select it for **Resubmit** or **Download**.
+
+---
+
 ## The log table
 
-Each row shows when the record was archived, its level and type, where it came from, and a **Message** column previewing what it says, so you can scan the table without opening each row:
+Each row shows when the record was archived, its level and type, where it came from, and a **Preview** of the message, so you can scan the table without opening each row.
 
-| Record | The Message column shows |
-| --- | --- |
-| HL7 v2 | The message type as a tag, such as `ADT^A04`, then the message from `MSH` onwards, its segments separated by `⏎` |
-| X12 | The transaction as a tag, such as `X12 837`, then the message from `ISA` onwards |
-| FHIR and other JSON | The resource type as a tag, such as `Patient`, then the JSON on one line |
-| XML, including CDA | The root element as a tag, such as `ClinicalDocument`, then the XML on one line |
-| Node and system events | The event's message, such as `Node created: Sink` |
-| Alert deliveries | An `Alert` tag and the name of the rule that fired |
-| Script `print` output and other text | The text on one line |
+The **Preview** column shows the start of the message, up to three lines, with a tag on the left saying what kind of message it is:
 
-The preview is the first 75 characters, taken from the summary recorded on the index row, so it costs nothing extra to load. Select the row to read the whole message.
+| Record | The tag | The preview lines |
+| --- | --- | --- |
+| HL7 v2 | The message type, such as `ADT^A04` | One line per segment, from `MSH` onwards |
+| X12 | The transaction, such as `X12 837` | One line per segment, from `ISA` onwards |
+| FHIR and other JSON | The resource type, such as `Patient` | The JSON, wrapped |
+| XML, including CDA | The root element, such as `ClinicalDocument` | The XML, wrapped |
+| Node and system events | — | The event's message, such as `Node created: Sink` |
+| Alert deliveries | `Alert` | The name of the rule that fired |
+| Script `print` output and other text | — | One line per line of text |
 
-Previews are **always masked**, including for users holding **Unredact PHI**, by the same rules as the payload view: a table of patient names is more exposure than one opened message. A preview that can't be masked safely — usually a FHIR or other JSON message cut off partway — shows only its tag and *Content hidden (PHI) — select to view*. See [Messages that can't be read](../configurations/phi-masking.md#messages-that-cant-be-read).
+The preview is taken from the start of the message recorded on the index row, so it costs nothing extra to load. Long lines are cut short; open the row to read the whole message.
+
+Previews follow the **PHI** button in the toolbar: patient identifiers are masked unless you hold **Unredact PHI** and have chosen to show them. A preview that can't be masked safely — usually a FHIR or other JSON message cut off partway — shows only its tag and *Content hidden (PHI) — select to view*. See [PHI on the Logs page](#phi-on-the-logs-page).
+
+Columns size themselves to their content, and **Preview** takes the rest of the width. Click a column heading to sort by it; **Preview** can't be sorted. Sorting reorders the rows currently loaded in the table, not the whole log.
+
+### Reading further back
+
+The table loads 100 records at a time, newest first. **Load more**, at the bottom of the table, loads the next 100 older records.
+
+The table holds up to 500 records at once, so it stays quick however far back you read. Past that, each **Load more** drops the newest 100 from the top, and a **Load newer** button appears at the top of the table to bring them back, 100 at a time. Either way, the row you were reading stays where it is on screen.
+
+While older records are showing and the newest have been dropped, new records stop arriving — see [New records arrive on their own](#new-records-arrive-on-their-own).
 
 ### Choosing columns
 
-**Columns**, beside the search box, shows or hides each column. The choice is remembered in your browser, so it stays the same next time you open the page on that computer. At least one column always stays showing. Hiding a column doesn't change the sort: a table sorted by **Node** keeps that order with **Node** hidden.
+**Columns**, in the toolbar, shows or hides each column. The choice is remembered in your browser, so it stays the same next time you open the page on that computer. At least one column always stays showing. Hiding a column doesn't change the sort: a table sorted by **Node** keeps that order with **Node** hidden.
 
 ---
 
-## Filtering
+## Searching and filtering
 
-The left sidebar narrows the table, and every filter combines with the others:
+The search box works like the search on GitHub: **plain words search message content**, and **`qualifier:value`** narrows the table by a field. You can mix the two:
 
-- **Project**, **Workflow**, and **Node**. The project list offers every project you collaborate on, whether or not it has archived anything yet, so a brand-new interface is selectable before its first message lands.
-- **Type**, and once a type is chosen, an **Event Type**.
-- **Level** — Info, Warning, Error, Debug, Data.
-- **Time Range** — last hour, 24 hours, 7 days, 30 days, or a custom **From**/**To**.
+```text
+level:error project:"Lab Results" PID|1||12345
+```
 
-Alert emails and Alert Node payloads carry a link straight into this page with the project, workflow, or node already selected. See [Alerting and Notifications](../notifications/index.md).
+The table updates as you pause typing, or straight away when you press **Enter**.
 
----
+### Searching message content
 
-## Searching
-
-The search box matches **message content as well as names**:
+Words that aren't a qualifier are searched for in:
 
 | It searches | Notes |
 | --- | --- |
@@ -71,9 +96,7 @@ The search box matches **message content as well as names**:
 | Event detail bodies | Node and system event text |
 | Project, workflow, and node **names** | Matched on the name you see, not the underlying identifier |
 
-Matching is a plain substring: there are no wildcards or boolean operators. Narrow a search with the sidebar filters rather than with search syntax.
-
-The one exception is `user:`. Typing `user:alice` (or `user:"alice smith"` for a name with spaces) shows that user's audit events instead of a text search. It matches the username exactly, ignoring case. See [Audit events](../security/index.md#audit-events).
+The words are matched as one plain piece of text: there are no wildcards or boolean operators, so narrow a search with qualifiers rather than with search syntax. Text that only looks like a qualifier, such as `PID:3` or `http://host`, is searched as typed. To search for something that starts with a qualifier's name, such as `node:`, put it in double quotes.
 
 Two limits worth knowing:
 
@@ -82,20 +105,103 @@ Two limits worth knowing:
 
 Without **Unredact PHI**, a row only counts as a match when the term is in what you would be shown, so a masked identifier can't be found by searching for it. Such a search can stop before filling a page; the table then says **Older messages haven't been searched yet**, and **Keep searching** carries on. See [Searching masked messages](../configurations/phi-masking.md#searching-masked-messages).
 
-Tracing one message end to end is still the correlation ID: every node it passes through records the same one, so searching it returns the whole journey.
+Tracing one message end to end is still the correlation ID: every node it passes through records the same one, so `correlation-id:` with that ID returns the whole journey.
+
+The one other special word is `user:`. Typing `user:alice` (or `user:"alice smith"` for a name with spaces) shows that user's audit events instead of a text search. It matches the username exactly, ignoring case. See [Audit events](../security/index.md#audit-events).
+
+### Qualifiers
+
+| Qualifier | Narrows to | Values |
+| --- | --- | --- |
+| `project:` | Records from a project | A project name |
+| `workflow:` | Records from a workflow | A workflow name |
+| `node:` | Records from a node | A node name |
+| `type:` | A kind of record | `data`, `system`, `node` |
+| `event:` | An event type | See [Event types](#event-types) |
+| `level:` | A level | `info`, `warn`, `error`, `debug`, `data` |
+| `range:` | A recent period | `1h`, `24h`, `7d`, `30d` |
+| `after:` | Records from this date or time onwards | `2026-10-07` or `2026-10-07T09:30` |
+| `before:` | Records up to this date or time | `2026-10-07` or `2026-10-07T17:30` |
+| `message-id:` | One message, by its message ID | The ID |
+| `correlation-id:` | Every record of one message's journey | The correlation ID |
+
+How they combine:
+
+- **Several values of one qualifier match any of them.** Separate them with commas, `level:error,warn`, or repeat the qualifier, `project:ADT project:Lab`. This works for every qualifier except `range:`, `after:` and `before:`, which take one value each.
+- **Different qualifiers narrow together.** `project:ADT level:error` is errors in the ADT project.
+- **Names with spaces go in double quotes**: `project:"Lab Results"`, `node:"HL7 Listener"`.
+- **Matching ignores case**: `level:ERROR` and `level:error` are the same, and `project:"lab results"` finds **Lab Results**.
+- **A name matches everything in scope with that name.** `node:Listener` is every node called Listener in the projects you can see; add `workflow:` or `project:` to pick one.
+- **Naming a workflow or node is enough.** The page works out which project (and workflow) it belongs to, so `node:"HL7 Listener"` on its own finds that node's records.
+- **A bare date covers the whole day.** `after:2026-10-07` starts at the beginning of that day, and `before:2026-10-07` runs to its end. Add a time, `2026-10-07T09:30`, to be exact.
+- **`range:` can't be combined with `after:` or `before:`.** Use one or the other.
+
+#### Event types
+
+`event:` takes an event type in lowercase with dashes. Naming one also narrows `type:` to the kind of record it belongs to.
+
+| `type:` | `event:` values |
+| --- | --- |
+| `node` | `node-state-change`, `message-enqueued`, `message-dequeued`, `script-print`, `error-occurred` |
+| `data` | `alert-delivered` |
+| `system` | `runtime-crash-loop`, `runtime-down`, `archiver-crash-loop`, `archiver-down`, `log-db-unreachable`, `engine-crash-loop` |
+
+#### Example searches
+
+| To see | Type |
+| --- | --- |
+| Errors and warnings from one project | `project:"Lab Results" level:error,warn` |
+| Everything one node did in the last hour | `node:"HL7 Listener" range:1h` |
+| Node errors over the last week | `event:error-occurred range:7d` |
+| Data messages on a given day that mention an MRN | `type:data after:2026-10-07 before:2026-10-07 MRN12345` |
+| A morning's records from two projects | `project:ADT,Lab after:2026-10-07T08:00 before:2026-10-07T12:00` |
+| The full journey of one message | `correlation-id:` followed by its correlation ID |
+
+### Suggestions as you type
+
+A menu opens under the search box as you type. At the start of a word it lists the qualifiers; after a qualifier's colon it lists that qualifier's values — your projects, workflows and nodes, the levels, the event types, and recent dates for `after:` and `before:`. Workflows are limited to the projects already named, and nodes to the workflows.
+
+| Key | Does |
+| --- | --- |
+| **/** | Jumps to the search box from anywhere on the page |
+| **↓** / **↑** | Moves through the suggestions |
+| **Enter** or **Tab** | Picks the highlighted suggestion. With nothing highlighted, **Enter** runs the search |
+| **Esc** | Closes the suggestions; press it again to leave the search box |
+
+After picking a value, type a comma to add another value to the same qualifier.
+
+A long search wraps onto more lines rather than scrolling out of sight. The **×** at the end of the box clears it.
+
+### Picking a custom time range
+
+Typing `range:`, `after:` or `before:` offers **Custom range…** at the end of the suggestions. It opens **From** and **To** date-and-time pickers:
+
+- Either end may be left empty, for an open-ended window.
+- **From** must be before **To**.
+- **Apply** replaces any time filter already in the box with `after:` and `before:` for the times you picked.
+
+### Values that don't match
+
+A value that doesn't match anything — a misspelt level, a project you can't see, a workflow outside the project you named — is shown in red with a wavy underline and is **not applied**. A warning icon at the end of the box lists every value that wasn't applied and why; hover over it to read them. The suggestions menu shows the same message while your cursor is on the value.
+
+### Links and bookmarks
+
+The page's address holds the current search, so you can bookmark a view, share the link with a colleague, or refresh the page without losing your filters. 
+Alert emails and Alert Node payloads carry a **View in Logs** link that opens this page with the project, workflow, or node already filled in. See [Alerting and Notifications](../notifications/index.md). If the link points at something since deleted, or whose logs have been purged, the page says so and offers **Show all logs**.
 
 ---
 
 ## New records arrive on their own
 
-The Logs page tails the archive. The chip beside the toolbar buttons reads **Live** or **Paused**:
+The Logs page tails the archive. The indicator at the left of the toolbar reads **Live** or **Paused**:
 
 - **Live** — the page checks for newer records every 10 seconds. When you are parked at the top of a newest-first table, they are merged in silently. Otherwise a floating **_n_ new records** pill appears, and the rows only move when you click it.
 - **Paused** — with the reason on hover:
 
 | Paused because | Why |
 | --- | --- |
-| A custom **To** time is set | That makes the view a fixed window, so nothing new can fall inside it |
+| The search has a `before:` time, or a custom range with a **To** time | That makes the view a fixed window, so nothing new can fall inside it |
+| You have read far enough back that the newest records were dropped from the table | New records can only be added above the newest ones. Click **Load newer** at the top of the table until you are back at the latest, and **Live** resumes |
 | The resubmit window is open | It is a task you are in the middle of |
 | The log index is being rebuilt | The page is already reporting that reads are slow |
 
@@ -105,23 +211,71 @@ There is nothing to switch on or off. Tailing does not count as user activity, s
 
 ## Reading a message
 
-Selecting a row opens it, with its metadata, its related messages, and its raw body. HL7 messages render one segment per line whether or not PHI is masked.
+Click a row to open it in the **message inspector**, which slides open beside the table with the message's metadata, its related messages, and its body. HL7 messages render one segment per line. The inspector only appears while a message is open, so the table has the full width the rest of the time.
 
-Patient identifiers in a payload are **masked for everyone without Unredact PHI**: HL7 v2 fields, and values in JSON and XML (FHIR included), as **Settings → Instance → PHI Masking** sets out. The masking is done on the server, so the identifiers never reach the browser. Holding **Unredact PHI** shows the payload in full, with a **Hide PHI** button that masks it again by the same rules, for reading a message with someone looking over your shoulder. See [PHI Masking](../configurations/phi-masking.md).
+To make the inspector wider or narrower, drag the grip on its left edge (hover over it for **Drag to resize**). From the keyboard, **Tab** to the grip, then **←** widens the inspector and **→** narrows it.
+
+| Key | Does |
+| --- | --- |
+| **↓** / **↑** | Opens the next or previous message in the table. With none open, **↓** opens the first and **↑** the last |
+| **Esc** | Closes the inspector (so does the **×** in its corner) |
+
+The arrow keys move between messages only when you aren't typing in the search box or another field, and not while a menu or window is open.
+
+### Related messages
+
+**Related messages**, under the message body, shows every record of the open message — everything that shares its correlation ID — in the order it moved through the workflow:
+
+- **The route** along the top: each node the message passed through, joined by arrows, with the node you are viewing highlighted and the total time from first record to last.
+- **The stops** below it, numbered in order. Each stop is one node, with its workflow (and its project, when the message crossed projects), and the records the message left there. Between stops, the time the message took to get from one to the next, such as **+9ms**.
+- **Each record** shows its level, what happened (for example *Message enqueued*), the time and how long after the first record it came, and a two-line preview like the table's **Preview** column. The record you have open is marked **Viewing**; click any other to open it.
+
+The panel opens tall enough to show a couple of records; drag its top edge to make it taller or shorter, and close it with its **×**.
+
+---
+
+## PHI on the Logs page
+
+Patient identifiers are **masked by default**: HL7 v2 fields, and values in JSON and XML (FHIR included), as **Settings → Instance → PHI Masking** sets out. There are two **PHI** buttons, and each only affects its own part of the page:
+
+- **The toolbar's PHI button** covers the **Preview** column in the table, and the previews under [Related messages](#related-messages). It's hidden every time you open the page and stays as you set it until you reload.
+- **The inspector's PHI button** covers the message open in the inspector. Every message you open starts hidden — including when you move to the next one with the arrow keys — so showing one message's identifiers never carries over to another.
+
+Either button reads **PHI hidden** while identifiers are masked. **Holding Unredact PHI**, click it to show them in full; it then reads **Hide PHI**, and clicking it again masks them by the same rules — useful when someone is looking over your shoulder.
+
+**Without Unredact PHI** both buttons are disabled and PHI stays hidden. The masking is done on the server, so the identifiers never reach your browser.
+
+See [PHI Masking](../configurations/phi-masking.md).
+
+---
+
+## Selecting messages
+
+Tick a row's checkbox to select it, or **Select All** to select every row loaded in the table. The toolbar then shows how many are selected and a **Clear** button. **Resubmit** and **Download** act on the selection.
+
+A selection stays as you read on, even when the rows scroll out of the table as older ones load, and when you change the search. **Resubmit** and **Download** act on everything selected, not only the rows on screen; **Clear** empties the selection.
 
 ---
 
 ## Downloading
 
-**Download** exports the selected rows as a text or JSON file, and needs **Export log messages**. Each export is itself recorded as an audit event.
+**Download** exports the selected rows as **Plain Text** or **JSON**, and needs **Export log messages**. It is greyed out until at least one row is selected. Each export is itself recorded as an audit event.
 
 ---
 
 ## Resubmitting a message
 
-**Resubmit** re-publishes selected data messages onto the queue of the node that originally produced them. It needs **Resubmit messages**, plus collaboration on each record's project — records from a project you are not on are skipped and reported.
+**Resubmit**, in the toolbar, re-publishes the selected data messages onto the queue of the node that originally produced them. The button shows how many will be resubmitted, for example **Resubmit (3)**. Only data messages can be resubmitted: node and system events in the selection are skipped, and the button's tooltip says how many.
 
-Opening a message in the resubmit window lets you review it. Correcting one before it goes back out is a separate right:
+The button is greyed out, with a tooltip explaining why, when:
+
+- You don't hold **Resubmit messages**.
+- Nothing is selected.
+- None of the selected rows is a data message.
+
+Resubmitting also needs collaboration on each record's project — records from a project you are not on are skipped and reported.
+
+**Resubmit** opens a review window listing each message. Opening a message there lets you review it. Correcting one before it goes back out is a separate right:
 
 | You hold | In the resubmit window |
 | --- | --- |
@@ -140,8 +294,8 @@ The receiving node processes it like any other message, and downstream systems s
 
 | Permission | Grants |
 | --- | --- |
-| **View log messages** | Open the page, filter it, and read a message's payload |
-| **Unredact PHI** | Reveal masked patient identifiers, and edit a message before resubmitting it |
+| **View log messages** | Open the page, search and filter it, and read a message's payload |
+| **Unredact PHI** | Show masked patient identifiers with the **PHI** buttons, and edit a message before resubmitting it |
 | **Export log messages** | Download selected records |
 | **Resubmit messages** | Re-publish a stored message onto its originating queue |
 

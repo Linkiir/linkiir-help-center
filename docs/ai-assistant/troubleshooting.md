@@ -45,9 +45,9 @@ Stop the process the command reports, then wait for the supervisor's next health
 | What | Where |
 | --- | --- |
 | AI Service log — startup failures, port binding, provider call errors | `<working directory>/logs/ai_service.log` |
-| AI system events — usage, quota warnings, policy relaxations, blocked runs | The **Logs** page, filtered to `SYSTEM_EVENT`, event types beginning `AI_` |
+| AI system events — usage, quota warnings, policy relaxations, blocked runs | The **Logs** page, searched with `type:system`, event types beginning `AI_` |
 
-Filter the **Logs** page to `SYSTEM_EVENT` and look for event types with an `AI_` prefix. Those records tell you whether a run was blocked, whether a token budget threshold was crossed, and when a policy was relaxed. See [Logs](../administration/logs/index.md).
+Type `type:system` in the **Logs** page search box and look for event types with an `AI_` prefix. Those records tell you whether a run was blocked, whether a token budget threshold was crossed, and when a policy was relaxed. See [Logs](../administration/logs/index.md).
 
 :::caution[Log files hold no secrets, and should stay that way]
 Provider credentials are stored encrypted and are never written to `ai_service.log`. If you attach a log to a support request, still read it through first — prompts and node configuration can carry environment detail you would rather not send.

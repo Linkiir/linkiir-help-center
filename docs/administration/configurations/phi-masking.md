@@ -16,9 +16,9 @@ The masking happens on the server: a user without **Unredact PHI** never receive
 
 | Where | Without **Unredact PHI** | With **Unredact PHI** |
 | --- | --- | --- |
-| **Logs**: a message's payload | Always masked | Shown in full. **Hide PHI** masks it again with the same rules |
+| **Logs**: a message's payload | Always masked | Masked for each message you open. The inspector's **PHI** button shows it in full, and masks it again with the same rules |
 | **Logs**: the summary on each row | Masked | Shown in full |
-| **Logs**: the **Message** preview on each row | Always masked | Always masked. Select the row to read it in full |
+| **Logs**: the **Preview** on each row | Always masked | Masked each time the page opens. The toolbar's **PHI** button shows the previews in full, separately from the inspector |
 | **Logs**: search | Matches only what you are shown (see [Searching](#searching-masked-messages)) | Matches the whole message |
 | **Logs**: Download | Exported masked | Exported in full |
 | **Logs**: Resubmit | Read only, masked | Reveal a message to edit it before resubmitting |
@@ -89,7 +89,7 @@ The next log read, export or queue preview uses the new policy. Nothing needs re
 Saving the policy needs both **Security settings** and **Unredact PHI**. Masking less shows identifiers to everyone who can't unredact. That isn't a power to give someone who sees the masked view themselves.
 :::
 
-Anyone signed in can read the policy, because the Logs page needs it for **Hide PHI**, and the policy itself contains no patient data.
+Anyone signed in can read the policy, because the Logs page needs it to mask previews and payloads in the browser, and the policy itself contains no patient data.
 
 ---
 
@@ -103,7 +103,7 @@ That requires reading the whole document. If any rule could apply to a JSON or X
 ██████ Hidden: this message could not be read to mask its PHI
 ```
 
-This happens with malformed messages, and with summaries and queue previews that are cut off partway. Masking the part that could be read would risk showing the rest. In the Logs table, such a row's **Message** preview reads *Content hidden (PHI) — select to view*.
+This happens with malformed messages, and with summaries and queue previews that are cut off partway. Masking the part that could be read would risk showing the rest. In the Logs table, such a row's **Preview** reads *Content hidden (PHI) — select to view*.
 
 ---
 

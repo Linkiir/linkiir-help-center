@@ -80,7 +80,7 @@ Note that this is a different setting from **Queue Retention (days)**, which is 
 
 Yes. The Logs page search box matches the archived message body as well as project, workflow, and node names, so an MRN or an accession number in any segment is findable.
 
-Two caveats: matching is a plain substring — there are no wildcards or operators, so narrow with the filters instead — and only messages whose payload is still archived can match on content. A payload above **Max Payload Size** was never stored, and one past your retention has been purged. See [Log Search and Message History](../administration/logs/index.md).
+Two caveats: matching is a plain substring — there are no wildcards or operators, so narrow with qualifiers such as `project:`, `level:error` or `range:24h` in the same box instead — and only messages whose payload is still archived can match on content. A payload above **Max Payload Size** was never stored, and one past your retention has been purged. See [Log Search and Message History](../administration/logs/index.md).
 
 ## Does Run Test send real messages?
 
