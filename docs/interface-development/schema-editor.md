@@ -6,7 +6,7 @@ keywords: [schema, grammar, schema editor, HL7, X12, FHIR, CDA, C-CDA, JSON, XML
 
 # Schema Editor
 
-A **schema** describes the messages a node works with: which messages exist, what they are made of, and how to tell them apart. Scripts read and build messages through a schema (`linkiir.data.extract`, `linkiir.data.create`, `linkiir.data.parse`), and a [Data Map node](interfaces/data-map/index.md) maps between a source schema and a target schema.
+A **schema** describes the messages a node works with: which messages exist, what they are made of, and how to tell them apart. Scripts read and build messages through a schema (`linkiir.data.extract`, `linkiir.data.create`, `linkiir.data.parse`), and a [Data Map node](interfaces/data-map/index.md) maps between a source schema and a destination schema.
 
 A schema is a JSON file in the node, versioned with the rest of the node's files. The **Schema Editor** is the tree view the Scripting tab shows in place of the text editor whenever you open one.
 
@@ -35,7 +35,7 @@ The JSON and XML kinds describe documents of your own design, such as an API's r
 
 Opening any schema file shows the Schema Editor. **Code** switches to the file's raw JSON and **Schema** switches back. Edits in either view are saved, committed and diffed like any other file.
 
-A Data Map node keeps its schemas in `source.json` and `target.json`. In that node, **Source schema** and **Target schema** sit beside **Map** and **Code**.
+A Data Map node keeps its schemas in `source.json` and `destination.json`. In that node, **Source schema** and **Destination schema** sit beside **Map** and **Code**.
 
 ---
 

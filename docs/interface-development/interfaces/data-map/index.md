@@ -6,7 +6,7 @@ keywords: [data map, mapping, graphical map, HL7 to FHIR, FHIR to HL7, X12, CDA,
 
 # Data Map Nodes
 
-A **Data Map** node converts each message it receives from one format to another. You draw the mapping in the **Map view**: link a source field to a target field, pick how its value is converted, and the node generates readable Lua that does the work.
+A **Data Map** node converts each message it receives from one format to another. You draw the mapping in the **Map view**: link a source field to a destination field, pick how its value is converted, and the node generates readable Lua that does the work.
 
 ```text
 Source  →  Data Map (HL7 v2 ADT^A01 → FHIR Bundle)  →  Destination
@@ -41,7 +41,7 @@ One node builds one output format: two output formats means two nodes. Within th
    1. **Source message**: the protocol and version it reads, and the message it takes (`ADT_A01`, `Patient`, `837P`, a table, a structure).
    2. **Sample data** (optional): paste or upload one or more samples, so the board shows real values. For JSON and XML, the structure can be read from the first sample.
    3. **Filters**: the condition a message must meet for this map to take it. See [Conditions](conditions.md).
-   4. **Target message**: the protocol and version it builds, the message it builds, how the output starts, and the map's name. A later map can start as a copy of an existing one.
+   4. **Destination message**: the protocol and version it builds, the message it builds, how the output starts, and the map's name. A later map can start as a copy of an existing one.
 4. Link fields, or select **Auto-map** to add the standard mappings. See [Building a Map](building-maps.md).
 5. Run it on a sample. See [Testing and Errors](testing-and-errors.md).
 
@@ -72,13 +72,13 @@ Your own code sits at the top of the node. Everything the Map view manages is in
 | `custom.lua` | Your own Lua functions, which the maps call by name (see [Custom Lua](building-maps.md#custom-lua)) | You. The Map view only adds an empty function for a name a map uses that isn't there yet |
 | `premap.lua` | `PreMap`, which runs on each message just before its map | You |
 | `postmap.lua` | `PostMap`, which runs on what the map built | You |
-| `source.json`, `target.json` | The source and target [schemas](../../schema-editor.md) | The Map view and the Schema Editor |
+| `source.json`, `destination.json` | The source and destination [schemas](../../schema-editor.md) | The Map view and the Schema Editor |
 | `mapping/datamap.lua` | The list of maps: name, the message each takes, its condition, and the formats | The Map view (or by hand) |
 | `mapping/maps/<name>.map.lua` | One map's rules, as a Lua table | The Map view (or by hand) |
 | `mapping/init.lua`, `mapping/maps/<name>.lua` | The code generated from the maps | Generated: don't edit |
 | `mapping/helpers/*.lua` | Conversion helpers the generated code uses (`hl7v2.lua`, `fhir.lua`, `convert.lua`, `normalize.lua`, …) | Kept up to date by the Map view |
 
-Nodes made before the `mapping` folder existed are moved into it the first time they are opened, and any custom Lua inside their maps is moved into `custom.lua` as named functions. The move shows in Source Control: commit it when you're ready.
+Nodes made before the `mapping` folder existed are moved into it the first time they are opened, and any custom Lua inside their maps is moved into `custom.lua` as named functions. Nodes that called the destination the **target** have `target.json` renamed `destination.json` the same way. The change shows in Source Control: commit it when you're ready.
 
 ### PreMap and PostMap
 

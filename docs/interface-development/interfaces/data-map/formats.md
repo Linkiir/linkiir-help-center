@@ -36,7 +36,7 @@ Rules, conditions and custom Lua all name fields by **path**. Each format has it
 - **Resources in it** lists the resource types read from the Bundle. `Patient.name` reads the Bundle's first `Patient`.
 - A segment can be made once per resource of a type, such as one `AL1` per `AllergyIntolerance`, or per item of a list (`Patient.contact[]`).
 
-**As a target**, the output is a Bundle (**transaction**, **batch** or **collection**) or a **Single resource**. A resource can be made once per item, such as one `Observation` per `OBX`. References between the resources, such as `subject` → `Patient`, are filled in for you.
+**As a destination**, the output is a Bundle (**transaction**, **batch** or **collection**) or a **Single resource**. A resource can be made once per item, such as one `Observation` per `OBX`. References between the resources, such as `subject` → `Patient`, are filled in for you.
 
 FHIR to FHIR is not supported. Use a Transform Custom node.
 
@@ -49,7 +49,7 @@ FHIR to FHIR is not supported. Use a Transform Custom node.
 
 ## CDA and C-CDA
 
-The target's document type decides the rules:
+The destination's document type decides the rules:
 
 | Document type | Rules |
 | --- | --- |
@@ -82,8 +82,8 @@ A Data Map node doesn't connect to a database. Rows travel as JSON, so a source 
 ```
 
 - **As a source**, the message is an object of tables: the map's main table and any child tables, each a row or a list of rows. The node's `main.lua` reads it with `mapper.read`.
-- **As a target**, the map writes a main table row and child tables made once per item, such as one `allergies` row per `AL1`. Each value is checked against its column's type and size.
-- The tables come from a [DB Schema](../../schema-editor.md#database-tables), which can be imported from a live database. In a new node, the source or target column offers to open the Schema Editor to set them up.
+- **As a destination**, the map writes a main table row and child tables made once per item, such as one `allergies` row per `AL1`. Each value is checked against its column's type and size.
+- The tables come from a [DB Schema](../../schema-editor.md#database-tables), which can be imported from a live database. In a new node, the source or destination column offers to open the Schema Editor to set them up.
 
 To write the rows, connect a Transform Custom node that calls `Connection:merge`. See [Database](../../../api/scripting-api/database.md).
 
@@ -93,7 +93,7 @@ Your own documents, described by a [JSON or XML schema](../../schema-editor.md#j
 
 - Paths are the names `linkiir.data.parse` gives: `Order.customer.name`, `Order.lines[].sku`. In XML, an attribute is read by its name, or as `@name` when a child element shares it, and an element's text is `xmlText`.
 - Values take their schema type: numbers are written as numbers, booleans as `true`/`false`.
-- The output can start as a copy of the input when the source and target are the same format (JSON to JSON, XML to XML).
+- The output can start as a copy of the input when the source and destination are the same format (JSON to JSON, XML to XML).
 
 ## Next
 

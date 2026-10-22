@@ -1,36 +1,36 @@
 ---
 title: Building a Map
-description: Use the Data Map node's Map view to link source fields to target fields, convert and normalize values, fill fixed values, add custom Lua, change the schemas, move maps between nodes, and commit.
+description: Use the Data Map node's Map view to link source fields to destination fields, convert and normalize values, fill fixed values, add custom Lua, change the schemas, move maps between nodes, and commit.
 keywords: [data map, map view, auto-map, rules, functions, code map, normalize, date format, custom Lua, custom.lua, fixed value, export map, import map, undo, commit]
 ---
 
 # Building a Map
 
-A **map** turns one message type into another: an ADT^A01 into a FHIR Bundle, or a `Patient` resource into an ADT^A28. It is a list of **rules**, and each rule fills one target field. A node can have as many maps as it needs.
+A **map** turns one message type into another: an ADT^A01 into a FHIR Bundle, or a `Patient` resource into an ADT^A28. It is a list of **rules**, and each rule fills one destination field. A node can have as many maps as it needs.
 
 ---
 
 ## The Map view
 
-Opening a Data Map node on the Scripting page shows the **Map** view. The switch at the right of its toolbar moves between **Map**, **Source schema**, **Target schema** and **Code**. In the Map view, **Code** opens `custom.lua`, where your own functions live.
+Opening a Data Map node on the Scripting page shows the **Map** view. The switch at the right of its toolbar moves between **Map**, **Source schema**, **Destination schema** and **Code**. In the Map view, **Code** opens `custom.lua`, where your own functions live.
 
 | Area | Shows |
 | --- | --- |
 | **Toolbar** | The map picker, a button reading what the map takes and builds (such as **HL7 ADT_A01 → FHIR Bundle**), the map's condition, **Auto-map**, and the **PreMap** and **PostMap** buttons |
 | **Source column**, left | The message the map takes, from `source.json`, with the selected sample's values beside each field |
-| **Target column**, right | The message it builds, from `target.json` |
+| **Destination column**, right | The message it builds, from `destination.json` |
 | **Links** between the columns | One per rule. Hover over a field to highlight its links. Scrolling over the links scrolls both columns together. The **Undo** and **Redo** buttons sit at the top |
 | **Bottom panel** | **Rule**: the selected rule's settings, what it read and wrote on the last run, and the map's problems. **Output**: running the map on a sample |
 
-The toolbar also counts the fields mapped and the target's required fields that are filled (**required 12/14**). The filter box at the top of each column narrows it, and the filter button limits it to fields that have a value in the sample or are mapped.
+The toolbar also counts the fields mapped and the destination's required fields that are filled (**required 12/14**). The filter box at the top of each column narrows it, and the filter button limits it to fields that have a value in the sample or are mapped.
 
 **Expand all** and **Collapse all**, at the right of each column's toolbar, open or close the whole column at once. **Collapse all** folds everything back to its top-level rows: segments, resources, loops, tables or sections. **Expand all** opens those top-level rows one level down, so a large message stays readable. Open a row further with its own arrow. Links to a folded field end on the nearest row still showing, such as its segment.
 
 The bottom panel opens when you select a rule or run the map, and closes with its **×** to give the board more room. While it is closed, a **problems** button shows when the map has any, and opens it.
 
-### Source and target settings
+### Source and destination settings
 
-The toolbar button that reads what the map takes and builds opens the map's source and target settings: the version, the message it takes and builds, how the output starts, and, for CDA, how strictly documents are checked. The node's protocols can't be changed while a map has content.
+The toolbar button that reads what the map takes and builds opens the map's source and destination settings: the version, the message it takes and builds, how the output starts, and, for CDA, how strictly documents are checked. The node's protocols can't be changed while a map has content.
 
 ### Picking a map
 
@@ -52,9 +52,9 @@ The map picker in the toolbar lists the node's maps. With a map selected, its me
 
 There are three ways to add a rule:
 
-- **Drag** from a source field to a target field.
-- **Click** a source field, then a target field.
-- **Right-click** a row and select **Map to target…** (or **Map to source…** on a target row), then click the other end. **Escape** cancels.
+- **Drag** from a source field to a destination field.
+- **Click** a source field, then a destination field.
+- **Right-click** a row and select **Map to destination…** (or **Map to source…** on a destination row), then click the other end. **Escape** cancels.
 
 The new rule uses the conversion that suits the two fields. For example, an HL7 `XPN` name going into a FHIR `HumanName` uses **Name**. Select the link to change it in the **Rule** tab.
 
@@ -65,7 +65,7 @@ To remove a rule, right-click its link and select **Delete link**, or right-clic
 | Setting | What it does |
 | --- | --- |
 | **Function** | How the value is converted (see below) |
-| **Source**, **Target** | The two ends, as paths: `PID-5`, `Patient.name[]`, `2010BA/NM1-3`, `patients.mrn` |
+| **Source**, **Destination** | The two ends, as paths: `PID-5`, `Patient.name[]`, `2010BA/NM1-3`, `patients.mrn` |
 | Function options | For example, a code map's codes, a date's **Output format**, or a fixed value |
 | **Normalize data** | Clean-up applied to the value before it is written (see below) |
 | **When empty** | When the source has no value: **skip the field**, or **reject the message** |
@@ -98,7 +98,7 @@ A **Code map** rule shows its codes as a two-column table: the **Code** that arr
 
 ### Date output formats
 
-**Output format** on a date or time rule picks how the value is written, such as `YYYY-MM-DD`, `MM/DD/YYYY` or `YYYYMMDDHHmmss`. Each target format has its own default. **Custom…** takes your own pattern, built from these tokens:
+**Output format** on a date or time rule picks how the value is written, such as `YYYY-MM-DD`, `MM/DD/YYYY` or `YYYYMMDDHHmmss`. Each destination format has its own default. **Custom…** takes your own pattern, built from these tokens:
 
 | Token | Gives |
 | --- | --- |
@@ -127,7 +127,7 @@ The Map view warns when a pattern is written into a field whose own format it do
 | Case | **lower case**, **UPPER CASE**, **Title Case** |
 | Length | **Strip leading zeros**, **Pad with zeros** to a length, **Cut to length** |
 
-The steps always run in a fixed order, whatever order you tick them in, with **Cut to length** last. Steps that contradict each other can't be chosen together. For a database target, **Cut to length** can't exceed the column's length. On structured values, such as a FHIR identifier or a CDA code, normalizing changes the text but leaves systems, URLs and code system IDs alone.
+The steps always run in a fixed order, whatever order you tick them in, with **Cut to length** last. Steps that contradict each other can't be chosen together. For a database destination, **Cut to length** can't exceed the column's length. On structured values, such as a FHIR identifier or a CDA code, normalizing changes the text but leaves systems, URLs and code system IDs alone.
 
 **+ Add custom normalization** adds your own step, as a function in `custom.lua` that takes the text and returns it cleaned. It runs after the ticked steps:
 
@@ -141,14 +141,14 @@ end
 
 ## Values with no source
 
-Right-click a target field and choose **Set value** to fill it without a source:
+Right-click a destination field and choose **Set value** to fill it without a source:
 
 | Value | Fills |
 | --- | --- |
 | **Fixed value** | The same text every time, such as `2.5.1` in MSH-12. In HL7, `^` separates components |
 | **Current date/time** | The time the message is mapped, in a format you choose, optionally shifted (`-1d`, `+2h`, `+30min`, `+1mo`, `-1y`) |
 | **New UUID** | A new random UUID per message |
-| **New control ID** | A new unique ID, such as for MSH-10 (HL7 and X12 targets) |
+| **New control ID** | A new unique ID, such as for MSH-10 (HL7 and X12 destinations) |
 | **Custom Lua** | Whatever your function returns |
 
 ---
@@ -163,9 +163,9 @@ Auto-map only adds rules, and never changes or removes one you made. Review what
 
 ## Building the output
 
-What you set up in the target column depends on the target format:
+What you set up in the destination column depends on the destination format:
 
-| Target | You choose |
+| Destination | You choose |
 | --- | --- |
 | HL7 v2 | **Output starts as** a **Copy of the input** (change only what differs) or an **Empty message**. Then the segments it holds, each written once or once per item of the input (one `NK1` per contact), and in a copy, the segments to drop |
 | FHIR | The Bundle type (**transaction**, **batch**, **collection**) or a **Single resource**, and the resources it holds. A resource can be made once per item, such as one `Observation` per `OBX`, and references between them, such as `Observation.subject` → `Patient`, are filled in for you |
@@ -188,7 +188,7 @@ When a message carries something the schema doesn't have, such as a Z-segment fi
 | **Remove field** | Removes it from the schema |
 | **Remove segment** | On an HL7 source, removes a segment the map doesn't need. MSH can't be removed |
 
-HL7 v2 and X12 fields are numbered by position, so a new field goes on the end and only the last one can be removed. Nothing is removed while a rule, a segment or resource made per item, or a condition still uses it. The change is saved to `source.json` or `target.json`, the same file the [Schema Editor](../../schema-editor.md) edits.
+HL7 v2 and X12 fields are numbered by position, so a new field goes on the end and only the last one can be removed. Nothing is removed while a rule, a segment or resource made per item, or a condition still uses it. The change is saved to `source.json` or `destination.json`, the same file the [Schema Editor](../../schema-editor.md) edits.
 
 ---
 
@@ -228,7 +228,7 @@ end
 
 ## Moving maps between nodes
 
-A map built in one Data Map node can be reused in another: in the same project, in another project, or on another Linkiir grid. The map travels with what it needs: the parts of the source and target schemas it reads and builds, and the functions it calls in `custom.lua`. The receiving node generates the map's code itself, as after any change.
+A map built in one Data Map node can be reused in another: in the same project, in another project, or on another Linkiir grid. The map travels with what it needs: the parts of the source and destination schemas it reads and builds, and the functions it calls in `custom.lua`. The receiving node generates the map's code itself, as after any change.
 
 ### Exporting a map
 
@@ -255,7 +255,7 @@ The **Import map** window then shows, before anything changes:
 | --- | --- |
 | Summary | What the map converts, the messages it takes, and its condition |
 | **Map name** | The name it gets in this node. A name already in use gets a number added |
-| **This node gains** | The source and target schema messages and the **Custom Lua functions** the node doesn't have yet. When it already has everything, only the map is added |
+| **This node gains** | The source and destination schema messages and the **Custom Lua functions** the node doesn't have yet. When it already has everything, only the map is added |
 | **Add its samples to this node** | For a file with samples: they are added to the node's samples, a name already in use getting a number, such as `Lab result (2)`. Untick it to leave them out |
 | **Check before importing** | Anything to look at after importing, such as a function renamed or a schema part this node defines differently |
 
