@@ -1530,6 +1530,12 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "api/web-api/get-logs-resubmit-targets-api-logs-resubmit-targets-get",
+          label: "List resubmission targets",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
           id: "api/web-api/post-logs-resubmit-api-logs-resubmit-post",
           label: "Resubmit log events to Kafka",
           className: "api-method post",

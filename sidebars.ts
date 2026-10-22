@@ -44,6 +44,7 @@ const sidebars: SidebarsConfig = {
           'administration/configurations/log-archive-database',
           'administration/configurations/log-retention-purge', 'administration/configurations/kafka-redpanda',
         ]},
+        'administration/monitor/index',
         'administration/logs/index',
         'administration/backup-restore/index',
         {type: 'category', label: 'Alerting and Notifications', link: {type: 'doc', id: 'administration/notifications/index'}, items: [

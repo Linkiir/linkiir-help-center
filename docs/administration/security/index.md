@@ -255,7 +255,7 @@ No event ever contains a password, token, secret, or SSO assertion. Events also 
 | `LOG_SEARCH` | Message content is searched by someone without **Unredact PHI** |
 | `LOG_PHI_UNMASKED_VIEW` | Someone with **Unredact PHI** opens a payload unmasked. Recorded once per session per project. |
 | `LOG_EXPORT` | Log records are downloaded |
-| `MESSAGE_RESUBMIT` | Archived messages are resubmitted |
+| `MESSAGE_RESUBMIT` | Archived messages are resubmitted. A message sent to another node is recorded in the destination project, and also in its own project when it leaves that project |
 
 The **Event Type** filter lists the most common of these by name. Every one of them appears when **Event Type** is left at **All Event Types**.
 

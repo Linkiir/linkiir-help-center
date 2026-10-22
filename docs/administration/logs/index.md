@@ -265,7 +265,7 @@ A selection stays as you read on, even when the rows scroll out of the table as 
 
 ## Resubmitting a message
 
-**Resubmit**, in the toolbar, re-publishes the selected data messages onto the queue of the node that originally produced them. The button shows how many will be resubmitted, for example **Resubmit (3)**. Only data messages can be resubmitted: node and system events in the selection are skipped, and the button's tooltip says how many.
+**Resubmit**, in the toolbar, re-publishes the selected data messages, either back onto the queue they came from or to a node you choose. The button shows how many will be resubmitted, for example **Resubmit (3)**. Only data messages can be resubmitted: node and system events in the selection are skipped, and the button's tooltip says how many.
 
 The button is greyed out, with a tooltip explaining why, when:
 
@@ -275,18 +275,57 @@ The button is greyed out, with a tooltip explaining why, when:
 
 Resubmitting also needs collaboration on each record's project — records from a project you are not on are skipped and reported.
 
-**Resubmit** opens a review window listing each message. Opening a message there lets you review it. Correcting one before it goes back out is a separate right:
+**Resubmit** opens the **Resubmit Messages** window. Its top part says where the messages go. Below it is the list of messages, which scrolls on its own so the destination stays in view.
+
+### Choosing where it goes
+
+Under **Send to**, pick one:
+
+| Option | Where the messages go |
+| --- | --- |
+| **Original queue** | Each message goes back onto the queue it was archived from, so the nodes that read that queue pick it up again. This is the default. |
+| **Another node** | Every selected message goes to one node you pick, in any workflow or project you collaborate on. |
+
+For **Another node**, choose a **Project**, then a **Workflow**, then a **Node**. Each list narrows the next. The project starts on the messages' own project when they all share one, and a project with only one workflow selects it for you. Each node in the list says whether it is a **Transform** or a **Destination** node. Source nodes aren't listed, because they don't read from a queue.
+
+A summary under the pickers shows the full path of the chosen node, for example *Lab Results › Outbound › Send to EHR*, before anything is sent.
+
+### How a message reaches another node
+
+A node doesn't have an inbox of its own. It reads the output of the node or nodes upstream of it. So a resubmitted message is placed on an upstream node's output queue, as if that node had sent it, and the chosen node reads it from there:
+
+- The message goes straight to the node you chose. The upstream node does not process it again.
+- It joins the end of that queue, behind anything already waiting. If the node is running and nothing is waiting, it is processed straight away. If the node is stopped, it waits on the queue until the node starts.
+- The summary says which node it arrives from: *Arrives as if sent by 'Transform A'*.
+
+When the chosen node has several upstream nodes, an **Arrives from** list appears. Nothing is picked for you: choose the upstream node the message should arrive through. The node you chose receives the message once, from that queue only.
+
+:::caution[Other nodes may read the same queue]
+If other nodes also read from the upstream node you deliver through, they receive the message too. The summary marks this in amber and names them: *Also received by 'Archive', which reads the same queue.* When there is a choice, pick the upstream node that reaches only the node you want.
+:::
+
+A resubmission sent to another node is recorded as an audit event in the destination project. When it leaves its own project, an event is also recorded in the project it came from, so that project's collaborators can see that the message left.
+
+If the destination can't be used, for example because the node was deleted or you are no longer a collaborator on its project, nothing is sent and the window says why.
+
+### Reviewing and correcting messages
+
+Opening a message in the window lets you review it. Correcting one before it goes out is a separate right:
 
 | You hold | In the resubmit window |
 | --- | --- |
-| **Resubmit messages** | *View message*. Every message goes back out exactly as archived. |
+| **Resubmit messages** | *View message*. Every message goes out exactly as archived. |
 | **Resubmit messages** and **Unredact PHI** | *View / edit message*. A correction applies to that resubmission only and never changes the archived record. |
 
 This applies to every payload format, not only HL7: a FHIR or JSON body carries the same identifiers, so rewriting one takes the same permission. Text still holding masking characters is refused outright, whatever permissions you hold.
 
+With **Unredact PHI**, each message opens masked, and **PHI hidden** reveals it for editing. When no masking rule matches a message, there is nothing to reveal: the button isn't shown, and a note says *No PHI masking rule matches this message, so nothing in it is hidden.* To mask that kind of message, add rules in [PHI Masking](../configurations/phi-masking.md).
+
 :::caution[A resubmit is a real message]
 The receiving node processes it like any other message, and downstream systems see a duplicate. Confirm the receiver tolerates one before resubmitting. Replaying a specific message is almost always safer than repositioning a queue — see [Commonly Asked Questions](../../faq/common-questions.md#should-i-replay-a-message-or-rewind-the-queue).
 :::
+
+Resubmitting needs the message's archived copy. Messages older than the Log DB's retention period can no longer be resubmitted; see [Log Retention and Purge](../configurations/log-retention-purge.md).
 
 ---
 
@@ -297,7 +336,7 @@ The receiving node processes it like any other message, and downstream systems s
 | **View log messages** | Open the page, search and filter it, and read a message's payload |
 | **Unredact PHI** | Show masked patient identifiers with the **PHI** buttons, and edit a message before resubmitting it |
 | **Export log messages** | Download selected records |
-| **Resubmit messages** | Re-publish a stored message onto its originating queue |
+| **Resubmit messages** | Re-publish a stored message onto its original queue, or send it to a node in any project you collaborate on |
 
 None implies another, and project collaboration decides which records you see at all. See [Users and Roles](../configurations/user-roles.md).
 

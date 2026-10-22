@@ -21,7 +21,7 @@ The masking happens on the server: a user without **Unredact PHI** never receive
 | **Logs**: the **Preview** on each row | Always masked | Masked each time the page opens. The toolbar's **PHI** button shows the previews in full, separately from the inspector |
 | **Logs**: search | Matches only what you are shown (see [Searching](#searching-masked-messages)) | Matches the whole message |
 | **Logs**: Download | Exported masked | Exported in full |
-| **Logs**: Resubmit | Read only, masked | Reveal a message to edit it before resubmitting |
+| **Logs**: Resubmit | Read only, masked | Reveal a message to edit it before resubmitting. A message no rule matches says so, rather than offering to reveal it |
 | **Dashboard**: a queue's message previews | Masked | Shown in full |
 | **AI assistant** | Always masked, for everyone. See [AI Policy and Limits](../../ai-assistant/setup/policy-and-limits.md) | Always masked |
 
@@ -31,27 +31,45 @@ Masked values are replaced with `██████`. A message that still conta
 
 ## What is masked
 
-The policy has three parts. Each applies to its kind of payload:
+Every FHIR message is masked by a fixed set of [built-in FHIR paths](#built-in-fhir-paths). On top of those, the policy has three parts. Each applies to its kind of payload:
 
 | Part | Applies to | Example |
 | --- | --- | --- |
 | **HL7v2 Fields** | HL7 v2 messages | `PID` fields `3, 5, 7` |
 | **JSON & XML Key Names** | JSON and XML: the value of every key or element with that name, wherever it appears | `ssn` |
-| **JSON & XML Paths** | JSON and XML: values at a path | `Patient.name`, `*.text.div`, `$.patient.ssn` |
+| **Additional JSON & XML Paths** | JSON and XML: values at a path | `Observation.performer.display`, `$.patient.ssn` |
 
 Linkiir recognises the payload's kind from its content. Plain text that is none of the three is left as it is.
 
+### Built-in FHIR paths
+
+These paths are masked in every FHIR message, JSON or XML, whatever the policy says. They are the places a FHIR resource keeps its patient's identifiers, so they can't be removed. The **PHI Masking** card lists them, locked, under **Built-in FHIR Paths**.
+
+| Resource | Masked |
+| --- | --- |
+| `Patient` | `identifier`, `name`, `telecom`, `address`, `birthDate`, `deceasedDateTime`, `photo`, `contact`, `extension` (mother's maiden name, birthplace, race and ethnicity) |
+| `RelatedPerson` | `identifier`, `name`, `telecom`, `address`, `birthDate`, `photo` |
+| `Person` | `identifier`, `name`, `telecom`, `address`, `birthDate`, `photo` |
+| `Coverage` | `identifier`, `subscriberId` (the member and subscriber numbers on an insurance card) |
+| Any resource (`*`) | `subject.display`, `patient.display`, `beneficiary.display`, `subscriber.display` (a reference's display text is usually the patient's name) · `text.div` (the narrative repeats what the resource holds) |
+
+The built-in paths only apply inside FHIR resources. JSON and XML that isn't FHIR, such as an API's own response format, is not masked by them. Add key names or `$` paths for those.
+
+:::note[No PHI masking rule matches]
+A message that no rule matches is shown in full. This is most often JSON that isn't FHIR and that no key name or path in the policy covers. In the resubmit window this is called out: *No PHI masking rule matches this message, so nothing in it is hidden.*
+:::
+
 ### The defaults
 
-A new installation masks the following:
+A new installation masks the following, on top of the built-in FHIR paths:
 
 | Kind | Masked by default |
 | --- | --- |
 | HL7 v2 | PID-2, 3, 5, 6, 7, 9, 11, 12, 13, 14, 18, 19 · NK1-2, 4, 5 · IN1-16, 17, 18, 19 · GT1-3, 5, 6 |
-| FHIR (JSON or XML) | `Patient.name`, `.identifier`, `.telecom`, `.address`, `.birthDate`, `.photo`, `.contact` · `RelatedPerson.name`, `.telecom`, `.address` · `*.subject.display`, `*.patient.display` (a reference's display text is usually the patient's name) · `*.text.div` (the narrative repeats what the resource holds) |
 | Key names | None |
+| Additional paths | None |
 
-**Reset everything to defaults** on the card puts these back.
+**Reset everything to defaults** on the card puts these back. It does not affect the built-in FHIR paths.
 
 ### Writing a path
 
@@ -79,8 +97,8 @@ A path steps through arrays and repeated elements on its own: `Patient.name` mas
 2. Change the rows:
    - **HL7v2 Fields**: one row per segment, with its field numbers separated by commas. **Add segment** adds a row.
    - **JSON & XML Key Names**: one key name per line.
-   - **JSON & XML Paths**: one path per line.
-3. Check the **Preview**. It runs the policy you are editing against sample HL7v2, FHIR JSON and FHIR XML messages, so you can see what a change hides before saving it.
+   - **Additional JSON & XML Paths**: one path per line, masked on top of the built-in FHIR paths. A built-in path typed here is already covered, so it isn't saved again; the card says which.
+3. Check the **Preview**. It runs the policy you are editing, built-in paths included, against sample HL7v2, FHIR JSON and FHIR XML messages, so you can see what a change hides before saving it.
 4. Select **Save**.
 
 The next log read, export or queue preview uses the new policy. Nothing needs restarting. Each save is recorded in the instance's history.
