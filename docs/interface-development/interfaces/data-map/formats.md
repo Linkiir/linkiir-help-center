@@ -85,7 +85,7 @@ A Data Map node doesn't connect to a database. Rows travel as JSON, so a source 
 - **As a destination**, the map writes a main table row and child tables made once per item, such as one `allergies` row per `AL1`. Each value is checked against its column's type and size.
 - The tables come from a [DB Schema](../../schema-editor.md#database-tables), which can be imported from a live database. In a new node, the source or destination column offers to open the Schema Editor to set them up.
 
-To write the rows, connect a Transform Custom node that calls `Connection:merge`. See [Database](../../../api/scripting-api/database.md).
+To write the rows, connect a [Database node](../database-node.md). It inserts or upserts them into SQL Server, PostgreSQL, Oracle or SQLite with no script, and **Add from an upstream node** copies the map's destination tables into it. For anything the node doesn't do, use a Transform Custom node that calls `Connection:merge`. See [Database](../../../api/scripting-api/database.md).
 
 ## JSON and XML
 

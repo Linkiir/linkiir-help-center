@@ -10,7 +10,7 @@ This applies to everything that opens a database connection:
 
 - the [Log Archive Database](log-archive-database.md);
 - **Import** and **Export to database…** in the [Schema Editor](../../interface-development/schema-editor.md);
-- the **Database** destination node;
+- the [Database](../../interface-development/interfaces/database-node.md) destination node;
 - `linkiir.store.open` in a script. See [Database](../../api/scripting-api/database.md).
 
 ## What each database needs

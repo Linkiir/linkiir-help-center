@@ -1,0 +1,70 @@
+---
+id: database-node-schema-changes-api-database-node-schema-changes-project-guid-workflow-guid-node-guid-get
+title: "What changed in a Database node's schema.json since its last commit"
+description: "Compares the node's schema.json at HEAD with the caller's working copy and describes the difference as tables and columns. The runtime runs the committed schema, so `uncommitted` says whether edits are waiting. Nothing is written."
+sidebar_label: "What changed in a Database node's schema.json since its last commit"
+hide_title: true
+hide_table_of_contents: true
+api: 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
+sidebar_class_name: "get api-method"
+info_path: docs/api/web-api/linkiir-api
+custom_edit_url: null
+hide_send_button: true
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"What changed in a Database node's schema.json since its last commit"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/api/database_node_schema_changes/{project_guid}/{workflow_guid}/{node_guid}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Compares the node's schema.json at HEAD with the caller's working copy and describes the difference as tables and columns. The runtime runs the committed schema, so `uncommitted` says whether edits are waiting. Nothing is written.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<ParamsDetails
+  {...require("./database-node-schema-changes-api-database-node-schema-changes-project-guid-workflow-guid-node-guid-get.ParamsDetails.json")}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  {...require("./database-node-schema-changes-api-database-node-schema-changes-project-guid-workflow-guid-node-guid-get.RequestSchema.json")}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  {...require("./database-node-schema-changes-api-database-node-schema-changes-project-guid-workflow-guid-node-guid-get.StatusCodes.json")}
+>
+  
+</StatusCodes>
+
+
+      

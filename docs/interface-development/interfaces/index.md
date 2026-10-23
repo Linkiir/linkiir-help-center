@@ -22,6 +22,7 @@ In the Workflow Builder, the palette groups node types under three headings. Dra
 | **Source** | **Custom** | A timer | Required |
 | **Transform** | **Custom** | An inbound message from an upstream node | Required |
 | **Transform** | **Data Map** | An inbound message from an upstream node | Generated from the map |
+| **Destination** | **Database** | An inbound message of database rows from an upstream node | Not used |
 | **Destination** | **File/FTP** | An inbound message from an upstream node | Not used |
 | **Destination** | **LLP** | An inbound message from an upstream node | Not used |
 
@@ -63,11 +64,28 @@ The palette also offers **Custom** under **Destination**. It has no runtime impl
 | HL7 v2 over MLLP, with ACK handling | Destination LLP |
 | Files to a directory | Destination File/FTP |
 | Files to an FTP, FTPS, or SFTP server | Destination File/FTP with **Upload to FTP** enabled |
+| Rows into a SQL Server, PostgreSQL, Oracle or SQLite table | [Destination Database](database-node.md) |
 | An outbound HTTP call | Transform Custom, calling `linkiir.link.web.post` |
 | Email | Transform Custom, calling `linkiir.link.mail.send` |
-| A database write | Transform Custom, calling `linkiir.store` |
+| Database work beyond writing rows, such as a stored procedure or your own SQL | Transform Custom, calling `linkiir.store` |
 
 The last three are transform nodes rather than dedicated destination types: you make the outbound call from a script. See [Linkiir Scripting API](../../api/scripting-api/index.md).
+
+## Node icons on the canvas
+
+Each built-in node type has its own icon on the canvas, so a workflow reads at a glance.
+
+| Icon | Node |
+| --- | --- |
+| Globe | Source HTTP |
+| Folder with an arrow in | Source File/FTP |
+| Folder with an arrow out | Destination File/FTP |
+| Angle brackets with dots | Source and Destination LLP |
+| Two arrows | Transform Data Map |
+| Database | Destination Database |
+| Terminal | Source, Transform and Destination Custom, and the Notification Alert node |
+
+An adapter built on one of these node types shows that type's icon. Any other node shows a general source, transform or destination icon.
 
 ## The Node Parameters panel
 
@@ -84,6 +102,27 @@ Click a node on the canvas to open **Node Parameters** on the right. Everything 
 The panel is read-only until you click **Edit** in its header, and **Save** writes the name, description, debug logging, and configuration fields together. The permissions behind them are separate: changing a field's value needs **Edit config values**, adding, removing, redefining, or reordering fields needs **Edit config fields**, and the name, description, and debug logging need **Edit node details**. A refused save says which permission it wanted rather than failing quietly. See [Users and Roles](../../administration/configurations/user-roles.md).
 
 **Run From Commit** is the exception: it saves the moment you pick a commit, because pinning reloads the node in the Runtime. Choosing the newest commit means "follow the latest" — the node keeps picking up new commits instead of freezing on that one. Pinning needs the **Set run commit** permission.
+
+### Configure dialogs
+
+The LLP, File/FTP and Database nodes don't list their fields in the panel. The panel shows a summary card instead: where the node listens, reads, writes or sends, and a few key settings. Under the card is a **Configure** button.
+
+**Configure** opens a dialog with all of the node's fields, in titled cards over a few tabs:
+
+- **LLP:** Connection, Messages, Acknowledgments, Security.
+- **File/FTP:** Files, Content, FTP.
+- **Database:** Connection, Schema, Database, Behaviour.
+
+At the top, the dialog shows where the node connects, and it updates as you type. A field still appears only when the setting it depends on is on. A number field shows its unit, such as `ms`, `sec` or `attempts`, at the end of its input.
+
+- **No Edit needed.** You don't click **Edit** first. **Save** in the dialog writes the node's fields straight away, and **Cancel** asks before throwing away unsaved changes.
+- **Panel edits come first.** While the panel itself is in edit mode, **Configure** waits until you save or cancel that edit, so the two can't save over each other.
+- **New nodes.** A node that hasn't been saved to the canvas yet can't be configured. Save the canvas first.
+- **Read-only.** Without the **Edit config values** permission, the button reads **View configuration** and the dialog is read-only.
+
+A field you added to the node yourself appears in the dialog's first card, so nothing on the node is out of reach. On a Database node, it appears under **Writing**.
+
+Under **Configure**, an LLP node has **Edit Ack**, which opens its `ack.lua`. A Database node has **Edit Schema**, which opens its `schema.json`. Both open on the Scripting page.
 
 ## Required fields and when they are checked
 
@@ -116,7 +155,7 @@ Right-click a node for:
 | Item | Available |
 | --- | --- |
 | **Create template** | Always |
-| **Edit script** | Always, except on File/FTP nodes, which have no script |
+| **Edit script** | Always, except on File/FTP and Database nodes, which have no script |
 | **Remove upstream connection** | Edit mode |
 | **Remove downstream connection** | Edit mode, and not on a destination node |
 | **Delete node** | Edit mode |
@@ -131,6 +170,7 @@ The breadcrumb above the canvas switches project and workflow, and creates them 
 
 - [Source Nodes](source-nodes.md)
 - [Destination Nodes](destination-nodes.md)
+- [Database Node](database-node.md)
 - [Custom Scripting Nodes](custom-scripting-nodes.md)
 
 :::note[Conditional fields]

@@ -42,6 +42,7 @@ const sidebars: SidebarsConfig = {
           'administration/configurations/migration',
           'administration/configurations/http-server',
           'administration/configurations/log-archive-database',
+          'administration/configurations/database-drivers',
           'administration/configurations/log-retention-purge', 'administration/configurations/kafka-redpanda',
         ]},
         'administration/monitor/index',
@@ -66,6 +67,7 @@ const sidebars: SidebarsConfig = {
         'interface-development/architecture',
         {type: 'category', label: 'Interfaces and Core Nodes', link: {type: 'doc', id: 'interface-development/interfaces/index'}, items: [
           'interface-development/interfaces/source-nodes', 'interface-development/interfaces/destination-nodes',
+          'interface-development/interfaces/database-node',
           'interface-development/interfaces/custom-scripting-nodes',
           {type: 'category', label: 'Data Map Nodes', link: {type: 'doc', id: 'interface-development/interfaces/data-map/index'}, items: [
             'interface-development/interfaces/data-map/building-maps',
