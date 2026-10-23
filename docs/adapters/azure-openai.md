@@ -44,7 +44,7 @@ API Key is quicker to set up. Entra ID avoids a long-lived key and is the better
 
 ## Set it up
 
-1. Open the Azure OpenAI node in the Workflow Builder and click **Edit**.
+1. Open the Azure OpenAI node in the Workflow Builder and click **Configure**.
 2. Set **Authentication Mode**, which decides which credential fields appear:
 
    | Mode | Fill in |

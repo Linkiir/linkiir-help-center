@@ -51,7 +51,7 @@ The identity needs these actions on the target bucket:
 
 ## Set it up
 
-1. Open each S3 node in the Workflow Builder, click **Edit**, and enter the connection fields:
+1. Open each S3 node in the Workflow Builder, click **Configure**, and enter the connection fields:
 
    | Field | Value |
    | --- | --- |

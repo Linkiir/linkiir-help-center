@@ -89,40 +89,81 @@ An adapter built on one of these node types shows that type's icon. Any other no
 
 ## The Node Parameters panel
 
-Click a node on the canvas to open **Node Parameters** on the right. Everything about the node lives there — there is no separate node details dialog.
+Click a node on the canvas to open **Node Parameters** on the right. The panel shows the node's name and type, then one card for each tab of the node's **Configure** dialog, in the same order. Every node is set up in that dialog. Nothing in the panel is edited in place, and the panel has no **Edit** button.
 
-| In the panel | Holds |
+The buttons stay at the bottom of the panel while the cards scroll:
+
+- **Configure** opens the dialog on its first tab. **Configure** in a node's right-click menu on the canvas does the same.
+- A card's title opens the dialog on that card's tab.
+- **Edit Script** (**Edit Map** on a Data Map node) opens the node on the Scripting page.
+
+### The Configure dialog
+
+Every node's dialog starts with **General** and ends with **Advanced**. The tabs in between depend on the node:
+
+| Node | Tabs between General and Advanced |
 | --- | --- |
-| Title | The node's name, editable in place |
-| **Description** | Free text describing what the node does |
-| **Debug Logging** | Per-node switch for verbose logging |
-| **Run From Commit** | Which commit of the node's files the Runtime executes |
-| Configuration fields | The node type's own fields, plus any you added |
+| Most nodes | **Parameters** (the fields the node's template defines), **Custom Parameters** |
+| LLP | Connection, Messages, Acknowledgments (destination only), Security, Custom Parameters |
+| File/FTP | Files, Content (source only), FTP |
+| Database | Connection, Tables, Behaviour |
 
-The panel is read-only until you click **Edit** in its header, and **Save** writes the name, description, debug logging, and configuration fields together. The permissions behind them are separate: changing a field's value needs **Edit config values**, adding, removing, redefining, or reordering fields needs **Edit config fields**, and the name, description, and debug logging need **Edit node details**. A refused save says which permission it wanted rather than failing quietly. See [Users and Roles](../../administration/configurations/user-roles.md).
+A node with no template-defined fields has no **Parameters** tab: all of its fields are under **Custom Parameters**.
 
-**Run From Commit** is the exception: it saves the moment you pick a commit, because pinning reloads the node in the Runtime. Choosing the newest commit means "follow the latest" — the node keeps picking up new commits instead of freezing on that one. Pinning needs the **Set run commit** permission.
+| Tab | Holds |
+| --- | --- |
+| **General** | The node's **Name** and **Description**. The **Catalog** it follows, for a catalog adapter. **Run from commit**. |
+| **Advanced** | **Debug Logging**, **Payload Encryption**, and the node's **Permissions**. Permissions appear only on nodes that run a script. A Database node's **Batching** is here too. |
 
-### Configure dialogs
+Inside the dialog:
 
-The LLP, File/FTP and Database nodes don't list their fields in the panel. The panel shows a summary card instead: where the node listens, reads, writes or sends, and a few key settings. Under the card is a **Configure** button.
+- Fields are grouped in titled cards. Hover over a field's name to see its description.
+- A field appears only when the setting it depends on is on.
+- A number field shows its unit, such as `ms`, `sec` or `attempts`, at the end of its input.
+- On LLP, File/FTP and Database nodes, the first of the node's own tabs shows where the node listens, reads, writes or sends. It updates as you type.
 
-**Configure** opens a dialog with all of the node's fields, in titled cards over a few tabs:
+Saving:
 
-- **LLP:** Connection, Messages, Acknowledgments, Security.
-- **File/FTP:** Files, Content, FTP.
-- **Database:** Connection, Schema, Database, Behaviour.
+- **Save** writes everything you changed on every tab. The fields are saved first, then the name, description and debug logging, then permissions, then payload encryption, then **Unlink**, then **Run from commit**.
+- If one of these is refused, the dialog stays open and says which one and why. Click **Save** again to retry. Anything already saved isn't sent twice.
+- **Save** stays unavailable while the node has no name.
+- **Cancel** asks before throwing away unsaved changes.
+- A node that hasn't been saved to the canvas yet can't be configured. Save the canvas first.
 
-At the top, the dialog shows where the node connects, and it updates as you type. A field still appears only when the setting it depends on is on. A number field shows its unit, such as `ms`, `sec` or `attempts`, at the end of its input.
+**Run from commit** pins the node to a commit. Saving a new pin reloads the node in the Runtime. Choosing the newest commit means "follow the latest": the node keeps picking up new commits instead of freezing on that one.
 
-- **No Edit needed.** You don't click **Edit** first. **Save** in the dialog writes the node's fields straight away, and **Cancel** asks before throwing away unsaved changes.
-- **Panel edits come first.** While the panel itself is in edit mode, **Configure** waits until you save or cancel that edit, so the two can't save over each other.
-- **New nodes.** A node that hasn't been saved to the canvas yet can't be configured. Save the canvas first.
-- **Read-only.** Without the **Edit config values** permission, the button reads **View configuration** and the dialog is read-only.
+On a catalog adapter, choosing a version and **Update** apply as soon as you choose them, not on **Save**. They rewrite the node's files and fields, so they wait until the dialog has no other unsaved changes.
 
-A field you added to the node yourself appears in the dialog's first card, so nothing on the node is out of reach. On a Database node, it appears under **Writing**.
+**Unlink** waits for **Save**. Clicking it marks the node to be unlinked, and the button changes to **Keep linked** in case you change your mind. Unlinking leaves the node's files as they are and makes them yours to change.
 
-Under **Configure**, an LLP node has **Edit Ack**, which opens its `ack.lua`. A Database node has **Edit Schema**, which opens its `schema.json`. Both open on the Scripting page.
+**Payload Encryption** reaches a running node when it next restarts.
+
+### Who can change what
+
+Each setting has its own permission. Without it, that control is read-only and its hover text names the permission it needs.
+
+| Change | Permission |
+| --- | --- |
+| A field's value | **Edit config values** |
+| Adding, removing or redefining a custom parameter. A catalog version, **Update** or **Unlink**. | **Edit config fields** |
+| Name, description, **Debug Logging** | **Edit node details** |
+| **Payload Encryption** | **Change payload encryption** |
+| **Permissions** | **Edit node permissions** |
+| **Run from commit** | **Set run commit** |
+
+With none of them, the button reads **View configuration** and the dialog is read-only. See [Users and Roles](../../administration/configurations/user-roles.md).
+
+### Custom Parameters
+
+The **Custom Parameters** tab holds fields of your own, beyond the node's built-in ones. The tab shows how many there are. File/FTP and Database nodes don't have this tab: a field you added to one of them appears in the dialog's first card, or under **Writing** on a Database node.
+
+- **Values.** Each field is one row, showing its name and type beside its value. Set the value right there. Hover over the name to see its description.
+- **Definitions.** The gear on a row opens the field's definition: its name, type, default value and description. While it's open, the value is set there as **Default value**. The type can be `string`, `number`, `bool`, `list`, `password` or `file_path`. For a list, enter its options separated by commas. Click **Done** to close the definition again.
+- **Adding a field.** Click **Add parameter**. The new field opens on its definition so you can name it.
+- **Removing a field.** Click the bin on its row.
+- **Names.** Every field needs a name, and no two fields on the node can share one. **Save** stays unavailable until each name is set and unique.
+
+Beside **Configure**, an LLP node has **Edit Ack**, which opens its `ack.lua`. A Database node has **Edit Schema**, which opens its `schema.json`. Both open on the Scripting page. **Edit Ack** is unavailable until the node uses a custom ACK: **Acknowledgment Mode** set to **Custom** on a source, or **Ack Verification** set to **Custom** on a destination. Only then does the node run `ack.lua`.
 
 ## Required fields and when they are checked
 
@@ -144,7 +185,7 @@ Beyond the fields a node type defines, you can add your own to a node's configur
 
 Nodes created from a Linkiir-supplied template have their built-in fields locked: you can change a value, but not a label, type, or option list, and you cannot remove or move one. Fields you add yourself remain fully editable.
 
-To reorder fields in **Edit** mode, drag a field by the grip to the left of its name. To use the keyboard, focus the grip, press Space, move the field with the arrow keys, and press Space again. Locked fields have no grip and keep their order. Fields you added can go above, below, or between them. The new order is saved with everything else when you click **Save**.
+To reorder fields, use the **Node Config** panel on the Scripting page. Switch it to **Editing**, then drag a field by the grip to the left of its name. To use the keyboard, focus the grip, press Space, move the field with the arrow keys, and press Space again. Locked fields have no grip and keep their order. Fields you added can go above, below, or between them. The new order is saved as soon as you drop the field.
 
 ## Editing the canvas
 

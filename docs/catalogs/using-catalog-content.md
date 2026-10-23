@@ -31,6 +31,8 @@ While a node is linked:
 
 **Unlink** stops the node following its catalog. Every file stays exactly as it is; what changes is that the files become editable and no further updates are offered.
 
+**Unlink** is on the **General** tab of the node's **Configure** dialog. Clicking it marks the node to unlink, and the unlink happens when you click **Save**; **Cancel** leaves the node linked.
+
 Unlinking is deliberately one-way. A fork can never be silently reconnected to a catalog, because there would be no way to tell which of its files were still the vendor's.
 
 A node also keeps working — and stays updatable from what it recorded — if its catalog is removed from the grid entirely. The node remembers which of its files came from the vendor, so a later update can still tell vendor code apart from anything you added.

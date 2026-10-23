@@ -35,7 +35,7 @@ Both the password and the API key are entered as masked fields, so they are encr
 
 ## Set it up
 
-1. Open the **ModMed FHIR Adapter** node in the Workflow Builder and click **Edit**.
+1. Open the **ModMed FHIR Adapter** node in the Workflow Builder and click **Configure**.
 2. Fill in the connection fields:
 
    | Field | Value |

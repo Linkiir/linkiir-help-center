@@ -45,7 +45,7 @@ Register `ecw_public.pem` with eCW. Put `ecw_private.pem` on the machine running
 
 ## Set it up
 
-1. Open the **eCW FHIR Adapter** node in the Workflow Builder and click **Edit**.
+1. Open the **eCW FHIR Adapter** node in the Workflow Builder and click **Configure**.
 2. Fill in both URLs, and the credentials:
 
    | Field | Value |

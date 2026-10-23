@@ -97,7 +97,7 @@ Changing how an existing node is set up, without authoring it.
 | **Edit config fields** | Add, remove, redefine, or reorder the config fields themselves |
 | **Edit node details** | Change a node's name, description, and other details |
 
-Any one of the three opens the Builder's Node Parameters panel, and what you actually changed decides which one the save needs. See [The Node Parameters panel](../../interface-development/interfaces/index.md).
+In the Builder, a node's **Configure** dialog checks each control against its own permission: without one, that control is read-only and its hover text names the permission. See [The Node Parameters panel](../../interface-development/interfaces/index.md#the-node-parameters-panel).
 
 ### Administration
 

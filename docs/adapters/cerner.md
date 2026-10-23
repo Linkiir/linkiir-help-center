@@ -46,7 +46,7 @@ The node stores the key's path, not its contents, so the key never enters the pr
 
 ## Set it up
 
-1. Open the **Cerner FHIR Adapter** node in the Workflow Builder and click **Edit**.
+1. Open the **Cerner FHIR Adapter** node in the Workflow Builder and click **Configure**.
 2. Fill in the connection fields:
 
    | Field | Value |

@@ -39,7 +39,7 @@ You also need your org's **My Domain** host, for example `myorg.my.salesforce.co
 
 ## Set it up
 
-1. Open the Salesforce node in the Workflow Builder and click **Edit**.
+1. Open the Salesforce node in the Workflow Builder and click **Configure**.
 2. Fill in the connection fields:
 
    | Field | Value |

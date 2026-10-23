@@ -88,7 +88,7 @@ Dexcom will only redirect to an `https` address. Before configuring the nodes, c
 
 ### Step 2 — Configure the Dexcom Authorize node
 
-1. Open the node in the Workflow Builder and click **Edit**.
+1. Open the node in the Workflow Builder and click **Configure**.
 2. Set **Route Path**, or keep `dexcom/authorize`. This becomes part of your redirect URI.
 3. Set **Environment** to `sandbox`.
 4. Fill in **Client ID**, **Client Secret**, and **Redirect URI** from the portal.
@@ -124,7 +124,7 @@ The authorization persists in the token store. The read node refreshes it automa
 
 ### Step 5 — Configure the Dexcom Read EGV node
 
-1. Open the node and click **Edit**.
+1. Open the node and click **Configure**.
 2. Copy the **same** Environment, Client ID, Client Secret, Redirect URI, and **Token Store Path** you used above.
 
    :::warning[The token store path must match]

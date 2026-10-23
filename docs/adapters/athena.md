@@ -33,7 +33,7 @@ Register an application at the [Athena developer portal](https://developer.athen
 
 ## Set it up
 
-1. Open the **Athena Health Adapter** node in the Workflow Builder and click **Edit**.
+1. Open the **Athena Health Adapter** node in the Workflow Builder and click **Configure**.
 2. Fill in the connection fields:
 
    | Field | Value |

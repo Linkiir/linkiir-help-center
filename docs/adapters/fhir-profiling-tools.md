@@ -33,7 +33,7 @@ Copy the JSON and paste it into the **Template** field of a Resource Creator nod
 
 ## Set it up
 
-1. Open the **FHIR Profiling Tools** node in the Workflow Builder and click **Edit**.
+1. Open the **FHIR Profiling Tools** node in the Workflow Builder and click **Configure**.
 2. Set **Route Path** to the path you want it served on, and pick the default **FHIR Version**. You can still switch versions in the page itself.
 3. **Save** and start the node.
 4. Open the route in a browser, on the port configured in **Settings → Http Server**. See [HTTP Server Settings](../administration/configurations/http-server.md).

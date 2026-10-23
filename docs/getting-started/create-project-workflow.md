@@ -62,14 +62,14 @@ The palette shows a group heading and a short node name. This documentation writ
 
 ### Configure the node
 
-Click the node to open **Node Parameters** on the right, click **Edit** in the panel header, and set:
+Save the canvas, then click the node to open **Node Parameters** on the right. Click **Configure**, and on the **Parameters** tab set:
 
 | Field | Set it to | Notes |
 | --- | --- | --- |
 | **Route Path** | `/intake` | The path this node answers on. Must be unique across the HTTP nodes sharing the server. |
 | **Worker Count** | `1` | How many requests the node handles at the same time. Defaults to `1`. |
 
-The node's name is the first thing in the same panel — set it to `Intake` — then **Save**. Its Lua script, `main.lua`, is created with the node.
+On the **General** tab, set the node's **Name** to `Intake`, then click **Save**. Its Lua script, `main.lua`, is created with the node.
 
 These are the fields the node needs before it will start. The Grid does not mark fields as required — a node with a missing value fails at start with a message naming the field, for example `missing required field: Route Path`.
 

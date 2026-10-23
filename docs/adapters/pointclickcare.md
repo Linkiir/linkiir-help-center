@@ -104,7 +104,7 @@ The number shown in the PointClickCare user interface is usually the **facility 
 
 ### Step 1 — Configure PCC Connect
 
-1. Open the node in the Workflow Builder and click **Edit**.
+1. Open the node in the Workflow Builder and click **Configure**.
 2. Leave **OAuth Mode** as `2-legged`.
 3. Fill in **Client ID** and **Client Secret**.
 4. Set **Client Certificate File** and **Client Key File** to the paths on the server, relative to the Linkiir working directory or absolute:

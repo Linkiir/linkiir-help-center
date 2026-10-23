@@ -38,7 +38,7 @@ FHIR Resource Creator  →  FHIR Validator  →  a FHIR server, a file, or your 
 ## Set it up
 
 1. Add the **FHIR Validator** node to a workflow, or open the supplied one, and connect the node producing FHIR JSON to its input.
-2. Click **Edit** and set **FHIR Server URL** to a FHIR base URL. For synthetic development testing you can use `https://hapi.fhir.org/baseR4`.
+2. Click **Configure** and set **FHIR Server URL** to a FHIR base URL. For synthetic development testing you can use `https://hapi.fhir.org/baseR4`.
 3. Optionally set **FHIR Profile** to a profile canonical URL, but only if that profile is installed on the server.
 4. Connect the node that should receive the validated resource to its output.
 5. **Save**, then send one message through with **Run Test** on the upstream node, and start the nodes.

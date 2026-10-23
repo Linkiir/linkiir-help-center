@@ -8,7 +8,7 @@ A destination node delivers a message out of the workflow. It consumes from the 
 
 Fields marked **needed to start** must have a usable value before the node will start.
 
-The LLP, File/FTP and Database destinations are set up in a **Configure** dialog rather than in the panel's field list. See [Configure dialogs](index.md#configure-dialogs). The tables below list each node's fields by the tab and card they appear under.
+The LLP, File/FTP and Database destinations are set up in a **Configure** dialog, like every node. See [The Configure dialog](index.md#the-configure-dialog). The tables below list each node's fields by the tab and card they appear under. Every dialog also starts with **General** and ends with **Advanced**, which hold the node's name, description, logging, encryption and permissions.
 
 ---
 
@@ -16,7 +16,15 @@ The LLP, File/FTP and Database destinations are set up in a **Configure** dialog
 
 Sends HL7 v2 over MLLP to a remote host and handles the ACK.
 
-In **Node Parameters**, the node shows where it sends, for example `LLP · lab.example.org:5145`, or `LLP over TLS` with **Use SSL** on. It also shows whether it waits for ACKs, the connection mode and the encoding. The **Configure** dialog has four tabs:
+In **Node Parameters**, the node shows where it sends, for example `LLP · lab.example.org:5145`, or `LLP over TLS` with **Use SSL** on. It has a card for each tab of the **Configure** dialog. Between **General** and **Advanced**, they are:
+
+- **Connection:** the connection mode and reconnecting.
+- **Messages:** the encoding and delimiters.
+- **Acknowledgments:** how long it waits, how ACKs are checked, when and how often messages are resent, and the ACK error handling.
+- **Security:** TLS and certificate checks.
+- **Custom Parameters:** each of yours with its value.
+
+Between **General** and **Advanced**, the **Configure** dialog has five tabs:
 
 | Tab | Cards |
 | --- | --- |
@@ -24,6 +32,7 @@ In **Node Parameters**, the node shows where it sends, for example `LLP · lab.e
 | **Messages** | **Encoding**, **Framing** |
 | **Acknowledgments** | **Waiting for an ACK**, **Resending** |
 | **Security** | **SSL/TLS**. The tab shows **On** when **Use SSL** is on. |
+| **Custom Parameters** | Fields of your own. See [Custom Parameters](index.md#custom-parameters). |
 
 **Edit Ack**, under **Configure**, opens the node's `ack.lua` on the Scripting page. The node runs it only with **Ack Verification** set to `Custom`.
 
@@ -158,7 +167,12 @@ Each line shows with the message it is about, under **Related messages** on the 
 
 Writes each message to a file, locally or to an FTP/FTPS/SFTP server.
 
-In **Node Parameters**, the node shows where it writes, either a local folder or the protocol, server, port and path. It also shows how messages are split into files, the file name mask and the encoding. The **Configure** dialog has two tabs:
+In **Node Parameters**, the node shows where it writes, either a local folder or the protocol, server, port and path. It has a card for each tab of the **Configure** dialog. Between **General** and **Advanced**, they are:
+
+- **Files:** how messages are split into files, the file name mask and ID, and the encoding.
+- **FTP:** the user it signs in as, how files are uploaded, what happens to an existing file, whether local copies are kept, and reconnecting. When FTP isn't used, the card says so.
+
+Between **General** and **Advanced**, the **Configure** dialog has two tabs:
 
 | Tab | Cards |
 | --- | --- |
@@ -279,12 +293,33 @@ With `be overwritten`, the node doesn't check whether the remote file exists, so
 
 Writes the rows each message carries, a JSON object of rows by table, into SQL Server, PostgreSQL, Oracle or SQLite. It runs no script. You set up its connection, its tables and how it writes in its **Configure** dialog. Rows are inserted or upserted on each table's primary key, and never deleted.
 
+Each message must be one JSON object of rows by table. A table's rows are one object, or an array of objects, of values by column:
+
+```json
+{
+  "patients": { "mrn": "7", "family_name": "Doe" },
+  "results": [
+    { "mrn": "7", "code": "GLU", "value": 5.4 },
+    { "mrn": "7", "code": "K", "value": 4.1 }
+  ]
+}
+```
+
+Table and column names must match the node's `schema.json`. Values are text, numbers, `true`/`false` or `null`, checked against each column's type. A [Data Map](data-map/index.md) with a database destination produces this shape. See [What a message must hold](database-node.md#what-a-message-must-hold) for every rule and the value formats for each column type.
+
+In **Node Parameters**, the node has a card for each **Configure** tab that holds settings. Between **General** and **Advanced**, they are:
+
+- **Connection:** the database and where it is, the user it signs in as, and the encryption or SSL setting for the engine.
+- **Tables:** its tables, with any warnings about them.
+- **Behaviour:** the write mode, unknown tables, error handling and reconnecting.
+
 | Tab | Holds |
 | --- | --- |
 | **Connection** | The database, server, sign-in and encryption, with **Test connection** |
-| **Schema** | The tables the node writes, kept in its own `schema.json` |
-| **Database** | **Check tables** against the database, and create the missing ones |
-| **Behaviour** | **Writing**, **Batching** and **Reconnecting** |
+| **Tables** | The tables the node writes, kept in its own `schema.json`. **Check tables** against the database, then create the missing ones or alter the ones that differ, after reviewing their SQL. |
+| **Behaviour** | **Writing** and **Reconnecting** |
+
+The node's **Batching** settings are on its **Advanced** tab.
 
 See [Database Node](database-node.md) for the full reference.
 

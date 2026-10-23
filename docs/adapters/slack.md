@@ -39,7 +39,7 @@ Enter the token in the **API Token** field, which is masked and encrypted in the
 
 ## Set it up
 
-1. Open the Slack node in the Workflow Builder and click **Edit**.
+1. Open the Slack node in the Workflow Builder and click **Configure**.
 2. Fill in the fields:
 
    | Field | Value |

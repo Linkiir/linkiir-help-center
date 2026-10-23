@@ -38,7 +38,7 @@ Adapters ship separately from the Linkiir installation. Email [support@linkiir.c
 
 ## Where the configuration lives
 
-Click the adapter node on the canvas to open **Node Parameters** on the right, click **Edit**, fill in the fields, and click **Save**. Nothing about an adapter is configured in a file.
+Click the adapter node on the canvas to open **Node Parameters** on the right, click **Configure**, fill in the fields on the **Parameters** tab, and click **Save**. Nothing about an adapter is configured in a file. The **General** tab shows the catalog the node follows and offers its other versions. See [The Configure dialog](../interface-development/interfaces/index.md#the-configure-dialog).
 
 Every adapter's page in this section carries a **Configuration reference** table listing each field, its type, its default, and what it does.
 
@@ -113,7 +113,7 @@ Adapters report failures as a stable code plus a readable message in the node lo
 | `PARSE_ERROR` | The response was not the format expected |
 | `REQUEST_FAILED` | The request could not be sent — network, DNS, or TLS |
 
-Turn on **Debug Logging** on the node while you are bringing it up, and turn it off once it runs clean. Payload content stays out of the log either way — see [Security](../administration/security/index.md) for what is safe to record.
+Turn on **Debug Logging**, on the **Advanced** tab of the node's **Configure** dialog, while you are bringing it up, and turn it off once it runs clean. Payload content stays out of the log either way — see [Security](../administration/security/index.md) for what is safe to record.
 
 ## Next
 

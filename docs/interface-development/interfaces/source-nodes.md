@@ -8,7 +8,7 @@ A source node brings a message into the workflow. This page lists the fields for
 
 Fields marked **needed to start** must have a usable value before the node will start. Everything else has a working default or belongs to an optional mode.
 
-The LLP and File/FTP sources are set up in a **Configure** dialog rather than in the panel's field list. See [Configure dialogs](index.md#configure-dialogs). The tables below list each node's fields by the tab and card they appear under.
+The LLP and File/FTP sources are set up in a **Configure** dialog, like every node. See [The Configure dialog](index.md#the-configure-dialog). The tables below list each node's fields by the tab and card they appear under. Every dialog also starts with **General** and ends with **Advanced**, which hold the node's name, description, logging, encryption and permissions.
 
 ---
 
@@ -94,13 +94,21 @@ Walkthrough: [Edit the Script and Start the HTTP Server](../../getting-started/s
 
 Accepts HL7 v2 messages over an MLLP socket and returns an ACK.
 
-In **Node Parameters**, the node shows the port it listens on, for example `LLP · Port 5349`, or `LLP over TLS` with **Use SSL** on. It also shows the acknowledgment mode, whether idle connections are closed, the encoding and the delimiters. The **Configure** dialog has three tabs:
+In **Node Parameters**, the node shows the port it listens on, for example `LLP · Port 5349`, or `LLP over TLS` with **Use SSL** on. It has a card for each tab of the **Configure** dialog. Between **General** and **Advanced**, they are:
+
+- **Connection:** the idle timeout.
+- **Messages:** the acknowledgment mode, encoding and delimiters.
+- **Security:** TLS and certificate checks.
+- **Custom Parameters:** each of yours with its value, hiding passwords.
+
+Between **General** and **Advanced**, the **Configure** dialog has four tabs:
 
 | Tab | Cards |
 | --- | --- |
 | **Connection** | **Listening**: the port and the idle timeout |
 | **Messages** | **Acknowledgments**, **Encoding**, **Framing** |
 | **Security** | **SSL/TLS**. The tab shows **On** when **Use SSL** is on. |
+| **Custom Parameters** | Fields of your own. See [Custom Parameters](index.md#custom-parameters). |
 
 **Edit Ack**, under **Configure**, opens the node's ACK script, `ack.lua`, on the Scripting page. It replaces the **Edit Script** button other nodes have.
 
@@ -173,7 +181,13 @@ The ACK the node sends back isn't logged.
 
 Polls a directory, or an FTP/FTPS/SFTP server, and creates one message per file.
 
-In **Node Parameters**, the node shows where it reads from, either a local folder or the protocol, server, port and path. It also shows which files it picks up, how often it checks, what happens after reading, and the file type. The **Configure** dialog has three tabs:
+In **Node Parameters**, the node shows where it reads from, either a local folder or the protocol, server, port and path. It has a card for each tab of the **Configure** dialog. Between **General** and **Advanced**, they are:
+
+- **Files:** which files it picks up, how often it checks and the minimum age. For a local folder, it also shows where processed and failed files go.
+- **Content:** the file type, encoding and HL7 changes.
+- **FTP:** the user it signs in as, what happens to a file on the server, and reconnecting. When FTP isn't used, the card says so.
+
+Between **General** and **Advanced**, the **Configure** dialog has three tabs:
 
 | Tab | Cards |
 | --- | --- |

@@ -45,7 +45,7 @@ The private key stays on disk. The node stores its path, not its contents, so th
 
 ## Set it up
 
-1. Open the **EPIC Adapter** node in the Workflow Builder and click **Edit**.
+1. Open the **EPIC Adapter** node in the Workflow Builder and click **Configure**.
 2. Fill in the connection fields:
 
    | Field | Value |

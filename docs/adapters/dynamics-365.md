@@ -33,7 +33,7 @@ The account signs in with the Azure AD resource owner password grant, so it must
 
 ## Set it up
 
-1. Open the **Dynamics CRM Adapter** node in the Workflow Builder and click **Edit**.
+1. Open the **Dynamics CRM Adapter** node in the Workflow Builder and click **Configure**.
 2. Fill in the connection fields:
 
    | Field | Value |
