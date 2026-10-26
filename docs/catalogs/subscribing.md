@@ -1,7 +1,7 @@
 ---
 title: Subscribing to a Catalog
-description: Add a published catalog to a Linkiir grid, see when an update is waiting, review what it changes, and pull it.
-keywords: [catalog, subscribe, pull, update, adapters, validation, diff]
+description: Install Linkiir's catalogs from a list, or add any published catalog by URL or folder; see when an update is waiting, review what it changes, and pull it.
+keywords: [catalog, subscribe, install, Linkiir catalogs, pull, update, adapters, validation, diff]
 ---
 
 # Subscribing to a Catalog
@@ -10,11 +10,53 @@ Subscribing installs a publisher's catalog on this grid, so its adapters appear 
 
 Catalogs are managed in **Settings → Catalogs**. Everything on this page needs the **Manage catalogs** permission.
 
-## Linkiir's published catalogs
+## Install Linkiir's catalogs
 
-Linkiir publishes its adapters in public repositories you can subscribe to
-directly. Paste one of these into the **Repository URL or folder** field below —
-they are public, so leave the SSH key empty.
+Linkiir publishes its adapters as catalogs, and the grid can list them for you,
+so there is no repository URL to look up.
+
+1. Open **Settings → Catalogs**.
+2. Click **Install Linkiir catalogs**. With no catalogs installed yet, this is the
+   main button in the middle of the tab. Once you have some, it is the
+   **Linkiir catalogs** button at the top.
+3. Tick the catalogs this grid needs. They are grouped by area — Healthcare,
+   Business systems, Transport and messaging, AI and Developer tools — and the
+   link next to each name opens its page in this help center.
+4. Click **Install**.
+
+Catalogs are installed one at a time, each with the same checks as any other
+subscription (see [What validation refuses](#what-validation-refuses)). If one
+fails, the reason is shown against it and the rest still install. Close the
+picker whenever you are done; you can come back and add more at any time.
+
+In the list:
+
+| Shown | Meaning |
+| --- | --- |
+| **Installed** | That catalog is already on this grid, including one imported from a folder. It cannot be ticked again. |
+| **Requires Grid *x*** | The catalog needs a newer version of Linkiir Grid. Upgrade the grid to install it. |
+| **Failed** | The install did not complete. The reason is shown underneath, and nothing of that catalog was left behind. |
+
+### Where the list comes from
+
+The grid downloads the list from `https://download.linkiir.com/catalogs/catalogs.json`
+when you open the picker, and at no other time. The request goes through the
+same proxy as software update checks, if one is configured, and carries only
+the grid's version and platform.
+
+The list is signed by Linkiir, and the grid checks that signature before using
+any of it. Two further checks apply whatever the list says:
+
+- Every catalog in it must come from Linkiir's own repositories on GitHub
+  (`https://github.com/Linkiir/…`). Any other entry is ignored.
+- The repository that is cloned must declare the catalog it was listed as. If it
+  declares a different one, nothing is installed.
+
+### If the list cannot be downloaded
+
+A grid with no route to `download.linkiir.com` shows an error in the picker.
+Subscribe by repository URL instead (below), using the addresses in this table,
+or bring the catalogs in on a drive — see [Offline delivery](offline-delivery.md).
 
 | Catalog | Repository URL |
 | --- | --- |
@@ -27,10 +69,13 @@ they are public, so leave the SSH key empty.
 | [AI Adapters](../adapters/catalogs/ai.md) | `https://github.com/Linkiir/linkiir-ai-adapters` |
 | [Developer Tools](../adapters/catalogs/devtools.md) | `https://github.com/Linkiir/linkiir-devtools` |
 
-See [Adapter Catalogs](../adapters/catalogs/index.md) for what each one contains.
-The rest of this page applies to any catalog, including your own.
+These repositories are public, so leave the SSH key empty. See
+[Adapter Catalogs](../adapters/catalogs/index.md) for what each one contains.
 
-## Add a catalog
+## Add a catalog by URL or folder
+
+Use this for any catalog that is not in Linkiir's list — your own, or another
+publisher's — or for a Linkiir catalog on a grid that cannot download the list.
 
 Click **Subscribe to a catalog** and fill in:
 

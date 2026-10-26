@@ -8,7 +8,7 @@ keywords: [FHIR, profiling, profile designer, templates, resource types, R4, R5]
 
 A **Source HTTP** node that serves the **FHIR Profile Designer**: a browser page where you choose a FHIR resource, pick the fields you want, and copy a FHIR JSON template with null placeholders ready to paste into a [FHIR Resource Creator](fhir-resource-creator.md).
 
-Published in the **[Linkiir FHIR Adapters](catalogs/fhir.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
+Published in the **[Linkiir FHIR Adapters](catalogs/fhir.md)** catalog. Install that catalog from **Settings → Catalogs → Install Linkiir catalogs** to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
 ## What it does
 

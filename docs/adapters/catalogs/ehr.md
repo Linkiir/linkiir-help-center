@@ -20,9 +20,16 @@ Adapters for EHR, EMR and practice-management systems reached over a proprietary
 Adapters whose wire protocol is FHIR are published in [Linkiir FHIR Adapters](fhir.md) instead, because they share the same FHIR client plumbing.
 :::
 
-## Subscribe to this catalog
+## Install this catalog
 
-In Grid, open **Settings → Catalogs** and click **Subscribe to a catalog**.
+In Grid, open **Settings → Catalogs**, click **Install Linkiir catalogs**, tick
+**Linkiir EHR Adapters** and click **Install**. See
+[Install Linkiir's catalogs](../../catalogs/subscribing.md#install-linkiirs-catalogs).
+
+### Subscribing by URL
+
+On a grid that cannot download Linkiir's catalog list, click
+**Subscribe to a catalog** in **Settings → Catalogs** instead and fill in:
 
 | Field | Value |
 | --- | --- |

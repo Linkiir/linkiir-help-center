@@ -8,7 +8,7 @@ keywords: [adapter catalogs, github, subscribe, repository, FHIR, EHR, diagnosti
 
 Linkiir adapters are delivered as **catalogs** — public git repositories your grid subscribes to. Subscribing adds a catalog's adapters to the node palette and keeps them updatable in place afterwards, without a product upgrade.
 
-Every catalog below is a **public repository, cloned anonymously**. You do not need an SSH key, a token, or a support request to subscribe to one.
+Every catalog below is a **public repository, cloned anonymously**, and Grid lists them for you under **Settings → Catalogs → Install Linkiir catalogs**. You do not need an SSH key, a token, or a support request to install one.
 
 Currently published: **17 adapters** and **14 libraries** across **8 catalogs**.
 
@@ -25,15 +25,31 @@ Currently published: **17 adapters** and **14 libraries** across **8 catalogs**.
 | [Linkiir AI Adapters](ai.md) | Model and AI service adapters: hosted and on-premise LLMs, embeddings, and AI tooling | 1 | `https://github.com/Linkiir/linkiir-ai-adapters` |
 | [Developer Tools](devtools.md) | Data simulation and testing tools — not adapters | 1 | `https://github.com/Linkiir/linkiir-devtools` |
 
-## How to subscribe
+## How to install
 
 1. In Grid, open **Settings → Catalogs**.
-2. Click **Subscribe to a catalog**.
-3. Paste the repository URL from the table above into **Repository URL or folder**.
-4. Leave **Branch or tag** as `main`, and leave **SSH key** and **CA bundle** empty.
-5. Click **Subscribe**.
+2. Click **Install Linkiir catalogs** (or **Linkiir catalogs** at the top, once you
+   already have some).
+3. Tick the catalogs covering the systems you integrate with, and click **Install**.
 
-Grid clones the repository into a staging area and validates its contents before installing anything. If validation fails, nothing is left behind and the reason is reported. See [Subscribing to a Catalog](../../catalogs/subscribing.md) for the full walkthrough, including how to review an incoming update's diff before applying it.
+Each catalog is cloned into a staging area and validated before anything is
+installed. If one fails, nothing of it is left behind, the reason is shown
+against it, and the others still install. See
+[Subscribing to a Catalog](../../catalogs/subscribing.md#install-linkiirs-catalogs)
+for what the list shows and where it comes from.
+
+### Subscribing by URL instead
+
+A grid that cannot reach `download.linkiir.com` cannot show the list. Subscribe
+to each catalog by its repository URL instead:
+
+1. In **Settings → Catalogs**, click **Subscribe to a catalog**.
+2. Paste the repository URL from the table above into **Repository URL or folder**.
+3. Leave **Branch or tag** as `main`, and leave **SSH key** and **CA bundle** empty.
+4. Click **Subscribe**.
+
+A grid with no outbound network at all can take catalogs on a drive instead —
+see [Offline delivery](../../catalogs/offline-delivery.md).
 
 :::info[Subscribing needs a permission]
 Every catalog operation — subscribing, updating and removing — needs the

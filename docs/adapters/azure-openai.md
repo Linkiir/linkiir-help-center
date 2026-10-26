@@ -9,7 +9,7 @@ keywords: [Azure OpenAI, AI, adapter, Entra ID, API key, model deployment]
 
 A **Transform Custom** node that sends the message reaching it to an Azure OpenAI model deployment and pushes the model's response downstream.
 
-Published in the **[Linkiir AI Adapters](catalogs/ai.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
+Published in the **[Linkiir AI Adapters](catalogs/ai.md)** catalog. Install that catalog from **Settings → Catalogs → Install Linkiir catalogs** to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
 Current version and changelog: [AI Adapters release notes](../release-notes/catalogs-ai.md).
 

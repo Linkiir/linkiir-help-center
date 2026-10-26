@@ -14,7 +14,7 @@ Two nodes that connect a workflow to a Dexcom account and read its continuous gl
 | **Dexcom Authorize** | Source HTTP | A web page where a person authorizes their Dexcom account, once |
 | **Dexcom Read EGV** | Source Custom | Reads glucose values on a timer and pushes them downstream |
 
-Published in the **[Linkiir Diagnostics Adapters](catalogs/diagnostics.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
+Published in the **[Linkiir Diagnostics Adapters](catalogs/diagnostics.md)** catalog. Install that catalog from **Settings → Catalogs → Install Linkiir catalogs** to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
 Current version and changelog: [Diagnostics Adapters release notes](../release-notes/catalogs-diagnostics.md).
 

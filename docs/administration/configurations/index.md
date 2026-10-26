@@ -122,7 +122,7 @@ Configure alert delivery channels (Email, Alert Node), notification rules, and t
 
 ### Catalogs
 
-Subscribe to catalogs of adapter nodes and shared libraries, review and pull updates, and publish a catalog from this grid. Needs the **Manage catalogs** permission. See [Catalogs](../../catalogs/index.md).
+Install Linkiir's adapter catalogs from a list, subscribe to any other catalog of adapter nodes and shared libraries, review and pull updates, and publish a catalog from this grid. Needs the **Manage catalogs** permission. See [Catalogs](../../catalogs/index.md).
 
 ### Roles
 

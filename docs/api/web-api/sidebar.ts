@@ -378,6 +378,12 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "api/web-api/linkiir-catalogs-api-linkiir-catalogs-post",
+          label: "List the catalogs Linkiir publishes",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
           id: "api/web-api/get-catalogs-api-get-catalogs-get",
           label: "List catalogs",
           className: "api-method get",

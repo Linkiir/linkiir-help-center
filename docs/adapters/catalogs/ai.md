@@ -20,9 +20,16 @@ Model and AI service adapters: hosted and on-premise LLMs, embeddings, and AI to
 The AI adapters in this catalog are workflow nodes that call a model as part of an interface. They are separate from the built-in [AI Assistant](../../ai-assistant/index.md), which helps you build interfaces inside the Grid console.
 :::
 
-## Subscribe to this catalog
+## Install this catalog
 
-In Grid, open **Settings → Catalogs** and click **Subscribe to a catalog**.
+In Grid, open **Settings → Catalogs**, click **Install Linkiir catalogs**, tick
+**Linkiir AI Adapters** and click **Install**. See
+[Install Linkiir's catalogs](../../catalogs/subscribing.md#install-linkiirs-catalogs).
+
+### Subscribing by URL
+
+On a grid that cannot download Linkiir's catalog list, click
+**Subscribe to a catalog** in **Settings → Catalogs** instead and fill in:
 
 | Field | Value |
 | --- | --- |

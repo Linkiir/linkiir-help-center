@@ -20,9 +20,16 @@ Adapters for moving bytes and messages: object storage, file transport, and stre
 Local and network file transfer, FTP, FTPS and SFTP are built into Grid's **File/FTP** source and destination nodes and need no catalog. See [Interfaces and Core Nodes](../../interface-development/interfaces/index.md).
 :::
 
-## Subscribe to this catalog
+## Install this catalog
 
-In Grid, open **Settings → Catalogs** and click **Subscribe to a catalog**.
+In Grid, open **Settings → Catalogs**, click **Install Linkiir catalogs**, tick
+**Linkiir Transport Adapters** and click **Install**. See
+[Install Linkiir's catalogs](../../catalogs/subscribing.md#install-linkiirs-catalogs).
+
+### Subscribing by URL
+
+On a grid that cannot download Linkiir's catalog list, click
+**Subscribe to a catalog** in **Settings → Catalogs** instead and fill in:
 
 | Field | Value |
 | --- | --- |

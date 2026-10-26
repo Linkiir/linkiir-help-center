@@ -9,7 +9,7 @@ keywords: [Slack, adapter, notifications, bot token, channel]
 
 A **Transform Custom** node that posts the message reaching it into a Slack channel.
 
-Published in the **[Linkiir Notification Adapters](catalogs/notification.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
+Published in the **[Linkiir Notification Adapters](catalogs/notification.md)** catalog. Install that catalog from **Settings → Catalogs → Install Linkiir catalogs** to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
 Current version and changelog: [Notification Adapters release notes](../release-notes/catalogs-notification.md).
 

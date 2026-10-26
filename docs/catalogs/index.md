@@ -54,7 +54,7 @@ Deciding whether to trust a publisher is an operator judgement, which is why it 
 
 | Page | Covers |
 | --- | --- |
-| [Subscribing to a catalog](subscribing.md) | Adding a catalog, reviewing updates, and pulling them |
+| [Subscribing to a catalog](subscribing.md) | Installing Linkiir's catalogs from a list, adding any other catalog, reviewing updates, and pulling them |
 | [Using catalog content](using-catalog-content.md) | Building nodes from catalog adapters, and keeping them updated |
 | [Publishing a catalog](publishing.md) | Creating a catalog, adding content, and publishing it |
 | [Offline delivery](offline-delivery.md) | Moving a catalog on a share or a removable drive |

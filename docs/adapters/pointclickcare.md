@@ -14,7 +14,7 @@ Two nodes that connect a workflow to a PointClickCare organization.
 | **PCC Connect** | Source Custom | Authenticates on a timer and reports what the connection can see |
 | **PCC Request** | Transform Custom | Makes an authenticated request to any PointClickCare path |
 
-Published in the **[Linkiir EHR Adapters](catalogs/ehr.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
+Published in the **[Linkiir EHR Adapters](catalogs/ehr.md)** catalog. Install that catalog from **Settings → Catalogs → Install Linkiir catalogs** to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
 Current version and changelog: [EHR Adapters release notes](../release-notes/catalogs-ehr.md).
 

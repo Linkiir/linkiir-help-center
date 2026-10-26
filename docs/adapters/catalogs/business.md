@@ -16,9 +16,16 @@ Enterprise business system adapters: CRM, ERP, ITSM, HR, identity and directory 
 | **Libraries** | 2 |
 | **Publisher** | Linkiir Inc |
 
-## Subscribe to this catalog
+## Install this catalog
 
-In Grid, open **Settings → Catalogs** and click **Subscribe to a catalog**.
+In Grid, open **Settings → Catalogs**, click **Install Linkiir catalogs**, tick
+**Linkiir Business Adapters** and click **Install**. See
+[Install Linkiir's catalogs](../../catalogs/subscribing.md#install-linkiirs-catalogs).
+
+### Subscribing by URL
+
+On a grid that cannot download Linkiir's catalog list, click
+**Subscribe to a catalog** in **Settings → Catalogs** instead and fill in:
 
 | Field | Value |
 | --- | --- |

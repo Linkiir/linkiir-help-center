@@ -15,7 +15,7 @@ Three nodes for moving messages through S3 or any S3-compatible object store:
 | **S3 Destination** | Transform Custom | Uploads every message it receives as a new object |
 | **S3 Explorer** | Source HTTP | Serves a page for listing and viewing objects in the bucket |
 
-Published in the **[Linkiir Transport Adapters](catalogs/transport.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
+Published in the **[Linkiir Transport Adapters](catalogs/transport.md)** catalog. Install that catalog from **Settings → Catalogs → Install Linkiir catalogs** to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
 Current version and changelog: [Transport Adapters release notes](../release-notes/catalogs-transport.md).
 

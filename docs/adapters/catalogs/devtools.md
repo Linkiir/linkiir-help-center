@@ -24,9 +24,16 @@ particular, it is useful on every grid regardless of which systems you integrate
 with — so it lives here rather than in one of the protocol or vendor catalogs.
 :::
 
-## Subscribe to this catalog
+## Install this catalog
 
-In Grid, open **Settings → Catalogs** and click **Subscribe to a catalog**.
+In Grid, open **Settings → Catalogs**, click **Install Linkiir catalogs**, tick
+**Linkiir Developer Tools** and click **Install**. See
+[Install Linkiir's catalogs](../../catalogs/subscribing.md#install-linkiirs-catalogs).
+
+### Subscribing by URL
+
+On a grid that cannot download Linkiir's catalog list, click
+**Subscribe to a catalog** in **Settings → Catalogs** instead and fill in:
 
 | Field | Value |
 | --- | --- |

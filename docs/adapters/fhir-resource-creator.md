@@ -8,7 +8,7 @@ keywords: [FHIR, R4, Patient resource, adapter, transform, mapping]
 
 A **Transform Custom** node that maps an inbound JSON message onto a FHIR R4 Patient resource and pushes it downstream — typically to the [FHIR Validator](fhir-validator.md).
 
-Published in the **[Linkiir FHIR Adapters](catalogs/fhir.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
+Published in the **[Linkiir FHIR Adapters](catalogs/fhir.md)** catalog. Install that catalog from **Settings → Catalogs → Install Linkiir catalogs** to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
 ## What it does
 

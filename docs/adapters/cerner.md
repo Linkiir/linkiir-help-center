@@ -9,7 +9,7 @@ keywords: [Cerner, FHIR, adapter, System Account, JWKS, SMART on FHIR]
 
 A **Source Custom** node that polls a Cerner FHIR endpoint on an interval and pushes every matching resource downstream as JSON.
 
-Published in the **[Linkiir FHIR Adapters](catalogs/fhir.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
+Published in the **[Linkiir FHIR Adapters](catalogs/fhir.md)** catalog. Install that catalog from **Settings → Catalogs → Install Linkiir catalogs** to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
 Current version and changelog: [FHIR Adapters release notes](../release-notes/catalogs-fhir.md).
 

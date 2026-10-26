@@ -8,7 +8,7 @@ keywords: [FHIR, validation, $validate, OperationOutcome, R4, adapter, transform
 
 A **Transform Custom** node that validates an inbound FHIR resource against a FHIR server's `$validate` operation and forwards it unchanged only when it passes. Anything else stops the node.
 
-Published in the **[Linkiir FHIR Adapters](catalogs/fhir.md)** catalog. Subscribe to that catalog to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
+Published in the **[Linkiir FHIR Adapters](catalogs/fhir.md)** catalog. Install that catalog from **Settings → Catalogs → Install Linkiir catalogs** to add this adapter to your grid — see [Adapter Catalogs](catalogs/index.md).
 
 ## What it does
 
