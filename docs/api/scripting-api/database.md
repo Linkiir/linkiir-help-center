@@ -15,7 +15,7 @@ Database access, named for what it does (store / retrieve). Connection-object st
 *function*
 
 ```lua
-linkiir.store.open{ driver=, name=, user=, password=, live= }
+linkiir.store.open{ driver=, name=, user=, password=, timeout=, live= }
 ```
 
 Open a database connection. Pass one of the driver constants (linkiir.store.SQLITE, MYSQL, MARIADB, ORACLE, POSTGRES_ODBC, SQLSERVER_ODBC, ORACLE_ODBC, MYSQL_ODBC) as the driver parameter.
@@ -34,7 +34,7 @@ local conn, err = linkiir.store.open{ driver=, name=, user=, password=, timeout=
 | `name` | string | Yes | The DSN, host, database or file, per driver: for ODBC drivers a connection string or DSN name, for SQLITE a file path. A relative SQLite path resolves against linkiir.sys.workingDir(). |
 | `user` | string | No | Username. For the ODBC drivers it is added to the connection string as UID unless the string already sets UID. |
 | `password` | string | No | Password. For the ODBC drivers it is added to the connection string as PWD unless the string already sets PWD. |
-| `timeout` | integer | No | Connect timeout (seconds). |
+| `timeout` | integer | No | Seconds connecting may take before it fails; 0 or none keeps the driver's default (15 seconds for SQL Server's ODBC driver). MySQL and MariaDB apply it as MYSQL_OPT_CONNECT_TIMEOUT, the ODBC drivers as the login timeout, and Oracle (OCI) adds connect_timeout to an Easy Connect name or CONNECT_TIMEOUT to a connect descriptor; a tnsnames alias keeps the timeout its own entry sets. SQLite opens a local file and has none. A negative value is an error. |
 | `live` | boolean | No | Default true. |
 
 **Returns**
@@ -555,12 +555,14 @@ Conn:rollback()
 conn:check()
 ```
 
-Liveness probe.
+Whether the connection still works.
+
+Whether the connection still works: one round trip to the database - mysql_ping on MySQL and MariaDB, OCIPing on Oracle (OCI), and SELECT 1 (SELECT 1 FROM DUAL on Oracle) over ODBC. Returns false once the connection is closed, or when the database can't be reached or has ended the session. An error from the database itself still means it answered, so a PostgreSQL transaction waiting for its rollback is true. SQLite works on a local file, so it only checks the connection is open. As it costs a round trip, call it when a statement has failed rather than before every one.
 
 **Usage**
 
 ```lua
-if conn:check() then ... end
+local alive = conn:check()
 ```
 
 **Returns**
@@ -570,8 +572,11 @@ if conn:check() then ... end
 **Example**
 
 ```lua
-if not Conn:check() then
-   Conn = linkiir.store.open{ driver = linkiir.store.POSTGRES_ODBC, name = 'clinicdb' }
+local Rows, Err = Conn:query{ sql = 'select id from patient' }
+if not Rows and not Conn:check() then
+   -- The connection is gone: open a new one and try again.
+   Conn = linkiir.store.open{ driver = linkiir.store.POSTGRES_ODBC, name = 'clinicdb', timeout = 10 }
+   Rows, Err = Conn:query{ sql = 'select id from patient' }
 end
 ```
 

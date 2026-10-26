@@ -3366,7 +3366,7 @@
         {
           "kind": "function",
           "name": "linkiir.store.open",
-          "signature": "linkiir.store.open{ driver=, name=, user=, password=, live= }",
+          "signature": "linkiir.store.open{ driver=, name=, user=, password=, timeout=, live= }",
           "usage": "local conn, err = linkiir.store.open{ driver=, name=, user=, password=, timeout=, live= }",
           "summary": "Open a database connection.",
           "description": "Open a database connection. Pass one of the driver constants (linkiir.store.SQLITE, MYSQL, MARIADB, ORACLE, POSTGRES_ODBC, SQLSERVER_ODBC, ORACLE_ODBC, MYSQL_ODBC) as the driver parameter.",
@@ -3399,7 +3399,7 @@
               "name": "timeout",
               "type": "integer",
               "required": false,
-              "description": "Connect timeout (seconds)."
+              "description": "Seconds connecting may take before it fails; 0 or none keeps the driver's default (15 seconds for SQL Server's ODBC driver). MySQL and MariaDB apply it as MYSQL_OPT_CONNECT_TIMEOUT, the ODBC drivers as the login timeout, and Oracle (OCI) adds connect_timeout to an Easy Connect name or CONNECT_TIMEOUT to a connect descriptor; a tnsnames alias keeps the timeout its own entry sets. SQLite opens a local file and has none. A negative value is an error."
             },
             {
               "name": "live",
@@ -3793,18 +3793,18 @@
           "of": "Connection",
           "name": "Connection:check",
           "signature": "conn:check()",
-          "summary": "Liveness probe.",
-          "description": "Liveness probe.",
+          "summary": "Whether the connection still works.",
+          "description": "Whether the connection still works: one round trip to the database - mysql_ping on MySQL and MariaDB, OCIPing on Oracle (OCI), and SELECT 1 (SELECT 1 FROM DUAL on Oracle) over ODBC. Returns false once the connection is closed, or when the database can't be reached or has ended the session. An error from the database itself still means it answered, so a PostgreSQL transaction waiting for its rollback is true. SQLite works on a local file, so it only checks the connection is open. As it costs a round trip, call it when a statement has failed rather than before every one.",
           "returns": [
             {
               "description": "boolean"
             }
           ],
-          "usage": "if conn:check() then ... end",
+          "usage": "local alive = conn:check()",
           "examples": [
             {
               "language": "lua",
-              "code": "if not Conn:check() then\n   Conn = linkiir.store.open{ driver = linkiir.store.POSTGRES_ODBC, name = 'clinicdb' }\nend"
+              "code": "local Rows, Err = Conn:query{ sql = 'select id from patient' }\nif not Rows and not Conn:check() then\n   -- The connection is gone: open a new one and try again.\n   Conn = linkiir.store.open{ driver = linkiir.store.POSTGRES_ODBC, name = 'clinicdb', timeout = 10 }\n   Rows, Err = Conn:query{ sql = 'select id from patient' }\nend"
             }
           ]
         },

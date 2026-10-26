@@ -55,7 +55,7 @@ Two fields in the node's configuration decide what happens when a message can't 
 
 | Field | Options | Default |
 | --- | --- | --- |
-| **On Error** | **Stop the node**: nothing more is processed until it is restarted. **Skip the message**: log the error and carry on with the next | Stop the node |
+| **On Error** | For a rejected message (it can't be read, no map takes it, or it lacks a value a map requires): **Stop the node**: nothing more is processed until it is restarted. **Skip the message**: log the error and carry on with the next. Any other error, such as one in your own Lua or a message that can't be sent, always stops the node | Stop the node |
 | **Unknown Messages** | For a message no map takes: **Treat as an error** (then On Error applies), **Skip the message**, or **Pass it through unchanged** | Treat as an error |
 
 A message is unknown when it matches none of the messages in the source schema, or when it matches one but meets none of its maps' conditions.

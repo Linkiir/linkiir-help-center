@@ -311,13 +311,13 @@ In **Node Parameters**, the node has a card for each **Configure** tab that hold
 
 - **Connection:** the database and where it is, the user it signs in as, and the encryption or SSL setting for the engine.
 - **Tables:** its tables, with any warnings about them.
-- **Behaviour:** the write mode, unknown tables, error handling and reconnecting.
+- **Behaviour:** the write mode, unknown tables, error handling, the connection and reconnecting.
 
 | Tab | Holds |
 | --- | --- |
 | **Connection** | The database, server, sign-in and encryption, with **Test connection** |
 | **Tables** | The tables the node writes, kept in its own `schema.json`. **Check tables** against the database, then create the missing ones or alter the ones that differ, after reviewing their SQL. |
-| **Behaviour** | **Writing** and **Reconnecting** |
+| **Behaviour** | **Writing** and **Staying connected** (**Connection**, keep open or close after each write, and reconnecting) |
 
 The node's **Batching** settings are on its **Advanced** tab.
 

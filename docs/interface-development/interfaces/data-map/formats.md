@@ -25,6 +25,8 @@ Rules, conditions and custom Lua all name fields by **path**. Each format has it
 
 - **Output starts as** a **Copy of the input**, changed only where you map, or as an **Empty message** built from your rules. A copy keeps every segment it doesn't drop.
 - A segment can be written **once per item** of the input: one `NK1` per FHIR contact, one `OBX` per JSON result. Rules under it read from that item, and **Set ID** numbers the copies.
+- A segment can be made **under** another, such as an OBX under its own OBR. See [Items made inside other items](building-maps.md#items-made-inside-other-items).
+- **As a source**, a segment's own group is read by the message structure: an OBX's OBR is the one above it, and an OBR's OBXs are those in its group.
 - Values are kept exactly as received, escapes included, so a copied field writes back unchanged.
 - MSH-7, MSH-9, MSH-10 and MSH-12 can be filled by Auto-map, or set with **Current date/time**, a **Fixed value** and **New control ID**.
 
@@ -36,7 +38,7 @@ Rules, conditions and custom Lua all name fields by **path**. Each format has it
 - **Resources in it** lists the resource types read from the Bundle. `Patient.name` reads the Bundle's first `Patient`.
 - A segment can be made once per resource of a type, such as one `AL1` per `AllergyIntolerance`, or per item of a list (`Patient.contact[]`).
 
-**As a destination**, the output is a Bundle (**transaction**, **batch** or **collection**) or a **Single resource**. A resource can be made once per item, such as one `Observation` per `OBX`. References between the resources, such as `subject` → `Patient`, are filled in for you.
+**As a destination**, the output is a Bundle (**transaction**, **batch** or **collection**) or a **Single resource**. A resource can be made once per item, such as one `Observation` per `OBX`. References between the resources, such as `subject` → `Patient`, are filled in for you. Made under another, such as a `DiagnosticReport` per `OBR` with its `Observation`s under it, each refers to its own. A list in a resource, such as `contact`, can have one item per input item (**each NK1**).
 
 FHIR to FHIR is not supported. Use a Transform Custom node.
 
@@ -82,7 +84,8 @@ A Data Map node doesn't connect to a database. Rows travel as JSON, so a source 
 ```
 
 - **As a source**, the message is an object of tables: the map's main table and any child tables, each a row or a list of rows. The node's `main.lua` reads it with `mapper.read`.
-- **As a destination**, the map writes a main table row and child tables made once per item, such as one `allergies` row per `AL1`. Each value is checked against its column's type and size.
+- **As a destination**, the map writes a main table row and child tables made once per item, such as one `allergies` row per `AL1`. The main table can be made per item too: one order row per `OBR` writes a row for each order an ORM carries. Each value is checked against its column's type and size.
+- **Rows under rows** (a legacy engine's MESSAGE_ID and PARENT_ID, as columns): a table made under another gets its row's key with **Parent's value**. Read back, a table under another names the column holding that key. See [Items made inside other items](building-maps.md#items-made-inside-other-items).
 - The tables come from a [DB Schema](../../schema-editor.md#database-tables), which can be imported from a live database. In a new node, the source or destination column offers to open the Schema Editor to set them up.
 
 To write the rows, connect a [Database node](../database-node.md). It inserts or upserts them into SQL Server, PostgreSQL, Oracle or SQLite with no script, and **Add from an upstream node** copies the map's destination tables into it. For anything the node doesn't do, use a Transform Custom node that calls `Connection:merge`. See [Database](../../../api/scripting-api/database.md).

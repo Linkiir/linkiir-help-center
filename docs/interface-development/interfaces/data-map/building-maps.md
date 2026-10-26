@@ -24,7 +24,7 @@ Opening a Data Map node on the Scripting page shows the **Map** view. The switch
 
 The toolbar also counts the fields mapped and the destination's required fields that are filled (**required 12/14**). The filter box at the top of each column narrows it, and the filter button limits it to fields that have a value in the sample or are mapped.
 
-**Expand all** and **Collapse all**, at the right of each column's toolbar, open or close the whole column at once. **Collapse all** folds everything back to its top-level rows: segments, resources, loops, tables or sections. **Expand all** opens those top-level rows one level down, so a large message stays readable. Open a row further with its own arrow. Links to a folded field end on the nearest row still showing, such as its segment.
+**Expand all** and **Collapse all**, at the right of each column's toolbar, open or close the whole column at once. **Collapse all** folds everything back to its top-level rows: segments, resources, loops, tables or sections. **Expand all** opens those top-level rows one level down, so a large message stays readable. Open a row further with its own arrow. Links to a folded field end on the nearest row still showing, such as its segment. When several links end on the same folded row, they are drawn as one dashed chip showing how many there are: hover over it to list them, click it to open the row, or Shift-click (Cmd-click on a Mac) to select them all.
 
 The bottom panel opens when you select a rule or run the map, and closes with its **×** to give the board more room. While it is closed, a **problems** button shows when the map has any, and opens it.
 
@@ -87,7 +87,9 @@ The functions on offer depend on the formats being mapped. The common ones:
 | **Identifier**, **Name**, **Address**, **Phone / email** | Whole data types between formats: `CX` ↔ `Identifier`, `XPN` ↔ `HumanName`, `XAD` ↔ `Address`, `XTN` ↔ `ContactPoint` |
 | **Coding**, **Coded concept**, **Coded value** | `CE`/`CWE` ↔ `Coding` and `CodeableConcept` |
 | **Number**, **Yes / No** | Text to numbers, and `Y`/`N`, `T`/`F` and `1`/`0` to booleans |
-| **Set ID** | 1, 2, 3… for a segment made once per item |
+| **Set ID** | 1, 2, 3… for a segment made once per item (counting again inside each item it is made under) |
+| **Row number** | 1, 2, 3… for a database row made once per item (counting again inside each row it is made under) |
+| **Parent's value** | Into a database table made under another: a column of the row it is under, usually its key (`results.order_id` from `orders.id`) |
 | **Custom Lua** | Your own function (see below) |
 
 The **Rule** tab describes the chosen function as it works for the formats in this map.
@@ -171,10 +173,53 @@ What you set up in the destination column depends on the destination format:
 | FHIR | The Bundle type (**transaction**, **batch**, **collection**) or a **Single resource**, and the resources it holds. A resource can be made once per item, such as one `Observation` per `OBX`, and references between them, such as `Observation.subject` → `Patient`, are filled in for you |
 | X12 | The loops it holds, each written once or per item. Envelope control numbers, HL numbering, loop qualifiers and segment counts are filled in when the message is finished |
 | CDA, C-CDA | The document type and its sections. What C-CDA fixes for the document is written for you |
-| Database | The main table, and the child tables written per item |
+| Database | The main table, and the other tables it writes. Each, the main table too, is written once or once per item of the input: a main table written per `OBR` gets a row for each order an ORM carries |
 | JSON, XML | The structure, and the lists made per item |
 
 See [Formats](formats.md) for each format's paths and particulars.
+
+---
+
+## Items made inside other items
+
+Many messages repeat inside a repeat. An ORU^R01 has tests, and results under each test:
+
+```
+OBR|1|ORD-A||CBC^Complete Blood Count     ← test 1
+OBX|1|NM|WBC^White cells||7.2             ←   its results
+OBX|2|NM|HGB^Hemoglobin||13.5
+NTE|1||repeat drawn                       ←     a note on HGB
+OBR|2|ORD-B||BMP^Metabolic Panel          ← test 2
+OBX|1|NM|NA^Sodium||140
+```
+
+A claim has service lines, and a panel has observations. To keep each result with its own test, make the inner item **under** the outer one.
+
+**In the destination column**, next to **once / each …** on a segment, table or resource, choose what it is made under:
+
+| Destination | Set | What you get |
+| --- | --- | --- |
+| HL7 v2 | `OBX` **each OBX**, **under OBR** | Each OBR's own OBXs, written right after it, and each OBX's NTEs after it |
+| Database | `results` **each OBX**, **under orders** | A results row per OBX of each order. A **Parent's value** rule gives each row its order's key: `results.order_id` ← `orders.id` |
+| FHIR | `Observation` **each OBX**, **under Report** | Each DiagnosticReport refers to its own Observations (`result`), and each Observation to its own report |
+| X12, CDA, JSON, XML | A list inside a list (`orders[].results[]`, a 2400 inside its 2300) | Nested by the path, nothing to set |
+
+Nested items are indented under the one they are made under, and can go as deep as the message does: an NTE under an OBX under an OBR.
+
+**Reading**, items are found the same way:
+
+- **HL7 v2:** an OBX made under an OBR reads that OBR's OBXs, by the message structure's groups (ORDER_OBSERVATION, OBSERVATION). A specimen's OBX is not a result.
+- **Database rows:** a table made under another names **the column holding its parent row's key**, on the line below it: *its results rows are those whose* `order_id` *holds the orders row's* `id`. The Map view proposes the two columns by name.
+- **FHIR Bundle:** a resource made under another **follows** a reference, chosen on the line below it: the outer one's (**those its result[] refers to**), or the inner one's pointing back (**those referring to it by basedOn[]**).
+- **X12, CDA, JSON, XML:** a list inside a list reads the outer item's.
+
+**A rule reads its own item's surroundings.** In an OBX made per OBX, a rule reading `OBR-4` reads the OBR that OBX belongs to, and `PID-3` its own patient's PID. It never reads the message's first OBR. This holds whether or not the OBX is made under anything.
+
+**A list inside a FHIR resource** can have its items made per item too. Next to a list element, such as `contact`, choose **each NK1** instead of **per value**: you get one contact per NK1, each with that NK1's phones.
+
+The checks point out a segment made per item that belongs under another, such as an OBX made per OBX while the OBR is made per OBR. Without **Under**, every OBX would follow the last OBR.
+
+An HL7 v2 map lists each segment once, so an NTE can be under OBX or under OBR in one map, not both.
 
 ---
 

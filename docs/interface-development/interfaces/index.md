@@ -19,6 +19,7 @@ In the Workflow Builder, the palette groups node types under three headings. Dra
 | **Source** | **HTTP** | An inbound HTTP request on a route | Required |
 | **Source** | **LLP** | An inbound HL7 v2 message over MLLP | Only for a custom ACK |
 | **Source** | **File/FTP** | A timer, polling a directory or FTP/FTPS/SFTP server | Not used |
+| **Source** | **Database** | A timer, polling a status table for records that are ready | Not used |
 | **Source** | **Custom** | A timer | Required |
 | **Transform** | **Custom** | An inbound message from an upstream node | Required |
 | **Transform** | **Data Map** | An inbound message from an upstream node | Generated from the map |
@@ -55,6 +56,7 @@ The palette also offers **Custom** under **Destination**. It has no runtime impl
 | An HTTP or REST call | Source HTTP |
 | Files from a directory | Source File/FTP |
 | Files from an FTP, FTPS, or SFTP server | Source File/FTP with **Use FTP** enabled |
+| Records from a SQL Server, PostgreSQL, Oracle or SQLite database, as another application marks them ready | [Source Database](database-source-node.md) |
 | Data you fetch or generate yourself on a schedule | Source Custom |
 
 ## Choosing a destination
@@ -82,7 +84,7 @@ Each built-in node type has its own icon on the canvas, so a workflow reads at a
 | Folder with an arrow out | Destination File/FTP |
 | Angle brackets with dots | Source and Destination LLP |
 | Two arrows | Transform Data Map |
-| Database | Destination Database |
+| Database | Source Database and Destination Database |
 | Terminal | Source, Transform and Destination Custom, and the Notification Alert node |
 
 An adapter built on one of these node types shows that type's icon. Any other node shows a general source, transform or destination icon.
@@ -106,7 +108,7 @@ Every node's dialog starts with **General** and ends with **Advanced**. The tabs
 | Most nodes | **Parameters** (the fields the node's template defines), **Custom Parameters** |
 | LLP | Connection, Messages, Acknowledgments (destination only), Security, Custom Parameters |
 | File/FTP | Files, Content (source only), FTP |
-| Database | Connection, Tables, Behaviour |
+| Database | Connection, Tables, Behaviour (the source has Record after Tables) |
 
 A node with no template-defined fields has no **Parameters** tab: all of its fields are under **Custom Parameters**.
 
@@ -128,6 +130,7 @@ Saving:
 - If one of these is refused, the dialog stays open and says which one and why. Click **Save** again to retry. Anything already saved isn't sent twice.
 - **Save** stays unavailable while the node has no name.
 - **Cancel** asks before throwing away unsaved changes.
+- Saving commits the node's configuration to the project's history straight away. Only this node's configuration is committed: anything else you have changed but not committed, such as another node's script, stays uncommitted for you to commit from the Scripting page.
 - A node that hasn't been saved to the canvas yet can't be configured. Save the canvas first.
 
 **Run from commit** pins the node to a commit. Saving a new pin reloads the node in the Runtime. Choosing the newest commit means "follow the latest": the node keeps picking up new commits instead of freezing on that one.
@@ -195,7 +198,9 @@ Right-click a node for:
 
 | Item | Available |
 | --- | --- |
+| **Configure** | Always, once the node has been saved to the canvas. Opens the node's [Configure dialog](#the-configure-dialog) |
 | **Create template** | Always |
+| **Add to catalog** | With **Manage catalogs**, once the node has been saved to the canvas |
 | **Edit script** | Always, except on File/FTP and Database nodes, which have no script |
 | **Remove upstream connection** | Edit mode |
 | **Remove downstream connection** | Edit mode, and not on a destination node |
@@ -203,7 +208,9 @@ Right-click a node for:
 
 Right-click a connection, in edit mode, for **Delete connection** — that one line only, rather than everything running into or out of a node.
 
-Each of these asks before it acts, naming what it is about to change: the node by name, or the two nodes a connection joins. Canvas changes stay local until you click **Save**; **Cancel** restores the canvas as it was when you entered edit mode.
+Removing a connection and deleting a node each ask before they act, naming what they are about to change: the node by name, or the two nodes a connection joins. Canvas changes stay local until you click **Save**; **Cancel** restores the canvas as it was when you entered edit mode.
+
+Deleting a node removes it, and all its files, from every user's copy of the project, including changes to it that nobody has committed yet. Anything you want to keep from a node is safe once committed: the node's committed files stay in the project's history.
 
 The breadcrumb above the canvas switches project and workflow, and creates them too: the project dropdown offers **New project** and the workflow dropdown **New workflow**, each taking a name and description and opening what it creates.
 
@@ -212,6 +219,7 @@ The breadcrumb above the canvas switches project and workflow, and creates them 
 - [Source Nodes](source-nodes.md)
 - [Destination Nodes](destination-nodes.md)
 - [Database Node](database-node.md)
+- [Database Source Node](database-source-node.md)
 - [Custom Scripting Nodes](custom-scripting-nodes.md)
 
 :::note[Conditional fields]

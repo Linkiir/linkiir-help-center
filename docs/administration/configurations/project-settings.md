@@ -65,6 +65,8 @@ Header actions: **Add Workflow**, **Start All** / **Stop All**, and a sort butto
 
 Right-click a workflow row for **Edit workflow** — name, description, and **Auto Start** — and **Delete workflow**. Both need the **Edit workflows** permission; without it the menu does not open.
 
+**Delete workflow** removes the workflow and its nodes from every user's copy of the project, including changes in it that nobody has committed yet. What was committed stays in the project's history.
+
 A workflow with no nodes has no Start button. There is nothing to run yet.
 
 ### Auto Start

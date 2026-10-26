@@ -29,6 +29,8 @@ The **Output** tab in the bottom panel has **Run on "_sample_"**. It runs the no
 - the error, if the run failed: for example, a required value with **When empty** set to **reject the message**, or a C-CDA rule the document breaks;
 - a warning if `main.lua` pushed nothing.
 
+To find something in a long output, type in **Find in output** above the messages. Every match is highlighted, ignoring case, across all the messages pushed, with a count such as **2 of 7**. **Enter** or the down arrow moves to the next match and **Shift+Enter** or the up arrow to the previous one, scrolling it into view. **Escape** clears the search.
+
 Selecting a link afterwards shows in the **Rule** tab what that link read from the sample and what ended up in the output at its destination. It warns when the last run failed, or pushed no message or more than one, since then there is no single output to compare.
 
 **Run Test** in the Scripting toolbar runs the same thing, and the debugger works on a Data Map node as on any other, including breakpoints in `custom.lua`, `premap.lua` and `postmap.lua`. See [Testing and Debugging](../../lua-programming/testing-debugging.md).
@@ -72,4 +74,8 @@ If a generated file is changed anyway, for example by a merge or by editing it o
 
 The runtime runs committed code. When the map works on every sample, commit the node's changes with **Commit** at the top of the page (see [Saving and committing](building-maps.md#saving-and-committing)), and start or restart the node.
 
-On live traffic, a message that fails follows **On Error**, and one no map takes follows **Unknown Messages**. Both are logged with the reason, such as *ADT_A04 is in the source schema, but no data map takes it*. See [Node settings](index.md#node-settings) and [Log Search and Message History](../../../administration/logs/index.md).
+On live traffic, a message that is rejected follows **On Error**, and one no map takes follows **Unknown Messages**. Both are logged with the reason, such as *Message rejected: ADT_A04 is in the source schema, but no data map takes it*.
+
+A message is rejected when it can't be read, no map takes it, a required value is missing (**When empty** set to **reject the message**), or a CDA document breaks the rules being enforced. Any other error stops the node even with **On Error** set to **Skip the message**: an error in your own Lua (`custom.lua`, `premap.lua`, `postmap.lua`), or a converted message that can't be sent. Those would fail every message alike, so skipping them would drop message after message. To reject a message from your own Lua, raise an error whose text starts with `Message rejected: `, for example `error('Message rejected: no visit number', 0)`.
+
+Nodes made before this change keep their own `main.lua`, which skips any error. The Map view warns about it: copy `main.lua` from a new Data Map node to get the new behaviour. See [Node settings](index.md#node-settings) and [Log Search and Message History](../../../administration/logs/index.md).

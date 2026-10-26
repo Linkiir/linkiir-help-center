@@ -119,7 +119,7 @@ For a Database node, the panel shows a card for each tab of the **Configure** di
 - **General:** the description and the commit the node runs.
 - **Connection:** the database and where it is, for example `PostgreSQL · db1:5432 / clinic`.
 - **Tables:** the node's tables.
-- **Behaviour:** **Write mode**, **Unknown tables**, **On error** and reconnecting.
+- **Behaviour:** **Write mode**, **Unknown tables**, **On error**, **Connection** and reconnecting.
 - **Advanced:** debug logging, payload encryption, rows per statement and transactions.
 
 Under the cards are two buttons:
@@ -162,7 +162,7 @@ The fields shown depend on **Database**.
 | **SSL Mode** | PostgreSQL | `Disable`, `Allow`, `Prefer` (default), `Require`, `Verify CA` or `Verify full`. |
 | **Search Path** | PostgreSQL | The schema the tables are in. Blank uses the server's search path, usually `public`. |
 | **Protocol** | Oracle | `TCP` (default), or `TCPS (TLS)`. |
-| **Connect Timeout** | PostgreSQL, Oracle | Seconds. Blank uses the driver's default. |
+| **Connect Timeout** | SQL Server, PostgreSQL, Oracle | Seconds to wait for the server before giving up. Blank uses the driver's default (15 seconds for SQL Server). |
 
 **Test connection** connects with the values in the dialog, saved or not, and says whether it worked. A password that's already saved is used without being shown again.
 
@@ -285,15 +285,18 @@ With **Upsert**, a column that a row leaves out keeps the value it already has i
 
 **Rows are never deleted.** Neither write mode removes rows, including child rows that a later message no longer includes.
 
-### Reconnecting
+### Staying connected
 
 | Field | Default | Notes |
 | --- | --- | --- |
+| **Connection** | `Keep open` | `Keep open` holds the connection open while the node runs. `Close after each write` closes it once each message is written (or each transaction, with **Messages per Transaction** above 1) and opens it again for the next. |
 | **Attempt to Reconnect** | `Yes, with limit` | `No`, `Yes` or `Yes, with limit`. Applies at start and when the connection is lost. |
 | **Reconnect Attempts** | `60` | With `Yes, with limit`, the most attempts before the node stops. |
 | **Reconnect Interval** | `10000` | Milliseconds between attempts. |
 
 With reconnecting on, the node starts even when the database can't be reached yet. It warns and keeps trying.
+
+**Choosing Connection.** Keep the connection open unless something counts against an idle one: a database that limits connections, a firewall that drops idle ones, or messages that arrive rarely. Closing it means the node signs in again for every write, which adds the time to connect to each one. Opening the connection for a write follows **Attempt to Reconnect** like any other connection.
 
 ---
 
@@ -339,6 +342,7 @@ The node doesn't log the messages it writes. It logs what it did with each one. 
 | --- | --- | --- |
 | INFO | `Wrote 1 row to patients, 3 rows to results` | A message is written. `Nothing to write: the message has no rows` for one with no rows. |
 | DEBUG | `SQL: INSERT INTO …` | Each statement the node runs, in a line of its own. Only with **Debug Logging** on. |
+| DEBUG | `Closed the connection until the next message` | With **Connection** set to `Close after each write`, after each write. Only with **Debug Logging** on. |
 | WARN | `Skipped the rows for <table>: …` | **Unknown Tables** is `Skip the table`. |
 | ERROR | The database's own message | A message can't be written. With **On Error** set to `Skip the message`, it reads `Skipped a message: …`. |
 | WARN | Lost the connection, each failed reconnect attempt | The database can't be reached. |
@@ -356,6 +360,7 @@ The Monitor counts the messages each node received and sent as usual.
 
 ## Next
 
+- [Database Source Node](database-source-node.md), which reads records out of a database
 - [Destination Nodes](destination-nodes.md)
 - [Data Map formats: database rows](data-map/formats.md#database-rows)
 - [Schema Editor: database tables](../schema-editor.md#database-tables)

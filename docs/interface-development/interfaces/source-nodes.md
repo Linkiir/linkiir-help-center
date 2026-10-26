@@ -8,7 +8,7 @@ A source node brings a message into the workflow. This page lists the fields for
 
 Fields marked **needed to start** must have a usable value before the node will start. Everything else has a working default or belongs to an optional mode.
 
-The LLP and File/FTP sources are set up in a **Configure** dialog, like every node. See [The Configure dialog](index.md#the-configure-dialog). The tables below list each node's fields by the tab and card they appear under. Every dialog also starts with **General** and ends with **Advanced**, which hold the node's name, description, logging, encryption and permissions.
+The LLP, File/FTP and Database sources are set up in a **Configure** dialog, like every node. See [The Configure dialog](index.md#the-configure-dialog). The tables below list each node's fields by the tab and card they appear under. Every dialog also starts with **General** and ends with **Advanced**, which hold the node's name, description, logging, encryption and permissions.
 
 ---
 
@@ -285,6 +285,31 @@ On the **Logs** page, alongside each message. `<file>` is the local path, or for
 | ERROR | `Read 3 message(s) from <file>, but …` | The messages went, but moving or deleting the file failed. A local file isn't read again. A remote file is downloaded again next poll, sending its messages again. |
 
 If the node is stopped partway through a file, the file is left where it is and read again when the node starts.
+
+---
+
+## Source Database
+
+Reads records out of SQL Server, PostgreSQL, Oracle or SQLite and sends each one downstream as rows by table. It runs no script. Another application marks a record ready by setting its row in a **status table** to the Waiting status (`W` by default). Every **Interval**, the node reads the records waiting, sends each one with its rows from the other tables of its `schema.json`, then sets it to the Processing status (`P`). A record it can't read is set to the Failed status (`F`) and logged.
+
+```json
+{
+  "patient_queue": [{ "mrn": "M100", "status": "W", "seq": 2 }],
+  "patients": [{ "mrn": "M100", "name": "Ada Lovelace" }],
+  "visits": [{ "visit_id": 1, "patient_mrn": "M100", "ward": "North" }]
+}
+```
+
+| Tab | Holds |
+| --- | --- |
+| **Connection** | The database, server, sign-in and encryption, with **Test connection** |
+| **Tables** | The tables the node reads, kept in its own `schema.json`, with **Import tables from the database** and **Check tables** |
+| **Record** | The status table, its identifier, status and order columns, the status values, and each table's link column. **Show SQL** and **Preview next record**. |
+| **Behaviour** | **Reading** (**Interval**, **Records per Poll**, **On Error**) and **Staying connected** (**Connection**, keep open or close between polls, and reconnecting) |
+
+The node sets nothing after Processing: downstream nodes record the outcome. Run one Database source per status table.
+
+See [Database Source Node](database-source-node.md) for the full reference.
 
 ---
 

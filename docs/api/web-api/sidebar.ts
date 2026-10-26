@@ -774,6 +774,12 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "api/web-api/database-node-downstream-schemas-api-database-node-downstream-schemas-project-guid-workflow-guid-node-guid-get",
+          label: "List the database schemas the nodes a Database node sends to hold",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
           id: "api/web-api/database-node-test-connection-api-database-node-test-connection-project-guid-workflow-guid-node-guid-post",
           label: "Check that a Database node's settings connect",
           className: "api-method post",
@@ -794,6 +800,24 @@ const sidebar: SidebarsConfig = {
           type: "doc",
           id: "api/web-api/database-node-check-tables-api-database-node-check-tables-project-guid-workflow-guid-node-guid-post",
           label: "Compare a Database node's tables with its database",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/database-node-source-sql-api-database-node-source-sql-project-guid-workflow-guid-node-guid-post",
+          label: "Write the SQL a Database source node runs",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/database-node-preview-record-api-database-node-preview-record-project-guid-workflow-guid-node-guid-post",
+          label: "Read the next record a Database source node would send",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/database-node-create-tables-sql-api-database-node-create-tables-sql-project-guid-workflow-guid-node-guid-post",
+          label: "Write the SQL that creating a Database node's tables runs",
           className: "api-method post",
         },
         {
