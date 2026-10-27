@@ -20,7 +20,7 @@ Reference for the Lua scripting API available inside Linkiir workflow scripts.
 | [Security](security.md) (`linkiir.sec`) | Security primitives with modern, explicit parameters. |
 | [Runtime & System](runtime-system.md) (`linkiir.sys`) | Runtime helpers and filesystem access. |
 | [Logging](logging.md) (`linkiir.log`) | Writes log events at a level to the workflow's log, without raising or stopping the node. |
-| [Node Configuration](node-configuration.md) (`linkiir.config`) | Reads the current node's configuration fields as a single label → value table, with password fields decrypted. |
+| [Node Configuration](node-configuration.md) (`linkiir.config`) | Reads the current node's configuration fields and the project's variables. |
 | [Lua Table Library](lua-table-library.md) (`table`) | Standard Lua 5.1 table library for building and manipulating array-style tables (insert/remove/sort/concat). |
 | [Lua Math Library](lua-math-library.md) (`math`) | Standard Lua 5.1 math library. |
 | [Lua OS Library (time/env)](lua-os-library.md) (`os`) | Lua 5.1's time, environment, file and process functions. |

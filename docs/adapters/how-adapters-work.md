@@ -51,7 +51,7 @@ Every adapter's page in this section carries a **Configuration reference** table
 Fields on a supplied template are locked to their labels and types: you change values, not the form. Fields you add yourself stay fully editable. See [Interfaces and Core Nodes](../interface-development/interfaces/index.md).
 
 :::caution[Credentials belong in fields, not scripts]
-Enter every secret in its **password** field, or keep it in the project's **Variables** tab with **Secret** ticked. A credential pasted into a script travels in the project history and in every export. See [Security](../administration/security/index.md).
+Enter every secret in its **password** field, or keep it in the project's **Variables** tab with **Secret** ticked and use it in the password field as `${project:NAME}` (the field's `{x}` button picks it). A credential pasted into a script travels in the project history and in every export. See [Security](../administration/security/index.md).
 :::
 
 ## Bringing an adapter up

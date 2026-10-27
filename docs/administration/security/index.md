@@ -101,7 +101,7 @@ Restrict its filesystem permissions, and include it in your backups — see [Bac
 
 ### Secrets in projects
 
-Keep connection secrets in a project's **Variables** tab with the **Secret** flag set, and reference them by name from node configuration and scripts. Never paste a password into a Lua file: the file is committed to the project's history and travels in an export.
+Keep connection secrets in a project's **Variables** tab with the **Secret** flag set, and reference them by name from node configuration and scripts: `${project:NAME}` in a password field, `linkiir.config.project().NAME` in a script. A secret variable can only be used in password fields, because other values can appear in logs. See [Variables](../configurations/project-settings.md#variables). Never paste a password into a Lua file: the file is committed to the project's history and travels in an export.
 
 Secret values leave an export encrypted, and only the installation that exported them can read them back. Their names survive, so whoever imports the project elsewhere can see exactly what needs re-entering. See [Project Settings](../configurations/project-settings.md) and [Import and Export](../deployment/import-export.md).
 

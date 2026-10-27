@@ -5805,7 +5805,7 @@
     {
       "name": "linkiir.config",
       "title": "Node Configuration",
-      "description": "Reads the current node's configuration fields as a single label → value table, with password fields decrypted. The table is read once per script and cached.",
+      "description": "Reads the current node's configuration fields and the project's variables. Password fields and secret variables come back decrypted, and ${project:name} references to project variables are filled in. Each table is read once per script and cached.",
       "items": [
         {
           "kind": "function",
@@ -5813,15 +5813,15 @@
           "signature": "linkiir.config.node()",
           "usage": "local Cfg = linkiir.config.node()",
           "summary": "Return this node's configuration as a label → value table.",
-          "description": "Returns the node's configuration as a table keyed by each field's label. Absent or empty fields read as nil, and the table is cached after the first call.",
+          "description": "Returns the node's configuration as a table keyed by each field's label. Absent or empty fields read as nil, and the table is cached after the first call. A field whose value references a project variable (${project:name}) comes back with the variable's value filled in; a number or bool field holding a reference comes back as a number or boolean.",
           "returns": [
             {
               "name": "table",
-              "description": "flat map of config label → value (string, number, or boolean); empty when the node has no config fields."
+              "description": "flat map of config label → value (string, number, or boolean), references filled in; empty when the node has no config fields."
             }
           ],
           "errors": {
-            "description": "Raises a Lua error when the node directory is not configured, when the node's configuration is missing or unreadable, when it is malformed, or when a password field cannot be decrypted (typically a missing or wrong LINKIIR_SECRET_KEY)."
+            "description": "Raises a Lua error when the node directory is not configured; when node_config.json is missing, unreadable or not valid JSON; when a password field cannot be decrypted; or when a reference cannot be resolved: an unknown variable, a secret variable used outside a password field, or a number or bool field whose variable holds something else. A secret that cannot be decrypted says why: the grid's encryption key isn't available, the stored value isn't encrypted, or it was encrypted with a different key and has to be entered again."
           },
           "examples": [
             {
@@ -5830,11 +5830,77 @@
             },
             {
               "language": "lua",
+              "code": "-- A field set to ${project:api_host} reads as the variable's value.\nlocal Cfg = linkiir.config.node()\nlinkiir.log.info('sending to ' .. Cfg.host)   -- \"api.internal.net\""
+            },
+            {
+              "language": "lua",
               "code": "-- Absent fields are nil, so defaults are a plain 'or'.\nlocal Cfg = linkiir.config.node()\nlocal Timeout = Cfg.timeout_ms or 5000\n\nif Cfg.protocol == 'hl7' then\n  linkiir.log.info('Using HL7 profile')\nend"
             },
             {
               "language": "lua",
               "code": "-- Cached: the second call does no disk I/O and returns the same table.\nlocal A = linkiir.config.node()\nlocal B = linkiir.config.node()\nassert(rawequal(A, B))"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "linkiir.config.project",
+          "signature": "linkiir.config.project()",
+          "usage": "local Vars = linkiir.config.project()",
+          "summary": "Return the project's variables as a name → value table.",
+          "description": "Returns the variables from the project's Variables tab, keyed by name, with secret ones decrypted. Values are strings. A deployed node reads the project's variables as they are when it starts, so a changed variable takes effect when the node restarts; Run Test reads your own copy of the project. The table is cached after the first call.",
+          "returns": [
+            {
+              "name": "table",
+              "description": "flat map of variable name → value (string); empty when the project has no variables."
+            }
+          ],
+          "errors": {
+            "description": "Raises a Lua error when the project's variables cannot be read, or when a secret variable cannot be decrypted. The message says why: the grid's encryption key isn't available, the stored value isn't encrypted, or it was encrypted with a different key and has to be entered again on the project's Variables tab."
+          },
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Vars = linkiir.config.project()\n\nlocal Url = 'https://' .. Vars.api_host .. '/v1'\nlocal Token = Vars.api_token   -- a secret, decrypted"
+            },
+            {
+              "language": "lua",
+              "code": "-- Values are strings: convert the ones you need as numbers.\nlocal Vars = linkiir.config.project()\nlocal Port = tonumber(Vars.port) or 443"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "linkiir.config.resolve",
+          "signature": "linkiir.config.resolve(text)",
+          "usage": "local Url = linkiir.config.resolve(Text)",
+          "summary": "Fill in ${project:name} references in a string.",
+          "description": "Returns text with every ${project:name} reference replaced by that project variable's value, secret variables decrypted. Write $${ for a literal ${. Text like ${name}, with no namespace: before the name, is left exactly as written.",
+          "params": [
+            {
+              "name": "text",
+              "type": "string",
+              "required": true,
+              "description": "Text holding ${project:name} references."
+            }
+          ],
+          "returns": [
+            {
+              "name": "string",
+              "description": "the text with its references filled in."
+            }
+          ],
+          "errors": {
+            "description": "Raises a Lua error for an unknown project variable, a namespace other than project (for example ${env:HOME}), or a secret variable that cannot be decrypted."
+          },
+          "examples": [
+            {
+              "language": "lua",
+              "code": "local Url = linkiir.config.resolve('https://${project:api_host}:${project:port}/v1')\n-- \"https://api.internal.net:6661/v1\""
+            },
+            {
+              "language": "lua",
+              "code": "-- $${ keeps a literal ${ in the text.\nlocal Tpl = linkiir.config.resolve('$${patient} at ${project:site}')\n-- \"${patient} at Main Street\""
             }
           ]
         }

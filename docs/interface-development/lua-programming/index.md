@@ -145,6 +145,7 @@ Use the adapter to get an interface running with minimal edits, then move to the
 
 - Keep `main` short. It should read as a summary of what the node does.
 - Put reusable functions in separate `.lua` files and `require` them by bare name. Node-local files take priority, then the project's `common` directory.
+- Read hostnames, paths and credentials from node fields or [project variables](../../administration/configurations/project-settings.md#variables) (`linkiir.config.node()`, `linkiir.config.project()`) rather than writing them into the script, so promoting a project means editing values, not code.
 - Use a project library when you want a shared module versioned, so a node pins a published version instead of tracking every edit. See [Project Settings](../../administration/configurations/project-settings.md).
 - Avoid module-level mutable state. A Source HTTP node with **Worker Count** above `1` runs several script instances, each with its own copy.
 - Never hard-code credentials or endpoints; keep them in the project's **Variables** tab, with **Secret** ticked for passwords and keys.

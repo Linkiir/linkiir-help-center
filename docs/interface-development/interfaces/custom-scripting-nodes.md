@@ -14,6 +14,13 @@ There is no port, path, or interval — the node is driven entirely by the messa
 
 You can add your own fields to its configuration and read them from the script, which is the neat way to make a transform configurable without editing code. See [Interfaces and Core Nodes](index.md).
 
+```lua
+local Cfg = linkiir.config.node()          -- the node's fields, by label
+local Vars = linkiir.config.project()      -- the project's variables, by name
+```
+
+A field can hold a [project variable](index.md#using-project-variables-in-a-node), and `linkiir.config.node()` returns it with the variable's value filled in. See [Node Configuration](../../api/scripting-api/node-configuration.md).
+
 ## Entry point
 
 ```lua

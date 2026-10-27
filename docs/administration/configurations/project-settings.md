@@ -88,7 +88,7 @@ Auto start is a property of the workflow, so it travels with the project into an
 
 ## Variables
 
-> Project-level variables available to all workflows in this project.
+> Values shared by every workflow in this project. Use one in a node setting with the `{x}` button (it reads `${project:NAME}`), or in a script with `linkiir.config.project().NAME`. Nodes pick up a change when they restart.
 
 Use variables for the values that differ between environments: hostnames, directory paths, account identifiers, feature switches — and, with the **Secret** flag set, the passwords and keys those endpoints need.
 
@@ -97,13 +97,61 @@ Use variables for the values that differ between environments: hostnames, direct
 3. Set a **Label** and a **Value**.
 4. Click **Save**.
 
-The label is the name your scripts and node configuration refer to, so use a stable, readable form. The default text reads `VARIABLE_NAME`.
+### Naming a variable
+
+The label is the variable's name: node settings refer to it as `${project:LABEL}` and scripts as `linkiir.config.project().LABEL`. Pick a stable name, since renaming it means updating everything that uses it.
+
+A name can use letters, digits, `_`, `.` and `-`, and can't start with a digit, so `DEST_HOST`, `api.host` and `sftp-user` are all fine. Each name can be used only once in a project. The tab points out a name that breaks these rules, and **Save** stays unavailable until it's fixed.
+
+### Using a variable in a node
+
+In a node's **Configure** dialog, any field can take a project variable. See [Using project variables in a node](../../interface-development/interfaces/index.md#using-project-variables-in-a-node).
+
+- **Text fields** can mix a variable with other text, such as `https://${project:API_HOST}/v1`.
+- **Number, on/off and list fields** take a variable as their whole value.
+- The **Node Parameters** panel shows the variable's value, not the `${project:...}` text. Passwords still show as dots.
+
+### Using a variable in a script
+
+```lua
+local Vars = linkiir.config.project()     -- every variable by name
+local Host = Vars.API_HOST
+local Token = Vars.API_TOKEN               -- secrets come back decrypted
+
+local Url = linkiir.config.resolve('https://${project:API_HOST}/v1')
+```
+
+A node field that holds a reference reads as the variable's value through `linkiir.config.node()` too. See [Node Configuration](../../api/scripting-api/node-configuration.md).
+
+### When a change takes effect
+
+A running node reads the project's variables when it starts. After changing a variable, restart the nodes that use it. A node doesn't need a new commit or pin to pick up the change.
+
+**Run Test** and **Debug** on the Scripting page use your own copy of the project's variables, which is updated when the variables are saved.
+
+### Where a variable is used
+
+Each variable that node settings use shows a count, such as **2 uses**. Hover over it to see which workflow, node and field.
+
+If a save renames or removes a variable that nodes still use, or makes one secret while an ordinary field uses it, a **Variables in use** window lists those nodes before anything is saved. Choose **Keep editing** to go back, or **Save anyway** to save. Those nodes then refuse to start until their settings are changed.
 
 ### Secrets
 
 Each row has a **Secret** checkbox. This is where connection passwords and keys belong — there is no separate credentials tab. Ticking **Secret** masks the value in the UI and clears whatever was there, so you re-enter it deliberately, and the value is encrypted at rest rather than stored as plain text. Password-typed fields on a node's configuration are protected the same way.
 
-Reference a secret from node configuration and scripts by its label. Never paste a password into a Lua file: the file is committed to the project's history and travels in an export.
+A secret variable can be used only in a node's **password** fields, and in scripts. An ordinary field can't use one, because ordinary values can appear in logs. The `{x}` button offers secrets only on password fields, and a node that uses one elsewhere won't save. Never paste a password into a Lua file: the file is committed to the project's history and travels in an export.
+
+If a secret can't be read, the node or script says why:
+
+| Message ends with | What to do |
+| --- | --- |
+| …was encrypted with a different key than the grid's encryption key | Re-enter the value on this tab. It was saved by another installation, or before this grid's key changed. |
+| …should be encrypted, but its stored value isn't | Re-enter the value on this tab. |
+| …is encrypted, but the grid's encryption key isn't available here | Re-entering won't help. The grid was started without its encryption key; contact your administrator. |
+
+:::note
+Renaming a secret keeps its stored value as it was. If a secret already couldn't be read, re-enter it as well as renaming it.
+:::
 
 :::caution[Secrets do not survive a move to another installation]
 Secrets leave in their encrypted form, and only the installation that encrypted them can read them back. Import the bundle somewhere else and every secret arrives unreadable — the labels are intact, the values are not usable. Re-enter them on the target before starting anything.

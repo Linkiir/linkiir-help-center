@@ -93,6 +93,8 @@ An adapter built on one of these node types shows that type's icon. Any other no
 
 Click a node on the canvas to open **Node Parameters** on the right. The panel shows the node's name and type, then one card for each tab of the node's **Configure** dialog, in the same order. Every node is set up in that dialog. Nothing in the panel is edited in place, and the panel has no **Edit** button.
 
+A field that uses a [project variable](#using-project-variables-in-a-node) shows the variable's value, and passwords show as dots. If a variable can't be found, the field shows its `${project:...}` text highlighted, and hovering over it says why.
+
 The buttons stay at the bottom of the panel while the cards scroll:
 
 - **Configure** opens the dialog on its first tab. **Configure** in a node's right-click menu on the canvas does the same.
@@ -140,6 +142,34 @@ On a catalog adapter, choosing a version and **Update** apply as soon as you cho
 **Unlink** waits for **Save**. Clicking it marks the node to be unlinked, and the button changes to **Keep linked** in case you change your mind. Unlinking leaves the node's files as they are and makes them yours to change.
 
 **Payload Encryption** reaches a running node when it next restarts.
+
+### Using project variables in a node
+
+Any field in the **Configure** dialog can take one of the project's [variables](../../administration/configurations/project-settings.md#variables) instead of a typed value. Use them for values that change between environments, so the project is repointed by editing its **Variables** tab rather than node by node.
+
+1. Click the `{x}` button at the end of the field.
+2. Pick a variable. Each one shows its value; a secret shows **Secret**.
+
+What the field holds afterwards depends on the field:
+
+- **Text and path fields** get `${project:NAME}` at the cursor, so it can sit inside other text: `https://${project:API_HOST}/v1`. A line under the field shows what the text comes to.
+- **Number, on/off and list fields** show the variable in place of their control, with its value. Click **×** to go back to a normal value.
+- **Password fields** take the variable as their whole value, and a line under the field says which variable they use. Only password fields offer secret variables.
+
+You can also type `${project:NAME}` yourself. To keep a literal `${` in a value, write `$${`. Text such as `${name}`, with no `project:`, is left as it is.
+
+The dialog checks every reference:
+
+- A line under the field warns about a variable that doesn't exist, or a secret in a field that isn't a password field.
+- **Save** refuses the dialog while a reference is wrong and names the field.
+- A node whose variable has since been deleted refuses to start, and its error names the field and variable.
+
+Two kinds of field don't offer variables:
+
+- A field that other fields depend on, such as a Database node's **Database**. Which fields appear depends on its value as written, so a variable there would hide the fields it controls.
+- The switches on the **Advanced** tab.
+
+The node reads the variables when it starts, so after changing a variable, restart the nodes that use it.
 
 ### Who can change what
 

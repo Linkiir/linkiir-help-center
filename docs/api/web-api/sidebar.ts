@@ -84,6 +84,12 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "api/web-api/get-project-variables-api-get-project-variables-guid-get",
+          label: "Get project variables and where they are used",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
           id: "api/web-api/update-project-git-config-api-update-project-git-config-guid-put",
           label: "Update project git remote",
           className: "api-method put",

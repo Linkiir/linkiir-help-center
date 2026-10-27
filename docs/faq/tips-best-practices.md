@@ -54,9 +54,9 @@ Practices worth adopting early, when they cost nothing, rather than after an inc
 
 **Make delivery idempotent.** Delivery is at-least-once. Deduplicate on message control ID, use unique file naming, or send an idempotency key — decided before go-live, not after.
 
-**Keep secrets out of scripts.** Put them in the project's **Variables** tab with the **Secret** flag set, and reference them by name. A value in a `.lua` file is committed to the project's history.
+**Keep secrets out of scripts.** Put them in the project's **Variables** tab with the **Secret** flag set, and reference them by name: `${project:NAME}` in a node's password field, `linkiir.config.project().NAME` in a script. A value in a `.lua` file is committed to the project's history. See [Variables](../administration/configurations/project-settings.md#variables).
 
-**Make environment-specific values project variables.** Hostnames, directories, and account identifiers in the **Variables** tab are repointed in one place when you promote a project. The same values typed into every node are edited node by node.
+**Make environment-specific values project variables.** Hostnames, directories, and account identifiers in the **Variables** tab are repointed in one place when you promote a project. The same values typed into every node are edited node by node. Pick one into a node's field with the field's `{x}` button, and restart the node after changing it.
 
 ## Operations
 

@@ -125,6 +125,16 @@ Export a bundle from the project's **Git** tab with **Export project**. Import o
 
 See [Import and Export](../administration/deployment/import-export.md).
 
+## How do I use a project variable in a node or a script?
+
+In a node's **Configure** dialog, click the `{x}` button at the end of a field and pick the variable. The field then holds `${project:NAME}`, and the node gets the variable's value when it starts. In a script, `linkiir.config.project().NAME` returns the value, and `linkiir.config.node()` returns node fields with their variables already filled in.
+
+A secret variable can only go in a password field. After changing a variable, restart the nodes that use it. See [Variables](../administration/configurations/project-settings.md#variables).
+
+## Why does my node say a variable "was encrypted with a different key"?
+
+The secret was saved by another installation, or before this grid's encryption key changed, so this grid can't read it. Open the project's **Variables** tab and type the value in again. Renaming the variable doesn't fix it: a renamed secret keeps its old stored value.
+
 ## Do exported projects contain secrets?
 
 Not usably, on another installation. A project variable marked **Secret** — and a password-typed node field — is stored encrypted, and the export carries it that way. Only the installation that encrypted it can read it back, so importing elsewhere leaves the labels intact and the values unreadable.

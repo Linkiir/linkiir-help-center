@@ -148,7 +148,7 @@ Unlike a zip import, a remote import never regenerates identifiers — it has to
 
 Work through these before you start anything.
 
-1. **Re-enter secrets.** Open the project's **Variables** tab. Every variable marked **Secret** arrived encrypted under the source installation's key and is unusable here. The names tell you what is needed.
+1. **Re-enter secrets.** Open the project's **Variables** tab. Every variable marked **Secret** arrived encrypted under the source installation's key and is unusable here. The names tell you what is needed. A node or script that uses one before it is re-entered fails with a message ending "was encrypted with a different key than the grid's encryption key".
 2. **Check project variables.** The **Variables** tab travelled with its values. Anything environment-specific — hostnames, paths, account identifiers — needs repointing at this environment.
 3. **Repoint node configuration.** Source and destination nodes carry the source environment's directories, hosts, and ports. A destination LLP node imported from DEV still names the DEV receiver.
 4. **Connect a remote, if you want one.** A bundle import is local-only. Set it up in the **Git** tab.
