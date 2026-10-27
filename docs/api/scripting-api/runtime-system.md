@@ -128,7 +128,7 @@ local Root = linkiir.sys.workingDir()
 print('working dir: ' .. Root)
 
 -- Rarely needed: a relative path already resolves here.
-local DB = linkiir.store.open{ driver = linkiir.store.SQLITE, name = 'demo/patient.db' }
+local DB = linkiir.store.open{ driver = linkiir.store.SQLITE, name = 'demo/patient.db', live = true }
 ```
 
 

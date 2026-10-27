@@ -3405,7 +3405,7 @@
               "name": "live",
               "type": "boolean",
               "required": false,
-              "description": "Default true."
+              "description": "Default false: the connection is simulated (closed) and never reaches the database. Pass true to connect."
             }
           ],
           "returns": [
@@ -3428,7 +3428,7 @@
           "examples": [
             {
               "language": "lua",
-              "code": "local Conn, Err = linkiir.store.open{ driver = linkiir.store.POSTGRES_ODBC, name = 'clinicdb',\n                               user = 'svc', password = Secret }\nif not Conn then error(Err.message) end"
+              "code": "local Conn, Err = linkiir.store.open{ driver = linkiir.store.POSTGRES_ODBC, name = 'clinicdb',\n                               user = 'svc', password = Secret, live = true }\nif not Conn then error(Err.message) end"
             }
           ]
         },
@@ -3804,7 +3804,7 @@
           "examples": [
             {
               "language": "lua",
-              "code": "local Rows, Err = Conn:query{ sql = 'select id from patient' }\nif not Rows and not Conn:check() then\n   -- The connection is gone: open a new one and try again.\n   Conn = linkiir.store.open{ driver = linkiir.store.POSTGRES_ODBC, name = 'clinicdb', timeout = 10 }\n   Rows, Err = Conn:query{ sql = 'select id from patient' }\nend"
+              "code": "local Rows, Err = Conn:query{ sql = 'select id from patient' }\nif not Rows and not Conn:check() then\n   -- The connection is gone: open a new one and try again.\n   Conn = linkiir.store.open{ driver = linkiir.store.POSTGRES_ODBC, name = 'clinicdb', timeout = 10, live = true }\n   Rows, Err = Conn:query{ sql = 'select id from patient' }\nend"
             }
           ]
         },
@@ -5307,7 +5307,7 @@
           "examples": [
             {
               "language": "lua",
-              "code": "local Root = linkiir.sys.workingDir()\nprint('working dir: ' .. Root)\n\n-- Rarely needed: a relative path already resolves here.\nlocal DB = linkiir.store.open{ driver = linkiir.store.SQLITE, name = 'demo/patient.db' }"
+              "code": "local Root = linkiir.sys.workingDir()\nprint('working dir: ' .. Root)\n\n-- Rarely needed: a relative path already resolves here.\nlocal DB = linkiir.store.open{ driver = linkiir.store.SQLITE, name = 'demo/patient.db', live = true }"
             }
           ]
         },

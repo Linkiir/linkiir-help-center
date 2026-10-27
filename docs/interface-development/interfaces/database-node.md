@@ -108,7 +108,7 @@ end
 1. Drag **Database** from **Destination** in the palette, connect the node that sends it rows, and **Save** the canvas. The dialog can't open until the node exists.
 2. Select the node and click **Configure** in **Node Parameters**.
 3. On **Connection**, fill in the database and click **Test connection**.
-4. On **Tables**, add the tables the node writes. Then click **Check tables**, and create any tables the database doesn't have yet.
+4. On **Tables**, add the tables the node writes: import them from the database, copy them from the node that sends to this one, or build them in the Schema Editor. Then click **Check tables**, and create any tables the database doesn't have yet.
 5. On **Behaviour**, choose how rows are written.
 6. Click **Save**, then start the node.
 
@@ -180,15 +180,16 @@ The schema is the node's own copy. Copying tables from another node doesn't link
 
 | To | Use |
 | --- | --- |
-| Copy tables from a node that sends to this one | **Add from an upstream node**. It lists the tables of every node upstream that holds a database schema, such as a Data Map's destination. Tick the tables and **Copy**. A table the node already has is marked **Already in this node**. |
-| Build or change tables by hand, or read them from the database | **Edit schema**, or **Create schema** when there are none. It opens the Schema Editor on the Scripting page. **Import** there reads tables from the database with this node's connection. |
+| Read tables from the database the node writes to | **Import tables from the database**. It lists the database's tables, using the settings on **Connection** as they are in the dialog. Tick the tables and **Import**: each table's columns, types and primary key are read into the node's schema. A table the node already has is marked **Already in this node** and skipped, unless you tick **Overwrite**. Nothing is saved until you click **Save**. |
+| Copy tables from a node that sends to this one | **Add table from upstream node**. It lists the tables of every node upstream that holds a database schema, such as a Data Map's destination. Tick the tables and **Copy**. A table the node already has is marked **Already in this node**. |
+| Build or change tables by hand | **Edit schema**, or **Create schema** when there are none. It opens the Schema Editor on the Scripting page, which can also import tables from the database with this node's connection. |
 | Use a schema file you already have | **Upload schema**, or **Replace schema** when the node has tables. The file must be a DB Schema (`"protocol": "db"`). |
 | Keep a copy | **Download schema**. |
 | Stop writing a table | The remove button on its row. This removes it from the node's tables only. The table in the database is left as it is. |
 
 ### Which database a schema is for
 
-A DB Schema is for one database, or for **Any database**. The node refuses to start when its schema is for a different database than **Database** says. Tables can't be copied between schemas for different databases, except into a node that has no tables yet, which takes the copied schema's database.
+A DB Schema is for one database, or for **Any database**. The node refuses to start when its schema is for a different database than **Database** says. Tables can't be copied between schemas for different databases, except into a node that has no tables yet, which takes the copied schema's database. Importing tables from the database into a node that has no tables yet sets its schema to the node's **Database**, so table and column names keep their case and types are the database's own. A schema for **Any database** holds names in lower case and types in their general form (VARCHAR, INTEGER, TIMESTAMP).
 
 ### Primary keys
 

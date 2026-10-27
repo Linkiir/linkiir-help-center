@@ -136,7 +136,7 @@ The tab works as on the [Database destination](database-node.md#tables-tab): **C
 
 The differences:
 
-- **Import tables from the database** lists the database's tables with this node's connection. Tick the ones to read; **Import** reads each table's columns, types and primary key into the node's schema. A table the node already has is skipped unless you tick **Overwrite**. Nothing is saved until you press **Save**.
+- **Import tables from the database** lists the database's tables with this node's connection. Tick the ones to read; **Import** reads each table's columns, types and primary key into the node's schema. A table the node already has is skipped unless you tick **Overwrite**. Into a node with no tables yet, the import sets the schema to the node's **Database**, so names keep the database's case; the tables a record is sent as are named as the schema names them. Nothing is saved until you press **Save**.
 - **Add table from downstream node** takes the place of adding tables from an upstream node, since a source has none. It offers the tables already described by the nodes this one sends to, for example a Data Map's `source.json` that reads database rows, or a Database destination's `schema.json`. Connect the node to them first. Tick the tables to copy; the node gets its own copy, so a later change downstream needs copying again. A table the node already has is skipped unless you tick **Overwrite**.
 - The status table is badged **Status table**, and each other table shows its link column, or **No link column**.
 - **Check tables** also says when the node would not start with the settings and tables in the dialog, in the node's own words, for example when the identifier column isn't the status table's primary key in `schema.json`.

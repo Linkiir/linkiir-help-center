@@ -35,7 +35,7 @@ local conn, err = linkiir.store.open{ driver=, name=, user=, password=, timeout=
 | `user` | string | No | Username. For the ODBC drivers it is added to the connection string as UID unless the string already sets UID. |
 | `password` | string | No | Password. For the ODBC drivers it is added to the connection string as PWD unless the string already sets PWD. |
 | `timeout` | integer | No | Seconds connecting may take before it fails; 0 or none keeps the driver's default (15 seconds for SQL Server's ODBC driver). MySQL and MariaDB apply it as MYSQL_OPT_CONNECT_TIMEOUT, the ODBC drivers as the login timeout, and Oracle (OCI) adds connect_timeout to an Easy Connect name or CONNECT_TIMEOUT to a connect descriptor; a tnsnames alias keeps the timeout its own entry sets. SQLite opens a local file and has none. A negative value is an error. |
-| `live` | boolean | No | Default true. |
+| `live` | boolean | No | Default false: the connection is simulated (closed) and never reaches the database. Pass true to connect. |
 
 **Returns**
 
@@ -52,7 +52,7 @@ Codes: `DRIVER_NOT_FOUND`, `AUTH_FAILED`, `CONNECT_FAILED`, `TIMEOUT`
 
 ```lua
 local Conn, Err = linkiir.store.open{ driver = linkiir.store.POSTGRES_ODBC, name = 'clinicdb',
-                               user = 'svc', password = Secret }
+                               user = 'svc', password = Secret, live = true }
 if not Conn then error(Err.message) end
 ```
 
@@ -575,7 +575,7 @@ local alive = conn:check()
 local Rows, Err = Conn:query{ sql = 'select id from patient' }
 if not Rows and not Conn:check() then
    -- The connection is gone: open a new one and try again.
-   Conn = linkiir.store.open{ driver = linkiir.store.POSTGRES_ODBC, name = 'clinicdb', timeout = 10 }
+   Conn = linkiir.store.open{ driver = linkiir.store.POSTGRES_ODBC, name = 'clinicdb', timeout = 10, live = true }
    Rows, Err = Conn:query{ sql = 'select id from patient' }
 end
 ```
