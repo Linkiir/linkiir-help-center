@@ -1,7 +1,7 @@
 ---
 title: Building a Map
 description: Use the Data Map node's Map view to link source fields to destination fields, convert and normalize values, fill fixed values, add custom Lua, change the schemas, move maps between nodes, and commit.
-keywords: [data map, map view, auto-map, rules, functions, code map, normalize, date format, custom Lua, custom.lua, fixed value, export map, import map, undo, commit]
+keywords: [data map, map view, auto-map, rules, functions, code map, normalize, date format, custom Lua, custom.lua, fixed value, narrative, export map, import map, undo, commit]
 ---
 
 # Building a Map
@@ -151,13 +151,27 @@ Right-click a destination field and choose **Set value** to fill it without a so
 | **Current date/time** | The time the message is mapped, in a format you choose, optionally shifted (`-1d`, `+2h`, `+30min`, `+1mo`, `-1y`) |
 | **New UUID** | A new random UUID per message |
 | **New control ID** | A new unique ID, such as for MSH-10 (HL7 and X12 destinations) |
+| **Narrative** | A FHIR resource's `text`: a readable summary of what the map wrote into the resource (FHIR destinations) |
 | **Custom Lua** | Whatever your function returns |
+
+### Narrative
+
+FHIR expects each resource to carry a `text` that a person can read, and validators warn when it is missing (`dom-6`). Right-click a resource's `text` and choose **Set value > Narrative** to fill it. Narrative is offered only on `text`, and there only it and **Custom Lua** are.
+
+The narrative is built after the resource's other rules, from what they wrote, so it never says more than the resource holds. Each element is a line, such as **Birth date**: 1980-01-01, with names, addresses and coded values written out in words. The map fills both parts of `text`:
+
+- `status` is `generated`, or `extensions` when an extension is shown.
+- `div` is the summary as XHTML, in the namespace FHIR requires.
+
+Under **Show**, tick the elements to include. With none ticked, every element that has a value is shown.
 
 ---
 
 ## Auto-map
 
 **Auto-map** in the toolbar adds the standard mappings for the segments, resources or loops in the map. Its badge counts how many it can add. For example, ADT^A01 to FHIR maps PID into a `Patient` and PV1 into an `Encounter`, and fills MSH-7, MSH-9 and MSH-10 when building HL7.
+
+When building FHIR, Auto-map also gives each resource it maps into a [Narrative](#narrative), unless something already fills that resource's `text`.
 
 Auto-map only adds rules, and never changes or removes one you made. Review what it adds as you would your own: it maps the standard meaning of a field, and your trading partner may use that field differently.
 
