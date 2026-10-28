@@ -11,14 +11,14 @@ Linkiir ships ready-to-run demo projects you import as a zip bundle. Each one is
 | Demo | What you learn | Import bundle |
 | --- | --- | --- |
 | [Feature Demo](demo-feature.md) | The core nodes end to end: generate HL7, move it over LLP, store it in SQLite, and serve it back as a JSON API | `Linkiir_Demo.linkiir.zip` |
-| [HL7 v2 to FHIR Demo](demo-hl7v2-fhir.md) | Converting HL7 v2 to FHIR and back, FHIR profiling, FHIR validation, and reading from and writing to a FHIR server — with the mapping in readable Lua modules | `FHIR_Demo.linkiir.zip` |
+| [HL7 v2 to FHIR Demo](demo-hl7v2-fhir.md) | Building an HL7 v2 to FHIR map with the graphical Data Map node, FHIR validation, reading from and writing to a FHIR server, and a FHIR to HL7 v2 mapping written in Lua | `FHIR_Demo.linkiir.zip` |
 
 Both import the same way (**Projects → Add Project → From zip**) and run against a local grid with no extra setup.
 
 ## Which to start with
 
 - New to Linkiir? Start with the **[Feature Demo](demo-feature.md)** — it introduces projects, workflows, and the core node types with a self-contained round trip.
-- Working with healthcare interoperability? The **[HL7 v2 to FHIR Demo](demo-hl7v2-fhir.md)** shows the FHIR adapter catalog in action: profiling, validation, a live FHIR server connection, and HL7 v2 ↔ FHIR mapping you can read and edit.
+- Working with healthcare interoperability? The **[HL7 v2 to FHIR Demo](demo-hl7v2-fhir.md)** walks you through building an HL7 v2 to FHIR map with the Data Map node, then shows the FHIR adapter catalog in action: validation, a live FHIR server connection, and a FHIR to HL7 v2 mapping in Lua.
 
 ## Where to go next
 
