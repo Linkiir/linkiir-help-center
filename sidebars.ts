@@ -231,7 +231,7 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category', label: 'FAQ', link: {type: 'doc', id: 'faq/index'},
-      items: ['faq/common-questions', 'faq/tips-best-practices'],
+      items: ['faq/common-questions', 'faq/tips-best-practices', 'faq/hl7-changes-1-2-0'],
     },
     {
       type: 'category', label: 'Support', link: {type: 'doc', id: 'support/index'},

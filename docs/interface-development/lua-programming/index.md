@@ -156,4 +156,5 @@ Use the adapter to get an interface running with minimal edits, then move to the
 
 - [Linkiir Scripting API](../../api/scripting-api/index.md) — signatures and examples.
 - [Testing and Debugging Lua](testing-debugging.md) — Run Test, Debug, and samples.
+- [HL7 v2 Changes in 1.2.0](../../faq/hl7-changes-1-2-0.md) — updating HL7 v2 scripts written for Grid 1.1.0.
 - [Sample Code](../sample-code/index.md) — complete working interfaces.
