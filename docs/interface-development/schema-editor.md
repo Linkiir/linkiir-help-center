@@ -95,6 +95,18 @@ Database, JSON and XML schemas have no messages and no matching rules. A script 
 
 ---
 
+## How an HL7 v2 schema shapes the message
+
+A script or Data Map reads an HL7 v2 message as a tree, and the schema decides its shape:
+
+- **Rep** on a segment's field: a field that repeats holds its repetitions, each holding components (`PID[3][1][1]`). A field without **Rep** holds its components directly (`MSH[9][2]`).
+- A message definition's **Group** rows: when a message fits the definition, each segment sits in its group, so a script reaches it through the group (`Msg.PATIENT_RESULT.PATIENT.PID`).
+- **Max** on a segment or group row: one that can repeat, read by name, gives its occurrences (`Msg.NK1[2]` is the second NK1).
+
+Changing these changes the paths a script uses for the messages this schema reads. See [HL7 v2 trees](../api/scripting-api/message-data.md#hl7-v2-trees).
+
+---
+
 ## Database tables
 
 A **DB Schema** describes tables: each column's name, type and size, whether it is part of the key, and whether it can be null. **Database** at the top of the left panel picks the dialect, which sets the column types on offer: **SQL Server**, **PostgreSQL**, **Oracle**, **SQLite**, or **Any database** for a table that has to work in all four. Under **Any database**, **In each database** shows what each column becomes in each one.

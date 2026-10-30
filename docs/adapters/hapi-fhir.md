@@ -69,7 +69,11 @@ resources.
 | **FHIR Base URL** | `https://hapi.fhir.org/baseR4` | The FHIR base URL, with no trailing resource path. For OmniVera, the endpoint Smile supplied for your deployment and tenant. |
 | **FHIR Version** | `FHIR R4 (4.0.1)` | `FHIR R4 (4.0.1)` or `FHIR R5 (5.0.0)`. Sent as the `fhirVersion` parameter on the `Accept` header. |
 | **Verify TLS** | on | Verify the server's certificate. Leave on; turn it off only for a local test server with a self-signed certificate. |
-| **Live Mode** | on | When off, requests are prepared and logged but never sent. |
+| **Live Mode** | on | When off, requests are prepared and logged but never sent, in Run Test and in a running node. |
+
+:::warning[Live Mode needs 1.1.0 on Grid 1.2.0 and later]
+From Grid 1.2.0, a running node makes every request whatever `live` says. Version 1.1.0 of this adapter checks Live Mode itself, so turning it off still stops the requests. A node built from an earlier version sends them even with Live Mode off: update it to 1.1.0 from **Settings → Catalogs**.
+:::
 
 :::note[FHIR Version is advisory]
 FHIR defines a `fhirVersion` parameter on the JSON media type for servers hosting

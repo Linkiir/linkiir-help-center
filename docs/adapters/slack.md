@@ -59,8 +59,12 @@ Enter the token in the **API Token** field, which is masked and encrypted in the
 | **API Token** | password | *(empty)* | Slack Bot User OAuth Token |
 | **Channel ID** | string | *(empty)* | Target channel identifier |
 | **Mention Email** | string | *(empty)* | Email resolved to a user mention on the post. Leave empty for no mention |
-| **Live Mode** | bool | `true` | When off, nothing is sent to Slack |
+| **Live Mode** | bool | `true` | When off, nothing is sent to Slack, in Run Test and in a running node |
 | **Verify TLS** | bool | `true` | Verify Slack's TLS certificate |
+
+:::warning[Live Mode needs 1.1.0 on Grid 1.2.0 and later]
+From Grid 1.2.0, a running node makes every request whatever `live` says. Version 1.1.0 of this adapter checks Live Mode itself, so turning it off still stops the requests. A node built from an earlier version sends them even with Live Mode off: update it to 1.1.0 from **Settings → Catalogs**.
+:::
 
 ## Verify it worked
 

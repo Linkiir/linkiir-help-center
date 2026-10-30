@@ -35,7 +35,7 @@ local conn, err = linkiir.store.open{ driver=, name=, user=, password=, timeout=
 | `user` | string | No | Username. For the ODBC drivers it is added to the connection string as UID unless the string already sets UID. |
 | `password` | string | No | Password. For the ODBC drivers it is added to the connection string as PWD unless the string already sets PWD. |
 | `timeout` | integer | No | Seconds connecting may take before it fails; 0 or none keeps the driver's default (15 seconds for SQL Server's ODBC driver). MySQL and MariaDB apply it as MYSQL_OPT_CONNECT_TIMEOUT, the ODBC drivers as the login timeout, and Oracle (OCI) adds connect_timeout to an Easy Connect name or CONNECT_TIMEOUT to a connect descriptor; a tnsnames alias keeps the timeout its own entry sets. SQLite opens a local file and has none. A negative value is an error. |
-| `live` | boolean | No | Default false: the connection is simulated (closed) and never reaches the database. Pass true to connect. |
+| `live` | boolean | No | Default false. In the editor (Run Test and Debug), it only connects with live = true; otherwise it gives a simulated connection that never reaches the database. A running node always connects. |
 
 **Returns**
 
@@ -52,7 +52,7 @@ Codes: `DRIVER_NOT_FOUND`, `AUTH_FAILED`, `CONNECT_FAILED`, `TIMEOUT`
 
 ```lua
 local Conn, Err = linkiir.store.open{ driver = linkiir.store.POSTGRES_ODBC, name = 'clinicdb',
-                               user = 'svc', password = Secret, live = true }
+                               user = 'svc', password = Secret }
 if not Conn then error(Err.message) end
 ```
 
@@ -433,7 +433,7 @@ local n, err = conn:merge{ data=<tableTree>, key='id' }
 | --- | --- | --- | --- |
 | `data` | node | Yes | A linkiir.store.tables node tree. |
 | `key` | string\|table\|false | No | Column name, or list of column names, to match existing rows on. Omit for plain inserts, or for a schema-built table to use the schema's primary key; false for plain inserts into a schema-built table. |
-| `live` | boolean | No | Default true; false simulates. |
+| `live` | boolean | No | Default false. In the editor (Run Test and Debug), it only writes with live = true; otherwise it returns 0. A running node always writes. |
 
 **Returns**
 
@@ -575,7 +575,7 @@ local alive = conn:check()
 local Rows, Err = Conn:query{ sql = 'select id from patient' }
 if not Rows and not Conn:check() then
    -- The connection is gone: open a new one and try again.
-   Conn = linkiir.store.open{ driver = linkiir.store.POSTGRES_ODBC, name = 'clinicdb', timeout = 10, live = true }
+   Conn = linkiir.store.open{ driver = linkiir.store.POSTGRES_ODBC, name = 'clinicdb', timeout = 10 }
    Rows, Err = Conn:query{ sql = 'select id from patient' }
 end
 ```
@@ -591,7 +591,7 @@ conn:quote(s)
 
 Quote a string as a SQL literal for the driver in use.
 
-Quotes a string as a SQL literal for the driver in use, as N'...' on SQL Server. Use it on every value that came from a message, a variable or user input.
+Quote a string as a SQL literal for the driver in use: wrapped in single quotes with embedded quotes doubled. On SQL Server the literal is N'...' so text outside the database's code page is kept.
 
 **Usage**
 
@@ -612,8 +612,7 @@ local q = conn:quote(s)
 **Example**
 
 ```lua
-local Sql = 'select id from patient where mrn = ' .. Conn:quote(Mrn)
-local Rows, Err = Conn:query{ sql = Sql }
+local Escaped = Conn:quote(UserInput)  -- prefer params= over this when possible
 ```
 
 

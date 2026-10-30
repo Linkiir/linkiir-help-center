@@ -24,7 +24,7 @@ Tools for building and testing interfaces, rather than adapters to an external s
 
 | Adapter | Current version | Node type id | Changelog |
 | --- | --- | --- | --- |
-| [Data Simulator](../adapters/data-simulator.md) | **1.0.0** | `LKTOOL_DATA_SIMULATOR` | [history](#data-simulator) |
+| [Data Simulator](../adapters/data-simulator.md) | **1.0.1** | `LKTOOL_DATA_SIMULATOR` | [history](#data-simulator) |
 
 ### Libraries
 
@@ -40,7 +40,14 @@ Open the node in the Builder: the adapter version it was built from is shown on 
 
 ### Data Simulator
 
-`LKTOOL_DATA_SIMULATOR` · current **1.0.0** · [configuration](../adapters/data-simulator.md)
+`LKTOOL_DATA_SIMULATOR` · current **1.0.1** · [configuration](../adapters/data-simulator.md)
+
+#### 1.0.1
+
+_Released 2026-10-29_
+
+- **Live Mode** off now queues nothing in a running node, not only in Run Test. From Grid 1.2.0 a running node pushes every message whatever `live` says, so 1.0.0 queues them even with Live Mode off.
+- Requires Grid 1.2.0 or later.
 
 #### 1.0.0
 

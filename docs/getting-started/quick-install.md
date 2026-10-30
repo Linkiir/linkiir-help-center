@@ -219,6 +219,21 @@ The endpoint always returns HTTP 200. The `status` field carries the verdict:
 
 If `degraded` persists, read `checks.runtime.detail` and `checks.archiver.detail` in the response — each names its own reason.
 
+### Docker container health
+
+On Docker, the container's own health status (`docker ps`, `docker inspect`) checks two things every 30 seconds:
+
+- the Grid's `/api/health`, with `healthy` and `degraded` both passing;
+- the HTTP listener that Source HTTP nodes share (port 8081, or the port set under **Settings > Infrastructure > Http Server**). Any HTTP reply passes, including the `404` it gives a request that matches no node's route. No reply within 3 seconds fails.
+
+After three failures in a row the container is marked `unhealthy`. To see which check failed:
+
+```bash
+docker inspect -f '{{range .State.Health.Log}}{{.Output}}{{end}}' <container>
+```
+
+Docker only marks the container `unhealthy`; it does not restart it. To restart automatically, use a tool that acts on container health (for example an orchestrator or an autoheal container), or a load-balancer monitor.
+
 ---
 
 ## Back up the encryption key now

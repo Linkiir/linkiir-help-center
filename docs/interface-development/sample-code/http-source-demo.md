@@ -156,7 +156,7 @@ For `Normalise`, add a sample containing just the JSON body:
 {"patientId":"TEST-1001","status":"active"}
 ```
 
-Click **Run Test** on each and confirm the console output and final variables. `linkiir.flow.push` is non-live during a test, so nothing is produced. See [Testing and Debugging Lua](../lua-programming/testing-debugging.md).
+Click **Run Test** on each and confirm the console output and final variables. `linkiir.flow.push` is simulated during a test, so nothing is produced. See [Testing and Debugging Lua](../lua-programming/testing-debugging.md).
 
 ---
 

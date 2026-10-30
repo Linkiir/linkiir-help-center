@@ -58,7 +58,7 @@ Administration-tier **Manage catalogs** permission. See
 
 | Tool | Node type | Trigger | Version | Node type id | Documentation |
 | --- | --- | --- | --- | --- | --- |
-| [Data Simulator](../data-simulator.md) | source | interval | 1.0.0 | `LKTOOL_DATA_SIMULATOR` | see page |
+| [Data Simulator](../data-simulator.md) | source | interval | 1.0.1 | `LKTOOL_DATA_SIMULATOR` | see page |
 
 ### Data Simulator
 

@@ -159,7 +159,11 @@ Dexcom Read: pushed 12 reading(s) for 2026-09-03T10:00:00 .. 2026-09-03T11:00:00
 | **Token Store Path** | string | *(empty)* | File holding the authorization, relative to the working directory |
 | **Request Timeout** | number | `20` | Seconds to wait for Dexcom |
 | **Verify TLS** | bool | `true` | Leave on |
-| **Live Mode** | bool | `false` | When off, nothing is sent to Dexcom |
+| **Live Mode** | bool | `false` | When off, nothing is sent to Dexcom, in Run Test and in a running node |
+
+:::warning[Live Mode needs 1.1.0 on Grid 1.2.0 and later]
+From Grid 1.2.0, a running node makes every request whatever `live` says. Version 1.1.0 of these adapters checks Live Mode itself, so turning it off still stops the requests. A node built from an earlier version sends them even with Live Mode off: update it to 1.1.0 from **Settings → Catalogs**.
+:::
 
 ### Dexcom Read EGV (Source Custom)
 
@@ -175,7 +179,7 @@ Dexcom Read: pushed 12 reading(s) for 2026-09-03T10:00:00 .. 2026-09-03T11:00:00
 | **Token Store Path** | string | *(empty)* | **Must match the Authorize node** |
 | **Request Timeout** | number | `20` | Seconds to wait for Dexcom |
 | **Verify TLS** | bool | `true` | Leave on |
-| **Live Mode** | bool | `false` | When off, nothing is sent to Dexcom |
+| **Live Mode** | bool | `false` | When off, nothing is sent to Dexcom, in Run Test and in a running node |
 
 :::note[Overlapping windows are expected]
 Consecutive reads overlap, so the same reading can arrive more than once. That is deliberate: it means a late-arriving value is not missed. De-duplicating is the consuming workflow's job, because only it knows what has already been acted on.
@@ -192,7 +196,7 @@ The adapter arrives as two node templates plus the library behind them. See [How
 
 | Library | Version | Used by |
 | --- | --- | --- |
-| `dexcom_cgm` | 1.0.0 | Both templates, already linked |
+| `dexcom_cgm` | 1.1.0 | Both templates, already linked |
 
 ### Add another instance
 

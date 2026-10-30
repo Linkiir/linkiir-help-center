@@ -35,7 +35,7 @@ linkiir.flow.push{ data = <string> [, topic=] [, metadata=] [, live=] }   -- or 
 | `data` | string | Yes | Message payload. |
 | `topic` | string | No | Target topic/node; defaults to the configured destination. |
 | `metadata` | table | No | Key/value headers stored with the message. |
-| `live` | boolean | No | Default true; false simulates (test mode). |
+| `live` | boolean | No | Default false. In the editor (Run Test and Debug), messages are never sent on. A running node always sends them. |
 
 **Returns**
 
@@ -59,24 +59,23 @@ local MessageId = linkiir.flow.push{ data = Out:text(), topic = 'adt.out' }
 *function*
 
 ```lua
-linkiir.flow.configure{ bootstrap=, project=, workflow=, node=, topic= }
+linkiir.flow.configure{ project=, workflow=, node=, topic= }
 ```
 
-Configure the flow context (node identity and Kafka settings).
+Configure the flow context node identity.
 
-Sets the flow context's node identity and Kafka settings; empty fields keep their current value. The context is also read from the LINKIIR_* environment variables.
+Sets the flow context's node identity (project/workflow/node/topic); empty fields keep their current value. The context is also read from the LINKIIR_* environment variables.
 
 **Usage**
 
 ```lua
-linkiir.flow.configure{ project = <string> [, workflow=] [, node=] [, bootstrap=] [, topic=] }
+linkiir.flow.configure{ project = <string> [, workflow=] [, node=] [, topic=] }
 ```
 
 **Parameters**
 
 | Name | Type | Required | Description |
 | --- | --- | --- | --- |
-| `bootstrap` | string | No | Kafka bootstrap servers. |
 | `project` | string | No | Project ID. |
 | `workflow` | string | No | Workflow ID. |
 | `node` | string | No | Node ID. |

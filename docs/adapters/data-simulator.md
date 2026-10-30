@@ -55,7 +55,11 @@ configured changes.
 | **Topic** | string | _(empty)_ | Optional queue topic. Leave empty to use the node's configured destination, which is what a normal workflow wants. |
 | **Randomize Content** | bool | `true` | On, each message picks a patient at random. Off, patients are used in a fixed rotation. |
 | **Random Seed** | number | `0` | `0` varies output on every start. Any other value pins the sequence. |
-| **Live Mode** | bool | `true` | When off, messages are generated and counted but never queued. |
+| **Live Mode** | bool | `true` | When off, messages are generated and counted but never queued, in Run Test and in a running node. |
+
+:::warning[Live Mode needs 1.0.1 on Grid 1.2.0 and later]
+From Grid 1.2.0, a running node pushes every message whatever `live` says. Version 1.0.1 of the Data Simulator checks Live Mode itself, so turning it off still stops the push. A node built from an earlier version queues messages even with Live Mode off: update it to 1.0.1 from **Settings → Catalogs**.
+:::
 
 ## Common setups
 

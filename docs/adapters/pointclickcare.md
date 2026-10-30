@@ -189,7 +189,11 @@ Both nodes share the same connection fields. **PCC Connect** adds **Interval**.
 | **API Base URL** | string | *(empty)* | Leave empty to follow **OAuth Mode** |
 | **Request Timeout** | number | `20` | Seconds to wait for a response |
 | **Verify TLS** | bool | `true` | Leave on |
-| **Live Mode** | bool | `false` | When off, nothing is sent to PointClickCare |
+| **Live Mode** | bool | `false` | When off, nothing is sent to PointClickCare, in Run Test and in a running node |
+
+:::warning[Live Mode needs 1.1.0 on Grid 1.2.0 and later]
+From Grid 1.2.0, a running node makes every request whatever `live` says. Version 1.1.0 of these adapters checks Live Mode itself, so turning it off still stops the requests. A node built from an earlier version sends them even with Live Mode off: update it to 1.1.0 from **Settings → Catalogs**.
+:::
 
 ## Templates and library
 
@@ -202,7 +206,7 @@ The adapter arrives as two node templates plus the library behind them. See [How
 
 | Library | Version | Used by |
 | --- | --- | --- |
-| `pcc_api` | 1.0.0 | Both templates, already linked |
+| `pcc_api` | 1.1.0 | Both templates, already linked |
 
 ### Add another instance
 

@@ -74,8 +74,8 @@ Shared Lua modules the adapters depend on. Grid installs the version an adapter 
 
 | Library | Version | What it does |
 | --- | --- | --- |
-| `salesforce` | 1.0.0 | Salesforce REST client — OAuth 2.0 client_credentials, with query, modify, batch modify and delete helpers. |
-| `dynamics_crm` | 1.0.0 | Microsoft Dynamics 365 client — OAuth against Azure AD, with FetchXML query and generic request helpers. |
+| `salesforce` | 1.1.0 | Salesforce REST client — OAuth 2.0 client_credentials, with query, modify, batch modify and delete helpers. |
+| `dynamics_crm` | 1.1.0 | Microsoft Dynamics 365 client — OAuth against Azure AD, with FetchXML query and generic request helpers. |
 
 :::tip[Library versions are immutable]
 A published library version is never changed. A fix ships as a new version, and each node stays pinned to the version it was built against, so updating a catalog cannot disturb a node already running.

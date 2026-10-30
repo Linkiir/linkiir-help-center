@@ -71,7 +71,7 @@ Shared Lua modules the adapters depend on. Grid installs the version an adapter 
 
 | Library | Version | What it does |
 | --- | --- | --- |
-| `azure_openai` | 1.0.0 | Azure OpenAI client — API key or Azure AD client-credentials authentication, chat completions and responses endpoints. |
+| `azure_openai` | 1.1.0 | Azure OpenAI client — API key or Azure AD client-credentials authentication, chat completions and responses endpoints. |
 
 :::tip[Library versions are immutable]
 A published library version is never changed. A fix ships as a new version, and each node stays pinned to the version it was built against, so updating a catalog cannot disturb a node already running.

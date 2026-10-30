@@ -78,7 +78,7 @@ Shared Lua modules the adapters depend on. Grid installs the version an adapter 
 
 | Library | Version | What it does |
 | --- | --- | --- |
-| `aws_s3` | 1.0.0 | AWS S3 client — Signature V4 signing, put/get/head/delete/list, ListObjectsV2 parsing, retry and backoff. Works against S3-compatible services too. |
+| `aws_s3` | 1.1.0 | AWS S3 client — Signature V4 signing, put/get/head/delete/list, ListObjectsV2 parsing, retry and backoff. Works against S3-compatible services too. |
 
 :::tip[Library versions are immutable]
 A published library version is never changed. A fix ships as a new version, and each node stays pinned to the version it was built against, so updating a catalog cannot disturb a node already running.

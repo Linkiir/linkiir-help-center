@@ -24,15 +24,15 @@ CRM, ERP, ITSM, HR, identity and directory services, and scheduling.
 
 | Adapter | Current version | Node type id | Changelog |
 | --- | --- | --- | --- |
-| [Salesforce Adapter](../adapters/salesforce.md) | **1.0.0** | `LKBZ_SALESFORCE_ADAPTER` | [history](#salesforce-adapter) |
-| [Dynamics CRM Adapter](../adapters/dynamics-365.md) | **1.0.0** | `LKBZ_DYNAMICS_CRM_ADAPTER` | [history](#dynamics-crm-adapter) |
+| [Salesforce Adapter](../adapters/salesforce.md) | **1.1.0** | `LKBZ_SALESFORCE_ADAPTER` | [history](#salesforce-adapter) |
+| [Dynamics CRM Adapter](../adapters/dynamics-365.md) | **1.1.0** | `LKBZ_DYNAMICS_CRM_ADAPTER` | [history](#dynamics-crm-adapter) |
 
 ### Libraries
 
 | Library | Current version | Changelog |
 | --- | --- | --- |
-| `salesforce` | **1.0.0** | [history](#salesforce) |
-| `dynamics_crm` | **1.0.0** | [history](#dynamics_crm) |
+| `salesforce` | **1.1.0** | [history](#salesforce) |
+| `dynamics_crm` | **1.1.0** | [history](#dynamics_crm) |
 
 :::tip[Checking what you are on]
 Open the node in the Builder: the adapter version it was built from is shown on the node, and **Settings → Catalogs** lists every node whose adapter or library has a newer release. See [how to upgrade](./catalogs.md#upgrading-to-a-newer-version).
@@ -44,7 +44,21 @@ Open the node in the Builder: the adapter version it was built from is shown on 
 
 ### Salesforce Adapter
 
-`LKBZ_SALESFORCE_ADAPTER` · current **1.0.0** · [configuration](../adapters/salesforce.md)
+`LKBZ_SALESFORCE_ADAPTER` · current **1.1.0** · [configuration](../adapters/salesforce.md)
+
+#### 1.1.0
+
+_Released 2026-10-29_
+
+- **Live Mode** off now stops the requests in a running node, not only in Run Test. From Grid 1.2.0 a running node makes every request whatever `live` says, so earlier versions send them even with Live Mode off.
+- Uses `salesforce` 1.1.0.
+- Requires Grid 1.2.0 or later.
+
+#### 1.0.1
+
+_Released 2026-10-29_
+
+- Requires Grid 1.2.0 or later. Nothing else changed: Live Mode off still does not stop requests in a running node. Use 1.1.0.
 
 #### 1.0.0
 
@@ -54,7 +68,21 @@ _Released 2026-09-17_
 
 ### Dynamics CRM Adapter
 
-`LKBZ_DYNAMICS_CRM_ADAPTER` · current **1.0.0** · [configuration](../adapters/dynamics-365.md)
+`LKBZ_DYNAMICS_CRM_ADAPTER` · current **1.1.0** · [configuration](../adapters/dynamics-365.md)
+
+#### 1.1.0
+
+_Released 2026-10-29_
+
+- **Live Mode** off now stops the requests in a running node, not only in Run Test. From Grid 1.2.0 a running node makes every request whatever `live` says, so earlier versions send them even with Live Mode off.
+- Uses `dynamics_crm` 1.1.0.
+- Requires Grid 1.2.0 or later.
+
+#### 1.0.1
+
+_Released 2026-10-29_
+
+- Requires Grid 1.2.0 or later. Nothing else changed: Live Mode off still does not stop requests in a running node. Use 1.1.0.
 
 #### 1.0.0
 
@@ -68,7 +96,13 @@ Library versions are immutable: a published version is never edited, and a fix s
 
 ### `salesforce`
 
-current **1.0.0**
+current **1.1.0**
+
+#### 1.1.0
+
+_Released 2026-10-29_
+
+- With `live` off, a request made from a running node is no longer sent: the client returns the same simulated result Run Test gives. It checks `linkiir.node.dev()`, so it needs Grid 1.2.0 or later. 1.0.0 remains published for nodes pinned to it.
 
 #### 1.0.0
 
@@ -78,7 +112,13 @@ _Released 2026-09-17_
 
 ### `dynamics_crm`
 
-current **1.0.0**
+current **1.1.0**
+
+#### 1.1.0
+
+_Released 2026-10-29_
+
+- With `live` off, a request made from a running node is no longer sent: the client returns the same simulated result Run Test gives. It checks `linkiir.node.dev()`, so it needs Grid 1.2.0 or later. 1.0.0 remains published for nodes pinned to it.
 
 #### 1.0.0
 

@@ -211,6 +211,7 @@ const sidebars: SidebarsConfig = {
             'api/scripting-api/runtime-system',
             'api/scripting-api/logging',
             'api/scripting-api/node-configuration',
+            'api/scripting-api/node',
             'api/scripting-api/lua-table-library',
             'api/scripting-api/lua-math-library',
             'api/scripting-api/lua-os-library',

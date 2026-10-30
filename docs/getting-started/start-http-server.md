@@ -145,7 +145,7 @@ Testing runs your script without opening a port or sending anything to a real de
 The Debug panel shows the local variables at the end of `main` and the console output. You should see your `Received POST /intake` line.
 
 :::info[Nothing leaves the test]
-In both Run Test and Debug, `linkiir.flow.push` is forced into non-live mode. It validates your call and returns a placeholder message ID, but writes nothing to the queue. You can test freely without producing real messages.
+In both Run Test and Debug, `linkiir.flow.push` validates your call and returns a placeholder message ID, but writes nothing to the queue. Web requests, email and database calls are simulated too, unless you pass `live = true`. You can test freely without producing real messages.
 :::
 
 If you want to watch the script run line by line, click the editor gutter to set a breakpoint and use **Debug** instead. Full details in [Testing and Debugging Lua](../interface-development/lua-programming/testing-debugging.md).

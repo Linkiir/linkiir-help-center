@@ -8,6 +8,53 @@ title: Message Data
 
 Parses, builds and serializes messages in HL7 v2, X12, FHIR, CDA and XML as node trees. Documents of a plain JSON or XML schema are read into Lua tables with parse and written back with serialize.
 
+
+---
+
+## HL7 v2 trees
+
+An HL7 v2 message is read into a tree shaped by its schema: the fields each segment definition marks as repeating, and the groups of each message definition. The [Schema Editor](../../interface-development/schema-editor.md) sets both.
+
+### Fields
+
+| Field in the schema | Holds | Read it as |
+| --- | --- | --- |
+| Not repeating | Its components directly | `Msg.MSH[9][2]`: MSH-9, component 2 (the trigger event) |
+| Repeating, or not defined | Its repetitions, each holding components | `Msg.PID[3][1][1]`: PID-3, repetition 1, component 1 |
+
+A component holds its subcomponents, so `Msg.PID[5][1][1][1]` is the first subcomponent of PID-5's family name. A `~` in a field that doesn't repeat is kept as text.
+
+### Segment groups
+
+A message definition can group its segments: an ORU R01 has a PATIENT_RESULT holding a PATIENT and ORDER_OBSERVATIONs, and each ORDER_OBSERVATION holds its OBR and OBSERVATION groups. When a message fits its definition's structure, each segment sits in its group, so a segment in a group is reached through the group's name:
+
+```lua
+local Pid = Msg.PATIENT_RESULT.PATIENT.PID      -- Msg.PID is nil: PID is in a group
+local Obr2 = Msg.PATIENT_RESULT.ORDER_OBSERVATION[2].OBR
+```
+
+A segment the definition doesn't have (a Z-segment) stays in the group it came in. From the first segment that is out of the structure's order, the rest of the message is read without groups, as a plain list under the message. A message no definition matches is read as a plain list too.
+
+### Repeating segments and groups
+
+A segment or group that can repeat where it sits, read by name, gives its occurrences, side by side in the same parent:
+
+| Expression | Means |
+| --- | --- |
+| `Msg.NK1[2]` | The second NK1 |
+| `Msg.NK1[2][2]` | Field NK1-2 of the second NK1 |
+| `#Msg.NK1` | How many NK1 segments there are |
+| `Msg.NK1:remove(2)` | Removes the second NK1 |
+| `Msg.NK1[3]`, read past the last | nil |
+
+Anything else read on it (`Msg.NK1:S()`, `Msg.NK1:count()`, `Msg.NK1:child(2)`) acts on the first NK1. Assigning to an occurrence (`Msg.NK1[2] = 'x'`) raises an error; write to one of its fields instead (`Msg.NK1[2][2] = 'x'`). `Msg:child('NK1')` is the first NK1 itself.
+
+### Building a message
+
+`linkiir.data.create` builds one empty occurrence of each of the definition's groups and segments. Empty ones are left out of the message text. `Node:add` adds a segment to the message or group it belongs in, or another occurrence of a group, which comes with its own empty segments. See `Node:add` below.
+
+The Variables panel in the Scripting tab shows the groups, and right-clicking a row copies the path to it, such as `MsgIn.PATIENT_RESULT.ORDER_OBSERVATION[2].OBR`.
+
 ---
 
 ## `linkiir.data.extract`
@@ -52,7 +99,10 @@ Codes: `MISSING_PARAMETER`, `SCHEMA_NOT_FOUND`, `PARSE_ERROR`, `UNSUPPORTED_TYPE
 ```lua
 local Msg, MsgType = linkiir.data.extract{ schema = 'demo.json', data = Data, type = 'hl7' }
 print(MsgType)                               -- "ADT"
-print(Msg.MSH[9][1]:value(), Msg.PID[3][1][1]:value())
+print(Msg.MSH[9][2]:value())     -- "A01": MSH-9 doesn't repeat, so [2] is its 2nd component
+print(Msg.PID[3][1][1]:value())  -- PID-3 repeats: repetition 1, component 1
+print(Msg.NK1[2][2][1][1]:value()) -- NK1 repeats: the 2nd NK1's NK1-2
+print(#Msg.NK1)                  -- how many NK1 segments
 
 -- Trap failures explicitly.
 local ok, msg, mtype = pcall(linkiir.data.extract, { schema = 'demo.json', data = Data })
@@ -690,7 +740,7 @@ Out:map(Msg)  -- copy matching values from Msg into Out
 Node:child(k)
 ```
 
-Child by name or 1-based index (= Node[k]). Bypasses method dispatch, so it reaches an element whose name matches a node method — common in FHIR (Patient.name, Bundle.type, Quantity.value).
+Child by name or 1-based index (= Node[k]). Bypasses method dispatch, so it reaches an element whose name matches a node method — common in FHIR (Patient.name, Bundle.type, Quantity.value). On HL7 v2, Msg:child('NK1') is the first NK1 itself, where Msg.NK1 gives the NK1 occurrences (Msg.NK1[2]).
 
 **Usage**
 
@@ -726,7 +776,7 @@ Node:parent()
 
 The node holding this one; nil for the root.
 
-The node holding this one, or nil for a tree's root. On an X12 tree it climbs from a segment to its loop instance, then to the container a repeating loop's instances sit in, and so on up to the message.
+The node holding this one, or nil for a tree's root.
 
 **Usage**
 
@@ -743,6 +793,11 @@ local Loop = Seg:parent()
 ```lua
 -- X12: the subscriber loop a claim belongs to
 local Subscriber = Claim:parent():parent()   -- 2300 instance -> 2300 container -> 2000B instance
+```
+
+```lua
+-- HL7 v2: the order an OBX belongs to
+local Order = Obx:parent():parent():parent()   -- OBSERVATION -> ORDER_DETAIL -> ORDER
 ```
 
 
@@ -770,6 +825,7 @@ local n = N:count()
 
 ```lua
 print(#Msg.PID)  -- same as Msg.PID:count()
+print(#Msg.NK1)  -- the number of NK1 segments
 ```
 
 
@@ -895,14 +951,15 @@ Node:add(name [, after | before])
 
 Add a child element (XML, FHIR JSON), a segment (HL7 v2), or a segment or loop (X12). Returns it.
 
-Appends a new empty child element named `name` and returns it; on XML, `before` places it before a given child. On a CDA document (which keeps the schema it was created or read with) an element added without `before` goes where the schema puts it among its siblings. On HL7 v2 and X12 it inserts a segment (or X12 loop) where the structure puts it, or after `after`.
+Appends a new empty child element named `name` and returns it.
 
 **Usage**
 
 ```lua
 local Item = Order:add('Item')
 local Realm = Doc:add('realmCode', Doc.typeId)   -- XML, before typeId
-local Obx = Msg:add('OBX', PrevObx)   -- HL7 v2
+local Obs = Detail:add('OBSERVATION', PrevObs)   -- HL7 v2: a group occurrence
+local Nk1 = Msg:add('NK1')   -- HL7 v2: a segment
 local Claim = Subscriber:add('2300')   -- X12
 ```
 
@@ -911,7 +968,7 @@ local Claim = Subscriber:add('2300')   -- X12
 | Name | Type | Required | Description |
 | --- | --- | --- | --- |
 | `name` | string | Yes | Element name (1-1024 chars; must not start with '@' or equal '#text'). |
-| `after` | node | No | HL7 v2 and X12: the segment to insert after, defaulting to where the structure puts it. XML: a child to insert before instead. |
+| `after` | node | No | HL7 v2 and X12: the segment (or HL7 v2 group) to insert after, a child of the receiver, defaulting to where the structure puts it. XML: a child to insert before instead. |
 
 **Returns**
 
@@ -929,17 +986,17 @@ print(linkiir.data.serialize{ data = Order })
 ```
 
 ```lua
--- HL7 v2: an OBX and its note for each result
+-- HL7 v2: an OBX and its note for each result. In demo.json's Lab an OBX
+-- and its notes are an OBSERVATION, in ORDER > ORDER_DETAIL.
 local Out = linkiir.data.create{ schema = 'demo.json', name = 'Lab', type = 'hl7' }
-local Prev = Out.OBX
-Prev[1] = '1'
-for i = 2, 3 do
-  local Nte = Out:add('NTE', Prev)
-  Nte[3] = 'note ' .. (i - 1)
-  Prev = Out:add('OBX', Nte)
-  Prev[1] = tostring(i)
+local Detail = Out.ORDER.ORDER_DETAIL
+local Obs = Detail.OBSERVATION            -- the empty one create made
+for i = 1, 3 do
+  if i > 1 then Obs = Detail:add('OBSERVATION', Obs) end   -- another, after the last
+  Obs.OBX[1] = tostring(i)
+  Obs.NTE[1][3] = 'note ' .. i            -- NTE repeats: NTE[1] is the first
 end
--- ... OBX|1 / NTE|||note 1 / OBX|2 / NTE|||note 2 / OBX|3
+-- ... OBX|1 / NTE|||note 1 / OBX|2 / NTE|||note 2 / OBX|3 / NTE|||note 3
 ```
 
 
@@ -1029,7 +1086,7 @@ Node:remove(key)
 
 Remove children by name or 1-based index (XML, FHIR JSON), segments and repetitions (HL7 v2), or segments and loops (X12).
 
-Removes the children with a given name, or the child at a 1-based index, and returns the receiver. On HL7 v2 it removes segments or repetitions, and on X12 segments or loops.
+Removes the children with a given name, or the child at a 1-based index, and returns the receiver.
 
 **Usage**
 
@@ -1038,6 +1095,7 @@ Order:remove('Item')   -- by name
 Order:remove(2)         -- by index
 Msg:remove('EVN')       -- HL7 v2: a segment
 Msg.PID[3]:remove(2)    -- HL7 v2: a repetition
+Msg.NK1:remove(2)       -- HL7 v2: the second NK1
 Subscriber['2300']:remove(1)   -- X12: a loop instance
 ```
 

@@ -1021,7 +1021,7 @@
           "examples": [
             {
               "language": "lua",
-              "code": "local Msg, MsgType = linkiir.data.extract{ schema = 'demo.json', data = Data, type = 'hl7' }\nprint(MsgType)                               -- \"ADT\"\nprint(Msg.MSH[9][1]:value(), Msg.PID[3][1][1]:value())\n\n-- Trap failures explicitly.\nlocal ok, msg, mtype = pcall(linkiir.data.extract, { schema = 'demo.json', data = Data })\nif not ok then error('extract failed: ' .. tostring(msg)) end"
+              "code": "local Msg, MsgType = linkiir.data.extract{ schema = 'demo.json', data = Data, type = 'hl7' }\nprint(MsgType)                               -- \"ADT\"\nprint(Msg.MSH[9][2]:value())     -- \"A01\": MSH-9 doesn't repeat, so [2] is its 2nd component\nprint(Msg.PID[3][1][1]:value())  -- PID-3 repeats: repetition 1, component 1\nprint(Msg.NK1[2][2][1][1]:value()) -- NK1 repeats: the 2nd NK1's NK1-2\nprint(#Msg.NK1)                  -- how many NK1 segments\n\n-- Trap failures explicitly.\nlocal ok, msg, mtype = pcall(linkiir.data.extract, { schema = 'demo.json', data = Data })\nif not ok then error('extract failed: ' .. tostring(msg)) end"
             },
             {
               "language": "lua",
@@ -1461,7 +1461,7 @@
           "name": "Node:child",
           "signature": "Node:child(k)",
           "summary": "Child by name or 1-based index (= Node[k]).",
-          "description": "Child by name or 1-based index (= Node[k]). Bypasses method dispatch, so it reaches an element whose name matches a node method — common in FHIR (Patient.name, Bundle.type, Quantity.value).",
+          "description": "Child by name or 1-based index (= Node[k]). Bypasses method dispatch, so it reaches an element whose name matches a node method — common in FHIR (Patient.name, Bundle.type, Quantity.value). On HL7 v2, Msg:child('NK1') is the first NK1 itself, where Msg.NK1 gives the NK1 occurrences (Msg.NK1[2]).",
           "returns": [
             {
               "description": "Node / nil"
@@ -1489,7 +1489,7 @@
           "name": "Node:parent",
           "signature": "Node:parent()",
           "summary": "The node holding this one; nil for the root.",
-          "description": "The node holding this one, or nil for a tree's root. On an X12 tree it climbs from a segment to its loop instance, then to the container a repeating loop's instances sit in, and so on up to the message.",
+          "description": "The node holding this one, or nil for a tree's root.",
           "returns": [
             {
               "description": "Node, or nil for the root"
@@ -1500,6 +1500,10 @@
             {
               "language": "lua",
               "code": "-- X12: the subscriber loop a claim belongs to\nlocal Subscriber = Claim:parent():parent()   -- 2300 instance -> 2300 container -> 2000B instance"
+            },
+            {
+              "language": "lua",
+              "code": "-- HL7 v2: the order an OBX belongs to\nlocal Order = Obx:parent():parent():parent()   -- OBSERVATION -> ORDER_DETAIL -> ORDER"
             }
           ]
         },
@@ -1519,7 +1523,7 @@
           "examples": [
             {
               "language": "lua",
-              "code": "print(#Msg.PID)  -- same as Msg.PID:count()"
+              "code": "print(#Msg.PID)  -- same as Msg.PID:count()\nprint(#Msg.NK1)  -- the number of NK1 segments"
             }
           ]
         },
@@ -1609,14 +1613,14 @@
           "name": "Node:add",
           "signature": "Node:add(name [, after | before])",
           "summary": "Add a child element (XML, FHIR JSON), a segment (HL7 v2), or a segment or loop (X12). Returns it.",
-          "description": "Appends a new empty child element named `name` and returns it; on XML, `before` places it before a given child. On a CDA document (which keeps the schema it was created or read with) an element added without `before` goes where the schema puts it among its siblings. On HL7 v2 and X12 it inserts a segment (or X12 loop) where the structure puts it, or after `after`.",
+          "description": "Appends a new empty child element named `name` and returns it.",
           "returns": [
             {
               "name": "node",
               "description": "the new child Element_Node."
             }
           ],
-          "usage": "local Item = Order:add('Item')\nlocal Realm = Doc:add('realmCode', Doc.typeId)   -- XML, before typeId\nlocal Obx = Msg:add('OBX', PrevObx)   -- HL7 v2\nlocal Claim = Subscriber:add('2300')   -- X12",
+          "usage": "local Item = Order:add('Item')\nlocal Realm = Doc:add('realmCode', Doc.typeId)   -- XML, before typeId\nlocal Obs = Detail:add('OBSERVATION', PrevObs)   -- HL7 v2: a group occurrence\nlocal Nk1 = Msg:add('NK1')   -- HL7 v2: a segment\nlocal Claim = Subscriber:add('2300')   -- X12",
           "params": [
             {
               "name": "name",
@@ -1628,7 +1632,7 @@
               "name": "after",
               "type": "node",
               "required": false,
-              "description": "HL7 v2 and X12: the segment to insert after, defaulting to where the structure puts it. XML: a child to insert before instead."
+              "description": "HL7 v2 and X12: the segment (or HL7 v2 group) to insert after, a child of the receiver, defaulting to where the structure puts it. XML: a child to insert before instead."
             }
           ],
           "examples": [
@@ -1638,7 +1642,7 @@
             },
             {
               "language": "lua",
-              "code": "-- HL7 v2: an OBX and its note for each result\nlocal Out = linkiir.data.create{ schema = 'demo.json', name = 'Lab', type = 'hl7' }\nlocal Prev = Out.OBX\nPrev[1] = '1'\nfor i = 2, 3 do\n  local Nte = Out:add('NTE', Prev)\n  Nte[3] = 'note ' .. (i - 1)\n  Prev = Out:add('OBX', Nte)\n  Prev[1] = tostring(i)\nend\n-- ... OBX|1 / NTE|||note 1 / OBX|2 / NTE|||note 2 / OBX|3"
+              "code": "-- HL7 v2: an OBX and its note for each result. In demo.json's Lab an OBX\n-- and its notes are an OBSERVATION, in ORDER > ORDER_DETAIL.\nlocal Out = linkiir.data.create{ schema = 'demo.json', name = 'Lab', type = 'hl7' }\nlocal Detail = Out.ORDER.ORDER_DETAIL\nlocal Obs = Detail.OBSERVATION            -- the empty one create made\nfor i = 1, 3 do\n  if i > 1 then Obs = Detail:add('OBSERVATION', Obs) end   -- another, after the last\n  Obs.OBX[1] = tostring(i)\n  Obs.NTE[1][3] = 'note ' .. i            -- NTE repeats: NTE[1] is the first\nend\n-- ... OBX|1 / NTE|||note 1 / OBX|2 / NTE|||note 2 / OBX|3 / NTE|||note 3"
             }
           ]
         },
@@ -1710,13 +1714,13 @@
           "name": "Node:remove",
           "signature": "Node:remove(key)",
           "summary": "Remove children by name or 1-based index (XML, FHIR JSON), segments and repetitions (HL7 v2), or segments and loops (X12).",
-          "description": "Removes the children with a given name, or the child at a 1-based index, and returns the receiver. On HL7 v2 it removes segments or repetitions, and on X12 segments or loops.",
+          "description": "Removes the children with a given name, or the child at a 1-based index, and returns the receiver.",
           "returns": [
             {
               "description": "Node (self)"
             }
           ],
-          "usage": "Order:remove('Item')   -- by name\nOrder:remove(2)         -- by index\nMsg:remove('EVN')       -- HL7 v2: a segment\nMsg.PID[3]:remove(2)    -- HL7 v2: a repetition\nSubscriber['2300']:remove(1)   -- X12: a loop instance",
+          "usage": "Order:remove('Item')   -- by name\nOrder:remove(2)         -- by index\nMsg:remove('EVN')       -- HL7 v2: a segment\nMsg.PID[3]:remove(2)    -- HL7 v2: a repetition\nMsg.NK1:remove(2)       -- HL7 v2: the second NK1\nSubscriber['2300']:remove(1)   -- X12: a loop instance",
           "params": [
             {
               "name": "key",
@@ -2056,7 +2060,7 @@
               "name": "live",
               "type": "boolean",
               "required": false,
-              "description": "Default true; false simulates (test mode)."
+              "description": "Default false. In the editor (Run Test and Debug), messages are never sent on. A running node always sends them."
             }
           ],
           "returns": [
@@ -2083,17 +2087,11 @@
         {
           "kind": "function",
           "name": "linkiir.flow.configure",
-          "signature": "linkiir.flow.configure{ bootstrap=, project=, workflow=, node=, topic= }",
-          "usage": "linkiir.flow.configure{ project = <string> [, workflow=] [, node=] [, bootstrap=] [, topic=] }",
-          "summary": "Configure the flow context (node identity and Kafka settings).",
-          "description": "Sets the flow context's node identity and Kafka settings; empty fields keep their current value. The context is also read from the LINKIIR_* environment variables.",
+          "signature": "linkiir.flow.configure{ project=, workflow=, node=, topic= }",
+          "usage": "linkiir.flow.configure{ project = <string> [, workflow=] [, node=] [, topic=] }",
+          "summary": "Configure the flow context node identity.",
+          "description": "Sets the flow context's node identity (project/workflow/node/topic); empty fields keep their current value. The context is also read from the LINKIIR_* environment variables.",
           "params": [
-            {
-              "name": "bootstrap",
-              "type": "string",
-              "required": false,
-              "description": "Kafka bootstrap servers."
-            },
             {
               "name": "project",
               "type": "string",
@@ -2213,7 +2211,7 @@
               "name": "live",
               "type": "boolean",
               "required": false,
-              "description": "Default true."
+              "description": "Default false. In the editor (Run Test and Debug), the request is only sent with live = true; otherwise it returns { code = 0, body = \"\", simulated = true }. A running node always sends it."
             }
           ],
           "returns": [
@@ -2307,7 +2305,7 @@
               "name": "live",
               "type": "boolean",
               "required": false,
-              "description": "Default true."
+              "description": "Default false. In the editor (Run Test and Debug), the request is only sent with live = true; otherwise it returns { code = 0, body = \"\", simulated = true }. A running node always sends it."
             }
           ],
           "returns": [
@@ -2401,7 +2399,7 @@
               "name": "live",
               "type": "boolean",
               "required": false,
-              "description": "Default true."
+              "description": "Default false. In the editor (Run Test and Debug), the request is only sent with live = true; otherwise it returns { code = 0, body = \"\", simulated = true }. A running node always sends it."
             }
           ],
           "returns": [
@@ -2491,7 +2489,7 @@
               "name": "live",
               "type": "boolean",
               "required": false,
-              "description": "Default true."
+              "description": "Default false. In the editor (Run Test and Debug), the request is only sent with live = true; otherwise it returns { code = 0, body = \"\", simulated = true }. A running node always sends it."
             }
           ],
           "returns": [
@@ -2581,7 +2579,7 @@
               "name": "live",
               "type": "boolean",
               "required": false,
-              "description": "Default true."
+              "description": "Default false. In the editor (Run Test and Debug), the request is only sent with live = true; otherwise it returns { code = 0, body = \"\", simulated = true }. A running node always sends it."
             }
           ],
           "returns": [
@@ -2671,7 +2669,7 @@
               "name": "live",
               "type": "boolean",
               "required": false,
-              "description": "Default true."
+              "description": "Default false. In the editor (Run Test and Debug), the request is only sent with live = true; otherwise it returns { code = 0, body = \"\", simulated = true }. A running node always sends it."
             }
           ],
           "returns": [
@@ -2761,7 +2759,7 @@
               "name": "live",
               "type": "boolean",
               "required": false,
-              "description": "Default true."
+              "description": "Default false. In the editor (Run Test and Debug), the request is only sent with live = true; otherwise it returns { code = 0, body = \"\", simulated = true }. A running node always sends it."
             }
           ],
           "returns": [
@@ -3073,7 +3071,7 @@
               "name": "live",
               "type": "boolean",
               "required": false,
-              "description": "Default true; false simulates."
+              "description": "Default false. In the editor (Run Test and Debug), the email is only sent with live = true; otherwise it returns true. A running node always sends it."
             }
           ],
           "returns": [
@@ -3405,7 +3403,7 @@
               "name": "live",
               "type": "boolean",
               "required": false,
-              "description": "Default false: the connection is simulated (closed) and never reaches the database. Pass true to connect."
+              "description": "Default false. In the editor (Run Test and Debug), it only connects with live = true; otherwise it gives a simulated connection that never reaches the database. A running node always connects."
             }
           ],
           "returns": [
@@ -3428,7 +3426,7 @@
           "examples": [
             {
               "language": "lua",
-              "code": "local Conn, Err = linkiir.store.open{ driver = linkiir.store.POSTGRES_ODBC, name = 'clinicdb',\n                               user = 'svc', password = Secret, live = true }\nif not Conn then error(Err.message) end"
+              "code": "local Conn, Err = linkiir.store.open{ driver = linkiir.store.POSTGRES_ODBC, name = 'clinicdb',\n                               user = 'svc', password = Secret }\nif not Conn then error(Err.message) end"
             }
           ]
         },
@@ -3694,7 +3692,7 @@
               "name": "live",
               "type": "boolean",
               "required": false,
-              "description": "Default true; false simulates."
+              "description": "Default false. In the editor (Run Test and Debug), it only writes with live = true; otherwise it returns 0. A running node always writes."
             }
           ],
           "examples": [
@@ -3804,7 +3802,7 @@
           "examples": [
             {
               "language": "lua",
-              "code": "local Rows, Err = Conn:query{ sql = 'select id from patient' }\nif not Rows and not Conn:check() then\n   -- The connection is gone: open a new one and try again.\n   Conn = linkiir.store.open{ driver = linkiir.store.POSTGRES_ODBC, name = 'clinicdb', timeout = 10, live = true }\n   Rows, Err = Conn:query{ sql = 'select id from patient' }\nend"
+              "code": "local Rows, Err = Conn:query{ sql = 'select id from patient' }\nif not Rows and not Conn:check() then\n   -- The connection is gone: open a new one and try again.\n   Conn = linkiir.store.open{ driver = linkiir.store.POSTGRES_ODBC, name = 'clinicdb', timeout = 10 }\n   Rows, Err = Conn:query{ sql = 'select id from patient' }\nend"
             }
           ]
         },
@@ -3814,7 +3812,7 @@
           "name": "Connection:quote",
           "signature": "conn:quote(s)",
           "summary": "Quote a string as a SQL literal for the driver in use.",
-          "description": "Quotes a string as a SQL literal for the driver in use, as N'...' on SQL Server. Use it on every value that came from a message, a variable or user input.",
+          "description": "Quote a string as a SQL literal for the driver in use: wrapped in single quotes with embedded quotes doubled. On SQL Server the literal is N'...' so text outside the database's code page is kept.",
           "returns": [
             {
               "description": "string"
@@ -3832,7 +3830,7 @@
           "examples": [
             {
               "language": "lua",
-              "code": "local Sql = 'select id from patient where mrn = ' .. Conn:quote(Mrn)\nlocal Rows, Err = Conn:query{ sql = Sql }"
+              "code": "local Escaped = Conn:quote(UserInput)  -- prefer params= over this when possible"
             }
           ]
         },
@@ -5307,7 +5305,7 @@
           "examples": [
             {
               "language": "lua",
-              "code": "local Root = linkiir.sys.workingDir()\nprint('working dir: ' .. Root)\n\n-- Rarely needed: a relative path already resolves here.\nlocal DB = linkiir.store.open{ driver = linkiir.store.SQLITE, name = 'demo/patient.db', live = true }"
+              "code": "local Root = linkiir.sys.workingDir()\nprint('working dir: ' .. Root)\n\n-- Rarely needed: a relative path already resolves here.\nlocal DB = linkiir.store.open{ driver = linkiir.store.SQLITE, name = 'demo/patient.db' }"
             }
           ]
         },
@@ -5901,6 +5899,37 @@
             {
               "language": "lua",
               "code": "-- $${ keeps a literal ${ in the text.\nlocal Tpl = linkiir.config.resolve('$${patient} at ${project:site}')\n-- \"${patient} at Main Street\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "linkiir.node",
+      "title": "Node",
+      "description": "Facts about the node the script runs for.",
+      "items": [
+        {
+          "kind": "function",
+          "name": "linkiir.node.dev",
+          "signature": "linkiir.node.dev()",
+          "usage": "local InEditor = linkiir.node.dev()",
+          "summary": "Return true when the script runs from the editor (Run Test or Debug), false in a started node.",
+          "description": "Tells the script where it is running. It returns true when you run the script from the editor with Run Test or Debug, and false when it runs in a started node. Use it to keep test-only behaviour, such as a fixed sample or skipped side effects, out of the running node. A script can't change the answer.",
+          "returns": [
+            {
+              "name": "boolean",
+              "description": "true in Run Test or Debug, false in a started node."
+            }
+          ],
+          "examples": [
+            {
+              "language": "lua",
+              "code": "function main(Data)\n  if linkiir.node.dev() then\n    linkiir.log.info('Run Test: skipping the upload')\n    return\n  end\n  -- started node: send the message on\n  linkiir.flow.push{ data = Data }\nend"
+            },
+            {
+              "language": "lua",
+              "code": "-- Log more detail while testing in the editor.\nlocal Verbose = linkiir.node.dev()\n\nfunction main(Data)\n  if Verbose then print('input: ' .. Data) end\nend"
             }
           ]
         }

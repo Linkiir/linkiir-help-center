@@ -84,7 +84,7 @@ end
 | `MsgType ~= "ADT"` | Filters by returning without pushing — normal operation, not an error |
 | `mrn == ""` check | Raises for a genuinely broken message the sender must fix |
 | `create` then `map` | Copies everything that matches, so only changed fields need writing |
-| `PID[5][1][1][1]` | Segment → field → repeat → component → sub-component |
+| `PID[5][1][1][1]` | Segment → field → repeat → component → sub-component. PID-5 repeats; a field the schema marks as not repeating has no repeat level, so `MSH[9][2]` is the trigger event. See [HL7 v2 trees](../../api/scripting-api/message-data.md#hl7-v2-trees) |
 | `key = mrn` | Gives the message a meaningful correlation key for log search |
 
 Raising an error here rather than skipping the message is deliberate: a message missing a patient identifier signals a problem with the feed, not one bad record. Stopping preserves order and makes the problem visible immediately instead of letting hundreds of messages fail unnoticed. See [Error Handling and Retry](../error-handling.md).

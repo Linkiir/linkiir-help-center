@@ -24,14 +24,14 @@ EHR, EMR and practice-management systems reached over a proprietary API rather t
 
 | Adapter | Current version | Node type id | Changelog |
 | --- | --- | --- | --- |
-| [PCC Connect](../adapters/pointclickcare.md) | **1.0.0** | `LKEHR_PCC_CONNECT` | [history](#pcc-connect) |
-| [PCC Request](../adapters/pointclickcare.md) | **1.0.0** | `LKEHR_PCC_REQUEST` | [history](#pcc-request) |
+| [PCC Connect](../adapters/pointclickcare.md) | **1.1.0** | `LKEHR_PCC_CONNECT` | [history](#pcc-connect) |
+| [PCC Request](../adapters/pointclickcare.md) | **1.1.0** | `LKEHR_PCC_REQUEST` | [history](#pcc-request) |
 
 ### Libraries
 
 | Library | Current version | Changelog |
 | --- | --- | --- |
-| `pcc_api` | **1.0.0** | [history](#pcc_api) |
+| `pcc_api` | **1.1.0** | [history](#pcc_api) |
 
 :::tip[Checking what you are on]
 Open the node in the Builder: the adapter version it was built from is shown on the node, and **Settings → Catalogs** lists every node whose adapter or library has a newer release. See [how to upgrade](./catalogs.md#upgrading-to-a-newer-version).
@@ -43,7 +43,21 @@ Open the node in the Builder: the adapter version it was built from is shown on 
 
 ### PCC Connect
 
-`LKEHR_PCC_CONNECT` · current **1.0.0** · [configuration](../adapters/pointclickcare.md)
+`LKEHR_PCC_CONNECT` · current **1.1.0** · [configuration](../adapters/pointclickcare.md)
+
+#### 1.1.0
+
+_Released 2026-10-29_
+
+- **Live Mode** off now stops the requests in a running node, not only in Run Test. From Grid 1.2.0 a running node makes every request whatever `live` says, so earlier versions send them even with Live Mode off.
+- Uses `pcc_api` 1.1.0.
+- Requires Grid 1.2.0 or later.
+
+#### 1.0.1
+
+_Released 2026-10-29_
+
+- Requires Grid 1.2.0 or later. Nothing else changed: Live Mode off still does not stop requests in a running node. Use 1.1.0.
 
 #### 1.0.0
 
@@ -53,7 +67,21 @@ _Released 2026-09-17_
 
 ### PCC Request
 
-`LKEHR_PCC_REQUEST` · current **1.0.0** · [configuration](../adapters/pointclickcare.md)
+`LKEHR_PCC_REQUEST` · current **1.1.0** · [configuration](../adapters/pointclickcare.md)
+
+#### 1.1.0
+
+_Released 2026-10-29_
+
+- **Live Mode** off now stops the requests in a running node, not only in Run Test. From Grid 1.2.0 a running node makes every request whatever `live` says, so earlier versions send them even with Live Mode off.
+- Uses `pcc_api` 1.1.0.
+- Requires Grid 1.2.0 or later.
+
+#### 1.0.1
+
+_Released 2026-10-29_
+
+- Requires Grid 1.2.0 or later. Nothing else changed: Live Mode off still does not stop requests in a running node. Use 1.1.0.
 
 #### 1.0.0
 
@@ -67,7 +95,13 @@ Library versions are immutable: a published version is never edited, and a fix s
 
 ### `pcc_api`
 
-current **1.0.0**
+current **1.1.0**
+
+#### 1.1.0
+
+_Released 2026-10-29_
+
+- With `live` off, a request made from a running node is no longer sent: the client returns the same simulated result Run Test gives. It checks `linkiir.node.dev()`, so it needs Grid 1.2.0 or later. 1.0.0 remains published for nodes pinned to it.
 
 #### 1.0.0
 

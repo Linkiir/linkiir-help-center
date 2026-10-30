@@ -123,12 +123,12 @@ Shared Lua modules the adapters depend on. Grid installs the version an adapter 
 
 | Library | Version | What it does |
 | --- | --- | --- |
-| `hapi_fhir` | 1.0.0 | HAPI FHIR and Smile OmniVera client. Four authentication modes, Bundle paging, and read plus write (create, update, transaction) so the same client serves HL7 v2 to FHIR and FHIR to HL7 v2. |
-| `epic_fhir` | 1.0.0 | Epic FHIR client — SMART backend services authentication, search, read, create, update and operations. |
-| `cerner_fhir` | 1.0.0 | Cerner FHIR client — SMART backend services authentication with a signed JWT client assertion. |
-| `ecw_fhir` | 1.0.0 | eCW FHIR client — JWT client-credentials against a separate token endpoint, plus bulk export helpers. |
-| `modmed_fhir` | 1.0.0 | ModMed FHIR client — password and refresh-token authentication with an API key. |
-| `athena_health` | 1.0.0 | Athena Health client — client_credentials OAuth for both the proprietary REST API and the FHIR R4 API. |
+| `hapi_fhir` | 1.1.0 | HAPI FHIR and Smile OmniVera client. Four authentication modes, Bundle paging, and read plus write (create, update, transaction) so the same client serves HL7 v2 to FHIR and FHIR to HL7 v2. |
+| `epic_fhir` | 1.1.0 | Epic FHIR client — SMART backend services authentication, search, read, create, update and operations. |
+| `cerner_fhir` | 1.1.0 | Cerner FHIR client — SMART backend services authentication with a signed JWT client assertion. |
+| `ecw_fhir` | 1.1.0 | eCW FHIR client — JWT client-credentials against a separate token endpoint, plus bulk export helpers. |
+| `modmed_fhir` | 1.1.0 | ModMed FHIR client — password and refresh-token authentication with an API key. |
+| `athena_health` | 1.1.0 | Athena Health client — client_credentials OAuth for both the proprietary REST API and the FHIR R4 API. |
 | `fhir_creator` | 1.0.0 | FHIR resource builder helpers. Start a resource and append name, identifier, telecom and address, adding only populated fields, then serialize to JSON. No network. |
 | `fhir_validate` | 1.0.0 | Remote FHIR `$validate` client. Checks a resource against a server and returns a strict valid / invalid / unknown verdict. Fails closed; the server is the authority. |
 | `fhir_profiling` | 1.1.0 | FHIR profiling and profile-authoring tool. Loads specification profiles from SQLite, powers the Profile Designer, and generates JSON templates for any resource or type. |

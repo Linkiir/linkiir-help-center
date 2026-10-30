@@ -56,8 +56,12 @@ The account signs in with the Azure AD resource owner password grant, so it must
 | **Username** | string | *(empty)* | Azure AD username |
 | **Password** | password | *(empty)* | Azure AD password |
 | **FetchXML Query** | string | *(template)* | The query to run. `{{curr_date}}` is replaced with today's date. The entity in the query decides what is queried |
-| **Live Mode** | bool | `true` | Off simulates the requests. Sign-in is always live |
+| **Live Mode** | bool | `true` | Off simulates the requests, in Run Test and in a running node. Sign-in is always live |
 | **Verify TLS** | bool | `true` | Verify the server's TLS certificate. Turn off only for a local test proxy |
+
+:::warning[Live Mode needs 1.1.0 on Grid 1.2.0 and later]
+From Grid 1.2.0, a running node makes every request whatever `live` says. Version 1.1.0 of this adapter checks Live Mode itself, so turning it off still stops the requests. A node built from an earlier version sends them even with Live Mode off: update it to 1.1.0 from **Settings → Catalogs**.
+:::
 
 ## Verify it worked
 

@@ -146,7 +146,7 @@ linkiir.link.web.get{ url=, headers=, params=, body=, auth=, timeout=, tls=, ver
 | `timeout` | integer | No | Seconds. |
 | `tls` | table | No | `Client certificate for mutual TLS (mTLS): { certFile=, keyFile=, caFile= }. All three are filesystem paths to PEM files.` |
 | `verifyTls` | boolean | No | Default true. |
-| `live` | boolean | No | Default true. |
+| `live` | boolean | No | `Default false. In the editor (Run Test and Debug), the request is only sent with live = true; otherwise it returns { code = 0, body = "", simulated = true }. A running node always sends it.` |
 
 **Returns**
 
@@ -212,7 +212,7 @@ linkiir.link.web.post{ url=, headers=, params=, body=, auth=, timeout=, tls=, ve
 | `timeout` | integer | No | Seconds. |
 | `tls` | table | No | `Client certificate for mutual TLS (mTLS): { certFile=, keyFile=, caFile= }. All three are filesystem paths to PEM files.` |
 | `verifyTls` | boolean | No | Default true. |
-| `live` | boolean | No | Default true. |
+| `live` | boolean | No | `Default false. In the editor (Run Test and Debug), the request is only sent with live = true; otherwise it returns { code = 0, body = "", simulated = true }. A running node always sends it.` |
 
 **Returns**
 
@@ -300,7 +300,7 @@ linkiir.link.web.put{ url=, headers=, params=, body=, auth=, timeout=, tls=, ver
 | `timeout` | integer | No | Seconds. |
 | `tls` | table | No | `Client certificate for mutual TLS (mTLS): { certFile=, keyFile=, caFile= }. All three are filesystem paths to PEM files.` |
 | `verifyTls` | boolean | No | Default true. |
-| `live` | boolean | No | Default true. |
+| `live` | boolean | No | `Default false. In the editor (Run Test and Debug), the request is only sent with live = true; otherwise it returns { code = 0, body = "", simulated = true }. A running node always sends it.` |
 
 **Returns**
 
@@ -354,7 +354,7 @@ linkiir.link.web.patch{ url=, headers=, params=, body=, auth=, timeout=, tls=, v
 | `timeout` | integer | No | Seconds. |
 | `tls` | table | No | `Client certificate for mutual TLS (mTLS): { certFile=, keyFile=, caFile= }. All three are filesystem paths to PEM files.` |
 | `verifyTls` | boolean | No | Default true. |
-| `live` | boolean | No | Default true. |
+| `live` | boolean | No | `Default false. In the editor (Run Test and Debug), the request is only sent with live = true; otherwise it returns { code = 0, body = "", simulated = true }. A running node always sends it.` |
 
 **Returns**
 
@@ -406,7 +406,7 @@ linkiir.link.web.delete{ url=, headers=, params=, body=, auth=, timeout=, tls=, 
 | `timeout` | integer | No | Seconds. |
 | `tls` | table | No | `Client certificate for mutual TLS (mTLS): { certFile=, keyFile=, caFile= }. All three are filesystem paths to PEM files.` |
 | `verifyTls` | boolean | No | Default true. |
-| `live` | boolean | No | Default true. |
+| `live` | boolean | No | `Default false. In the editor (Run Test and Debug), the request is only sent with live = true; otherwise it returns { code = 0, body = "", simulated = true }. A running node always sends it.` |
 
 **Returns**
 
@@ -457,7 +457,7 @@ linkiir.link.web.head{ url=, headers=, params=, body=, auth=, timeout=, tls=, ve
 | `timeout` | integer | No | Seconds. |
 | `tls` | table | No | `Client certificate for mutual TLS (mTLS): { certFile=, keyFile=, caFile= }. All three are filesystem paths to PEM files.` |
 | `verifyTls` | boolean | No | Default true. |
-| `live` | boolean | No | Default true. |
+| `live` | boolean | No | `Default false. In the editor (Run Test and Debug), the request is only sent with live = true; otherwise it returns { code = 0, body = "", simulated = true }. A running node always sends it.` |
 
 **Returns**
 
@@ -507,7 +507,7 @@ linkiir.link.web.options{ url=, headers=, params=, body=, auth=, timeout=, tls=,
 | `timeout` | integer | No | Seconds. |
 | `tls` | table | No | `Client certificate for mutual TLS (mTLS): { certFile=, keyFile=, caFile= }. All three are filesystem paths to PEM files.` |
 | `verifyTls` | boolean | No | Default true. |
-| `live` | boolean | No | Default true. |
+| `live` | boolean | No | `Default false. In the editor (Run Test and Debug), the request is only sent with live = true; otherwise it returns { code = 0, body = "", simulated = true }. A running node always sends it.` |
 
 **Returns**
 
@@ -688,7 +688,7 @@ linkiir.link.mail.send{ server=, from=, to=, header=, body=, username=, password
 | `use_ssl` | string | No | 'yes' (require TLS), 'try' (STARTTLS if available), or '' (none). |
 | `timeout` | integer | No | Seconds (default 15). |
 | `verifyTls` | boolean | No | TLS verification, default true. |
-| `live` | boolean | No | Default true; false simulates. |
+| `live` | boolean | No | Default false. In the editor (Run Test and Debug), the email is only sent with live = true; otherwise it returns true. A running node always sends it. |
 
 **Returns**
 

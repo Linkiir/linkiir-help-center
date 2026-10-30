@@ -10,7 +10,7 @@ Linkiir ships ready-to-run demo projects you import as a zip bundle. Each one is
 
 | Demo | What you learn | Import bundle |
 | --- | --- | --- |
-| [Feature Demo](demo-feature.md) | The core nodes end to end: generate HL7, move it over LLP, store it in SQLite, and serve it back as a JSON API | `Linkiir_Demo.linkiir.zip` |
+| [Feature Demo](demo-feature.md) | The core nodes end to end: generate HL7, move it over LLP, map it to database rows with a Data Map, save them with a Database node, and serve them back as a JSON API | `Linkiir_Demo.linkiir.zip` |
 | [HL7 v2 to FHIR Demo](demo-hl7v2-fhir.md) | Building an HL7 v2 to FHIR map with the graphical Data Map node, FHIR validation, reading from and writing to a FHIR server, and a FHIR to HL7 v2 mapping written in Lua | `FHIR_Demo.linkiir.zip` |
 
 Both import the same way (**Projects → Add Project → From zip**) and run against a local grid with no extra setup.

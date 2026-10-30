@@ -24,14 +24,14 @@ Object storage, file transport, and streaming or message brokers.
 
 | Adapter | Current version | Node type id | Changelog |
 | --- | --- | --- | --- |
-| [S3 Adapter (Source)](../adapters/aws-s3.md) | **1.0.0** | `LKFLOW_S3_SOURCE` | [history](#s3-adapter-source) |
-| [S3 Adapter (Destination)](../adapters/aws-s3.md) | **1.0.0** | `LKFLOW_S3_DESTINATION` | [history](#s3-adapter-destination) |
+| [S3 Adapter (Source)](../adapters/aws-s3.md) | **1.1.0** | `LKFLOW_S3_SOURCE` | [history](#s3-adapter-source) |
+| [S3 Adapter (Destination)](../adapters/aws-s3.md) | **1.1.0** | `LKFLOW_S3_DESTINATION` | [history](#s3-adapter-destination) |
 
 ### Libraries
 
 | Library | Current version | Changelog |
 | --- | --- | --- |
-| `aws_s3` | **1.0.0** | [history](#aws_s3) |
+| `aws_s3` | **1.1.0** | [history](#aws_s3) |
 
 :::tip[Checking what you are on]
 Open the node in the Builder: the adapter version it was built from is shown on the node, and **Settings → Catalogs** lists every node whose adapter or library has a newer release. See [how to upgrade](./catalogs.md#upgrading-to-a-newer-version).
@@ -43,7 +43,15 @@ Open the node in the Builder: the adapter version it was built from is shown on 
 
 ### S3 Adapter (Source)
 
-`LKFLOW_S3_SOURCE` · current **1.0.0** · [configuration](../adapters/aws-s3.md)
+`LKFLOW_S3_SOURCE` · current **1.1.0** · [configuration](../adapters/aws-s3.md)
+
+#### 1.1.0
+
+_Released 2026-10-29_
+
+- **Live Mode** off now stops the requests in a running node, not only in Run Test. From Grid 1.2.0 a running node makes every request whatever `live` says, so earlier versions send them even with Live Mode off.
+- Uses `aws_s3` 1.1.0.
+- Requires Grid 1.2.0 or later.
 
 #### 1.0.0
 
@@ -53,7 +61,15 @@ _Released 2026-09-17_
 
 ### S3 Adapter (Destination)
 
-`LKFLOW_S3_DESTINATION` · current **1.0.0** · [configuration](../adapters/aws-s3.md)
+`LKFLOW_S3_DESTINATION` · current **1.1.0** · [configuration](../adapters/aws-s3.md)
+
+#### 1.1.0
+
+_Released 2026-10-29_
+
+- **Live Mode** off now stops the requests in a running node, not only in Run Test. From Grid 1.2.0 a running node makes every request whatever `live` says, so earlier versions send them even with Live Mode off.
+- Uses `aws_s3` 1.1.0.
+- Requires Grid 1.2.0 or later.
 
 #### 1.0.0
 
@@ -67,7 +83,13 @@ Library versions are immutable: a published version is never edited, and a fix s
 
 ### `aws_s3`
 
-current **1.0.0**
+current **1.1.0**
+
+#### 1.1.0
+
+_Released 2026-10-29_
+
+- With `live` off, a request made from a running node is no longer sent: the client returns the same simulated result Run Test gives. It checks `linkiir.node.dev()`, so it needs Grid 1.2.0 or later. 1.0.0 remains published for nodes pinned to it.
 
 #### 1.0.0
 

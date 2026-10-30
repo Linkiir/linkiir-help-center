@@ -79,8 +79,12 @@ The private key stays on disk. The node stores its path, not its contents, so th
 | **FHIR Version** | list | `R4` | `R4`, `STU3`, or `DSTU2`. Becomes the version segment of the request path |
 | **Resource Type** | string | `Patient` | FHIR resource type to search each poll |
 | **Search Query** | string | *(example)* | Search parameters as a URL query string |
-| **Live Mode** | bool | `true` | Off simulates the FHIR calls. Authentication is always live |
+| **Live Mode** | bool | `true` | Off simulates the FHIR calls, in Run Test and in a running node. Authentication is always live |
 | **Verify TLS** | bool | `true` | Verify Epic's TLS certificate. Turn off only for a local test proxy |
+
+:::warning[Live Mode needs 1.1.0 on Grid 1.2.0 and later]
+From Grid 1.2.0, a running node makes every request whatever `live` says. Version 1.1.0 of this adapter checks Live Mode itself, so turning it off still stops the requests. A node built from an earlier version sends them even with Live Mode off: update it to 1.1.0 from **Settings → Catalogs**.
+:::
 
 ## Verify it worked
 

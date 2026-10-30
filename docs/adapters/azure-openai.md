@@ -73,7 +73,11 @@ API Key is quicker to set up. Entra ID avoids a long-lived key and is the better
 | **Temperature** | number | *(empty)* | Sampling temperature, `0.0`–`1.0`. Empty uses the model default |
 | **TopP** | number | *(empty)* | Nucleus sampling, `0.0`–`1.0`. Empty uses the model default |
 | **Request Timeout** | number | `30` | Seconds to wait for a response. Raise it for long prompts |
-| **Live Mode** | bool | `true` | When off, requests are simulated and nothing leaves the installation |
+| **Live Mode** | bool | `true` | When off, requests are simulated and nothing leaves the installation, in Run Test and in a running node |
+
+:::warning[Live Mode needs 1.1.0 on Grid 1.2.0 and later]
+From Grid 1.2.0, a running node makes every request whatever `live` says. Version 1.1.0 of this adapter checks Live Mode itself, so turning it off still stops the requests. A node built from an earlier version sends them even with Live Mode off: update it to 1.1.0 from **Settings → Catalogs**.
+:::
 
 :::note[Which fields are visible]
 The credential fields depend on **Authentication Mode**: switch the mode and the other set appears. This is the conditional-field behavior described in [Interfaces and Core Nodes](../interface-development/interfaces/index.md).

@@ -27,6 +27,7 @@ Rules, conditions and custom Lua all name fields by **path**. Each format has it
 - A segment can be written **once per item** of the input: one `NK1` per FHIR contact, one `OBX` per JSON result. Rules under it read from that item, and **Set ID** numbers the copies.
 - A segment can be made **under** another, such as an OBX under its own OBR. See [Items made inside other items](building-maps.md#items-made-inside-other-items).
 - **As a source**, a segment's own group is read by the message structure: an OBX's OBR is the one above it, and an OBR's OBXs are those in its group.
+- **As a destination**, a message whose structure has groups is built in them: each OBX goes in an OBSERVATION of its own, and a second OBR starts another ORDER_OBSERVATION.
 - Values are kept exactly as received, escapes included, so a copied field writes back unchanged.
 - MSH-7, MSH-9, MSH-10 and MSH-12 can be filled by Auto-map, or set with **Current date/time**, a **Fixed value** and **New control ID**.
 

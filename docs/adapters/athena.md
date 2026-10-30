@@ -60,7 +60,7 @@ Register an application at the [Athena developer portal](https://developer.athen
 | **Scopes** | string | Athena service and patient read scopes | OAuth scopes requested, space-separated |
 | **Practice ID** | string | Athena's sandbox practice | Practice identifier used in the request path |
 | **Search Query** | string | `firstname=John` | Search parameters as a URL query string |
-| **Live Mode** | bool | `true` | Off simulates the API calls. Authentication is always live |
+| **Live Mode** | bool | `true` | Off simulates the API calls, in Run Test and in a running node. Authentication is always live |
 | **Verify TLS** | bool | `true` | Verify the Athena server's TLS certificate |
 
 :::note[Change the practice before going live]
@@ -72,6 +72,10 @@ Register an application at the [Athena developer portal](https://developer.athen
 - With **Live Mode** off, the node starts clean and logs that no request was sent.
 - With **Live Mode** on, the log reports a count of pushed patients.
 - Each message is a single patient record as JSON.
+
+:::warning[Live Mode needs 1.1.0 on Grid 1.2.0 and later]
+From Grid 1.2.0, a running node makes every request whatever `live` says. Version 1.1.0 of this adapter checks Live Mode itself, so turning it off still stops the requests. A node built from an earlier version sends them even with Live Mode off: update it to 1.1.0 from **Settings → Catalogs**.
+:::
 
 ## If it didn't work
 

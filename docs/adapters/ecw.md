@@ -76,8 +76,12 @@ Register `ecw_public.pem` with eCW. Put `ecw_private.pem` on the machine running
 | **Scopes** | string | patient, medication, and encounter read scopes | Space-separated OAuth scopes |
 | **Resource Type** | string | `Patient` | FHIR resource type to search each poll |
 | **Search Query** | string | *(example)* | Search parameters as a URL query string |
-| **Live Mode** | bool | `true` | Off simulates the FHIR calls. Authentication is always live |
+| **Live Mode** | bool | `true` | Off simulates the FHIR calls, in Run Test and in a running node. Authentication is always live |
 | **Verify TLS** | bool | `true` | Verify the eCW server's TLS certificate |
+
+:::warning[Live Mode needs 1.1.0 on Grid 1.2.0 and later]
+From Grid 1.2.0, a running node makes every request whatever `live` says. Version 1.1.0 of this adapter checks Live Mode itself, so turning it off still stops the requests. A node built from an earlier version sends them even with Live Mode off: update it to 1.1.0 from **Settings → Catalogs**.
+:::
 
 :::note[The defaults point at staging]
 **Base URL** and **Auth URL** arrive pointing at eCW's staging environment, including a sample tenant segment. Replace both with your own environment before you turn Live Mode on.

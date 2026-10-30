@@ -24,12 +24,12 @@ FHIR-native EHR and EMR APIs, and FHIR authoring tools.
 
 | Adapter | Current version | Node type id | Changelog |
 | --- | --- | --- | --- |
-| [HAPI FHIR / OmniVera Adapter](../adapters/hapi-fhir.md) | **1.0.0** | `LKFHIR_HAPI_FHIR_ADAPTER` | [history](#hapi-fhir--omnivera-adapter) |
-| [Epic FHIR Adapter](../adapters/epic.md) | **1.0.0** | `LKFHIR_EPIC_ADAPTER` | [history](#epic-fhir-adapter) |
-| [Cerner FHIR Adapter](../adapters/cerner.md) | **1.0.0** | `LKFHIR_CERNER_FHIR_ADAPTER` | [history](#cerner-fhir-adapter) |
-| [eCW Adapter](../adapters/ecw.md) | **1.0.0** | `LKFHIR_ECW_ADAPTER` | [history](#ecw-adapter) |
-| [ModMed Adapter](../adapters/modmed.md) | **1.0.0** | `LKFHIR_MODMED_ADAPTER` | [history](#modmed-adapter) |
-| [Athena Adapter](../adapters/athena.md) | **1.0.0** | `LKFHIR_ATHENA_ADAPTER` | [history](#athena-adapter) |
+| [HAPI FHIR / OmniVera Adapter](../adapters/hapi-fhir.md) | **1.1.0** | `LKFHIR_HAPI_FHIR_ADAPTER` | [history](#hapi-fhir--omnivera-adapter) |
+| [Epic FHIR Adapter](../adapters/epic.md) | **1.1.0** | `LKFHIR_EPIC_ADAPTER` | [history](#epic-fhir-adapter) |
+| [Cerner FHIR Adapter](../adapters/cerner.md) | **1.1.0** | `LKFHIR_CERNER_FHIR_ADAPTER` | [history](#cerner-fhir-adapter) |
+| [eCW Adapter](../adapters/ecw.md) | **1.1.0** | `LKFHIR_ECW_ADAPTER` | [history](#ecw-adapter) |
+| [ModMed Adapter](../adapters/modmed.md) | **1.1.0** | `LKFHIR_MODMED_ADAPTER` | [history](#modmed-adapter) |
+| [Athena Adapter](../adapters/athena.md) | **1.1.0** | `LKFHIR_ATHENA_ADAPTER` | [history](#athena-adapter) |
 | [FHIR Resource Creator](../adapters/fhir-resource-creator.md) | **1.1.0** | `LKFHIR_FHIR_RESOURCE_CREATOR` | [history](#fhir-resource-creator) |
 | [FHIR Validator](../adapters/fhir-validator.md) | **1.0.0** | `LKFHIR_FHIR_VALIDATOR` | [history](#fhir-validator) |
 | [FHIR Profiling Tools](../adapters/fhir-profiling-tools.md) | **1.1.0** | `LKFHIR_FHIR_PROFILING_TOOLS` | [history](#fhir-profiling-tools) |
@@ -38,12 +38,12 @@ FHIR-native EHR and EMR APIs, and FHIR authoring tools.
 
 | Library | Current version | Changelog |
 | --- | --- | --- |
-| `hapi_fhir` | **1.0.0** | [history](#hapi_fhir) |
-| `epic_fhir` | **1.0.0** | [history](#epic_fhir) |
-| `cerner_fhir` | **1.0.0** | [history](#cerner_fhir) |
-| `ecw_fhir` | **1.0.0** | [history](#ecw_fhir) |
-| `modmed_fhir` | **1.0.0** | [history](#modmed_fhir) |
-| `athena_health` | **1.0.0** | [history](#athena_health) |
+| `hapi_fhir` | **1.1.0** | [history](#hapi_fhir) |
+| `epic_fhir` | **1.1.0** | [history](#epic_fhir) |
+| `cerner_fhir` | **1.1.0** | [history](#cerner_fhir) |
+| `ecw_fhir` | **1.1.0** | [history](#ecw_fhir) |
+| `modmed_fhir` | **1.1.0** | [history](#modmed_fhir) |
+| `athena_health` | **1.1.0** | [history](#athena_health) |
 | `fhir_creator` | **1.0.0** | [history](#fhir_creator) |
 | `fhir_validate` | **1.0.0** | [history](#fhir_validate) |
 | `fhir_profiling` | **1.1.0** | [history](#fhir_profiling) |
@@ -58,7 +58,21 @@ Open the node in the Builder: the adapter version it was built from is shown on 
 
 ### HAPI FHIR / OmniVera Adapter
 
-`LKFHIR_HAPI_FHIR_ADAPTER` · current **1.0.0** · [configuration](../adapters/hapi-fhir.md)
+`LKFHIR_HAPI_FHIR_ADAPTER` · current **1.1.0** · [configuration](../adapters/hapi-fhir.md)
+
+#### 1.1.0
+
+_Released 2026-10-29_
+
+- **Live Mode** off now stops the requests in a running node, not only in Run Test. From Grid 1.2.0 a running node makes every request whatever `live` says, so earlier versions send them even with Live Mode off.
+- Uses `hapi_fhir` 1.1.0.
+- Requires Grid 1.2.0 or later.
+
+#### 1.0.1
+
+_Released 2026-10-29_
+
+- Requires Grid 1.2.0 or later. Nothing else changed: Live Mode off still does not stop requests in a running node. Use 1.1.0.
 
 #### 1.0.0
 
@@ -73,7 +87,21 @@ _Released 2026-09-17_
 
 ### Epic FHIR Adapter
 
-`LKFHIR_EPIC_ADAPTER` · current **1.0.0** · [configuration](../adapters/epic.md)
+`LKFHIR_EPIC_ADAPTER` · current **1.1.0** · [configuration](../adapters/epic.md)
+
+#### 1.1.0
+
+_Released 2026-10-29_
+
+- **Live Mode** off now stops the requests in a running node, not only in Run Test. From Grid 1.2.0 a running node makes every request whatever `live` says, so earlier versions send them even with Live Mode off.
+- Uses `epic_fhir` 1.1.0.
+- Requires Grid 1.2.0 or later.
+
+#### 1.0.1
+
+_Released 2026-10-29_
+
+- Requires Grid 1.2.0 or later. Nothing else changed: Live Mode off still does not stop requests in a running node. Use 1.1.0.
 
 #### 1.0.0
 
@@ -83,7 +111,21 @@ _Released 2026-09-17_
 
 ### Cerner FHIR Adapter
 
-`LKFHIR_CERNER_FHIR_ADAPTER` · current **1.0.0** · [configuration](../adapters/cerner.md)
+`LKFHIR_CERNER_FHIR_ADAPTER` · current **1.1.0** · [configuration](../adapters/cerner.md)
+
+#### 1.1.0
+
+_Released 2026-10-29_
+
+- **Live Mode** off now stops the requests in a running node, not only in Run Test. From Grid 1.2.0 a running node makes every request whatever `live` says, so earlier versions send them even with Live Mode off.
+- Uses `cerner_fhir` 1.1.0.
+- Requires Grid 1.2.0 or later.
+
+#### 1.0.1
+
+_Released 2026-10-29_
+
+- Requires Grid 1.2.0 or later. Nothing else changed: Live Mode off still does not stop requests in a running node. Use 1.1.0.
 
 #### 1.0.0
 
@@ -93,7 +135,21 @@ _Released 2026-09-17_
 
 ### eCW Adapter
 
-`LKFHIR_ECW_ADAPTER` · current **1.0.0** · [configuration](../adapters/ecw.md)
+`LKFHIR_ECW_ADAPTER` · current **1.1.0** · [configuration](../adapters/ecw.md)
+
+#### 1.1.0
+
+_Released 2026-10-29_
+
+- **Live Mode** off now stops the requests in a running node, not only in Run Test. From Grid 1.2.0 a running node makes every request whatever `live` says, so earlier versions send them even with Live Mode off.
+- Uses `ecw_fhir` 1.1.0.
+- Requires Grid 1.2.0 or later.
+
+#### 1.0.1
+
+_Released 2026-10-29_
+
+- Requires Grid 1.2.0 or later. Nothing else changed: Live Mode off still does not stop requests in a running node. Use 1.1.0.
 
 #### 1.0.0
 
@@ -103,7 +159,21 @@ _Released 2026-09-17_
 
 ### ModMed Adapter
 
-`LKFHIR_MODMED_ADAPTER` · current **1.0.0** · [configuration](../adapters/modmed.md)
+`LKFHIR_MODMED_ADAPTER` · current **1.1.0** · [configuration](../adapters/modmed.md)
+
+#### 1.1.0
+
+_Released 2026-10-29_
+
+- **Live Mode** off now stops the requests in a running node, not only in Run Test. From Grid 1.2.0 a running node makes every request whatever `live` says, so earlier versions send them even with Live Mode off.
+- Uses `modmed_fhir` 1.1.0.
+- Requires Grid 1.2.0 or later.
+
+#### 1.0.1
+
+_Released 2026-10-29_
+
+- Requires Grid 1.2.0 or later. Nothing else changed: Live Mode off still does not stop requests in a running node. Use 1.1.0.
 
 #### 1.0.0
 
@@ -113,7 +183,15 @@ _Released 2026-09-17_
 
 ### Athena Adapter
 
-`LKFHIR_ATHENA_ADAPTER` · current **1.0.0** · [configuration](../adapters/athena.md)
+`LKFHIR_ATHENA_ADAPTER` · current **1.1.0** · [configuration](../adapters/athena.md)
+
+#### 1.1.0
+
+_Released 2026-10-29_
+
+- **Live Mode** off now stops the API calls in a running node, not only in Run Test. From Grid 1.2.0 a running node makes every request whatever `live` says, so on 1.0.0 the calls were sent even with Live Mode off. Authentication is still always live.
+- Uses `athena_health` 1.1.0.
+- Requires Grid 1.2.0 or later.
 
 #### 1.0.0
 
@@ -174,7 +252,13 @@ Library versions are immutable: a published version is never edited, and a fix s
 
 ### `hapi_fhir`
 
-current **1.0.0**
+current **1.1.0**
+
+#### 1.1.0
+
+_Released 2026-10-29_
+
+- With `live` off, a request made from a running node is no longer sent: the client returns the same simulated result Run Test gives. It checks `linkiir.node.dev()`, so it needs Grid 1.2.0 or later. 1.0.0 remains published for nodes pinned to it.
 
 #### 1.0.0
 
@@ -187,7 +271,13 @@ _Released 2026-09-17_
 
 ### `epic_fhir`
 
-current **1.0.0**
+current **1.1.0**
+
+#### 1.1.0
+
+_Released 2026-10-29_
+
+- With `live` off, a request made from a running node is no longer sent: the client returns the same simulated result Run Test gives. It checks `linkiir.node.dev()`, so it needs Grid 1.2.0 or later. 1.0.0 remains published for nodes pinned to it.
 
 #### 1.0.0
 
@@ -197,7 +287,13 @@ _Released 2026-09-17_
 
 ### `cerner_fhir`
 
-current **1.0.0**
+current **1.1.0**
+
+#### 1.1.0
+
+_Released 2026-10-29_
+
+- With `live` off, a request made from a running node is no longer sent: the client returns the same simulated result Run Test gives. It checks `linkiir.node.dev()`, so it needs Grid 1.2.0 or later. 1.0.0 remains published for nodes pinned to it.
 
 #### 1.0.0
 
@@ -207,7 +303,13 @@ _Released 2026-09-17_
 
 ### `ecw_fhir`
 
-current **1.0.0**
+current **1.1.0**
+
+#### 1.1.0
+
+_Released 2026-10-29_
+
+- With `live` off, a request made from a running node is no longer sent: the client returns the same simulated result Run Test gives. It checks `linkiir.node.dev()`, so it needs Grid 1.2.0 or later. 1.0.0 remains published for nodes pinned to it.
 
 #### 1.0.0
 
@@ -217,7 +319,13 @@ _Released 2026-09-17_
 
 ### `modmed_fhir`
 
-current **1.0.0**
+current **1.1.0**
+
+#### 1.1.0
+
+_Released 2026-10-29_
+
+- With `live` off, a request made from a running node is no longer sent: the client returns the same simulated result Run Test gives. It checks `linkiir.node.dev()`, so it needs Grid 1.2.0 or later. 1.0.0 remains published for nodes pinned to it.
 
 #### 1.0.0
 
@@ -227,7 +335,13 @@ _Released 2026-09-17_
 
 ### `athena_health`
 
-current **1.0.0**
+current **1.1.0**
+
+#### 1.1.0
+
+_Released 2026-10-29_
+
+- With `live` off, a request made from a running node is no longer sent: the client returns the same simulated result Run Test gives. It checks `linkiir.node.dev()`, so it needs Grid 1.2.0 or later. 1.0.0 remains published for nodes pinned to it.
 
 #### 1.0.0
 

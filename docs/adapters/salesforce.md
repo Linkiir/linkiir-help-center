@@ -66,8 +66,12 @@ If your environment issues bearer tokens through another process, enter it in th
 | **Client Secret** | password | *(empty)* | OAuth consumer secret from the connected app |
 | **Key** | password | *(empty)* | An existing bearer token. When set, the node uses it instead of the OAuth exchange |
 | **API Version** | string | `59.0` | Salesforce REST API version |
-| **Live Mode** | bool | `true` | When off, no requests are sent |
+| **Live Mode** | bool | `true` | When off, no requests are sent, in Run Test and in a running node |
 | **Verify TLS** | bool | `true` | Verify the Salesforce TLS certificate |
+
+:::warning[Live Mode needs 1.1.0 on Grid 1.2.0 and later]
+From Grid 1.2.0, a running node makes every request whatever `live` says. Version 1.1.0 of this adapter checks Live Mode itself, so turning it off still stops the requests. A node built from an earlier version sends them even with Live Mode off: update it to 1.1.0 from **Settings → Catalogs**.
+:::
 
 ## Verify it worked
 

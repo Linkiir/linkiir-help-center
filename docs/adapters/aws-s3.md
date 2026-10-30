@@ -82,7 +82,11 @@ Set **Endpoint Override** to point the same nodes at MinIO, LocalStack, Backblaz
 | **Secret Key** | password | *(empty)* | IAM secret access key |
 | **Endpoint Override** | string | *(empty)* | Base URL of an S3-compatible service. Empty means AWS |
 | **Verify TLS** | bool | `true` | Verify the endpoint's TLS certificate |
-| **Live Mode** | bool | `false` | Off signs and logs the request without sending it |
+| **Live Mode** | bool | `false` | Off signs and logs the request without sending it, in Run Test and in a running node |
+
+:::warning[Live Mode needs 1.1.0 on Grid 1.2.0 and later]
+From Grid 1.2.0, a running node makes every request whatever `live` says. Version 1.1.0 of these adapters checks Live Mode itself, so turning it off still stops the requests. A node built from an earlier version sends them even with Live Mode off: update it to 1.1.0 from **Settings → Catalogs**.
+:::
 
 ### S3 Source
 

@@ -67,8 +67,10 @@ For anything a comparison can't express, change a check from **A value in the me
 
 ```lua
 -- A CCD needs at least one result for its Results section.
-return MsgIn.OBX ~= nil
+return hl7.first_segment(MsgIn, 'OBX') ~= nil
 ```
+
+`hl7.first_segment(MsgIn, 'OBX')` finds the first OBX wherever it is. In an ORU, OBX sits in its OBSERVATION group, so `MsgIn.OBX` would be `nil`.
 
 Custom Lua can be combined with ordinary checks under **all** or **any**.
 

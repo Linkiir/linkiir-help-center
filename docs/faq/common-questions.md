@@ -84,9 +84,9 @@ Two caveats: matching is a plain substring — there are no wildcards or operato
 
 ## Does Run Test send real messages?
 
-No. In both Run Test and Debug, `linkiir.flow.push` is non-live: it validates your call and returns a placeholder message ID without producing anything.
+No. In both Run Test and Debug, `linkiir.flow.push` validates your call and returns a placeholder message ID without producing anything.
 
-Outbound calls are a different matter. `linkiir.link.web.post`, `linkiir.link.mail.send`, and database calls execute for real during a test. Point them at test endpoints while developing. See [Testing and Debugging Lua](../interface-development/lua-programming/testing-debugging.md).
+Web requests, email, sockets, FTP and database calls are simulated too, unless the script passes `live = true` to that call. A running node always makes every call, whatever `live` says. See [Testing and Debugging Lua](../interface-development/lua-programming/testing-debugging.md#nothing-leaves-a-test-unless-you-ask).
 
 ## How do I trace one message across nodes?
 

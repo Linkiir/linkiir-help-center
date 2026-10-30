@@ -115,16 +115,26 @@ Turn **Hide empty** off when you are checking that a field really is empty rathe
 
 ---
 
-## Nothing leaves a test
+## Nothing leaves a test unless you ask
 
-In both modes, `linkiir.flow.push` is forced into non-live mode. It validates your arguments and returns a placeholder message ID, but writes nothing. You cannot accidentally produce a real message from the editor.
+In both modes, calls that reach outside the grid are simulated. Each one takes a `live` option, which defaults to `false`:
 
-This is worth knowing when reading test output: a push that "succeeded" in Run Test confirms the call is well-formed, not that delivery works. Verify delivery by starting the node.
+| Call | In Run Test and Debug |
+| --- | --- |
+| `linkiir.flow.push` | Validates the call and returns a placeholder message ID. It never produces a message, even with `live = true`. |
+| `linkiir.link.web.get`, `.post` and the other methods | Return `{ code = 0, body = "", simulated = true }` without sending the request. |
+| `linkiir.link.mail.send` | Returns `true` without sending the email. |
+| `linkiir.link.socket.connect`, `linkiir.link.file.open` | Return a simulated, closed connection. |
+| `linkiir.store.open` | Returns a simulated connection. Its `query` and `execute` return `nil` and an error; `merge` returns `0`. |
 
-:::warning[Outbound calls are real]
-Only queue output is contained. `linkiir.link.web.post`, `linkiir.link.mail.send`, and `linkiir.store` calls execute for real during a test.
+To make a call for real while you test, pass `live = true`, for example `linkiir.store.open{ driver = linkiir.store.SQLITE, name = 'test.db', live = true }`. Point such calls at test endpoints and test databases.
 
-Point them at test endpoints while developing, or pass `live = false` to the `linkiir.link` calls that accept it.
+`live` only matters in the editor. A running node always makes every call, whatever `live` says, so there is nothing to change before you deploy.
+
+This is worth knowing when reading test output: a push or request that "succeeded" in Run Test confirms the call is well-formed, not that delivery works. Verify delivery by starting the node.
+
+:::warning[Files are real]
+Reading and writing files is not simulated. `linkiir.sys.fs` and `io` calls touch the disk during a test, as they do in a running node.
 :::
 
 ---

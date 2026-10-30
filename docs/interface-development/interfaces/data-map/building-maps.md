@@ -273,7 +273,7 @@ function AttendingId(field, MsgIn, MsgType)
 end
 ```
 
-`custom.lua` starts with the helpers the map's code uses, such as `hl7`, so your functions can use them too. `hl7.part(field, i, j)` gives component `i` (and subcomponent `j`) as plain text, with HL7 escapes decoded. The functions are global, so one function can serve several rules, and PreMap and PostMap can call them.
+`custom.lua` starts with the helpers the map's code uses, such as `hl7`, so your functions can use them too. `hl7.part(field, i, j)` gives component `i` (and subcomponent `j`) as plain text, with HL7 escapes decoded. To read another segment of the message, use `hl7.first_segment(MsgIn, 'PV1')`: it finds the first one in the message's groups too, where `MsgIn.PV1` reaches only a segment at the top of the message. The functions are global, so one function can serve several rules, and PreMap and PostMap can call them.
 
 A custom step after a segment, resource or loop gets what was built, then `MsgIn`, `MsgType` and, when it is made per item, the item:
 
