@@ -59,7 +59,7 @@ ssh -i /path/to/key.pem -L 8080:127.0.0.1:8080 ubuntu@EC2_HOST
 
 Keep the tunnel open and browse to `http://localhost:8080/` on your computer. If local port 8080 is busy, use `-L 18080:127.0.0.1:8080` and browse to `http://localhost:18080/`.
 
-Sign in for the first time with the bootstrap web username `admin` and password `password`. Immediately after this login, Linkiir requires you to change the `admin` account password before you can use the dashboard or other product features.
+Sign in for the first time with the bootstrap web username `admin` and password `password`. During this initial login, Linkiir requires you to change the `admin` account password before you can use the dashboard or other product features.
 
 1. Enter `admin` and `password` on the login page.
 2. When **Choose a new password** appears, enter **New password** and **Confirm new password**.
