@@ -59,7 +59,13 @@ ssh -i /path/to/key.pem -L 8080:127.0.0.1:8080 ubuntu@EC2_HOST
 
 Keep the tunnel open and browse to `http://localhost:8080/` on your computer. If local port 8080 is busy, use `-L 18080:127.0.0.1:8080` and browse to `http://localhost:18080/`.
 
-Then follow [Create Grid User Accounts](../../getting-started/first-login.md). The installer uses the bootstrap web username `admin` and password `password`, and requires a password change at first login. Change it first, then create named accounts.
+Sign in for the first time with the bootstrap web username `admin` and password `password`. Immediately after this login, Linkiir requires you to change the `admin` account password before you can use the dashboard or other product features.
+
+1. Enter `admin` and `password` on the login page.
+2. When **Choose a new password** appears, enter **New password** and **Confirm new password**.
+3. Click **Set new password** to complete the required change and access the dashboard.
+
+The bootstrap password no longer works after this change. Create named accounts for daily use afterward. See [Create Grid User Accounts](../../getting-started/first-login.md) for the full procedure and password rules.
 
 :::caution[Secure initial access]
 Never expose an installation that still uses bootstrap credentials. Complete the password change over the private connection before enabling remote dashboard access.
