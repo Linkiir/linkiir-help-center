@@ -17,6 +17,7 @@ Adapters are released separately and are not covered here; see
 
 | Version | Date | Highlights |
 | --- | --- | --- |
+| [v1.2.0](./linkiir-grid-v1.2.0.md) | 2026-11-02 | Log encryption, SSO/LDAP, SOC 2 readiness, database nodes, graphical mapping, project variables, and schema editor, log, and monitor improvements |
 | [v1.1.0](./linkiir-grid-v1.1.0.md) | 2026-09-24 | High Availability, adapter catalog, rolling upgrades, and scripting, log, and queue improvements |
 | [v1.0.0](./linkiir-grid-v1.0.0.md) | 2026-08-12 | Initial release — Dashboard, Runtime, Log Archiver, Notification, Licensing, and more |
 
