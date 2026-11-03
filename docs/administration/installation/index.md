@@ -11,5 +11,6 @@ Select the operating-system guide that matches the Linkiir host.
 | Windows | Native graphical/silent installer | Kafka, or external Kafka |
 | Linux | Native systemd tarball or Docker | Kafka, or external broker |
 | macOS | Offline Docker bundle | Kafka, or external broker |
+| [AWS Marketplace](aws-marketplace.md) | Preinstalled Ubuntu AMI (BYOL) | Bundled Kafka |
 
 For production, prefer an organization-managed external Kafka cluster rather than a single bundled broker.

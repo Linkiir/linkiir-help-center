@@ -24,6 +24,7 @@ const sidebars: SidebarsConfig = {
       items: [
         {type: 'category', label: 'Installation', link: {type: 'doc', id: 'administration/installation/index'}, items: [
           'administration/installation/windows', 'administration/installation/linux', 'administration/installation/macos',
+          'administration/installation/aws-marketplace',
         ]},
         {type: 'category', label: 'Licensing', link: {type: 'doc', id: 'administration/licensing/index'}, items: [
           'administration/licensing/license-types', 'administration/licensing/license-id-code',
