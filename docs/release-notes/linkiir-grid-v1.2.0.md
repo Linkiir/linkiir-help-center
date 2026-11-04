@@ -16,6 +16,10 @@ nodes, graphical message mapping, and project variables, along with a wide set
 of improvements to the schema editor, scripting page, log search, and monitor
 page, plus fixes across mapping, the log page, and both Windows and Linux.
 
+:::warning[Update your HL7v2 mapping after upgrading]
+After you upgrade to v1.2.0, you may need to update your HL7v2 mapping if it uses mapping Lua code. HL7 handling changed in this release, so existing mapping scripts may not behave as before until they are updated. See [HL7 changes in v1.2.0](../faq/hl7-changes-1-2-0.md) for details.
+:::
+
 ## New Features
 
 | # | Feature | Description |
