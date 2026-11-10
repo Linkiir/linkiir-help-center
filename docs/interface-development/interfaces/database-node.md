@@ -144,11 +144,14 @@ A running node keeps the settings it started with. Restart it to pick up a chang
 
 ## Connection tab
 
-The fields shown depend on **Database**.
+The fields shown depend on **Database** and **Connect Using**.
 
 | Field | Shown for | Notes |
 | --- | --- | --- |
 | **Database** | All | `SQL Server` (default), `PostgreSQL`, `Oracle` or `SQLite`. |
+| **Connect Using** | SQL Server, PostgreSQL, Oracle | `Server settings` (default) uses the fields below. For SQL Server and PostgreSQL, `ODBC DSN` connects through a data source name set up on the machine Linkiir runs on, and hides the server, database, authentication, encryption, SSL and search path fields, since the DSN holds them. For Oracle, `TNS alias` connects through a `tnsnames.ora` entry, and hides **Server**, **Port**, **Service Name**, **Protocol** and **Connect Timeout**, since the entry holds them. |
+| **DSN** | Connect Using `ODBC DSN` | The data source name, as `odbc.ini` or the Windows ODBC Data Source Administrator (64-bit) knows it. **User** and **Password**, when filled in, override the DSN's own. |
+| **TNS Alias** | Connect Using `TNS alias` | The net service name in `tnsnames.ora`, for example `PROD`. Oracle looks for `tnsnames.ora` in the folder the `TNS_ADMIN` environment variable names, or else in the Instant Client's `network/admin` folder. Letters, digits, dots, dashes and underscores only. |
 | **Server** | SQL Server, PostgreSQL, Oracle | Host name or address. |
 | **Port** | SQL Server, PostgreSQL, Oracle | Left blank, the usual port is used: `1433`, `5432` or `1521`. For a SQL Server named instance, SQL Server Browser finds it. |
 | **Instance** | SQL Server | A named instance such as `SQLEXPRESS`. Blank for the default instance. |
@@ -162,11 +165,13 @@ The fields shown depend on **Database**.
 | **SSL Mode** | PostgreSQL | `Disable`, `Allow`, `Prefer` (default), `Require`, `Verify CA` or `Verify full`. |
 | **Search Path** | PostgreSQL | The schema the tables are in. Blank uses the server's search path, usually `public`. |
 | **Protocol** | Oracle | `TCP` (default), or `TCPS (TLS)`. |
-| **Connect Timeout** | SQL Server, PostgreSQL, Oracle | Seconds to wait for the server before giving up. Blank uses the driver's default (15 seconds for SQL Server). |
+| **Connect Timeout** | SQL Server, PostgreSQL, Oracle | Seconds to wait for the server before giving up. Blank uses the driver's default (15 seconds for SQL Server). It applies through a DSN too. Through a TNS alias, the `tnsnames.ora` entry sets it (`CONNECT_TIMEOUT`). |
 
 **Test connection** connects with the values in the dialog, saved or not, and says whether it worked. A password that's already saved is used without being shown again.
 
 Each Database node has its own connection. Two nodes writing to the same database each hold their own settings. Put shared values such as the password in the project's **Variables** tab flagged **Secret**. See [Project Settings](../../administration/configurations/project-settings.md).
+
+A DSN or TNS alias lives on the machine, not in the project. It must exist, with the same name, on every machine the node runs on, including each one in a high-availability cluster, and Test connection uses the one on the machine the Grid runs on. Use `Server settings` to keep the whole connection with the node.
 
 The database's driver must be installed on the machine that runs Linkiir. SQL Server needs Microsoft **ODBC Driver 18 for SQL Server**, and PostgreSQL needs psqlODBC. See [Database Drivers](../../administration/configurations/database-drivers.md).
 

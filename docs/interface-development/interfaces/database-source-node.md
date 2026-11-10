@@ -12,7 +12,7 @@ keywords: [database, source, status table, polling, SQL Server, PostgreSQL, Orac
 Your application  →  status table + data tables  →  Database source  →  Data Map, Database destination, File/FTP, …
 ```
 
-Another application says which records are ready through a **status table**. The status table has one row per record, holding the record's identifier and a status. The node reads each record whose status is **Waiting** and sends it, then sets it to **Processing**.
+Another application says which records are ready through a **status table**. The status table has one row per record, holding the record's identifier and a status. The node reads each record whose status is **Waiting** and sends it, then sets it to **Processing**. A node can read several status tables, for example one for each kind of record.
 
 ---
 
@@ -24,14 +24,14 @@ Another application says which records are ready through a **status table**. The
 | **Processing** | `P` | The node, once the record is sent | The record is on its way downstream. The node never changes it again. |
 | **Failed** | `F` | The node | The record couldn't be read, for example because no table has rows for it. It was never sent, and the node logged why. |
 
-Every poll, the node:
+Every poll, the node goes through its status tables in turn. For each one, it:
 
-1. finds up to **Records per Poll** records at the Waiting status, in **Order By Column** order (then identifier order), or in no particular order without one;
-2. reads each record's row of the status table, and the rows of every other table whose link column holds the record's identifier;
+1. finds up to **Records per Poll** records at the Waiting status, in **Order by** order (then identifier order), or in no particular order without one;
+2. reads each record's row of the status table, and the rows of each table that status table reads, where the link column holds the record's identifier;
 3. sends them downstream as one message;
 4. once the message is in the queue, sets the record to the Processing status. It does this only while the record is still Waiting, so a status a downstream node has already set is kept.
 
-A record is sent and marked one at a time, in order. A poll that finds a full **Records per Poll** looks again at once; otherwise the node waits **Interval** before the next poll. The node never runs two polls at once, however many records a poll finds.
+A record is sent and marked one at a time, in order. A poll that finds a full **Records per Poll** in any status table looks again at once; otherwise the node waits **Interval** before the next poll. The node never runs two polls at once, however many records a poll finds.
 
 **The node sets nothing after Processing.** Whether a record succeeded downstream is for the downstream nodes to say. See [Setting the outcome downstream](#setting-the-outcome-downstream).
 
@@ -41,7 +41,7 @@ A record is sent and marked one at a time, in order. A poll that finds a full **
 
 ## What a message holds
 
-Each record is sent as **one JSON object of rows by table**, the same shape the [Database destination](database-node.md#what-a-message-must-hold) and a Data Map's database source take. The status table comes first, then the other tables in **Table Links** order. Every table is an array, even with one row or none.
+Each record is sent as **one JSON object of rows by table**, the same shape the [Database destination](database-node.md#what-a-message-must-hold) and a Data Map's database source take. The record's status table comes first, then the tables it reads, in the order the dialog lists them. Every table is an array, even with one row or none.
 
 ```json
 {
@@ -55,6 +55,14 @@ Each record is sent as **one JSON object of rows by table**, the same shape the 
 ```
 
 The status table's row shows the Waiting status, as it was when the node read it.
+
+You can rely on this shape:
+
+- **The status table is always the first table in the message.** With several status tables, it is the one the record came from, and it is the only status table in the message.
+- **Its row is there exactly once**, with every column of the status table.
+- **Nothing marks which columns are the identifier and the status.** A node that writes the outcome back needs them in its own settings.
+
+If a node between this one and the node reading the message parses the JSON and writes it again, the table order may change. In that case, find the status table by name instead.
 
 Values come out in one form whatever the database:
 
@@ -78,23 +86,27 @@ A [Data Map](data-map/index.md) with a database source reads this shape. A Datab
 
 ## The tables
 
-The node reads only tables described in its own `schema.json`, a [DB Schema](../schema-editor.md#database-tables): the status table, and the tables a record's data is in.
+The node reads only tables described in its own `schema.json`, a [DB Schema](../schema-editor.md#database-tables): the status tables, and the tables a record's data is in.
 
-### The status table
+### Status tables
+
+A node has one status table or several. Each has its own columns, below, and its own list of the tables it reads. The status values (Waiting, Processing, Failed) are the node's, the same in every status table. Several status tables suit records of different kinds that are made ready in different tables, for example ADT messages queued in `adt_queue` and results in `oru_queue`.
 
 | Column | Notes |
 | --- | --- |
-| **Identifier Column** | Identifies the record. It must be the status table's primary key **on its own** in `schema.json`, so each status update changes one row. |
-| **Status Column** | Holds the status. Each status value must fit it: `CHAR(1)` holds `W`, `P` and `F`. |
-| **Order By Column** | Optional. Sets the order records are sent in, for example a sequence number or the time a record was made ready. Records are sent in its order, then by identifier. Left blank, they are sent in no particular order: the order the database finds them in. To send them in identifier order, choose the identifier column. |
+| **Identifier column** | Identifies the record. It must be the status table's primary key **on its own** in `schema.json`, so each status update changes one row. |
+| **Status column** | Holds the status. Each status value must fit it: `CHAR(1)` holds `W`, `P` and `F`. |
+| **Order by** | Optional. Sets the order records are sent in, for example a sequence number or the time a record was made ready. Records are sent in its order, then by identifier. Left blank, they are sent in no particular order: the order the database finds them in. To send them in identifier order, choose the identifier column. |
 
 The status table can hold other columns too. They are sent with the record's row.
 
-### Table links
+### What a status table reads
 
-Every other table needs a **link column**: the column holding the record's identifier. The node sends the rows where it does. For example, `patients` is linked by `mrn`, and `visits`, keyed by `visit_id`, is linked by `patient_mrn`.
+For each table a status table reads, it has a **link column**: the column holding the record's identifier. The node sends the rows where it does. For example, `patients` is linked by `mrn`, and `visits`, keyed by `visit_id`, is linked by `patient_mrn`.
 
-The node never guesses a link. A table without one stops the node from starting, and the error names the table. The dialog proposes one for you (see [Record tab](#record-tab)).
+Every table that isn't a status table must be read by at least one status table. One table can be read by several, each by its own link column: `patients` by `msg_id` for `adt_queue`, and by `result_id` for `oru_queue`. A status table is never read as another's data.
+
+The node never guesses a link. A table no status table reads stops the node from starting, and the error names the table. The dialog can add every table named like the identifier column in one click (see [Record tab](#record-tab)).
 
 Each table is read by the identifier itself. For a table one step further away, such as results keyed by a visit, put a database view that carries the identifier into the schema, or carry the identifier on that table.
 
@@ -110,7 +122,7 @@ When none of the other tables has a row for a record, the node can't send it. It
 2. Select the node and click **Configure** in **Node Parameters**.
 3. On **Connection**, fill in the database and click **Test connection**. The fields are the [Database destination's](database-node.md#connection-tab).
 4. On **Tables**, click **Import tables from the database**, or **Add table from downstream node**, and tick the status table and the tables a record's data is in.
-5. On **Record**, choose the status table and its columns, and check each table's link column.
+5. On **Record**, add the status table and choose its columns, and add each table it reads with its link column. Add another status table the same way.
 6. Click **Preview next record** to see what the node would send.
 7. On **Behaviour**, set how often it polls.
 8. Click **Save**, then start the node.
@@ -120,11 +132,11 @@ When none of the other tables has a row for a record, the node can't send it. It
 For a Database source, the panel shows a card for each tab of the **Configure** dialog that holds settings:
 
 - **Connection:** the database and where it is.
-- **Tables:** the node's tables, the status table marked **(status)**.
-- **Record:** the status table and identifier, for example `patient_queue.mrn`, the statuses (`W → P, failed F`) and the order.
+- **Tables:** the node's tables, each status table marked **(status)**.
+- **Record:** the status tables and their identifiers, for example `patient_queue.mrn`, the statuses (`W → P, failed F`), and with one status table its order.
 - **Behaviour:** how often it polls and how many records at a time, **On error**, **Connection** and reconnecting.
 
-The Record card also says what stops the node from reading records, for example *Choose the status table.*
+The Record card also says what stops the node from reading records, for example *Add a status table.*
 
 **Save** in the dialog saves the settings and `schema.json` together. A running node keeps the settings it started with. Restart it to pick up a change.
 
@@ -138,7 +150,7 @@ The differences:
 
 - **Import tables from the database** lists the database's tables with this node's connection. Tick the ones to read; **Import** reads each table's columns, types and primary key into the node's schema. A table the node already has is skipped unless you tick **Overwrite**. Into a node with no tables yet, the import sets the schema to the node's **Database**, so names keep the database's case; the tables a record is sent as are named as the schema names them. Nothing is saved until you press **Save**.
 - **Add table from downstream node** takes the place of adding tables from an upstream node, since a source has none. It offers the tables already described by the nodes this one sends to, for example a Data Map's `source.json` that reads database rows, or a Database destination's `schema.json`. Connect the node to them first. Tick the tables to copy; the node gets its own copy, so a later change downstream needs copying again. A table the node already has is skipped unless you tick **Overwrite**.
-- The status table is badged **Status table**, and each other table shows its link column, or **No link column**.
+- Each status table is badged **Status table**. Each other table shows its link column, **Read by 2** (hover for which status tables) when several read it, **Not read** when none does, or **No link column** when its link isn't one of its columns.
 - **Check tables** also says when the node would not start with the settings and tables in the dialog, in the node's own words, for example when the identifier column isn't the status table's primary key in `schema.json`.
 
 ---
@@ -157,16 +169,20 @@ The tab opens with the statuses drawn with your values: Waiting, sent, then Proc
 
 A blank status is its default. The three must all be different, compared as the database compares them: ignoring case and trailing spaces. Each must fit the status column: text no longer than the column, or a number for a number column.
 
-### Status table
+### Status tables
+
+The node's status tables are shown as tabs across the top, numbered in the order the node polls them. A tick means a status table is ready; a warning sign means something stops it, and picking it shows what. Pick one to see and change its settings below:
 
 | Field | Default | Notes |
 | --- | --- | --- |
-| **Status Table** | | One of the node's tables. Choosing one fills **Identifier Column** with its primary key, and **Status Column** with a column named `status`, when it has them. |
-| **Identifier Column** | | The status table's primary key, on its own. |
-| **Status Column** | | Any other column of the status table. |
-| **Order By Column** | None | **None**, or a column of the status table. With **None** the node asks for no order, so records go in whatever order the database returns them. |
+| **Table** | | One of the node's tables. Choosing one fills **Identifier column** with its primary key, and **Status column** with a column named `status`, when it has them. A table that becomes a status table is no longer read by the others. |
+| **Identifier column** | | The status table's primary key, on its own. |
+| **Status column** | | Any other column of the status table. |
+| **Order by** | None | **None**, or a column of the status table. With **None** the node asks for no order, so records go in whatever order the database returns them. |
 
-**Creating a status table.** If your database doesn't have one yet, choose **New status table...** in **Status Table**. Give the table a name and choose its columns:
+**Add a status table** (**Add another** once there is one) lists the node's tables that aren't status tables yet. A new one is polled last. With more than one, drag a tab to another place to change the poll order, or use the arrows beside the picked status table's name to move it earlier or later. The bin icon removes it from the node; its table stays in the schema, as a table to read.
+
+**Creating a status table.** If your database doesn't have one yet, choose **New status table**, at the top of **Add a status table**. Give the table a name and choose its columns:
 
 - **Identifier column:** the primary key. Name it like the column of the data tables that holds the same value, and the table links are filled in by it.
 - **Identifier type:** one of the database's types that can be a primary key, with its length or precision. It starts as the type of the first data table's key; make it match the data tables' link columns.
@@ -175,13 +191,15 @@ A blank status is its default. The three must all be different, compared as the 
 
 Hover over a field's name for what it is for.
 
-**Add status table** adds it to the node's tables and fills in the fields above. It isn't in the database yet: on the **Tables** tab, click **Check tables**, then create it after reviewing its SQL.
+**Add status table** adds it to the node's tables and to the list, with the fields above filled in. It isn't in the database yet: on the **Tables** tab, click **Check tables**, then create it after reviewing its SQL.
 
-### Table links
+### Reads
 
-One line per table besides the status table, in the order they are sent. Pick each table's link column.
+Under the picked status table, the tables it reads, each with its link column. They are sent in this order.
 
-- A table without a link yet gets the column with the same name as the identifier column, ignoring case. It is marked **Proposed** and saved with the node when you press **Save**.
+- **Add a table to read** (**Add another table...** once it reads one) lists the node's tables this status table doesn't read yet. A table no status table reads is marked so. A table with a column named like the identifier column, ignoring case, is added linked by it; otherwise choose its link column. It isn't saved until it has one.
+- The **×** on a line stops this status table reading that table.
+- A status table you add reads nothing yet. When tables that no status table reads have a column with the same name as its identifier column, ignoring case, the panel says how many and offers **Read them all**, which adds them, each linked by that column. Remove any it shouldn't read with **×**, or add them one at a time instead.
 - A warning appears when a link column is the table's own whole primary key and isn't named like the identifier. A table's own key is rarely the column holding another table's identifier, for example `orders.id` when the identifier is `patient_queue.id`.
 - Links to tables the node no longer has are listed, and dropped when you save.
 
@@ -189,8 +207,8 @@ One line per table besides the status table, in the order they are sent. Pick ea
 
 | Button | What it does |
 | --- | --- |
-| **Show SQL** | Shows the statements the node runs with the settings in the dialog, unsaved ones included, without connecting: finding waiting records, reading a record's rows from each table, and the two status updates. When the node would not start, it says why instead. |
-| **Preview next record** | Reads the next waiting record as the node would, and shows its identifier, the rows each table gave, and the message it would send. **It changes nothing**: the record stays Waiting, and the node still sends it. It says when no record is waiting, or when the record has no rows and the node would set it to Failed. The SQL it ran is listed below. |
+| **Show SQL** | For the status table picked above, shows the statements the node runs with the settings in the dialog, unsaved ones included, without connecting: finding waiting records, reading a record's rows from each table, and the two status updates. When the node would not start, it says why instead. |
+| **Preview next record** | Reads the picked status table's next waiting record as the node would, and shows its identifier, the rows each table gave, and the message it would send. **It changes nothing**: the record stays Waiting, and the node still sends it. It says when no record is waiting, or when the record has no rows and the node would set it to Failed. The SQL it ran is listed below. |
 
 ---
 
@@ -201,7 +219,7 @@ One line per table besides the status table, in the order they are sent. Pick ea
 | Field | Default | Range | Notes |
 | --- | --- | --- | --- |
 | **Interval** | `10000` | 100–86400000 ms | The wait between polls. A poll that finds a full **Records per Poll** looks again at once. |
-| **Records per Poll** | `100` | 1–1000 | The most records one poll reads. Each is sent and marked before the next. |
+| **Records per Poll** | `100` | 1–1000 | The most records one poll reads from each status table. Each is sent and marked before the next. |
 | **On Error** | `Stop the node` | | What happens after a record can't be read: either way it is set to the Failed status and logged. `Stop the node` stops, so nothing more is sent until it is restarted. `Carry on` goes on to the next record. |
 
 ### Staying connected
@@ -248,6 +266,8 @@ The node's part ends at Processing. To record whether a record succeeded, have a
 
 Use statuses of your own for the outcome, such as `C` for complete or `E` for error, different from Waiting.
 
+With several status tables, write the outcome to the status table the message came from (the first table in the message, see [What a message holds](#what-a-message-holds)), not to a fixed one.
+
 :::caution[Don't send the source's message straight back into the status table]
 The message carries the status row as it was read, at Waiting. A Database destination writing that message into the same status table would set the record back to Waiting, and the node would send it again. Write the outcome from a node that sets the status it means, or leave the status table out of the destination's schema.
 :::
@@ -260,7 +280,7 @@ The node doesn't log the records it sends. It logs what it did with each one. A 
 
 | Level | Line | When |
 | --- | --- | --- |
-| INFO | `Sent a record: 1 row from patients, 2 rows from visits` | A record is sent and marked. |
+| INFO | `Sent a record: 1 row from patients, 2 rows from visits` | A record is sent and marked. With several status tables: `Sent a record from oru_queue: ...`. |
 | DEBUG | `Record <identifier>` and `SQL: SELECT …` | Each record and each statement. Only with **Debug Logging** on. |
 | DEBUG | `Record <identifier> is no longer W: skipped` | A record changed by someone else between the poll and the read. |
 | DEBUG | `Closed the connection until the next poll` | With **Connection** set to `Close between polls`, before each wait. Only with **Debug Logging** on. |
