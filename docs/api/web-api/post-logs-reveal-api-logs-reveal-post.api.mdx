@@ -1,0 +1,68 @@
+---
+id: post-logs-reveal-api-logs-reveal-post
+title: "Unmask log record summaries"
+description: "Returns the unmasked `message_summary` of each given log record, for a caller with the 'Unredact PHI' (logs.unredact) permission (403 otherwise) - the summaries `GET /api/logs` sends masked. Records that don't exist, or belong to a project the caller isn't on, are left out. Sending a message's summary unmasked is recorded in the audit trail."
+sidebar_label: "Unmask log record summaries"
+hide_title: true
+hide_table_of_contents: true
+api: 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
+sidebar_class_name: "post api-method"
+info_path: docs/api/web-api/linkiir-api
+custom_edit_url: null
+hide_send_button: true
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Unmask log record summaries"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/api/logs/reveal"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Returns the unmasked `message_summary` of each given log record, for a caller with the 'Unredact PHI' (logs.unredact) permission (403 otherwise) - the summaries `GET /api/logs` sends masked. Records that don't exist, or belong to a project the caller isn't on, are left out. Sending a message's summary unmasked is recorded in the audit trail.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<ParamsDetails>
+  
+</ParamsDetails>
+
+<RequestSchema
+  {...require("./post-logs-reveal-api-logs-reveal-post.RequestSchema.json")}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  {...require("./post-logs-reveal-api-logs-reveal-post.StatusCodes.json")}
+>
+  
+</StatusCodes>
+
+
+      

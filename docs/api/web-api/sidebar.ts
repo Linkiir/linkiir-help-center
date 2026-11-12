@@ -1038,12 +1038,6 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
-          id: "api/web-api/move-data-map-files-api-move-data-map-files-post",
-          label: "Bring an older Data Map node's files up to date",
-          className: "api-method post",
-        },
-        {
-          type: "doc",
           id: "api/web-api/export-data-map-api-export-data-map-post",
           label: "Export a data map with what it needs",
           className: "api-method post",
@@ -1185,6 +1179,12 @@ const sidebar: SidebarsConfig = {
           id: "api/web-api/update-phi-masking-settings-api-phi-masking-settings-put",
           label: "Update PHI masking settings",
           className: "api-method put",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/preview-phi-masking-api-phi-masking-preview-post",
+          label: "Preview PHI masking",
+          className: "api-method post",
         },
         {
           type: "doc",
@@ -1402,12 +1402,6 @@ const sidebar: SidebarsConfig = {
           label: "Health",
           className: "api-method get",
         },
-        {
-          type: "doc",
-          id: "api/web-api/get-items-api-items-get",
-          label: "Get Items",
-          className: "api-method get",
-        },
       ],
     },
     {
@@ -1617,6 +1611,12 @@ const sidebar: SidebarsConfig = {
           id: "api/web-api/get-log-payload-api-logs-event-id-payload-get",
           label: "Get a log record's stored payload",
           className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/post-logs-reveal-api-logs-reveal-post",
+          label: "Unmask log record summaries",
+          className: "api-method post",
         },
         {
           type: "doc",

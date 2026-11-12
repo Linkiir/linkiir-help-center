@@ -1,14 +1,14 @@
 ---
 title: PHI Masking
-description: Choose which HL7 v2 fields, JSON keys, XML elements and FHIR paths are masked for anyone without Unredact PHI, in Settings → Instance → PHI Masking.
+description: Choose which HL7 v2 fields, JSON keys, XML elements and FHIR paths are masked in the message content Linkiir sends, in Settings → Instance → PHI Masking.
 keywords: [PHI, masking, redaction, unredact, hide PHI, HL7, FHIR, JSON, XML, log search]
 ---
 
 # PHI Masking
 
-Message payloads carry patient identifiers. Linkiir masks them for everyone who doesn't hold the **Unredact PHI** permission, and **Settings → Instance → PHI Masking** decides what counts as an identifier.
+Message payloads carry patient identifiers. Linkiir masks them in every message it sends, and **Settings → Instance → PHI Masking** decides what counts as an identifier.
 
-The masking happens on the server: a user without **Unredact PHI** never receives the masked values at all, whatever page or API they read the message through.
+The masking happens on the server, for everyone. **Masked PHI is sent unless a user with the Unredact PHI permission requests unmasked content**, for example by showing PHI on the Logs page. A user without **Unredact PHI** never receives the masked values at all, whatever page or API they read the message through, and a user with it receives them only for what they asked to see.
 
 ---
 
@@ -16,13 +16,12 @@ The masking happens on the server: a user without **Unredact PHI** never receive
 
 | Where | Without **Unredact PHI** | With **Unredact PHI** |
 | --- | --- | --- |
-| **Logs**: a message's payload | Always masked | Masked for each message you open. The inspector's **PHI** button shows it in full, and masks it again with the same rules |
-| **Logs**: the summary on each row | Masked | Shown in full |
-| **Logs**: the **Preview** on each row | Always masked | Masked each time the page opens. The toolbar's **PHI** button shows the previews in full, separately from the inspector |
-| **Logs**: search | Matches only what you are shown (see [Searching](#searching-masked-messages)) | Matches the whole message |
-| **Logs**: Download | Exported masked | Exported in full |
-| **Logs**: Resubmit | Read only, masked | Reveal a message to edit it before resubmitting. A message no rule matches says so, rather than offering to reveal it |
-| **Dashboard**: a queue's message previews | Masked | Shown in full |
+| **Logs**: a message's payload | Always masked | Masked for each message you open. The inspector's **PHI** button fetches it unmasked, and masks it again with the same rules |
+| **Logs**: the summary and **Preview** on each row | Always masked | Masked each time the page opens. The toolbar's **PHI** button fetches unmasked text for the rows on screen, separately from the inspector |
+| **Logs**: search | Matches only what you are shown (see [Searching](#searching-masked-messages)) | Matches the masked text while PHI is hidden, and the whole message while it is shown |
+| **Logs**: Download | Exported masked | Exported masked, unless you tick **Include PHI** |
+| **Logs**: Resubmit | Read only, masked | Reveal a message to edit it before resubmitting; Linkiir fetches it unmasked. A message no rule matches says so, rather than offering to reveal it |
+| **Dashboard**: a queue's message previews | Masked | Masked each time the window opens. Its **PHI** button fetches them unmasked |
 | **AI assistant** | Always masked, for everyone. See [AI Policy and Limits](../../ai-assistant/setup/policy-and-limits.md) | Always masked |
 
 Masked values are replaced with `██████`. A message that still contains that character is refused for resubmission, so a masked view can never be published back onto a queue.
@@ -98,7 +97,7 @@ A path steps through arrays and repeated elements on its own: `Patient.name` mas
    - **HL7v2 Fields**: one row per segment, with its field numbers separated by commas. **Add segment** adds a row.
    - **JSON & XML Key Names**: one key name per line.
    - **Additional JSON & XML Paths**: one path per line, masked on top of the built-in FHIR paths. A built-in path typed here is already covered, so it isn't saved again; the card says which.
-3. Check the **Preview**. It runs the policy you are editing, built-in paths included, against sample HL7v2, FHIR JSON and FHIR XML messages, so you can see what a change hides before saving it.
+3. Check the **Preview**. The server runs the policy you are editing, built-in paths included, against sample HL7v2, FHIR JSON and FHIR XML messages, so you can see what a change hides before saving it. Previewing saves nothing.
 4. Select **Save**.
 
 The next log read, export or queue preview uses the new policy. Nothing needs restarting. Each save is recorded in the instance's history.
@@ -107,7 +106,7 @@ The next log read, export or queue preview uses the new policy. Nothing needs re
 Saving the policy needs both **Security settings** and **Unredact PHI**. Masking less shows identifiers to everyone who can't unredact. That isn't a power to give someone who sees the masked view themselves.
 :::
 
-Anyone signed in can read the policy, because the Logs page needs it to mask previews and payloads in the browser, and the policy itself contains no patient data.
+Anyone signed in can read the policy: it contains no patient data, and pages that show masked content can say what was masked.
 
 ---
 
@@ -127,11 +126,11 @@ This happens with malformed messages, and with summaries and queue previews that
 
 ## Searching masked messages
 
-Search on the Logs page reaches into message bodies. For someone without **Unredact PHI**, a row counts as a match only if the term appears in what they would be shown: the masked message, the error summary, or a project, workflow or node name. Otherwise a search for a patient's name would list every message about that patient, even with each one masked.
+Search on the Logs page reaches into message bodies. While the page shows masked content, a row counts as a match only if the term appears in what is shown: the masked message, the error summary, or a project, workflow or node name. Otherwise a search for a patient's name would list every message about that patient, even with each one masked. This is how search always works for someone without **Unredact PHI**. Someone with it searches the whole message once they show PHI with the toolbar's **PHI** button.
 
 Checking each row against its masked text takes longer, so each request is limited in how much it searches. When the limit is reached before a page fills, the table says **Older messages haven't been searched yet**, and **Keep searching** carries on from there. A search that stops early means only that the term matched many messages, not which ones.
 
-Each search of message content by someone without **Unredact PHI** is recorded as a system event. The live tail repeating a search isn't. The event records the term and how many rows the masking hid, and that detail is itself always masked: only someone with **Unredact PHI** can read it.
+Each search of masked message content is recorded as a system event. The live tail repeating a search isn't. The event records the term and how many rows the masking hid, and that detail is itself always masked: only someone with **Unredact PHI** can read it.
 
 ---
 

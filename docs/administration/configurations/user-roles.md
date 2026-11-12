@@ -63,11 +63,11 @@ Reading message history.
 | Permission | Grants |
 | --- | --- |
 | **View log messages** | Browse, search and filter the log index, and open a message's payload |
-| **Unredact PHI** | Show the patient identifiers the Logs page masks, with its **PHI** buttons |
+| **Unredact PHI** | Request unmasked message content: the **PHI** buttons on the Logs page and in a node's queue window, and **Include PHI** when downloading |
 | **Export log messages** | Download selected messages as a file |
 | **Resubmit messages** | Re-produce a stored message onto its originating topic, or send it to a node in another workflow or project the user collaborates on |
 
-Reading a message includes reading its body — the index row already names the identifiers the payload carries, so gating the two separately drew a line where there was not one. What *is* separate is seeing PHI unmasked: payloads render redacted for everyone without **Unredact PHI**. What is redacted is set in [PHI Masking](phi-masking.md).
+Reading a message includes reading its body — the index row already names the identifiers the payload carries, so gating the two separately drew a line where there was not one. What *is* separate is seeing PHI unmasked: the server sends message content masked unless a user with **Unredact PHI** requests it unmasked. What is redacted is set in [PHI Masking](phi-masking.md).
 
 ### Scripting
 

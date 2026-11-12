@@ -155,9 +155,9 @@ The same boundary applies when you raise a support ticket: payloads belong in yo
 
 Set the retention your organisation's policy requires: **Log Retention Days** under **Settings → Logging** purges records past that age daily, payloads included. A fresh installation keeps everything until you set it. See [Log Retention and Purge](../configurations/log-retention-purge.md).
 
-Restrict who can view payloads and perform replays. Note that the permission model is coarse: **View log messages** covers reading message history including payloads, and there is no separate permission for payload access — what *is* separate is **Unredact PHI**, which is what turns a masked payload (HL7 v2, FHIR, or other JSON and XML) into readable patient data and what a message must be revealed under before it can be edited for a resubmission. The masking is applied on the server, to payloads, the log list, exports and queue previews alike, and **Settings → Instance → PHI Masking** decides which fields and paths it covers. Where a stricter split than that matters, separate environments rather than relying on roles within one. See [Log Search and Message History](../logs/index.md) and [PHI Masking](../configurations/phi-masking.md).
+Restrict who can view payloads and perform replays. Note that the permission model is coarse: **View log messages** covers reading message history including payloads, and there is no separate permission for payload access — what *is* separate is **Unredact PHI**, which is what turns a masked payload (HL7 v2, FHIR, or other JSON and XML) into readable patient data and what a message must be revealed under before it can be edited for a resubmission. The masking is applied on the server, to payloads, the log list, exports and queue previews alike: masked PHI is sent unless a user with **Unredact PHI** requests unmasked content (the **PHI** buttons on the Logs page and in a node's queue window, or **Include PHI** on a download), and **Settings → Instance → PHI Masking** decides which fields and paths it covers. Where a stricter split than that matters, separate environments rather than relying on roles within one. See [Log Search and Message History](../logs/index.md) and [PHI Masking](../configurations/phi-masking.md).
 
-Search reaches message content, not only the summary line. For an account without **Unredact PHI**, a message only matches on what that account is shown masked, so searching for a patient's name doesn't reveal which messages are about them; each such search is recorded as a system event. Unmasked content is still searchable by anyone holding **View log messages**, which is the same data those accounts can already open a record to read.
+Search reaches message content, not only the summary line. While the Logs page shows masked content, a message only matches on what is shown masked, so searching for a patient's name doesn't reveal which messages are about them; each such search is recorded as a system event. This is always the case for an account without **Unredact PHI**. An account with it searches the unmasked content once it shows PHI.
 
 ---
 
@@ -252,8 +252,8 @@ No event ever contains a password, token, secret, or SSO assertion. Events also 
 | --- | --- |
 | `QUEUE_CLEAR` | Messages waiting on a node's queue are discarded |
 | `QUEUE_REPOSITION` | A node's queue position is moved, skipping or replaying messages |
-| `LOG_SEARCH` | Message content is searched by someone without **Unredact PHI** |
-| `LOG_PHI_UNMASKED_VIEW` | Someone with **Unredact PHI** opens a payload unmasked. Recorded once per session per project. |
+| `LOG_SEARCH` | Masked message content is searched |
+| `LOG_PHI_UNMASKED_VIEW` | Someone with **Unredact PHI** is sent message content unmasked: a payload, the Logs table's rows with PHI shown, or a node's queue previews. Recorded once per session per project. |
 | `LOG_EXPORT` | Log records are downloaded |
 | `MESSAGE_RESUBMIT` | Archived messages are resubmitted. A message sent to another node is recorded in the destination project, and also in its own project when it leaves that project |
 

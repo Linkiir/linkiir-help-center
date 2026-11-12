@@ -8,7 +8,7 @@ Configuration is divided between platform settings, environment-specific connect
 
 - [Project Settings](project-settings.md) — variables, credentials, templates, libraries, and Git, per project
 - [Users and Roles](user-roles.md) — accounts, the permission set, and SSH keys
-- [PHI Masking](phi-masking.md) — which fields, keys and paths are masked for anyone without Unredact PHI
+- [PHI Masking](phi-masking.md) — which fields, keys and paths are masked in the message content Linkiir sends
 - [Migrating Existing Interfaces](migration.md)
 - [HTTP Server Settings](http-server.md) — the embedded server every Source HTTP node shares
 - [Database Drivers](database-drivers.md) — what SQL Server, PostgreSQL and Oracle need installed
@@ -140,7 +140,7 @@ Displays the instance identifier and the working directory path. Used for suppor
 | --- | --- |
 | Instance ID | A unique identifier for this Linkiir installation. |
 | Working Directory | Filesystem path where settings, state, and project data are stored. |
-| PHI Masking | Which HL7 v2 fields, JSON keys, XML elements and FHIR paths are masked for anyone without **Unredact PHI**. See [PHI Masking](phi-masking.md). |
+| PHI Masking | Which HL7 v2 fields, JSON keys, XML elements and FHIR paths are masked. Masked PHI is sent unless a user with **Unredact PHI** requests unmasked content. See [PHI Masking](phi-masking.md). |
 | Backup Settings | Configure automated instance backup (remote Git). |
 
 See [Backup and Restore](../backup-restore/index.md) for backup configuration details.

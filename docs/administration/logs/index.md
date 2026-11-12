@@ -57,7 +57,7 @@ The **Preview** column shows the start of the message, up to three lines, with a
 
 The preview is taken from the start of the message recorded on the index row, so it costs nothing extra to load. Long lines are cut short; open the row to read the whole message.
 
-Previews follow the **PHI** button in the toolbar: patient identifiers are masked unless you hold **Unredact PHI** and have chosen to show them. A preview that can't be masked safely — usually a FHIR or other JSON message cut off partway — shows only its tag and *Content hidden (PHI) — select to view*. See [PHI on the Logs page](#phi-on-the-logs-page).
+Previews follow the **PHI** button in the toolbar: patient identifiers are masked unless you hold **Unredact PHI** and have chosen to show them, and then only the rows on screen are fetched unmasked. A preview that can't be masked safely — usually a FHIR or other JSON message cut off partway — shows only its tag and *Content hidden (PHI) — select to view*. See [PHI on the Logs page](#phi-on-the-logs-page).
 
 Columns size themselves to their content, and **Preview** takes the rest of the width. Click a column heading to sort by it; **Preview** can't be sorted. Sorting reorders the rows currently loaded in the table, not the whole log.
 
@@ -103,7 +103,7 @@ Two limits worth knowing:
 - **Only archived bodies can match.** A message whose payload exceeded the archiver's maximum payload size, or whose payload has since been purged by retention, cannot be found by its content. Its index row still matches on the summary.
 - **A term that matches nothing is the slow case.** No index covers message text, so a search that finds no rows walks the whole table. A search that does match stops as soon as it has filled a page.
 
-Without **Unredact PHI**, a row only counts as a match when the term is in what you would be shown, so a masked identifier can't be found by searching for it. Such a search can stop before filling a page; the table then says **Older messages haven't been searched yet**, and **Keep searching** carries on. See [Searching masked messages](../configurations/phi-masking.md#searching-masked-messages).
+While PHI is hidden, a row only counts as a match when the term is in what you are shown, so a masked identifier can't be found by searching for it. That is always the case without **Unredact PHI**; with it, showing PHI with the toolbar's **PHI** button searches the whole message instead. Such a search can stop before filling a page; the table then says **Older messages haven't been searched yet**, and **Keep searching** carries on. See [Searching masked messages](../configurations/phi-masking.md#searching-masked-messages).
 
 Tracing one message end to end is still the correlation ID: every node it passes through records the same one, so `correlation-id:` with that ID returns the whole journey.
 
@@ -236,14 +236,14 @@ The panel opens tall enough to show a couple of records; drag its top edge to ma
 
 ## PHI on the Logs page
 
-Patient identifiers are **masked by default**: HL7 v2 fields, and values in JSON and XML (FHIR included), as **Settings → Instance → PHI Masking** sets out. There are two **PHI** buttons, and each only affects its own part of the page:
+Patient identifiers are **masked by default**: HL7 v2 fields, and values in JSON and XML (FHIR included), as **Settings → Instance → PHI Masking** sets out. The server sends every message masked; unmasked content is sent only when a user with **Unredact PHI** asks for it with one of the **PHI** buttons. There are two **PHI** buttons, and each only affects its own part of the page:
 
-- **The toolbar's PHI button** covers the **Preview** column in the table, and the previews under [Related messages](#related-messages). It's hidden every time you open the page and stays as you set it until you reload.
+- **The toolbar's PHI button** covers the **Preview** column in the table. Showing PHI fetches unmasked text only for the rows on screen, once scrolling stops; a row shows its masked preview until its text arrives. It's hidden every time you open the page and stays as you set it until you reload. A preview under [Related messages](#related-messages) is shown unmasked only when that record is also on screen in the table; the others stay masked. To read one of those, open it and use the inspector's **PHI** button.
 - **The inspector's PHI button** covers the message open in the inspector. Every message you open starts hidden — including when you move to the next one with the arrow keys — so showing one message's identifiers never carries over to another.
 
-Either button reads **PHI hidden** while identifiers are masked. **Holding Unredact PHI**, click it to show them in full; it then reads **Hide PHI**, and clicking it again masks them by the same rules — useful when someone is looking over your shoulder.
+Either button reads **PHI hidden** while identifiers are masked. **Holding Unredact PHI**, click it to fetch the unmasked content and show it in full; it then reads **Hide PHI**, and clicking it again masks them by the same rules — useful when someone is looking over your shoulder.
 
-**Without Unredact PHI** both buttons are disabled and PHI stays hidden. The masking is done on the server, so the identifiers never reach your browser.
+**Without Unredact PHI** both buttons are disabled and PHI stays hidden. The masking is done on the server, so the identifiers never reach your browser. Each project you see unmasked content from is recorded as a PHI view in the audit events.
 
 See [PHI Masking](../configurations/phi-masking.md).
 
@@ -260,6 +260,8 @@ A selection stays as you read on, even when the rows scroll out of the table as 
 ## Downloading
 
 **Download** exports the selected rows as **Plain Text** or **JSON**, and needs **Export log messages**. It is greyed out until at least one row is selected. Each export is itself recorded as an audit event.
+
+Exports are masked. Holding **Unredact PHI**, tick **Include PHI** in the Download menu to export the messages unmasked; it is cleared each time the menu opens. Without that permission the option isn't shown.
 
 ---
 
@@ -319,7 +321,7 @@ Opening a message in the window lets you review it. Correcting one before it goe
 
 This applies to every payload format, not only HL7: a FHIR or JSON body carries the same identifiers, so rewriting one takes the same permission. Text still holding masking characters is refused outright, whatever permissions you hold.
 
-With **Unredact PHI**, each message opens masked, and **PHI hidden** reveals it for editing. When no masking rule matches a message, there is nothing to reveal: the button isn't shown, and a note says *No PHI masking rule matches this message, so nothing in it is hidden.* To mask that kind of message, add rules in [PHI Masking](../configurations/phi-masking.md).
+With **Unredact PHI**, each message opens masked, and **PHI hidden** fetches it unmasked for editing. When no masking rule matches a message, there is nothing to reveal: the button isn't shown, and a note says *No PHI masking rule matches this message, so nothing in it is hidden.* To mask that kind of message, add rules in [PHI Masking](../configurations/phi-masking.md).
 
 :::caution[A resubmit is a real message]
 The receiving node processes it like any other message, and downstream systems see a duplicate. Confirm the receiver tolerates one before resubmitting. Replaying a specific message is almost always safer than repositioning a queue — see [Commonly Asked Questions](../../faq/common-questions.md#should-i-replay-a-message-or-rewind-the-queue).
@@ -334,7 +336,7 @@ Resubmitting needs the message's archived copy. Messages older than the Log DB's
 | Permission | Grants |
 | --- | --- |
 | **View log messages** | Open the page, search and filter it, and read a message's payload |
-| **Unredact PHI** | Show masked patient identifiers with the **PHI** buttons, and edit a message before resubmitting it |
+| **Unredact PHI** | Fetch unmasked patient identifiers with the **PHI** buttons, download with **Include PHI**, and edit a message before resubmitting it |
 | **Export log messages** | Download selected records |
 | **Resubmit messages** | Re-publish a stored message onto its original queue, or send it to a node in any project you collaborate on |
 

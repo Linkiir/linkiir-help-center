@@ -104,7 +104,7 @@ Across the top, three figures:
 
 Below them, the queue is listed oldest first in two groups, **Already processed** and **Waiting**, divided by a **Node resumes here** line. Select a message to see it in the panel beside the list: when it was produced, its offset, its correlation ID, its size and its content. **Next to process** marks the message the node will take next.
 
-Reading message content here needs **View log messages**, and previews follow the [PHI masking](../configurations/phi-masking.md) policy. Long messages show only their start here; the Logs page has all of it.
+Reading message content here needs **View log messages**, and previews are masked by the [PHI masking](../configurations/phi-masking.md) policy. The window opens with PHI hidden every time. **Holding Unredact PHI**, click **PHI hidden** next to **Refresh** to fetch the previews unmasked; it then reads **Hide PHI**, and clicking it again masks them. Without **Unredact PHI** the button is disabled. Each project you see unmasked previews from is recorded as a PHI view in the audit events. Long messages show only their start here; the Logs page has all of it.
 
 ### Changing where the node resumes
 

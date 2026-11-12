@@ -1,0 +1,1 @@
+{"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"403":{"description":"Requires the Security settings permission."},"422":{"description":"The text is too long, or a segment name, field number, key name, or path is invalid."}}}
