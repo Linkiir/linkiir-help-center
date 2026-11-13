@@ -88,8 +88,22 @@ A Data Map node doesn't connect to a database. Rows travel as JSON, so a source 
 - **As a destination**, the map writes a main table row and child tables made once per item, such as one `allergies` row per `AL1`. The main table can be made per item too: one order row per `OBR` writes a row for each order an ORM carries. Each value is checked against its column's type and size.
 - **Rows under rows** (a legacy engine's MESSAGE_ID and PARENT_ID, as columns): a table made under another gets its row's key with **Parent's value**. Read back, a table under another names the column holding that key. See [Items made inside other items](building-maps.md#items-made-inside-other-items).
 - The tables come from a [DB Schema](../../schema-editor.md#database-tables), which can be imported from a live database. In a new node, the source or destination column offers to open the Schema Editor to set them up.
+- **A map reading rows can get its tables in the New map wizard.** When a [Database source](../database-source-node.md) sends to the node (directly, or through nodes such as a filter), **Use tables from** _node_ copies its tables into the source schema, converted to the source schema's database when the two differ. **Import from database…** reads tables from the database: through that Database source's connection when there is one, otherwise through a connection you enter, which can use the project's [variables](../../../administration/configurations/project-settings.md#variables). The tables go into the source schema with the map.
 
-To write the rows, connect a [Database node](../database-node.md). It inserts or upserts them into SQL Server, PostgreSQL, Oracle or SQLite with no script, and **Add from an upstream node** copies the map's destination tables into it. For anything the node doesn't do, use a Transform Custom node that calls `Connection:merge`. See [Database](../../../api/scripting-api/database.md).
+To write the rows, connect a [Database node](../database-node.md). It inserts or upserts them into SQL Server, PostgreSQL, Oracle or SQLite with no script, and **Add table from upstream node** copies the map's destination tables into it. For anything the node doesn't do, use a Transform Custom node that calls `Connection:merge`. See [Database](../../../api/scripting-api/database.md).
+
+### Linked Database nodes
+
+A Data Map and a Database node next to it each keep their own copy of the tables: a Database source's `schema.json` and the Data Map's source schema, or the Data Map's destination schema and a Database destination's `schema.json`. They are **linked** when one sends to the other, directly or through nodes that hold no tables of their own. Tables are matched by name, ignoring case.
+
+Nothing changes one copy because the other changed, unless you say so:
+
+- **In the Map view**, when the map's tables differ from a linked Database node's, a warning above the board names them: *This map's tables differ from those of Patient Feed: patients, allergies.* **Review** lists each table as **Only in** _node_, **Only in this map** or **Differs**, with what differs. Tick the tables to copy and, for one in both, pick **Update this map** or **Update** _node_. Nothing changes until **Apply**. A change to this map is saved with its other edits, uncommitted; a change to the Database node is committed at once.
+- **In the Database node's Configure dialog**, saving tables that a linked Data Map also has asks **Update linked Data Maps?**, listing what the save would add, update or remove in each. Tick **Also update** _map_ to copy the changes into it. See [Database Node](../database-node.md#linked-data-maps).
+
+A table ticked **Don't ask again**, in either place, is left out of both from then on. **Review** lists those tables under **Not asked about**, each with **Ask again**. The choice is kept in the Data Map's `linked_tables.json`.
+
+A table copied between schemas for different databases is converted column by column. One with a column that has no type in the other database isn't copied, and says why. Copying tables changes only the schemas: create or alter the tables in the database from the Database node's **Tables** tab, and for a Database source, link a new table from a status table on its **Record** tab before the node reads it.
 
 ## JSON and XML
 

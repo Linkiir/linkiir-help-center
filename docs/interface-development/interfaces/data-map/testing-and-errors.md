@@ -31,6 +31,8 @@ The **Output** tab in the bottom panel has **Run on "_sample_"**. It runs the no
 
 To find something in a long output, type in **Find in output** above the messages. Every match is highlighted, ignoring case, across all the messages pushed, with a count such as **2 of 7**. **Enter** or the down arrow moves to the next match and **Shift+Enter** or the up arrow to the previous one, scrolling it into view. **Escape** clears the search.
 
+After a run that pushed one message, the destination column gets an **Output** column: beside each field a rule writes, what the run wrote there, or **(empty)** when it wrote nothing. Hover over a value to read it whole. The column shows only while the sample that was run is selected, the map on the board is the one that ran, and the node hasn't changed since. Run again to bring it back.
+
 Selecting a link afterwards shows in the **Rule** tab what that link read from the sample and what ended up in the output at its destination. It warns when the last run failed, or pushed no message or more than one, since then there is no single output to compare.
 
 **Run Test** in the Scripting toolbar runs the same thing, and the debugger works on a Data Map node as on any other, including breakpoints in `custom.lua`, `premap.lua` and `postmap.lua`. See [Testing and Debugging](../../lua-programming/testing-debugging.md).

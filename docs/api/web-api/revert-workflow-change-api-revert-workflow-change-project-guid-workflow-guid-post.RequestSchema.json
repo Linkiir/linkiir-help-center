@@ -1,0 +1,1 @@
+{"title":"Body","body":{"required":true,"content":{"application/json":{"schema":{"properties":{"hash":{"type":"string","title":"Hash","description":"Full hash of the change to undo, from get_workflow_history."}},"type":"object","required":["hash"],"title":"RevertWorkflowChangeRequest"}}}}}

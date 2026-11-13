@@ -240,10 +240,11 @@ No event ever contains a password, token, secret, or SSO assertion. Events also 
 | `PROJECT_CREATE` / `PROJECT_DELETE` | A project is created, imported, or deleted |
 | `PROJECT_START` / `PROJECT_STOP` | A project is started or stopped |
 | `WORKFLOW_CREATE` / `WORKFLOW_DELETE` | A workflow is created or deleted |
+| `WORKFLOW_UPDATE` | A connection is made or removed on a workflow's canvas, or a saved change is undone from **Workflow history** |
 | `WORKFLOW_START` / `WORKFLOW_STOP` / `WORKFLOW_RESTART` | A workflow is started, stopped, or restarted |
 | `NODE_CREATE` / `NODE_DELETE` | A node is added or removed |
 | `NODE_START` / `NODE_STOP` / `NODE_RESTART` | A node is started, stopped, or restarted |
-| `NODE_CONFIG_UPDATE` | A node's configuration is changed |
+| `NODE_CONFIG_UPDATE` | A node's configuration is changed, or its **Run from commit** is set or cleared, with the commit before and after |
 | `SCRIPT_COMMIT` | Script changes are committed |
 
 **Queues and patient data**

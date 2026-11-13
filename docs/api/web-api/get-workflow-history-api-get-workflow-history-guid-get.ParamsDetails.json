@@ -1,0 +1,1 @@
+{"parameters":[{"name":"guid","in":"path","required":true,"schema":{"type":"string","description":"GUID of the project.","title":"Guid"},"description":"GUID of the project."},{"name":"workflow_guid","in":"query","required":true,"schema":{"type":"string","description":"GUID of the workflow.","title":"Workflow Guid"},"description":"GUID of the workflow."}]}

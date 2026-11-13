@@ -1,7 +1,7 @@
 ---
 title: Building a Map
-description: Use the Data Map node's Map view to link source fields to destination fields, convert and normalize values, fill fixed values, add custom Lua, change the schemas, move maps between nodes, and commit.
-keywords: [data map, map view, auto-map, rules, functions, code map, normalize, date format, custom Lua, custom.lua, fixed value, narrative, export map, import map, undo, commit]
+description: Use the Data Map node's Map view to link source fields to destination fields, convert and normalize values, fill fixed values, add custom Lua, change the schemas, reuse custom messages, move maps between nodes, print a report, and commit.
+keywords: [data map, map view, auto-map, rules, functions, code map, normalize, date format, custom Lua, custom.lua, fixed value, narrative, custom message, go to definition, report, PDF, export map, import map, undo, commit]
 ---
 
 # Building a Map
@@ -16,13 +16,15 @@ Opening a Data Map node on the Scripting page shows the **Map** view. The switch
 
 | Area | Shows |
 | --- | --- |
-| **Toolbar** | The map picker, a button reading what the map takes and builds (such as **HL7 ADT_A01 → FHIR Bundle**), the map's condition, **Auto-map**, and the **PreMap** and **PostMap** buttons |
-| **Source column**, left | The message the map takes, from `source.json`, with the selected sample's values beside each field |
-| **Destination column**, right | The message it builds, from `destination.json` |
+| **Toolbar** | The map picker, **Report** (see [The report](#the-report)), and the **PreMap** and **PostMap** buttons |
+| **Source column**, left | The message the map takes, from the source schema, with the selected sample's values beside each field |
+| **Destination column**, right | The message it builds, from the destination schema. After a run, an **Output** column shows what the map wrote into each field |
 | **Links** between the columns | One per rule. Hover over a field to highlight its links. Scrolling over the links scrolls both columns together. The **Undo** and **Redo** buttons sit at the top |
 | **Bottom panel** | **Rule**: the selected rule's settings, what it read and wrote on the last run, and the map's problems. **Output**: running the map on a sample |
 
-The toolbar also counts the fields mapped and the destination's required fields that are filled (**required 12/14**). The filter box at the top of each column narrows it, and the filter button limits it to fields that have a value in the sample or are mapped.
+The destination column's header counts the fields mapped and the destination's required fields that are filled (**required 12/14**), and holds **Auto-map**. The filter box at the top of each column narrows it, and the filter button limits it to fields that have a value in the sample or are mapped.
+
+Selecting a link makes it stand out: it is drawn thicker, with a dot at each end where it meets its two fields, and the other links fade back until you select elsewhere.
 
 **Expand all** and **Collapse all**, at the right of each column's toolbar, open or close the whole column at once. **Collapse all** folds everything back to its top-level rows: segments, resources, loops, tables or sections. **Expand all** opens those top-level rows one level down, so a large message stays readable. Open a row further with its own arrow. Links to a folded field end on the nearest row still showing, such as its segment. When several links end on the same folded row, they are drawn as one dashed chip showing how many there are: hover over it to list them, click it to open the row, or Shift-click (Cmd-click on a Mac) to select them all.
 
@@ -30,11 +32,16 @@ The bottom panel opens when you select a rule or run the map, and closes with it
 
 ### Source and destination settings
 
-The toolbar button that reads what the map takes and builds opens the map's source and destination settings: the version, the message it takes and builds, how the output starts, and, for CDA, how strictly documents are checked. The node's protocols can't be changed while a map has content.
+Each column's title reads what that end of the map is, such as **Source · ADT_A01 · HL7 v2.5**. Click it to open that end's settings:
+
+- **Source**: the version, the message it takes and, for CDA, how strictly incoming documents are checked.
+- **Destination**: what it builds, the message, how the output starts and, for CDA, how strictly the documents it builds are checked.
+
+The node's protocols can't be changed while a map has content.
 
 ### Picking a map
 
-The map picker in the toolbar lists the node's maps. With a map selected, its menu offers:
+The map picker in the toolbar lists the node's maps, each with the messages it takes and its condition. With a map selected, its menu offers:
 
 | Action | Does |
 | --- | --- |
@@ -45,6 +52,20 @@ The map picker in the toolbar lists the node's maps. With a map selected, its me
 | **Delete** | Removes the map and its files |
 | **Export** | Saves the map as a file, with the samples you choose, to import into another node. See [Moving maps between nodes](#moving-maps-between-nodes) |
 | **Import** | Adds a map from another Data Map node, or from a file saved with **Export**. See [Moving maps between nodes](#moving-maps-between-nodes) |
+
+### The New map wizard
+
+**New map** asks for the message the map takes, optional samples, its condition, and what it builds.
+
+The message lists start with the messages the node's schemas already have, each tagged with its file (**source schema** or **destination schema**), then the standard catalog's, tagged **standard**. For HL7 v2, the schema's own messages also show the version the node reads or builds, such as **v2.5.1**. Pick one of the schema's own to map a message shaped by hand, such as your own ORU^R01. See [Custom messages](#custom-messages).
+
+**Copy from another schema…**, on both the source and destination steps, takes a message from another node's schema, or from a schema file on your computer, and has the map take or build it. See [Custom messages](#custom-messages).
+
+For database rows, the source step picks **Tables it reads** and the destination step **Tables it writes**, as many as the map needs:
+
+- **Reading**, the first table is the one a message is a row of, and the others hold the rows that go with it. The **Sample data** step starts with an empty row of each table to fill in, the first as one row and the others as lists.
+- **Writing**, the first table gets a row per message, and the others a row each. The destination column can then make any of them a row per item.
+- When a Database source sends to this node, **Use tables from** _node_ copies its tables into the source schema. **Import from database…** reads tables from the database, through that Database source's connection when there is one. See [Database rows](formats.md#database-rows).
 
 ---
 
@@ -190,6 +211,8 @@ What you set up in the destination column depends on the destination format:
 | Database | The main table, and the other tables it writes. Each, the main table too, is written once or once per item of the input: a main table written per `OBR` gets a row for each order an ORM carries |
 | JSON, XML | The structure, and the lists made per item |
 
+For HL7 v2, the destination column also lists the message's segments the map doesn't write, folded, in their place in the message. Each is marked **not written**, or **from the input** when the output starts as a copy of the input and the input has it. Open one to see its fields. Link to one of its fields, or press its **+**, and the map writes that segment.
+
 See [Formats](formats.md) for each format's paths and particulars.
 
 ---
@@ -245,9 +268,22 @@ When a message carries something the schema doesn't have, such as a Z-segment fi
 | --- | --- |
 | **Add field to …** (or element, column, property) | Opens a form for its name, description and type, and whether it repeats or is required (or, in XML, is an attribute). When the row is part of a data type used in several places, the new part is added everywhere that type is used |
 | **Remove field** | Removes it from the schema |
-| **Remove segment** | On an HL7 source, removes a segment the map doesn't need. MSH can't be removed |
+| **Remove segment** | On HL7 v2, removes a segment from the message: on the source side once nothing reads it, on the destination side once nothing writes it (remove the segment from the map with its **×** first). MSH can't be removed |
+| **Go to definition** | Opens the Schema Editor on where the row is defined: the segment, table, structure or resource, or the field in the segment or data type that holds it, scrolled to and marked |
 
-HL7 v2 and X12 fields are numbered by position, so a new field goes on the end and only the last one can be removed. Nothing is removed while a rule, a segment or resource made per item, or a condition still uses it. The change is saved to `source.json` or `destination.json`, the same file the [Schema Editor](../../schema-editor.md) edits.
+HL7 v2 and X12 fields are numbered by position, so a new field goes on the end and only the last one can be removed. Nothing is removed while a rule, a segment or resource made per item, or a condition still uses it. The change is saved to the source or destination schema, the same file the [Schema Editor](../../schema-editor.md) edits.
+
+---
+
+## Custom messages
+
+A trading partner's message often differs from the standard: an ORU^R01 with extra segments, Z-segments, or fields used their own way. Shape it once in a schema, then reuse it.
+
+- **In a map:** the **New map** wizard lists the messages the node's schemas already have first, tagged **source schema** or **destination schema**, before the catalog's, tagged **standard**. Pick your own to map it as you shaped it.
+- **From another node:** **Copy from another schema…** in the wizard, or **+ Message > From another schema…** in the [Schema Editor](../../schema-editor.md#copying-a-message-from-another-schema), copies a message from any node's schema in your projects, or from a schema file on your computer. The copy is exact: it reads just as it did where it came from, and your schema's other messages don't change.
+- **Both, side by side:** to map your own ORU^R01 and the standard one in the same node, give yours a name of its own, such as `ORU_R01_LAB`, since maps tell messages apart by name. Picking the standard message while the schema has one of that name adds the standard one beside it as `ORU_R01_2`.
+
+Which of two such messages an incoming message is read as depends on the schema's [matching rules](../../schema-editor.md#matching-rules): the first that matches wins. A copied message's rules go before any rule that would match everything they match and more. When two messages can only be told apart by MSH-9, the copy warns that one of them can never be reached. Add a condition on MSH-3 or MSH-21 to the rule that should win.
 
 ---
 
@@ -329,6 +365,18 @@ An import never changes what the node already has, since its other maps depend o
 - **Functions.** A function the node already has, with the same code, is shared. A different function of the same name is added under a new one, such as `LabNote_2`, and the imported map is pointed at it. A function the map calls that wasn't in its original node gets an empty function in `custom.lua` for you to fill in.
 
 An imported map is a copy: later changes to the original don't reach it, and importing the same map again adds a second one. A map taken straight from another node doesn't bring that node's samples. To carry samples, export the map to a file and import the file.
+
+---
+
+## The report
+
+**Report** in the toolbar opens a report of the whole node in a new browser tab, to read, print or keep as a PDF. It shows:
+
+- a summary: the source and destination formats and versions, and how many maps and rules the node has;
+- the **Source definition** and **Destination definition**: each message, table or structure, down to its fields, with every element the schema says must be present marked **Required**, and every element a rule reads or writes marked **Mapped**;
+- the **Mappings**: each map's messages, condition and output, and its rules, each with its source, function, destination and options.
+
+**Only mapped elements in the definitions**, on when the report opens, hides everything no rule touches; turn it off to see the whole definitions. **Print / Save as PDF** prints the report as it is shown, with or without the unmapped elements; choose **Save as PDF** as the printer to keep a PDF. The report is built from the node's files as they are on screen, and nothing is run. If nothing opens, allow pop-ups for the Linkiir Grid in your browser.
 
 ---
 

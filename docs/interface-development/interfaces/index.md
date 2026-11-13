@@ -222,23 +222,54 @@ To reorder fields, use the **Node Config** panel on the Scripting page. Switch i
 
 ## Editing the canvas
 
-Adding, moving, connecting, and deleting all happen in the Workflow Builder's **Edit** mode. Outside it the canvas is read-only, though you can still select a node to read its parameters and open its script.
+The canvas is always editable: add, move, connect and delete nodes straight away, with no mode to switch into. Saving those changes needs **Edit workflows**.
 
 Right-click a node for:
 
 | Item | Available |
 | --- | --- |
-| **Configure** | Always, once the node has been saved to the canvas. Opens the node's [Configure dialog](#the-configure-dialog) |
+| **Configure** | Once the node has been saved to the canvas. Opens the node's [Configure dialog](#the-configure-dialog) |
 | **Create template** | Always |
 | **Add to catalog** | With **Manage catalogs**, once the node has been saved to the canvas |
 | **Edit script** | Always, except on File/FTP and Database nodes, which have no script |
-| **Remove upstream connection** | Edit mode |
-| **Remove downstream connection** | Edit mode, and not on a destination node |
-| **Delete node** | Edit mode |
+| **Remove upstream connection** | Always |
+| **Remove downstream connection** | Not on a destination node |
+| **Delete node** | Always |
 
-Right-click a connection, in edit mode, for **Delete connection** — that one line only, rather than everything running into or out of a node.
+Right-click a connection for **Delete connection**, which removes that one connection only, not every connection into or out of a node. You can also select nodes or connections and press **Delete**.
 
-Removing a connection and deleting a node each ask before they act, naming what they are about to change: the node by name, or the two nodes a connection joins. Canvas changes stay local until you click **Save**; **Cancel** restores the canvas as it was when you entered edit mode.
+Deleting a node and removing a connection each ask first. The prompt names what is going: the node by name, with the number of connections that go with it, or the two nodes a connection joins.
+
+### Saving, cancelling and undoing
+
+**Save** and **Cancel** appear above the canvas only while it has unsaved changes. Nothing reaches the project until you click **Save**. **Cancel** puts the canvas back to how it was last saved.
+
+**Undo** and **Redo**, beside them, step through your unsaved changes one at a time: a node added or deleted, a connection made or removed, a node moved, **Organize**. Use the keyboard as well: **Ctrl+Z** to undo and **Ctrl+Y** to redo (**⌘Z** and **⇧⌘Z** on a Mac). The shortcuts are ignored while you are typing in a field or have a dialog open. Undo only moves nodes and changes what is on the canvas. A node's settings, saved from its **Configure** dialog, stay as they are.
+
+The Workflow Builder asks before throwing unsaved changes away: when you switch project or workflow, create one, open the Scripting page, or leave the page.
+
+### Workflow history
+
+**Workflow history**, beside **Undo** and **Redo**, lists the changes saved to the workflow's canvas, newest first, with who made each one and when. These are nodes added or deleted and connections made or removed. Script and setting changes aren't listed: they are in the node's history on the Scripting page.
+
+Click **Undo** on a change to reverse it. The undo is saved straight away, and you don't need to click **Save**:
+
+- Undoing a node's deletion brings the node back with its files, settings and connections.
+- Undoing an added node or connection removes it again.
+- Any change in the list can be undone, not just the latest one, as long as nothing saved since depends on it. For example, a node that has been edited since it was added can't be removed this way; delete it from the canvas instead.
+- The undo is added to the list as a change of its own, so you can undo the undo.
+- A change that can't be undone says **Can't undo**. Point at it to see why.
+
+Undoing needs **Edit workflows**. It is unavailable while the canvas has unsaved changes: save or cancel them first.
+
+### Changes to a running workflow
+
+Running nodes keep the nodes and connections they started with. When you save or undo a change to nodes or connections while the workflow is running, it doesn't take effect until the workflow restarts:
+
+- A new connection carries no messages, and a removed one still carries them.
+- A new node isn't started, and a deleted node keeps running.
+
+The Workflow Builder shows **Restart to apply** above the canvas when this happens. Click **Restart workflow** to restart it with the saved nodes and connections. Restarting stops any deleted nodes that are still running. Restarting needs **Start/stop**. You can also dismiss the notice and restart later.
 
 Deleting a node removes it, and all its files, from every user's copy of the project, including changes to it that nobody has committed yet. Anything you want to keep from a node is safe once committed: the node's committed files stay in the project's history.
 

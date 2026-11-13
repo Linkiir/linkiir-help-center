@@ -876,6 +876,18 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "api/web-api/get-workflow-history-api-get-workflow-history-guid-get",
+          label: "Get a workflow's change history",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/revert-workflow-change-api-revert-workflow-change-project-guid-workflow-guid-post",
+          label: "Undo one change to a workflow",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
           id: "api/web-api/create-workflow-api-create-workflow-project-guid-post",
           label: "Create a workflow",
           className: "api-method post",

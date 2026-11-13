@@ -1,7 +1,7 @@
 ---
 title: Schema Editor
 description: Build and edit the schemas a node reads and writes messages with — HL7 v2, X12, FHIR, CDA and C-CDA, database tables, and your own JSON and XML structures.
-keywords: [schema, grammar, schema editor, HL7, X12, FHIR, CDA, C-CDA, JSON, XML, database, matching rules, code sets]
+keywords: [schema, grammar, schema editor, HL7, X12, FHIR, CDA, C-CDA, JSON, XML, database, matching rules, code sets, copy message, custom message]
 ---
 
 # Schema Editor
@@ -35,7 +35,7 @@ The JSON and XML kinds describe documents of your own design, such as an API's r
 
 Opening any schema file shows the Schema Editor. **Code** switches to the file's raw JSON and **Schema** switches back. Edits in either view are saved, committed and diffed like any other file.
 
-A Data Map node keeps its schemas in `source.json` and `destination.json`. In that node, **Source schema** and **Destination schema** sit beside **Map** and **Code**.
+A Data Map node keeps its schemas in `source.json` and `destination.json`. In that node, **Source schema** and **Destination schema** sit beside **Map** and **Code**, and **Go to definition** on a row of the Map view opens the editor on the segment, table or field it comes from.
 
 ---
 
@@ -69,6 +69,18 @@ For HL7, X12, FHIR and CDA, **+ Message** searches the standard catalogs that sh
 The message is copied into the schema together with every segment, data type and, if **Include code sets** is ticked, code set it uses. The new message also gets the matching rules that recognise it. **Blank message** starts an empty definition instead.
 
 The catalogs are served by the Grid, so importing needs no internet access.
+
+### Copying a message from another schema
+
+A message you have already shaped, such as a trading partner's ORU^R01 with its own segments, can be copied from another schema rather than built again:
+
+1. Select **+ Message**, then **From another schema…** at the top.
+2. Pick the message. The schemas of the same kind in every project you are on are listed by project and workflow, each folded until you open it or search. **Load a schema file…** reads one from your computer instead.
+3. Check **Name here**. A message is known by its name, so to keep both your own ORU^R01 and the standard one, call yours something like `ORU_R01_LAB`. A name the schema already has is replaced only when you agree.
+
+The copy is exact: the message reads just as it did where it came from. Where this schema defines one of its segments, data types or code sets differently, the copy brings its own beside it, such as a second `OBX` or a `CWE_2`, used only by the copied message. The schema's other messages don't change.
+
+The message's [matching rules](#matching-rules) come with it, placed before any rule that matches everything they match and more. When one of the schema's rules can no longer be reached, for example two messages told apart by MSH-9 alone, the copy says so: add a condition on MSH-3 or MSH-21 to tell them apart.
 
 ### FHIR
 
@@ -113,10 +125,10 @@ A **DB Schema** describes tables: each column's name, type and size, whether it 
 
 | To | Do this |
 | --- | --- |
-| Read a table from an existing database | **Import** in **Tables**. Enter the connection, pick the table, and its columns are added |
+| Read tables from an existing database | **Import** in **Tables**. Enter the connection, tick the tables, or type a name, and **Import**: each table's columns and primary key are added. Tables the schema already has are replaced only when you agree, keeping their descriptions and code sets |
 | Create a table from the schema | Open the table and select **Export to database…**. A table that already exists is left as it is |
 
-The connection details are used for that request only and are not saved in the schema.
+The connection form takes the server settings, or, with **Connect using**, an **ODBC DSN** (SQL Server, PostgreSQL) or a **TNS alias** (Oracle) in their place. Opened from a project's node, its fields take the project's `${project:name}` [variables](../administration/configurations/project-settings.md#variables), filled in when the Grid connects. The connection is used for that request only: it isn't saved in the schema or remembered by the browser. To reuse one, keep it in project variables.
 
 A [Database node](interfaces/database-node.md) keeps its tables in its own `schema.json`. Opened from the node with **Edit Schema**, the editor imports and exports with that node's connection, so you don't enter it again.
 

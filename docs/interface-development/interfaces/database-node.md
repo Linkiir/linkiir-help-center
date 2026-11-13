@@ -181,7 +181,7 @@ The database's driver must be installed on the machine that runs Linkiir. SQL Se
 
 The node writes only tables described in its own `schema.json`, a [DB Schema](../schema-editor.md#database-tables). The tab lists each table with its column count, its primary key, and whether the database has it.
 
-The schema is the node's own copy. Copying tables from another node doesn't link the two, so a later change to that node's schema doesn't reach this one.
+The schema is the node's own copy. A later change to another node's schema doesn't reach this one by itself, but a Data Map next to this node is [linked](#linked-data-maps) to it, and each side offers to bring the other up to date.
 
 | To | Use |
 | --- | --- |
@@ -194,11 +194,19 @@ The schema is the node's own copy. Copying tables from another node doesn't link
 
 ### Which database a schema is for
 
-A DB Schema is for one database, or for **Any database**. The node refuses to start when its schema is for a different database than **Database** says. Tables can't be copied between schemas for different databases, except into a node that has no tables yet, which takes the copied schema's database. Importing tables from the database into a node that has no tables yet sets its schema to the node's **Database**, so table and column names keep their case and types are the database's own. A schema for **Any database** holds names in lower case and types in their general form (VARCHAR, INTEGER, TIMESTAMP).
+A DB Schema is for one database, or for **Any database**. The node refuses to start when its schema is for a different database than **Database** says. A node that has no tables yet takes the database of the first tables copied into it. Otherwise, a table copied from a schema for a different database is converted to this node's, column by column; one with a column that has no type in this database isn't copied, and the dialog says why. Importing tables from the database into a node that has no tables yet sets its schema to the node's **Database**, so table and column names keep their case and types are the database's own. A schema for **Any database** holds names in lower case and types in their general form (VARCHAR, INTEGER, TIMESTAMP).
 
 ### Primary keys
 
 **Upsert** matches rows on each table's primary key, so every table needs one. The **Tables** tab and the panel both warn about a table without one. Mark the key columns in the Schema Editor, or set **Write Mode** to **Insert only**.
+
+### Linked Data Maps
+
+A Data Map that sends to this node keeps its own copy of the tables, in its destination schema. The two are linked by the workflow alone, also through nodes in between that hold no tables of their own, such as a filter.
+
+When **Save** would change tables the linked Data Map also has, the dialog first asks **Update linked Data Maps?**. For each Data Map it lists the tables the save would **Add**, **Update** or **Remove** there, and what differs. Saving changes only this node unless you tick **Also update** _map_. A table ticked **Don't ask again** isn't changed and isn't asked about again. A Data Map that is updated is committed with this node's `schema.json`, unless its file already has uncommitted changes: then the update joins them and waits for you to commit.
+
+The Data Map's Map view warns the other way round, when its tables differ from this node's, and can copy tables in either direction. See [Linked Database nodes](data-map/formats.md#linked-database-nodes).
 
 ### Changes made on the Scripting page
 

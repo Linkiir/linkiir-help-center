@@ -38,10 +38,10 @@ One node builds one output format: two output formats means two nodes. Within th
 1. In the Workflow Builder, drag **Data Map** from the **Transform** group onto the canvas, and connect it between a source and a destination.
 2. Open the node's **Scripting** tab. It opens in the **Map** view, on a **Create your first map** card.
 3. Select **+ New map**, or **Import existing map** to start from a map built in another node or saved to a file (see [Moving maps between nodes](building-maps.md#moving-maps-between-nodes)). **New map** opens a short wizard that asks, one step at a time:
-   1. **Source message**: the protocol and version it reads, and the message it takes (`ADT_A01`, `Patient`, `837P`, a table, a structure).
+   1. **Source message**: the protocol and version it reads, and the message it takes (`ADT_A01`, `Patient`, `837P`, a structure), or for database rows the tables it reads. Messages your schemas already have are listed first, and **Copy from another schema…** brings one in from another node (see [Custom messages](building-maps.md#custom-messages)).
    2. **Sample data** (optional): paste or upload one or more samples, so the board shows real values. For JSON and XML, the structure can be read from the first sample.
    3. **Filters**: the condition a message must meet for this map to take it. See [Conditions](conditions.md).
-   4. **Destination message**: the protocol and version it builds, the message it builds, how the output starts, and the map's name. A later map can start as a copy of an existing one.
+   4. **Destination message**: the protocol and version it builds, the message it builds (or the tables it writes), how the output starts, and the map's name. A later map can start as a copy of an existing one.
 4. Link fields, or select **Auto-map** to add the standard mappings. See [Building a Map](building-maps.md).
 5. Run it on a sample. See [Testing and Errors](testing-and-errors.md).
 
@@ -77,6 +77,7 @@ Your own code sits at the top of the node. Everything the Map view manages is in
 | `mapping/maps/<name>.map.lua` | One map's rules, as a Lua table | The Map view (or by hand) |
 | `mapping/init.lua`, `mapping/maps/<name>.lua` | The code generated from the maps | Generated: don't edit |
 | `mapping/helpers/*.lua` | Conversion helpers the generated code uses (`hl7v2.lua`, `fhir.lua`, `convert.lua`, `normalize.lua`, …) | Kept up to date by the Map view |
+| `linked_tables.json` | Only with database rows: the tables of [linked Database nodes](formats.md#linked-database-nodes) you chose **Don't ask again** for | The Map view and the Database node's Configure dialog |
 
 Nodes made before the `mapping` folder existed are moved into it the first time they are opened, and any custom Lua inside their maps is moved into `custom.lua` as named functions. Nodes that called the destination the **target** have `target.json` renamed `destination.json` the same way. The change shows in Source Control: commit it when you're ready.
 
@@ -105,7 +106,7 @@ The generated files say **Do not edit by hand** in their first lines. If one is 
 
 | Page | Covers |
 | --- | --- |
-| [Building a Map](building-maps.md) | The Map view, links, functions, normalizing values, Auto-map, fixed values, custom Lua, schema changes, moving maps between nodes, undo and committing |
+| [Building a Map](building-maps.md) | The Map view, links, functions, normalizing values, Auto-map, fixed values, custom Lua, schema changes, custom messages, moving maps between nodes, the report, undo and committing |
 | [Conditions](conditions.md) | Several maps for one message type, and which one takes a message |
 | [Formats](formats.md) | What is particular to HL7 v2, FHIR, X12, CDA and C-CDA, database rows, JSON and XML |
 | [Testing and Errors](testing-and-errors.md) | Samples, runs, checks, generated code, and committing |
