@@ -1,0 +1,70 @@
+---
+id: copy-schema-message-api-copy-schema-message-post
+title: "Copy a message from another schema"
+description: "Copies a message from a schema file of a node the caller can open (workflow_guid, node_guid and file), or from the schema sent as from_schema, into the schema sent, exactly as it is there: segments, types and code sets this schema defines differently come in beside its own, and the message's matching rules with it. Nothing is written - the caller saves the schema - and nothing is run."
+sidebar_label: "Copy a message from another schema"
+hide_title: true
+hide_table_of_contents: true
+api: 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
+sidebar_class_name: "post api-method"
+info_path: docs/api/web-api/linkiir-api
+custom_edit_url: null
+hide_send_button: true
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Copy a message from another schema"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/api/copy_schema_message"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Copies a message from a schema file of a node the caller can open (workflow_guid, node_guid and file), or from the schema sent as from_schema, into the schema sent, exactly as it is there: segments, types and code sets this schema defines differently come in beside its own, and the message's matching rules with it. Nothing is written - the caller saves the schema - and nothing is run.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<ParamsDetails
+  {...require("./copy-schema-message-api-copy-schema-message-post.ParamsDetails.json")}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  {...require("./copy-schema-message-api-copy-schema-message-post.RequestSchema.json")}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  {...require("./copy-schema-message-api-copy-schema-message-post.StatusCodes.json")}
+>
+  
+</StatusCodes>
+
+
+      

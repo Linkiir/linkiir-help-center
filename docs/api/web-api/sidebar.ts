@@ -762,6 +762,12 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "api/web-api/data-map-report-api-data-map-report-post",
+          label: "A Data Map node's report",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
           id: "api/web-api/database-node-schema-api-database-node-schema-project-guid-workflow-guid-node-guid-get",
           label: "Get a Database node's schema.json",
           className: "api-method get",
@@ -771,6 +777,12 @@ const sidebar: SidebarsConfig = {
           id: "api/web-api/save-database-node-schema-api-database-node-schema-project-guid-workflow-guid-node-guid-put",
           label: "Save a Database node's schema.json",
           className: "api-method put",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/database-node-linked-changes-api-database-node-linked-changes-project-guid-workflow-guid-node-guid-post",
+          label: "What saving a Database node's schema.json would change in its linked Data Maps",
+          className: "api-method post",
         },
         {
           type: "doc",
@@ -824,6 +836,24 @@ const sidebar: SidebarsConfig = {
           type: "doc",
           id: "api/web-api/database-node-preview-record-api-database-node-preview-record-project-guid-workflow-guid-node-guid-post",
           label: "Read the next record a Database source node would send",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/data-map-linked-tables-api-data-map-linked-tables-project-guid-workflow-guid-node-guid-post",
+          label: "How a Data Map's tables differ from its linked Database nodes'",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/data-map-update-linked-api-data-map-update-linked-project-guid-workflow-guid-node-guid-post",
+          label: "Copy a Data Map's tables into a linked Database node",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/data-map-skip-tables-api-data-map-skip-tables-project-guid-workflow-guid-node-guid-post",
+          label: "Stop or start asking about tables a Data Map and a linked Database node differ in",
           className: "api-method post",
         },
         {
@@ -996,6 +1026,18 @@ const sidebar: SidebarsConfig = {
         },
         {
           type: "doc",
+          id: "api/web-api/list-schema-files-route-api-list-schema-files-get",
+          label: "List the schemas the caller can copy a message from",
+          className: "api-method get",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/copy-schema-message-api-copy-schema-message-post",
+          label: "Copy a message from another schema",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
           id: "api/web-api/import-schema-sample-api-import-schema-sample-post",
           label: "Build a JSON or XML structure from a sample",
           className: "api-method post",
@@ -1022,6 +1064,12 @@ const sidebar: SidebarsConfig = {
           type: "doc",
           id: "api/web-api/import-db-table-api-import-db-table-post",
           label: "Read a table from a database into a database schema",
+          className: "api-method post",
+        },
+        {
+          type: "doc",
+          id: "api/web-api/import-db-tables-api-import-db-tables-post",
+          label: "Read several tables from a database into a database schema",
           className: "api-method post",
         },
         {

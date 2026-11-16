@@ -1,0 +1,70 @@
+---
+id: database-node-linked-changes-api-database-node-linked-changes-project-guid-workflow-guid-node-guid-post
+title: "What saving a Database node's schema.json would change in its linked Data Maps"
+description: "Compares the schema sent with the node's schema.json and, for each linked Data Map (one after a source, one before a destination, through nodes without tables), lists the tables the save adds, changes or removes that the Data Map lacks, has otherwise, or has. Tables the user said not to ask about again are left out. Nothing is written."
+sidebar_label: "What saving a Database node's schema.json would change in its linked Data Maps"
+hide_title: true
+hide_table_of_contents: true
+api: eJztWW1z28YR/is3yAdKLgXJGs80w9SdcWw30dRxNHqpPwiKeCSOJCzwDsEdRLEcZvIj+gv7S/rs3oEEXyWn9bdKMxJ42Nvb12d3j7PIyaGNOjfRR5MqG922I/zrl1nhMqOjTvTWjAtZKivcSAnbH6mxFFZpJyaZG/GixsaWDe/iz9ZoIXXaFgNTCiX7I5Fn+l6l4p10UvwkC3FgtBJy4FQpwMtUZV+1Ba31FPbglYAILtOSRGjjjNJUwxGfY/lYUznhZC9X9rAN7tZ56fySF1Q+gE+a2rboj6QeYhnSlGpsHphCOiZbiJTL/j1oRxJ0eFFOMksylbQSi6sl48pCaiuzFOKAhxHS3gvZI4nkUGZQHQrkauAElmLxEdwyPRQZBC8z55SOo3ZkClWycmcpLJxCiJ606o4UvPPGugtS38kiu9tLcFeU5rPqu7thlaV3d3cTU94PcjOpP/Me/1wY63A63CnHCtYnt88ijQ+QoskGRBn5vpBuhOdS/VplpYKsrqxUO/KejjqzyE0L2mtdCSWj9dD54frsnTADtltgT9q7zOW069wviR/oxPmzNs/bC3lX9PwKAtf8Rd9oB8eSF+tob2rxqaZ7Wo39LBu6LXz2FfR6F4JpQxHK/2cosbZ/fuvFQsJ+b9IpybIuJWkLwKBXsijyrM+hf0xAQWtLJeBmJIbLAEMr68jjjLbI/LxB4ZkHxU2PAqShzaXfva7J1RLEfNIig3seLlKk8g48g5rzzaOWet7Uwt4uBfjAaerFuPAGAhfiAzAtjLZey9OTE/q3KuVl1e8rawdVLi4CcfSH7Uh4wQ+ZU2O7+X4ZbFviaGtw8A4fqk/s+EhE2DHI8r3Ef6P323xVAzT8QTw8co9MnjYRvxOKiK89AO1G+aj9B/N5wNxjCea2T0yuA8RL9r2Mu0nfeIp1nVqI5VZbtKoCoK5aJGzLV6XWTiFXj1gGoixLOW0c+TbsXT/zRyCOW7UlayrSbDBAFeA6N6lLon8FMZEQbGiWC4bC8nifxueBZP34T6Npg3Ff6pajlOubIsMRmUYGrpTiA4l3eTXWvsPQeI0TQSgy1Pm6Fh6y1GpcuGnMRw5klSM3oidT1Xt54cONlPVmfIadQVHpvhmPqa43s6dnTK6kbmy5btBtC3OObWo+6maF4xytBBlrsfU79FXCR474bDLNOTBui4YUK7YYyNyqp8zRrDXLxA4puwzIDTNRfjcsscNWHxh81lV+v60rZJUBxFQVJ6bKU7RR1MX1FDqoNBbvydeIU6URE1p5mqeR2cPfDi/bBbx6aH61DY3Rw6ElXal7HHya1+uADPUiYi6vNrmEbqe96AICj1Qxo4GpNIPrq9PTzc3/kHmWMp6J92Vpyj9eDVKFziPfA4K56a+8lXr684AbxXUcWqwgh9VQlegF9gSC8QKSimM73AckP6H0yWYG7iZlY4grejunVqmo2CD16zNeIFh1jw02G83CW7Llo3s6lmAbL36ga4TV0kXeQ7tN8c67YNthNcmPV1fnGwx9iD4e9REzl3Jc5Mo38DkiOcR1llFo5LKn8pUVXx+xBA1kLqgDaQtVluI1pyGIYvofT1QvpilhlmghRFXmIEiikXNF5/j45emf4xP8vux8e/LtyTEmk+N9k8lxEok4FiHuqXegj0kU1uu+eeMFAQsttlmGHprKhpRczTGCZTDOP9VMHB3d3GAcVSK0WIKaUEAGddm3t2LumRwdiUsEFUz51pj7THV4SxK9qQCg2oXcwfHIL6pFZ9qVJq24QIgCsRgzm5GSKeolxJmJmyTyvJLoFgsr7PnYeaKzAac2WZvYamaiyJkH+BuPfZwfJlrpNNEFYtsdEHHcZ4jhR9L/kLtsjGwjQ/PiYozDTNCJnvbDrDnazY9nK5MTPi8qwBxcycAXy37+/SMH2gqizDnVBqaZaSHUxJvzMzB5gJU8cL2MX8YnW0teveOT6tEumpDJ9BT5/Nk1aOBwsKT6r/KBUI+wAGrkv3//F1El2qJiLfYghMX1Gc3plpr7sdSwcT1B2iX84pEvFOgCoVfKMqNHSY4Ip1nl0EQOLXyf6G++Ed8TyF9ffKCPUKCkGQHNySB7RBUrqh4gWPQCTWchOtQioY9GcJpK2+hURRiXrBiitTGJniI5hZnooGYsyDzKG976kAQXCkPSSnS3pmMXwid6WCKZykrzaMm5nk9r+deCHb/vcdpUIPgKNBNOBKSz1GXIJTG0sz66Y/HBDKkRM7qvxEOGA7vnP19eCY7B3Awz3SWbDxUVxrAJ7QvlRJszgG6OUl/p/TKpp0iMRAezhIshpgkerk1tFV1duOBrc68069btdvMKsiDLXy5EDF2lxzsySxutZ+GqUvn7oRXhwMYTsg4Xz0fHJ+CR2SVRezt6cP0+ouLlMSTZKORApPkKDLZmSUQ3UNSjJVEniVqEmNdhhZ5bdBywwVoEerqkOQ8rgWbeWoGohd7rOJVE/KqOWTFA5VJpR3io3oJiYLhgxjgmfnstMOTuZkx5yZnhpKts4LzGg+tDZ+Mdg2M4uHYh0jag8OsGZTA+7H6p3NECuRcGWO7aIaelkVzRUNSrHAXjkk/wrJigfy8VQkwrGL6Wq5aqWR9eL8/rjKXrj3DMLze/fHf7J+zjcoVj71//hWP8r0lE2mHxNEaZIwigCA75gzinLN/MWYYCJMoithdF/3RbXCNnn1v0QVpfOtqdwb0sjfbLS+PpF9RGzv8taMZ46RsBOwLcA5FevPhw9vHvZ2cXL14IDivLGAuPZrkL18bIoomcEvLgaBpT+K7a2mpMwCi6K4W+G/BF5iX0n4aLCbnAth7d8vHFEqrKiCBe9jDq14h8oXJyFXtX3Fz6AgnghtduD+L42NYrR2R2DEHqMR6nhzUsim7txRddDgJL9SH1Z4RaJjy6+ktohXFQyAekMI/iGCCzlG7beQjxh0E0HveBcqicfD3kryQ/NaaztWFo7e7fz26++ain9rVZb2MinC3Hmf9/4fAVvnAIcwYNOcdFjl18eVHyHOj7yBsUn4zcsqeTxOvO2tcEnfVr+M7yPgE9K3U9xHs2I57XZT6f0zJqSTnFOh4f0Hn5azdMMmlm6TkNVxd7guTgIoxlh2LXtwzbVK4nMk3z2IPMK/qEx3s1Xf8KhObb/1qeJ79E+HIhVw3+P5Fy8yuBLxdr6Xa+BfD1gJ3q3zfbncb+jasLUsjveIOCW7i9tM2piBpREPfClxBjyIPVUk5ohsdfltWwUfheg9f88FzRbUMn8jzp5z+RZQmy
+sidebar_class_name: "post api-method"
+info_path: docs/api/web-api/linkiir-api
+custom_edit_url: null
+hide_send_button: true
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"What saving a Database node's schema.json would change in its linked Data Maps"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/api/database_node_linked_changes/{project_guid}/{workflow_guid}/{node_guid}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Compares the schema sent with the node's schema.json and, for each linked Data Map (one after a source, one before a destination, through nodes without tables), lists the tables the save adds, changes or removes that the Data Map lacks, has otherwise, or has. Tables the user said not to ask about again are left out. Nothing is written.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<ParamsDetails
+  {...require("./database-node-linked-changes-api-database-node-linked-changes-project-guid-workflow-guid-node-guid-post.ParamsDetails.json")}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  {...require("./database-node-linked-changes-api-database-node-linked-changes-project-guid-workflow-guid-node-guid-post.RequestSchema.json")}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  {...require("./database-node-linked-changes-api-database-node-linked-changes-project-guid-workflow-guid-node-guid-post.StatusCodes.json")}
+>
+  
+</StatusCodes>
+
+
+      

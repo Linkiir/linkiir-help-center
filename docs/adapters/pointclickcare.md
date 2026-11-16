@@ -214,10 +214,10 @@ One **PCC Request** node can serve every endpoint, because the path travels in t
 
 Add a second when you want a genuinely separate connection — a different organization, or a different credential with different privileges:
 
-1. In the Workflow Builder, switch to **Edit** mode.
-2. Drag **PCC Request** from the **Transform Custom** group onto the canvas.
-3. Give it its own Client ID, Client Secret, and certificate paths.
-4. Connect it and save.
+1. In the Workflow Builder, drag **PCC Request** from the **Transform Custom** group onto the canvas.
+2. Click **Save** above the canvas. A node can be configured once it has been saved.
+3. Right-click the new node, choose **Configure**, and give it its own Client ID, Client Secret, and certificate paths.
+4. Connect it, and click **Save** above the canvas.
 
 :::tip[Reuse before duplicating]
 If the only difference is the endpoint, send a different `path` to the existing node instead. A second node means a second set of credentials to rotate.

@@ -116,7 +116,7 @@ The one other special word is `user:`. Typing `user:alice` (or `user:"alice smit
 | `project:` | Records from a project | A project name |
 | `workflow:` | Records from a workflow | A workflow name |
 | `node:` | Records from a node | A node name |
-| `type:` | A kind of record | `data`, `system`, `node` |
+| `type:` | A kind of record | `data`, `audit`, `system`, `node` |
 | `event:` | An event type | See [Event types](#event-types) |
 | `level:` | A level | `info`, `warn`, `error`, `debug`, `data` |
 | `range:` | A recent period | `1h`, `24h`, `7d`, `30d` |
@@ -144,7 +144,8 @@ How they combine:
 | --- | --- |
 | `node` | `node-state-change`, `message-enqueued`, `message-dequeued`, `script-print`, `error-occurred` |
 | `data` | `alert-delivered` |
-| `system` | `runtime-crash-loop`, `runtime-down`, `archiver-crash-loop`, `archiver-down`, `log-db-unreachable`, `engine-crash-loop` |
+| `system` | `runtime-crash-loop`, `runtime-down`, `archiver-crash-loop`, `archiver-down`, `log-db-unreachable`, `engine-crash-loop`, `external-auth-test`, `ldap-directory-unavailable`, `external-auth-notice`, `external-user-profile-updated`, `kafka-encryption-keyring-missing` |
+| `audit` | Every event listed under [Audit events](../security/index.md#what-is-tracked), such as `user-login`, `workflow-update`, `node-config-update` and `log-phi-unmasked-view` |
 
 #### Example searches
 

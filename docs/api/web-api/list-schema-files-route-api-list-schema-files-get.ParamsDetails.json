@@ -1,0 +1,1 @@
+{"parameters":[{"name":"protocol","in":"query","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"description":"Only schemas of this protocol: hl7, x12, fhir or cda.","title":"Protocol"},"description":"Only schemas of this protocol: hl7, x12, fhir or cda."}]}

@@ -48,7 +48,7 @@ The **Rule** tab lists the map's problems under **Validation** as you edit, as e
 | *PID-5 → Patient.nme[]: Patient.nme[] is not in destination.json* | A path names a field the schema doesn't have, usually after a typo or a schema change |
 | *Code map needs a source field* | The function converts a value, and the rule has no source |
 | *ADT_A01 is taken by both A and B; only A gets it* | Two maps take the same messages, and the first has no condition. See [Conditions](conditions.md) |
-| *MSH-9 (Message Type) is required and not mapped* | The destination requires a field no rule fills. The toolbar's **required** count shows how many are filled |
+| *MSH-9 (Message Type) is required and not mapped* | The destination requires a field no rule fills. The **required** count in the destination column's header shows how many are filled |
 | *Result repeats over OBX, which is not in ADT_A01* | A segment or resource is made per item of something the message doesn't have |
 | *PV1-10 → PV1-10: no Lua function is named for it* | A Custom Lua rule has no function name. Give it one in the Rule tab |
 

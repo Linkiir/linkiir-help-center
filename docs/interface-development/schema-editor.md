@@ -126,7 +126,7 @@ A **DB Schema** describes tables: each column's name, type and size, whether it 
 | To | Do this |
 | --- | --- |
 | Read tables from an existing database | **Import** in **Tables**. Enter the connection, tick the tables, or type a name, and **Import**: each table's columns and primary key are added. Tables the schema already has are replaced only when you agree, keeping their descriptions and code sets |
-| Create a table from the schema | Open the table and select **Export to database…**. A table that already exists is left as it is |
+| Create a table from the schema | Open the table and select **Export to database…**. The dialog shows the `CREATE TABLE` for the database it connects to, and runs it only when you select **Create table**. A table that already exists is left as it is |
 
 The connection form takes the server settings, or, with **Connect using**, an **ODBC DSN** (SQL Server, PostgreSQL) or a **TNS alias** (Oracle) in their place. Opened from a project's node, its fields take the project's `${project:name}` [variables](../administration/configurations/project-settings.md#variables), filled in when the Grid connects. The connection is used for that request only: it isn't saved in the schema or remembered by the browser. To reuse one, keep it in project variables.
 

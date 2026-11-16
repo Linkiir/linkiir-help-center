@@ -1,0 +1,70 @@
+---
+id: data-map-update-linked-api-data-map-update-linked-project-guid-workflow-guid-node-guid-post
+title: "Copy a Data Map's tables into a linked Database node"
+description: "Copies the tables named from the Data Map's file, as sent, into the linked Database node's schema.json, each converted to the node's database and replacing the table of the same name, then commits it and reloads the runtime. A table with a column that has no type there isn't copied, and the notes say why. The database itself isn't changed."
+sidebar_label: "Copy a Data Map's tables into a linked Database node"
+hide_title: true
+hide_table_of_contents: true
+api: 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
+sidebar_class_name: "post api-method"
+info_path: docs/api/web-api/linkiir-api
+custom_edit_url: null
+hide_send_button: true
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Copy a Data Map's tables into a linked Database node"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/api/data_map_update_linked/{project_guid}/{workflow_guid}/{node_guid}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Copies the tables named from the Data Map's file, as sent, into the linked Database node's schema.json, each converted to the node's database and replacing the table of the same name, then commits it and reloads the runtime. A table with a column that has no type there isn't copied, and the notes say why. The database itself isn't changed.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<ParamsDetails
+  {...require("./data-map-update-linked-api-data-map-update-linked-project-guid-workflow-guid-node-guid-post.ParamsDetails.json")}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  {...require("./data-map-update-linked-api-data-map-update-linked-project-guid-workflow-guid-node-guid-post.RequestSchema.json")}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  {...require("./data-map-update-linked-api-data-map-update-linked-project-guid-workflow-guid-node-guid-post.StatusCodes.json")}
+>
+  
+</StatusCodes>
+
+
+      

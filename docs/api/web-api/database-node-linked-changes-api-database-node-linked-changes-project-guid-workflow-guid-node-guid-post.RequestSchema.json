@@ -1,0 +1,1 @@
+{"title":"Body","body":{"required":true,"content":{"application/json":{"schema":{"properties":{"schema":{"additionalProperties":true,"type":"object","title":"Schema","description":"The schema about to be saved as the node's schema.json."}},"type":"object","required":["schema"],"title":"LinkedSchemaRequest"}}}}}

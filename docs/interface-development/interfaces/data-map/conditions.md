@@ -8,7 +8,7 @@ keywords: [data map, conditions, when, routing, filter, multiple maps, custom Lu
 
 Every map has a **condition**: what a message must meet for the map to take it. Conditions let several maps share a message type. For example, inpatient admissions can be mapped one way and outpatient admissions another, both from ADT^A01.
 
-The toolbar shows the condition of the map on the board, such as `PV1-2 is I and PID-3 has a value`. Clicking it opens the condition for editing.
+The map picker in the toolbar lists each map with its condition, such as `PV1-2 is I and PID-3 has a value`. With a map selected, **Condition** in the picker opens its condition for editing.
 
 ---
 

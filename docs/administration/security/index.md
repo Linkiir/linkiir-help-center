@@ -15,7 +15,7 @@ What a fresh Linkiir installation gives you, what it does not, and what to do ab
 | Transport | Plain HTTP. TLS is available but not configured. |
 | Stored secrets | Broker and Log DB passwords encrypted with a generated master key |
 | User passwords | Hashed individually |
-| Sessions | 15-minute idle timeout, 24-hour absolute timeout |
+| Sessions | 15-minute idle timeout, 12-hour absolute timeout |
 
 The two things to do first: change the administrator password, and decide how the Grid will be reached.
 
@@ -77,7 +77,7 @@ Where a partner API requires mutual TLS, a script can present a client certifica
 | Timeout | Default | Configure in |
 | --- | --- | --- |
 | Idle | 15 minutes | **Settings → Instance** |
-| Absolute | 24 hours | **Settings → Instance** |
+| Absolute | 12 hours | **Settings → Instance** |
 
 Background polling the Grid performs on its own does not count as activity, so an unattended tab still times out.
 
@@ -258,7 +258,7 @@ No event ever contains a password, token, secret, or SSO assertion. Events also 
 | `LOG_EXPORT` | Log records are downloaded |
 | `MESSAGE_RESUBMIT` | Archived messages are resubmitted. A message sent to another node is recorded in the destination project, and also in its own project when it leaves that project |
 
-The **Event Type** filter lists the most common of these by name. Every one of them appears when **Event Type** is left at **All Event Types**.
+On the Logs page, `type:audit` in the search box shows all of these. To narrow to one, use `event:` with the event's name in lowercase with dashes, for example `event:workflow-update`. See [Event types](../logs/index.md#event-types).
 
 Events the platform raises on its own — runtime and archiver health, high availability, updates, and licence changes — are kept apart under **Type → System Events (platform)**.
 

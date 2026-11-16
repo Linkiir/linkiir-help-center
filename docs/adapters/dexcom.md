@@ -202,11 +202,11 @@ The adapter arrives as two node templates plus the library behind them. See [How
 
 To read a second Dexcom account, add a second pair of nodes from the templates rather than editing the first:
 
-1. In the Workflow Builder, switch to **Edit** mode.
-2. Drag **Dexcom Authorize** from the **Source HTTP** group onto the canvas, and **Dexcom Read EGV** from **Source Custom**.
-3. Give the new Authorize node a **different Route Path**, and register its redirect URI with Dexcom.
+1. In the Workflow Builder, drag **Dexcom Authorize** from the **Source HTTP** group onto the canvas, and **Dexcom Read EGV** from **Source Custom**.
+2. Click **Save** above the canvas. A node can be configured once it has been saved.
+3. Right-click each new node and choose **Configure**. Give the new Authorize node a **different Route Path**, and register its redirect URI with Dexcom.
 4. Give the new pair a **different Token Store Path**, so the two authorizations do not overwrite each other.
-5. Configure, then connect the reader to your downstream node.
+5. Connect the reader to your downstream node, and click **Save** above the canvas.
 
 :::warning[One authorization per token store]
 The token store holds a single authorization. Two Dexcom accounts need two store paths. Pointing both pairs at one file means the second authorization replaces the first.

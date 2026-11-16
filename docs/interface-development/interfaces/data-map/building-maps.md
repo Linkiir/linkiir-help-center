@@ -75,7 +75,7 @@ The map picker in the toolbar lists the node's maps, each with the messages it t
 
 **New map** asks for the message the map takes, optional samples, its condition, and what it builds.
 
-The message lists start with the messages the node's schemas already have, each tagged with its file (**source schema** or **destination schema**), then the standard catalog's, tagged **standard**. For HL7 v2, the schema's own messages also show the version the node reads or builds, such as **v2.5.1**. Pick one of the schema's own to map a message shaped by hand, such as your own ORU^R01. See [Custom messages](#custom-messages).
+The message lists start with the messages the node's schemas already have, each tagged with its file (**source schema** or **destination schema**), then the standard catalog's, tagged **standard**. For HL7 v2, the schema's own messages also show the version the node reads or builds, such as **v2.5.1**. The HL7 **ACK** isn't listed on either step, since acknowledgments are handled by the nodes, not by a map. Pick one of the schema's own to map a message shaped by hand, such as your own ORU^R01. See [Custom messages](#custom-messages).
 
 **Copy from another schema…**, on both the source and destination steps, takes a message from another node's schema, or from a schema file on your computer, and has the map take or build it. See [Custom messages](#custom-messages).
 
@@ -208,7 +208,7 @@ Under **Show**, tick the elements to include. With none ticked, every element th
 
 ## Auto-map
 
-**Auto-map** in the toolbar adds the standard mappings for the segments, resources or loops in the map. Its badge counts how many it can add. For example, ADT^A01 to FHIR maps PID into a `Patient` and PV1 into an `Encounter`, and fills MSH-7, MSH-9 and MSH-10 when building HL7.
+**Auto-map** in the destination column's header adds the standard mappings for the segments, resources or loops in the map. Its badge counts how many it can add. For example, ADT^A01 to FHIR maps PID into a `Patient` and PV1 into an `Encounter`, and fills MSH-7, MSH-9 and MSH-10 when building HL7.
 
 When building FHIR, Auto-map also gives each resource it maps into a [Narrative](#narrative), unless something already fills that resource's `text`.
 

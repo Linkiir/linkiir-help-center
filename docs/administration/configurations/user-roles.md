@@ -53,7 +53,7 @@ Everything reachable from a project card or the project popout, and the workflow
 | **Import/export projects** | Export a project archive, or import one from a file or remote |
 | **Add collaborators** | Grant another user access to a project |
 | **Remove collaborators** | Revoke another user's access to a project |
-| **Edit workflows** | Create and delete workflows, and add, remove, connect, and move the nodes on their canvas |
+| **Edit workflows** | Create and delete workflows, add, remove, connect, and move the nodes on their canvas, and undo saved canvas changes from **Workflow history** |
 | **Manage node templates** | Create, import, edit, and delete node templates and template groups |
 
 ### Logs

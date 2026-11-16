@@ -94,10 +94,10 @@ Most adapters ship with Live Mode on and are safe to leave that way once configu
 
 To point the same adapter at another endpoint, another resource type, or another channel, add a second node from the template rather than editing the first.
 
-1. In the Workflow Builder, open **Edit** mode.
-2. Find the adapter's template in the node palette, under the group matching its type, and drag it onto the canvas.
-3. Configure the new node. It carries the same fields, independently valued.
-4. Connect it and save.
+1. In the Workflow Builder, find the adapter's template in the node palette, under the group matching its type, and drag it onto the canvas.
+2. Click **Save** above the canvas. A node can be configured once it has been saved.
+3. Right-click the new node and choose **Configure**. It carries the same fields, independently valued.
+4. Connect it, and click **Save** above the canvas.
 
 Both nodes use the same library, so there is one copy of the client code to maintain. See [Project Settings](../administration/configurations/project-settings.md) for how libraries are listed, versioned, and copied between projects.
 
