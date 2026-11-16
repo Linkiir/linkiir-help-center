@@ -14,7 +14,7 @@ A Data Map node is tested like any other node: on samples, in its runtime, befor
 
 Add samples in the **New map** wizard's **Sample data** step, or at any time with **Samples** at the top of the Scripting page, where they can be read, edited, added or uploaded. A sample is a message as the node would receive it: an HL7 v2 message, a FHIR resource or Bundle, an X12 interchange, a CDA document, a JSON object of rows, or a JSON or XML document.
 
-With a sample selected, the source column shows each field's value from it, and its filter button can hide everything the sample leaves empty. Keep one sample per case the map has to handle: each message type, each condition, and a message with the optional parts missing.
+With a sample selected, the source column shows each field's value from it, and with **Show** at **Populated** (the default) it lists only what the sample fills. See [Choosing what the columns list](building-maps.md#choosing-what-the-columns-list). Keep one sample per case the map has to handle: each message type, each condition, and a message with the optional parts missing.
 
 See [Testing and Debugging](../../lua-programming/testing-debugging.md) for samples in general. Use fake identifiers in samples, never real patient data.
 
@@ -31,7 +31,7 @@ The **Output** tab in the bottom panel has **Run on "_sample_"**. It runs the no
 
 To find something in a long output, type in **Find in output** above the messages. Every match is highlighted, ignoring case, across all the messages pushed, with a count such as **2 of 7**. **Enter** or the down arrow moves to the next match and **Shift+Enter** or the up arrow to the previous one, scrolling it into view. **Escape** clears the search.
 
-After a run that pushed one message, the destination column gets an **Output** column: beside each field a rule writes, what the run wrote there, or **(empty)** when it wrote nothing. Hover over a value to read it whole. The column shows only while the sample that was run is selected, the map on the board is the one that ran, and the node hasn't changed since. Run again to bring it back.
+After a run that pushed one message, the destination column's **Output** column shows, beside each field a rule writes, what the run wrote there, or **(empty)** when it wrote nothing. Hover over a value to read it whole. These values show only while the sample that was run is selected, the map on the board is the one that ran, and the node hasn't changed since; otherwise the column shows only fixed values, after an **=**. Run again to bring the values back.
 
 Selecting a link afterwards shows in the **Rule** tab what that link read from the sample and what ended up in the output at its destination. It warns when the last run failed, or pushed no message or more than one, since then there is no single output to compare.
 

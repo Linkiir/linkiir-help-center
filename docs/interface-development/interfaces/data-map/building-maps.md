@@ -16,19 +16,37 @@ Opening a Data Map node on the Scripting page shows the **Map** view. The switch
 
 | Area | Shows |
 | --- | --- |
-| **Toolbar** | The map picker, **Report** (see [The report](#the-report)), and the **PreMap** and **PostMap** buttons |
+| **Toolbar** | The map picker, **Show** (see [Choosing what the columns list](#choosing-what-the-columns-list)), **Generate Report** (see [The report](#the-report)), and the **PreMap** and **PostMap** buttons |
 | **Source column**, left | The message the map takes, from the source schema, with the selected sample's values beside each field |
-| **Destination column**, right | The message it builds, from the destination schema. After a run, an **Output** column shows what the map wrote into each field |
-| **Links** between the columns | One per rule. Hover over a field to highlight its links. Scrolling over the links scrolls both columns together. The **Undo** and **Redo** buttons sit at the top |
+| **Destination column**, right | The message it builds, from the destination schema. Its **Output** column shows each field's fixed value, and after a run what the map wrote there |
+| **Links** between the columns | One per rule. Hover over a field to highlight its links. Scrolling over the links scrolls both columns together. The **Legend**, **Undo** and **Redo** buttons sit at the top |
 | **Bottom panel** | **Rule**: the selected rule's settings, what it read and wrote on the last run, and the map's problems. **Output**: running the map on a sample |
 
-The destination column's header counts the fields mapped and the destination's required fields that are filled (**required 12/14**), and holds **Auto-map**. The filter box at the top of each column narrows it, and the filter button limits it to fields that have a value in the sample or are mapped.
+The destination column's header counts the fields mapped and the destination's required fields that are filled (**required 12/14**), and holds **Auto-map**. The filter box at the top of each column narrows it by name.
 
-Selecting a link makes it stand out: it is drawn thicker, with a dot at each end where it meets its two fields, and the other links fade back until you select elsewhere.
+Selecting a link makes it stand out: it is drawn thicker, with a dot at each end where it meets its two fields, and the other links fade back until you select elsewhere. Both columns scroll to bring its two fields into view.
 
-**Expand all** and **Collapse all**, at the right of each column's toolbar, open or close the whole column at once. **Collapse all** folds everything back to its top-level rows: segments, resources, loops, tables or sections. **Expand all** opens those top-level rows one level down, so a large message stays readable. Open a row further with its own arrow. Links to a folded field end on the nearest row still showing, such as its segment. When several links end on the same folded row, they are drawn as one dashed chip showing how many there are: hover over it to list them, click it to open the row, or Shift-click (Cmd-click on a Mac) to select them all.
+A map opens with both columns folded to their top-level rows. **Expand all** and **Collapse all**, at the right of each column's toolbar, open or close the whole column at once. **Collapse all** folds everything back to its top-level rows: segments, resources, loops, tables or sections. **Expand all** opens those top-level rows one level down, so a large message stays readable. Open a row further with its own arrow. Links to a folded field end on the nearest row still showing, such as its segment. When several links end on the same folded row, or run from one folded source row into the same segment, resource or table, they are drawn as one dashed line with a chip showing how many there are: hover over it to draw them one by one and list them, click it to open the folded row, or Shift-click (Cmd-click on a Mac) to select them all.
+
+A link whose field is scrolled out of view runs faded to the edge of the column. The count at the top or bottom of the links column, such as **↓ 3**, says how many links lead out of view that way; click it to scroll to the nearest.
+
+A fixed value has no line. It shows in the destination's **Output** column after an **=**, such as **= F**, until a run shows what was written.
 
 The bottom panel opens when you select a rule or run the map, and closes with its **×** to give the board more room. While it is closed, a **problems** button shows when the map has any, and opens it.
+
+Drag the edges between the columns to resize them. The links column keeps the width you give it, and a wider window widens the source and destination columns.
+
+### Choosing what the columns list
+
+**Show** in the toolbar sets what both columns list. Your browser remembers the choice.
+
+| Show | Source column | Destination column |
+| --- | --- | --- |
+| **All** | Every segment and field the message has | Everything the map writes |
+| **Populated** (the default) | What the selected sample fills, or everything when there is no sample | Everything the map writes |
+| **Mapped** | Only what rules read | Only what rules write |
+
+A field a rule reads or writes is always listed. The legend button (**?**) at the top of the links column explains the lines, chips and the colored marker beside each field: mapped, partly mapped, covered by a whole-segment copy, required but not mapped, or not mapped.
 
 ### Source and destination settings
 
@@ -211,7 +229,7 @@ What you set up in the destination column depends on the destination format:
 | Database | The main table, and the other tables it writes. Each, the main table too, is written once or once per item of the input: a main table written per `OBR` gets a row for each order an ORM carries |
 | JSON, XML | The structure, and the lists made per item |
 
-For HL7 v2, the destination column also lists the message's segments the map doesn't write, folded, in their place in the message. Each is marked **not written**, or **from the input** when the output starts as a copy of the input and the input has it. Open one to see its fields. Link to one of its fields, or press its **+**, and the map writes that segment.
+For HL7 v2, the destination column lists the segments the map writes. When the output starts as a copy of the input, the segments the input brings along are listed too, folded and marked **from the input**: open one to see its fields, and link to one of its fields, or press its **+**, to have the map write that segment. Other segments of the message are added with **Add segment**.
 
 See [Formats](formats.md) for each format's paths and particulars.
 
@@ -370,7 +388,7 @@ An imported map is a copy: later changes to the original don't reach it, and imp
 
 ## The report
 
-**Report** in the toolbar opens a report of the whole node in a new browser tab, to read, print or keep as a PDF. It shows:
+**Generate Report** in the toolbar opens a report of the whole node in a new browser tab, to read, print or keep as a PDF. It shows:
 
 - a summary: the source and destination formats and versions, and how many maps and rules the node has;
 - the **Source definition** and **Destination definition**: each message, table or structure, down to its fields, with every element the schema says must be present marked **Required**, and every element a rule reads or writes marked **Mapped**;

@@ -132,6 +132,8 @@ The connection form takes the server settings, or, with **Connect using**, an **
 
 A [Database node](interfaces/database-node.md) keeps its tables in its own `schema.json`. Opened from the node with **Edit Schema**, the editor imports and exports with that node's connection, so you don't enter it again.
 
+The source and destination schemas of other nodes can use a linked Database node's connection too. When a Database source feeds the node, directly or through nodes in between, **Connect through** in the import and export dialog of its source schema offers that Database source; when the node sends to a Database destination, its destination schema offers that one. The nearest one whose database matches the schema's is picked to start with (the form, when none does), and **Enter connection details** switches to the form. Only nodes with a server, DSN, TNS alias or database file set are offered. Nothing connects until you test, list, import or export.
+
 Connecting needs the database's driver installed on the Linkiir server. SQL Server needs Microsoft **ODBC Driver 18 for SQL Server**. See [Database Drivers](../administration/configurations/database-drivers.md).
 
 In a script, `linkiir.store.tables{ name = 'patients', schema = 'clinic.json' }` checks each value you set against its column as you set it. See [Database](../api/scripting-api/database.md).
