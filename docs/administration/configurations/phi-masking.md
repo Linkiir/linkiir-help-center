@@ -21,7 +21,7 @@ The masking happens on the server, for everyone. **Masked PHI is sent unless a u
 | **Logs**: search | Matches only what you are shown (see [Searching](#searching-masked-messages)) | Matches the masked text while PHI is hidden, and the whole message while it is shown |
 | **Logs**: Download | Exported masked | Exported masked, unless you tick **Include PHI** |
 | **Logs**: Resubmit | Read only, masked | Reveal a message to edit it before resubmitting; Linkiir fetches it unmasked. A message no rule matches says so, rather than offering to reveal it |
-| **Monitor**: a node's message previews in **View queue** | Masked | Masked each time the window opens. Its **PHI** button fetches them unmasked |
+| **Integrations**, **Workflows** tab: a node's message previews in **View queue** | Masked | Masked each time the window opens. Its **PHI** button fetches them unmasked |
 | **AI assistant** | Always masked, for everyone. See [AI Policy and Limits](../../ai-assistant/setup/policy-and-limits.md) | Always masked |
 
 Masked values are replaced with `██████`. A message that still contains that character is refused for resubmission, so a masked view can never be published back onto a queue.

@@ -14,7 +14,7 @@ Administration covers the complete Linkiir platform lifecycle.
 - [Deployment](deployment/index.md): DEV, TEST, PROD, HA, and moving projects between environments.
 - [High Availability](../high-availability/index.md): Active/standby pairs, topologies, requirements, and how HA differs from backup and disaster recovery.
 - [Configurations](configurations/index.md): Project settings, users and roles, migration, Log Archive DB, log retention, and Kafka.
-- [Monitoring Workflows](monitor/index.md): Workflow status, searching the Monitor, and reading or repositioning a node's queue.
+- [The Integrations Page](integrations/index.md): Running and watching workflows, searching them, reading or repositioning a node's queue, and adding projects.
 - [Log Search and Message History](logs/index.md): Reading, searching, exporting, and resubmitting archived messages.
 - [Backup and Restore](backup-restore/index.md): Protect and recover the Linkiir working directory.
 - [Alerting and Notifications](notifications/index.md): Monitoring Linkiir, and alerting from a workflow.
@@ -37,7 +37,7 @@ Administration covers the complete Linkiir platform lifecycle.
 | Survive a server failure without an outage | [High Availability](../high-availability/index.md) |
 | Get alerted when an interface fails | [Alerting and Notifications](notifications/index.md) |
 | Stop message history growing forever | [Log Retention and Purge](configurations/log-retention-purge.md) |
-| Find workflows with a backed-up queue | [Monitoring Workflows](monitor/index.md#filtering-by-queue-size) |
+| Find workflows with a backed-up queue | [The Integrations Page](integrations/index.md#filtering-by-queue-size) |
 | Find out whether a message arrived | [Log Search and Message History](logs/index.md) |
 
 ## Daily operational checks

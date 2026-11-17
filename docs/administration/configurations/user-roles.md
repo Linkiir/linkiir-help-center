@@ -35,13 +35,13 @@ Starting and stopping what is already built, and choosing what it runs.
 | **Clear queues** | Discard the messages waiting on a node's queue |
 | **Reposition queues** | Move a stopped node to a chosen point in its queue, skipping messages or replaying processed ones |
 | **Set run commit** | Choose which commit of a node's code the Runtime executes |
-| **Clear errors** | Mark a workflow's or node's current errors as seen on the Monitor page |
+| **Clear errors** | Mark a workflow's or node's current errors as seen on the Integrations page's **Workflows** tab |
 
 Repositioning is separate from clearing because it points both ways: moving a node backward re-delivers messages it already processed, which sends duplicates downstream.
 
 ### Projects
 
-Everything reachable from a project card or the project popout, and the workflows inside a project.
+Everything reachable from a project's row on the Integrations page's **Projects** tab or from the project popout, and the workflows inside a project.
 
 | Permission | Grants |
 | --- | --- |

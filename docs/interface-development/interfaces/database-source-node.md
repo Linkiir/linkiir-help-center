@@ -295,7 +295,7 @@ The node doesn't log the records it sends. It logs what it did with each one. A 
 With **Debug Logging** on, the logs hold record identifiers and the SQL with them in it. The Logs page's PHI masking doesn't apply to these lines. Turn **Debug Logging** on only while you need it.
 :::
 
-The Monitor counts the messages the node sent as usual.
+The Integrations page counts the messages the node sent as usual.
 
 ---
 

@@ -273,7 +273,7 @@ The Workflow Builder shows **Restart to apply** above the canvas when this happe
 
 Deleting a node removes it, and all its files, from every user's copy of the project, including changes to it that nobody has committed yet. Anything you want to keep from a node is safe once committed: the node's committed files stay in the project's history.
 
-The breadcrumb above the canvas switches project and workflow, and creates them too: the project dropdown offers **New project** and the workflow dropdown **New workflow**, each taking a name and description and opening what it creates.
+The workflow picker above the canvas switches workflow without choosing a project first. It lists every workflow in the projects you can open, each with its project's name under it, and a long list can be searched by workflow or project name. **New workflow** at the top of the list opens the **Add workflow** dialog: choose the **Project** (its list offers **New project** too), enter a **Name** and optional **Description**, and click **Create workflow**. The Builder then opens the new workflow.
 
 ## Reference pages
 

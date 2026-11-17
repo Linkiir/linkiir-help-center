@@ -8,7 +8,7 @@ Node logic is written in Lua. The editor gives you static IntelliSense, schema-a
 
 ## The editor
 
-Scripts are written on the **Scripting** page. The file explorer on the left lists the node's own files, the project's shared files, and its libraries; the editor fills the rest. Clicking the active icon in the bar at the far left hides the sidebar to give the editor the full width, and clicking any icon brings it back. The page remembers which way you left it.
+Scripts are written on the **Scripting** page. Pick the node in the breadcrumb at the top of the page: first the workflow, from a list of every workflow in the projects you can open with each one's project named under it, then the node. There is no separate project picker. The file explorer on the left lists the node's own files, the project's shared files, and its libraries; the editor fills the rest. Clicking the active icon in the bar at the far left hides the sidebar to give the editor the full width, and clicking any icon brings it back. The page remembers which way you left it.
 
 In the explorer and the editor tabs, message schemas have their own icon, and files you can't edit, such as a Data Map node's generated code or a file in a node linked to a catalog, show a lock.
 
@@ -37,7 +37,7 @@ The **Source Control** tab is the open node's view of the project repository: th
 - The count on the button is how many pending commits are **this node's** work.
 - When the project has pending commits from elsewhere too, the tooltip spells out the difference — *"2 of the 5 commits pending in this project are from this node; a push sends all 5"* — and a line under the buttons repeats it.
 
-Use the project card's own Push when you mean the project as a whole; that is the same operation, viewed at the level it actually works on.
+Use the project's own Push, on its row on the Integrations page's **Projects** tab or in its popout, when you mean the project as a whole; that is the same operation, viewed at the level it actually works on.
 
 To throw away work you haven't committed, use **Discard change** on a file in the **Changes** list, or **Discard all changes** in its header. A changed file goes back to its last committed version, and a new file is deleted. You are asked to confirm first. Only unstaged changes are discarded: unstage a file first to discard it.
 

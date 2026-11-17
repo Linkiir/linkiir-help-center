@@ -19,14 +19,14 @@ A bundle is a file you can email, attach to a change ticket, or archive with a r
 
 ## Export a project as a bundle
 
-1. Open **Projects**.
-2. Click the project card to open it.
-3. Go to the **Git** tab.
-4. Click **Export project**.
+1. Open **Integrations** and select the **Projects** tab.
+2. Click the project's row to open it.
+3. Click **Export project** in the popout's header.
+4. Leave **Include sample data** on, or turn it off to leave samples out, and click **Export**.
 
 Your browser downloads a `.zip` file named after the project, for example `Patient_Administration.linkiir.zip`.
 
-The button sits next to **Configure remote** on purpose: they are the two ways a project leaves the grid.
+The button sits beside **Push to remote** and **Pull from remote** on purpose: they are the two ways a project leaves the grid.
 
 ### What the bundle contains
 
@@ -63,12 +63,12 @@ A bundle is an ordinary zip. Open it to confirm what you are handing over. `link
 
 ## Import a project from a bundle
 
-1. Open **Projects**.
-2. Click the chevron on **Add Project**.
-3. Choose **From zip**.
+1. Open **Integrations** and select the **Projects** tab.
+2. Click **Add Project**.
+3. Select the **From zip** tab.
 4. Drop the `.zip` on **Choose a project bundle**, or click to browse for it.
 5. Optionally type a **Name**. Leave it blank to keep the name in the bundle.
-6. Click **Import**.
+6. Click **Import project**.
 
 The project appears in the list, ready to open. Nothing needs restarting — the runtime picks up the new project on its own.
 
@@ -82,7 +82,7 @@ Importing a bundle onto a grid that already has that project is the exception. R
 
 That makes a bundle safe to import twice on one grid — useful for cloning a project as a starting point for a new one. The two copies are then independent: a change to one does not touch the other.
 
-Display names are not checked for uniqueness, so give the copy a distinct **Name** at import time if you want to tell them apart at a glance.
+Project names, unlike identifiers, must be unique on the grid, ignoring case. A second copy needs a distinct **Name** at import time: if the name in the bundle is already taken, the import is refused and asks you to give it a different name.
 
 ### If an import is refused
 
@@ -92,6 +92,7 @@ Display names are not checked for uniqueness, so give the copy a distinct **Name
 | Not a Linkiir project bundle | The zip has no `linkiir_project.json` at its root. It is a different kind of archive, or the project directory was zipped by hand instead of exported. |
 | …or it was exported by a newer version of Linkiir than this grid can read | The source grid is newer than the target. Upgrade the target, or export from a grid at the target's version. |
 | The bundle is incomplete | The archive is missing the project configuration. Export it again. |
+| A project named '…' already exists. Give the import a different name. | Another project on this grid already has that name. Type a different **Name** and import again. |
 | A project with that id is already on this grid | A rare race with another import of the same project. Retry. |
 | That archive is larger than this grid will import | A bundle is text plus samples, so this normally means large sample payloads. Trim them and export again. |
 | The archive contains a symlink / an unsafe path | The archive was not produced by Linkiir. Only import bundles you exported. |
@@ -109,12 +110,12 @@ Use this when the project lives in a repository both grids can reach. The clone 
 
 ### Steps
 
-1. Open **Projects**.
-2. Click the chevron on **Add Project**.
-3. Choose **From remote**.
+1. Open **Integrations** and select the **Projects** tab.
+2. Click **Add Project**.
+3. Select the **From remote** tab.
 4. Enter the **Remote SSH URL**, for example `git@github.com:org/patient-administration.git`.
 5. Optionally type a **Name**. Leave it blank to keep the name in the repository.
-6. Click **Import**.
+6. Click **Import project**.
 
 The project arrives with its full history and its remote already configured.
 
@@ -125,7 +126,7 @@ On the grid that owns the project:
 1. Open the project and go to the **Git** tab.
 2. Click **Configure remote**.
 3. Enter the **Remote SSH URL** and save.
-4. Use the **Push to remote** button in the project header.
+4. Use the **Push to remote** button in the popout's header.
 
 The target repository must be empty — the project's history is pushed into it.
 
@@ -138,6 +139,7 @@ The target repository must be empty — the project's history is pushed into it.
 | Could not clone that repository | Check the URL, and that your key has access to it. |
 | That repository doesn't hold a Linkiir project | The repository is not a pushed Linkiir project. |
 | That project is already on this grid | Pull it from its **Git** tab instead of importing a second copy. |
+| A project named '…' already exists. Give the import a different name. | Another project on this grid already has that name. Type a different **Name** and import again. |
 | A workflow in that project shares its id with one already on this grid | Import it as a zip bundle instead. That gives the copy fresh identifiers. |
 
 Unlike a zip import, a remote import never regenerates identifiers — it has to stay the same project for pushes back to the remote to mean anything.

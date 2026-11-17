@@ -13,10 +13,12 @@ You will write the script and start the listener in [the next step](start-http-s
 
 ## 1. Create the project
 
-1. Open **Projects** in the Grid.
-2. Click the chevron on **Add Project** and choose **New project**.
+1. Open **Integrations** in the Grid and select the **Projects** tab.
+2. Click **Add Project**. The dialog opens on its **New project** tab.
 3. Name it `Getting Started`. A description is optional.
-4. Save.
+4. Click **Create project**.
+
+Project names are unique on the grid, ignoring case, so the dialog refuses a name that is already taken.
 
 A project holds workflows, scripts, schemas, project variables, and libraries.
 
@@ -28,9 +30,9 @@ Linkiir gives every project, workflow, and node a stable internal identifier sep
 
 ## 2. Create the workflow
 
-1. Click the `Getting Started` project card to open it.
-2. On the **Workflows** tab, click **Add Workflow**.
-3. Name it `HTTP Intake` and save.
+1. Select the **Workflows** tab and click **Add Workflow**.
+2. Choose `Getting Started` as the **Project**.
+3. Name it `HTTP Intake` and click **Create workflow**.
 
 The workflow is the unit you start and stop. Everything you add next lives inside it.
 
@@ -38,7 +40,7 @@ The workflow is the unit you start and stop. Everything you add next lives insid
 
 ## 3. Add the HTTP source node
 
-Click the hammer icon on the workflow row (**Open in Builder**) to reach the Workflow Builder, then drag **HTTP** from the **Source** group of the node palette onto the canvas.
+Click **Open in builder** in the message that confirms the new workflow, or right-click the `HTTP Intake` row and choose **Open in builder**. In the Workflow Builder, drag **HTTP** from the **Source** group of the node palette onto the canvas.
 
 ### The node palette
 
@@ -140,13 +142,13 @@ Continue with [Edit the Script and Start the HTTP Server](start-http-server.md).
 
 ## Also worth knowing
 
-The project popout has more than the **Workflows** tab. You do not need them for this walkthrough, but they are where project-wide settings live:
+Clicking a project's row on the **Projects** tab opens the project popout. It has more than a **Workflows** tab. You do not need the others for this walkthrough, but they are where project-wide settings live:
 
 | Tab | Use it for |
 | --- | --- |
 | **Variables** | Project-level variables available to all workflows, with a **Secret** flag for passwords and keys |
 | **Templates** | Reusable node templates, and importing them from another project |
 | **Libraries** | Versioned code bundles shared across the project's nodes |
-| **Git** | Project history, remote configuration, and **Export project** |
+| **Git** | Project history and remote configuration. **Export project** is in the popout's header. |
 
 See [Project Settings](../administration/configurations/project-settings.md).

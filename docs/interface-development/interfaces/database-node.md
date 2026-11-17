@@ -368,7 +368,7 @@ With **Messages per Transaction** above `1`, one statement can write the rows of
 Each statement includes the values it writes, so with **Debug Logging** on, the logs hold the data the node wrote. The Logs page's PHI masking doesn't apply to these lines. Turn **Debug Logging** on only while you need it, and only where the people who can read the logs may see that data.
 :::
 
-The Monitor counts the messages each node received and sent as usual.
+The Integrations page counts the messages each node received and sent as usual.
 
 ---
 

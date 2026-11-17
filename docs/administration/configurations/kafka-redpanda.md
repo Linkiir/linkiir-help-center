@@ -94,7 +94,7 @@ Two things go wrong when that happens, and neither is cosmetic:
 
 | Symptom | Cause |
 | --- | --- |
-| A stopped node reports its entire retained history as queued, on the Monitor page, the Dashboard, and in queue-threshold alert rules | Queue depth is the log's end minus the committed position. With no committed position, the only floor left is the start of the log. |
+| A stopped node reports its entire retained history as queued, on the Integrations page, the Dashboard, and in queue-threshold alert rules | Queue depth is the log's end minus the committed position. With no committed position, the only floor left is the start of the log. |
 | Starting that node reprocesses everything still retained and re-sends it downstream | Consuming nodes read from the earliest available record when there is no position to resume from |
 
 What Linkiir does about it:

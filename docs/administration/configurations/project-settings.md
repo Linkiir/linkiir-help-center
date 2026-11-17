@@ -4,32 +4,15 @@ title: Project Settings
 
 # Project Settings
 
-Open a project by clicking its card on the **Projects** page. The popout that appears is where everything project-wide lives.
+Open a project by clicking its row on the **Projects** tab of the [Integrations](../integrations/index.md#the-projects-tab) page. The popout that appears is where everything project-wide lives.
 
----
-
-## The project card
-
-Each card on the **Projects** page carries the project's name and description, a chip summarising its workflows, and a footer showing **Total Queue**, the workflow count, and when the project last changed.
-
-| To | Do |
-| --- | --- |
-| Open the project's settings | Click the card |
-| Open the Builder or Monitor | Right-click the card, choose **Open in Builder** or **Open in Monitor**. The Monitor opens filtered to this project. |
-| Rename or re-describe it | Right-click the card, choose **Edit project** |
-| Delete it | Right-click the card, choose **Delete project**, then type the project's name to confirm |
-| Reorder the cards | Drag a card by the grip handle in its top-right corner |
-| Create or import a project | Click the chevron on **Add Project** — **New project**, **From zip**, or **From remote** |
-
-**Edit project** and **Delete project** are greyed out without the **Edit project details** and **Delete projects** permissions; card order is only a display preference, so it is open to everyone and saves as soon as you drop the card.
-
-A project you do not collaborate on shows as **No access** — name and description only, with no counters and no right-click menu.
+The Projects tab is also where you create, import, rename, delete and reorder projects. See [The Projects tab](../integrations/index.md#the-projects-tab).
 
 ---
 
 ## The project popout
 
-Across the top it shows four counters — **Workflow Count**, **Workflows Running**, **Nodes Running**, and **Current Queue** — then a row of tabs.
+Its header shows the project's name and description, with **Export project** and the **Push to remote** and **Pull from remote** cloud icons. Below it are four counters — **Workflow count**, **Workflows running**, **Nodes running**, and **Current queue** — then a row of tabs.
 
 | Tab | Use it for |
 | --- | --- |
@@ -37,14 +20,14 @@ Across the top it shows four counters — **Workflow Count**, **Workflows Runnin
 | [Variables](#variables) | Values shared by every workflow in the project |
 | [Templates](#templates) | Reusable node configurations, and importing them from another project |
 | [Libraries](#libraries) | Versioned code bundles the project's scripts share |
-| [Git](#git) | Project history, the remote, and **Export project** |
+| [Git](#git) | Project history and the remote |
 | [Collaborators](#collaborators) | Who may open this project at all |
 
 ---
 
 ## Workflows
 
-The default tab. Each row shows the workflow name, its state, its auto-start setting, queue depth, error count, and last activity.
+The default tab. Each row shows the workflow name and description, a status dot, its auto-start setting, queue depth, error count, and last activity. Hover over the dot to see the workflow's state.
 
 | State | Meaning |
 | --- | --- |
@@ -52,18 +35,24 @@ The default tab. Each row shows the workflow name, its state, its auto-start set
 | **Running** | Nodes running and ready |
 | **Processing** | Running with messages in flight |
 | **Failed** | At least one node errored |
+| **Degraded** | A node errored while others are still running |
 
 Per-row actions:
 
 | Action | Does |
 | --- | --- |
+| **Open in Workflows view** (workflow icon) | Opens the Integrations page's **Workflows** tab filtered to this project, with the workflow's name in the search box |
 | **Open in Builder** (hammer icon) | Opens the Workflow Builder to lay out and configure nodes |
-| **Open in Monitor** (activity icon) | Opens the Monitor filtered to this project, with the workflow's name in the search box |
+| **Open in Scripting** (code icon) | Opens the workflow on the Scripting page |
+| **Open in Logs** (scroll icon) | Opens the Logs page for the workflow |
 | **Start** / **Stop** | Starts or stops every node in the workflow |
+| **Restart** | Shown instead of **Start** / **Stop** on a failed or degraded workflow |
 
-Header actions: **Add Workflow**, **Start All** / **Stop All**, and a sort button that cycles the order rows are listed in.
+Header actions: **Start All** / **Stop All**, **Add Workflow**, and a sort button that cycles the order rows are listed in. **Add Workflow** here adds the workflow to this project; the Integrations page's **Add Workflow** asks which project it goes in.
 
-Right-click a workflow row for **Edit workflow** — name, description, and **Auto Start** — and **Delete workflow**. Both need the **Edit workflows** permission; without it the menu does not open.
+Right-click a workflow row for **Edit workflow** — name, description, **Auto start**, and **Payload Encryption** — and **Delete workflow**. Both need the **Edit workflows** permission; without it the menu does not open. The same two actions are on a workflow's right-click menu on the Integrations page's [Workflows tab](../integrations/index.md#editing-and-deleting-a-workflow).
+
+Workflow names are unique within a project, ignoring case, so a name already used in the project is refused.
 
 **Delete workflow** removes the workflow and its nodes from every user's copy of the project, including changes in it that nobody has committed yet. What was committed stays in the project's history.
 
@@ -78,7 +67,7 @@ Each row carries an **Auto start on** or **Auto start off** badge. It decides wh
 | **Auto start on** | The workflow's nodes start automatically |
 | **Auto start off** (default) | The workflow stays off until someone starts it |
 
-To change it: right-click the workflow row, choose **Edit workflow**, and switch **Auto Start** on or off. It is saved with the workflow's name and description, and is committed to the project's history like any other change.
+To change it: right-click the workflow row, choose **Edit workflow**, and switch **Auto start** on or off. It is saved with the workflow's name and description, and is committed to the project's history like any other change.
 
 Turn it on for production interfaces that must come back on their own after a restart. Leave it off for anything half-built, or for a workflow whose destination is a live system you do not want written to unattended — an auto-started workflow begins consuming its queue as soon as the Runtime is up, with nobody watching.
 
@@ -224,7 +213,7 @@ Your own row is marked **you**, and you can remove yourself — the confirmation
 
 There is no owner. Whoever creates the project is added as its first collaborator like anybody else. That means the list can end up empty, which is legal and shows as *Nobody is on this project. It cannot be opened until someone is added.* Anyone holding **Add collaborators** can reopen it, on any project on the instance; that permission is what makes a lockout recoverable, and it grants no access to the contents on its own.
 
-A project you are not on still appears on the **Projects** page as **No access**, with its name and description and nothing else — no workflows, no counters, no right-click menu. Someone holding **Add collaborators** or **Remove collaborators** can still open such a project, and the popout then shows this tab and nothing else: enough to grant access, not enough to read the project.
+A project you are not on still appears on the Integrations page's **Projects** tab as **No access**, with its name and description and nothing else — no workflows, no counters, no right-click menu. Someone holding **Add collaborators** or **Remove collaborators** can still open such a project, and the popout then shows this tab and nothing else: enough to grant access, not enough to read the project.
 
 The collaborator list lives inside the project, so it travels with an export and with a git sync, and deleting the project takes it along.
 
@@ -236,13 +225,16 @@ Every project is version controlled. This tab shows **Project History** — the 
 
 Click a commit to see its changed files, and a file to see its diff.
 
+Above the history, the tab says which remote the project is linked to, or **Local only - no remote configured**, and how many commits there are.
+
 | Action | Does |
 | --- | --- |
-| **Export project** | Downloads the project as a `.zip` bundle another installation can import |
 | **Configure remote** | Sets the **Remote SSH URL** this project pushes to and pulls from |
 | Refresh icon | Re-reads the history |
 
-**Push to remote** and **Pull from remote** are the cloud icons in the project header and on the project card. A dot on the icon means there is something to send or receive.
+**Export project**, in the popout's header, downloads the project as a `.zip` bundle another installation can import. See [Import and Export](../deployment/import-export.md).
+
+**Push to remote** and **Pull from remote** are the cloud icons in the popout's header and on the project's row on the Projects tab. A dot on the icon means there is something to send or receive.
 
 Both authenticate as whoever clicks them, using the **SSH private key path** set on that user in **Settings → Users**. There is no shared project key, which means a user without a key configured cannot push or pull.
 

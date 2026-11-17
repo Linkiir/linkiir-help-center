@@ -160,8 +160,8 @@ A script that fails to compile will not start. Run Test surfaces syntax and logi
 
 Starting the node is what opens the listener. Until then, nothing is answering on port `9001`.
 
-1. Return to the workflow editor, or open the project popout.
-2. Start the workflow, or start the `Intake` node on its own.
+1. Open **Integrations**. It opens on the **Workflows** tab.
+2. Click **Start** on the `HTTP Intake` row. To start the `Intake` node on its own, click the row to show its nodes and click **Start** on the node.
 
 The node moves through these states:
 
@@ -173,7 +173,7 @@ The node moves through these states:
 | `STOPPING` | Finishing in-flight work before shutting down. |
 | `ERRORED` | Failed to start, or hit an error it could not continue past. |
 
-In the project popout and workflow list, a workflow's rolled-up state reads **Off**, **Running**, **Processing**, or **Failed**.
+On the **Workflows** tab, the status filters at the top count workflows as **Running**, **Stopped** or **Failed**. In the project popout, hover over a workflow's status dot to see its rolled-up state: **Off**, **Running**, **Processing**, **Failed** or **Degraded**.
 
 Wait for `RUNNING`. The node reaches it only after the script compiled, its workers are ready, **and** the route is bound — so `RUNNING` is a real guarantee that the endpoint answers.
 

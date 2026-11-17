@@ -38,10 +38,10 @@ Generate HL7  ──►  File to LLP  ──LLP──►  Data Map ──► Dat
 ## Import the project
 
 1. Open the Linkiir Grid in your browser.
-2. Go to **Projects**.
-3. Click the chevron on **Add Project** and choose **From zip**.
+2. Go to **Integrations** and select the **Projects** tab.
+3. Click **Add Project** and select the **From zip** tab.
 4. Drop [`Linkiir_Demo.linkiir.zip`](pathname:///downloads/Linkiir_Demo.linkiir.zip) on **Choose a project bundle**, or click to browse for it.
-5. Click **Import**.
+5. Click **Import project**.
 
 The project appears as **Linkiir Demo** with 4 workflows. There is nothing to set up: the folders, the database and its table are created the first time the workflows run.
 
@@ -49,7 +49,7 @@ The project appears as **Linkiir Demo** with 4 workflows. There is nothing to se
 
 ## Start the demo
 
-Click into **Linkiir Demo** and click **Start All**.
+On the **Projects** tab, click **Start all** on the **Linkiir Demo** row.
 
 That's all. The workflows can start in any order: until Step 3 is listening, Step 2's **Send LLP** node keeps trying to connect, and both Step 3 and Step 4 create the database if it isn't there yet.
 

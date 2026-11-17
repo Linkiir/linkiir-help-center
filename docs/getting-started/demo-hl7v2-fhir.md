@@ -41,10 +41,10 @@ Both source nodes ship with **Live Mode on** and a **60-second interval**. Once 
 ## Step 1 — Import the project
 
 1. Open the Linkiir Grid in your browser.
-2. Go to **Projects**.
-3. Click the chevron on **Add Project** and choose **From zip**.
+2. Go to **Integrations** and select the **Projects** tab.
+3. Click **Add Project** and select the **From zip** tab.
 4. Drop [`FHIR_Demo.linkiir.zip`](pathname:///downloads/FHIR_Demo.linkiir.zip) on **Choose a project bundle**, or click to browse for it.
-5. Click **Import**.
+5. Click **Import project**.
 
 The project appears as **FHIR Demo** with two workflows. No other setup is needed. For name collisions and refused imports, see [Import and Export Projects](../administration/deployment/import-export.md#import-a-project-from-a-bundle).
 
@@ -56,7 +56,7 @@ Both workflows call the public HAPI FHIR server over the network. On an air-gapp
 
 ## Step 2 — Open the Map view
 
-1. Open the **FHIR Demo** project. On the **Workflows** tab, find the **HL7v2 to FHIR** workflow and select the **hammer** icon to open it in the **Workflow Builder**.
+1. Open the **FHIR Demo** project. On its **Workflows** tab, find the **HL7v2 to FHIR** workflow and select the **hammer** icon to open it in the **Workflow Builder**.
 2. Select the **ADT to FHIR** node. Right-click it and choose **Edit map**, or select **Edit Map** at the bottom of the node's settings.
 
 This opens the [Map view](../interface-development/interfaces/data-map/building-maps.md#the-map-view), the board where you build the message transformation. The node is already set up to take an HL7 v2.5.1 `ADT^A01` and build a FHIR R4 resource. A sample admit message, `ADT_A01.txt`, is loaded, so the source column on the left shows real values beside each field. The destination column on the right is empty until you fill it in the next step.
@@ -84,8 +84,8 @@ Now select a few of the links between the columns to see how each field is mappe
 
 With the map built and committed, run the workflow end to end.
 
-1. Open the [**Monitor**](../administration/monitor/index.md) page.
-2. Find the **HL7v2 to FHIR** workflow under the **FHIR Demo** project and select **Start**.
+1. Open the [**Integrations**](../administration/integrations/index.md) page. It opens on the **Workflows** tab.
+2. Find the **HL7v2 to FHIR** workflow, in the **FHIR Demo** project, and select **Start**.
 3. Right-click the **HL7v2 to FHIR** workflow and select **Open in logs**. The first message appears within a minute.
 4. In the **FHIR Validator** node's **INFO** entry, confirm that it reports no blocking issues.
 
@@ -111,7 +111,7 @@ The second workflow converts in the opposite direction. It uses a traditional [c
 
 The **HAPI FHIR Source** polls the server for two Patients each interval and pushes each one downstream. The **FHIR to HL7v2 Mapper** turns each Patient into an HL7 v2 `ADT^A08` (update). The **Print HL7v2 Destination** logs each segment so you can read the result.
 
-1. On the **Monitor** page, start the **FHIR to HL7v2** workflow.
+1. On the **Workflows** tab of the **Integrations** page, start the **FHIR to HL7v2** workflow.
 2. Right-click it and select **Open in logs**.
 
 The log shows the printed messages:
@@ -196,6 +196,6 @@ For general problems, see [Troubleshooting](../administration/troubleshooting/in
 | Writing mappings in Lua instead | [Custom Scripting Nodes](../interface-development/interfaces/custom-scripting-nodes.md) |
 | The FHIR adapters this demo builds on | [Linkiir FHIR Adapters](../adapters/catalogs/fhir.md) |
 | Building FHIR resource templates | [FHIR Profiling Tools](../adapters/fhir-profiling-tools.md) |
-| Starting, stopping and watching workflows | [Monitoring Workflows](../administration/monitor/index.md) |
+| Starting, stopping and watching workflows | [The Integrations Page](../administration/integrations/index.md) |
 | Searching logs and message history | [Log Search and Message History](../administration/logs/index.md) |
 | The core-nodes tour | [Feature Demo](demo-feature.md) |

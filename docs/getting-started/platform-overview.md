@@ -31,6 +31,8 @@ Source node  →  Transform node  →  Destination node
 
 Each node hands its output to the node connected after it. You connect nodes in the workflow editor; Linkiir handles the message transport between them.
 
+In the Grid, projects and workflows live on the **Integrations** page: its **Workflows** tab is where you start, stop and watch workflows, and its **Projects** tab is where you create and open projects. See [The Integrations Page](../administration/integrations/index.md).
+
 ## What you install
 
 A Linkiir installation is one package that brings up everything below. You do not install or start these individually.

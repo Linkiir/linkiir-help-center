@@ -90,7 +90,7 @@ second:
 | Messages Per Interval | `100` |
 | Interval | `1000` |
 
-Raise it in steps and watch queue depth on the [Monitor](../administration/logs/index.md)
+Raise it in steps and watch queue depth on the [Integrations](../administration/integrations/index.md)
 page. The point is usually to find where your transform becomes the limit, not
 the simulator.
 
