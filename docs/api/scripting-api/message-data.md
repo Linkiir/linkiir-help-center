@@ -62,7 +62,7 @@ The Variables panel in the Scripting tab shows the groups, and right-clicking a 
 *function*
 
 ```lua
-linkiir.data.extract{ schema=, data=, type= }
+linkiir.data.extract{ schema=, data=, type=, keep_empty= }
 ```
 
 Parse a wire message into a node tree.
@@ -72,7 +72,7 @@ Parses a raw message into a read/write node tree and returns it with the message
 **Usage**
 
 ```lua
-linkiir.data.extract{ schema = <string>, data = <string> [, type = <string>] }
+linkiir.data.extract{ schema = <string>, data = <string> [, type = <string>] [, keep_empty = <boolean>] }
 ```
 
 **Parameters**
@@ -82,6 +82,7 @@ linkiir.data.extract{ schema = <string>, data = <string> [, type = <string>] }
 | `schema` | string | Yes | Linkiir grammar JSON file (e.g. demo.json). |
 | `data` | string | Yes | Raw message text (HL7 v2, X12, FHIR JSON or XML, CDA, or XML). |
 | `type` | string | No | Protocol override: "hl7", "x12", "fhir", "cda" or "xml" (schema-free), defaulting to the schema's protocol. |
+| `keep_empty` | boolean | No | HL7 v2 and X12 only: true sends every segment, empty ones included, and every field of each segment, trailing empty ones included (below a field, trailing empty components still go). Default false: empty segments and trailing empty fields are left out. Raises for any other type. |
 
 **Returns**
 
@@ -190,7 +191,7 @@ local Xml = linkiir.data.serialize(Patient)
 *function*
 
 ```lua
-linkiir.data.create{ schema=, name=, type=, format= }
+linkiir.data.create{ schema=, name=, type=, format=, keep_empty= }
 ```
 
 Build an empty message tree for a definition.
@@ -200,7 +201,7 @@ Creates an empty message tree for a schema's message definition, ready to fill b
 **Usage**
 
 ```lua
-linkiir.data.create{ schema = <string>, name = <string> [, type = <string>] [, format = <string>] }
+linkiir.data.create{ schema = <string>, name = <string> [, type = <string>] [, format = <string>] [, keep_empty = <boolean>] }
 ```
 
 **Parameters**
@@ -211,6 +212,7 @@ linkiir.data.create{ schema = <string>, name = <string> [, type = <string>] [, f
 | `name` | string | Yes | Grammar message-definition name (usually the 2nd return of linkiir.data.extract). |
 | `type` | string | No | Protocol override; defaults to the grammar's protocol. |
 | `format` | string | No | FHIR only: "json" (default) or "xml". Raises for any other type. |
+| `keep_empty` | boolean | No | HL7 v2 and X12 only: true sends every segment, empty ones included, and every field of each segment, trailing empty ones included (below a field, trailing empty components still go). Default false: empty segments and trailing empty fields are left out. Raises for any other type. |
 
 **Returns**
 

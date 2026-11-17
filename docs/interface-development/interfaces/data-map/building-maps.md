@@ -222,14 +222,16 @@ What you set up in the destination column depends on the destination format:
 
 | Destination | You choose |
 | --- | --- |
-| HL7 v2 | **Output starts as** a **Copy of the input** (change only what differs) or an **Empty message**. Then the segments it holds, each written once or once per item of the input (one `NK1` per contact), and in a copy, the segments to drop |
+| HL7 v2 | **Output starts as** a **Copy of the input** (change only what differs) or an **Empty message**. Every segment of the message is there to map into; each is written once or once per item of the input (one `NK1` per contact), and in a copy, a segment can be dropped |
 | FHIR | The Bundle type (**transaction**, **batch**, **collection**) or a **Single resource**, and the resources it holds. A resource can be made once per item, such as one `Observation` per `OBX`, and references between them, such as `Observation.subject` → `Patient`, are filled in for you |
 | X12 | The loops it holds, each written once or per item. Envelope control numbers, HL numbering, loop qualifiers and segment counts are filled in when the message is finished |
 | CDA, C-CDA | The document type and its sections. What C-CDA fixes for the document is written for you |
 | Database | The main table, and the other tables it writes. Each, the main table too, is written once or once per item of the input: a main table written per `OBR` gets a row for each order an ORM carries |
 | JSON, XML | The structure, and the lists made per item |
 
-For HL7 v2, the destination column lists the segments the map writes. When the output starts as a copy of the input, the segments the input brings along are listed too, folded and marked **from the input**: open one to see its fields, and link to one of its fields, or press its **+**, to have the map write that segment. Other segments of the message are added with **Add segment**.
+For HL7 v2, the destination column lists every segment of the output message, as the destination schema defines it, standard or custom. Link to a field of any of them and the map writes that segment. Segments nothing writes yet are folded. An output that starts as an **Empty message** holds every segment of the message all the same, with every field's `|` in place, so a segment nothing writes is marked **empty**. When the output starts as a copy of the input, the segments the input brings along are marked **from the input**, and nothing in them is trimmed; a segment the input doesn't bring and nothing writes is marked **not in output**. To change the message's segments, edit the message in the Schema Editor. A segment's **×** clears it: its links and how it is written.
+
+For a C-CDA document type, every section of the document is listed, and the ones it must have are marked **REQ**.
 
 See [Formats](formats.md) for each format's paths and particulars.
 

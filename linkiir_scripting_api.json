@@ -975,8 +975,8 @@
         {
           "kind": "function",
           "name": "linkiir.data.extract",
-          "signature": "linkiir.data.extract{ schema=, data=, type= }",
-          "usage": "linkiir.data.extract{ schema = <string>, data = <string> [, type = <string>] }",
+          "signature": "linkiir.data.extract{ schema=, data=, type=, keep_empty= }",
+          "usage": "linkiir.data.extract{ schema = <string>, data = <string> [, type = <string>] [, keep_empty = <boolean>] }",
           "summary": "Parse a wire message into a node tree.",
           "description": "Parses a raw message into a read/write node tree and returns it with the message definition the schema matched. For documents of a plain JSON or XML schema, use linkiir.data.parse.",
           "params": [
@@ -997,6 +997,12 @@
               "type": "string",
               "required": false,
               "description": "Protocol override: \"hl7\", \"x12\", \"fhir\", \"cda\" or \"xml\" (schema-free), defaulting to the schema's protocol."
+            },
+            {
+              "name": "keep_empty",
+              "type": "boolean",
+              "required": false,
+              "description": "HL7 v2 and X12 only: true sends every segment, empty ones included, and every field of each segment, trailing empty ones included (below a field, trailing empty components still go). Default false: empty segments and trailing empty fields are left out. Raises for any other type."
             }
           ],
           "returns": [
@@ -1090,8 +1096,8 @@
         {
           "kind": "function",
           "name": "linkiir.data.create",
-          "signature": "linkiir.data.create{ schema=, name=, type=, format= }",
-          "usage": "linkiir.data.create{ schema = <string>, name = <string> [, type = <string>] [, format = <string>] }",
+          "signature": "linkiir.data.create{ schema=, name=, type=, format=, keep_empty= }",
+          "usage": "linkiir.data.create{ schema = <string>, name = <string> [, type = <string>] [, format = <string>] [, keep_empty = <boolean>] }",
           "summary": "Build an empty message tree for a definition.",
           "description": "Creates an empty message tree for a schema's message definition, ready to fill by assignment. FHIR and CDA messages come with their root and fixed values already set.",
           "params": [
@@ -1118,6 +1124,12 @@
               "type": "string",
               "required": false,
               "description": "FHIR only: \"json\" (default) or \"xml\". Raises for any other type."
+            },
+            {
+              "name": "keep_empty",
+              "type": "boolean",
+              "required": false,
+              "description": "HL7 v2 and X12 only: true sends every segment, empty ones included, and every field of each segment, trailing empty ones included (below a field, trailing empty components still go). Default false: empty segments and trailing empty fields are left out. Raises for any other type."
             }
           ],
           "returns": [

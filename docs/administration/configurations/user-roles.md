@@ -174,11 +174,11 @@ Withhold the Scripting and Node Configuration groups from operational roles. The
 
 ### Create a user
 
-1. Click **Add User**.
-2. Fill in **Username**, **Name**, and **Email address**. All three are required, and the email address must be well formed.
-3. Set a **Password**, and re-type it in **Confirm Password**. **Save** stays unavailable while the two do not match.
-4. Select **Roles**.
-5. Optionally set **SSH private key path**.
+1. Click **Add User**. The form is in four groups: **Profile**, **Roles**, **Git access** and **Password**.
+2. Under **Profile**, fill in **Username**, **Name**, and **Email address**. All three are required, and the email address must be well formed.
+3. Under **Roles**, select every role that applies.
+4. Under **Git access**, optionally set **SSH private key path**.
+5. Under **Password**, set a **Password**, and re-type it in **Confirm password**. **Save** stays unavailable while the two do not match.
 6. Click **Save**.
 
 The username is the login identifier and cannot be changed afterwards. A new account is created needing a password change, so the password you set is replaced by the user at their first login.
@@ -218,11 +218,17 @@ Points worth knowing before you use it:
 - **A test can fail where a real push succeeds.** The test deliberately ignores the server's SSH configuration so that a pass proves *this* key works — a host reached through a jump host or a rewritten host name is the case to expect this on.
 - **Generated keys are not in the instance repository**, so they are not carried by the backup remote Linkiir pushes to. After restoring an instance from that remote, regenerate each user's key and register the new public half. A filesystem copy of the working directory does include them. See [Backup and Restore](../backup-restore/index.md).
 
+### Edit a user
+
+**Edit** opens the account under a strip showing its name, the username it signs in as, whether it is **Local** or **External**, and its status. The username cannot change, so it is shown there rather than as a field. Below are the same four groups as **Add User**: **Profile**, **Roles**, **Git access** and **Password**. Without **Manage users**, the role pills on your own account are locked.
+
 ### Change a password
 
-Edit the user, set **New Password**, and re-type it in **Confirm New Password**. Leaving both blank keeps the current password; once either is filled in they have to match before **Save** is available.
+Edit the user and, under **Password**, set **New password** and re-type it in **Confirm new password**. Leaving both blank keeps the current password; once either is filled in they have to match before **Save** is available.
 
-Users can change their own password this way — the Edit button appears on your own row whether or not you hold **Manage users**. An administrator can reset any user's password the same way. There is no "forgot password" flow.
+Users can change their own password this way — the Edit button appears on your own row whether or not you hold **Manage users**. Changing your own password also needs your **Current password**, whatever roles you hold, so a session left open cannot be used to lock you out of your account. A wrong current password is refused with *Current password is incorrect*, and nothing is saved.
+
+An administrator resets someone else's password the same way, without knowing their current one. There is no "forgot password" flow: a forgotten password is reset by an administrator, and a lost `admin` password from the command line — see [Recover a lost admin password](../../getting-started/first-login.md#recover-a-lost-admin-password).
 
 ### External users
 
@@ -289,7 +295,7 @@ Being explicit so you can plan around it:
 | --- | --- |
 | Account lockout | Repeated failures pause sign-ins for 15 minutes rather than locking the account (see [Security](../security/index.md#1-complete-the-administrator-password-change)). Protect the Grid at the network layer as well, and behind a reverse proxy if it is reachable remotely. |
 | Password complexity or reuse rules | Only a minimum length of 8 characters and "not the current password" are enforced. Set your own standard by policy. |
-| Self-service password reset | A user can change their own password from the Users tab while signed in, but a forgotten one is reset by an administrator |
+| Self-service password reset | A user can change their own password from the Users tab while signed in, giving their current one, but a forgotten one is reset by an administrator |
 | A profile page of its own | Managing your own name, password, and SSH key happens through your row on the Users tab rather than a separate profile screen |
 | Per-project roles | Collaboration decides *which* projects a user reaches, not what they may do once inside. Permissions are the same in every project they collaborate on. |
 
@@ -297,7 +303,7 @@ Being explicit so you can plan around it:
 
 ## Recovering a lost administrator password
 
-Covered in [Create Grid User Accounts](../../getting-started/first-login.md), including the procedure for re-seeding the bootstrap account when every password is lost.
+Another administrator can reset it from **Settings → Users**. When there is none, `linkiirctl reset_admin_password` on the server sets a temporary password on `admin`, to be replaced at the next sign-in. See [Recover a lost admin password](../../getting-started/first-login.md#recover-a-lost-admin-password).
 
 ---
 
