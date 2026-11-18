@@ -955,13 +955,13 @@ const sidebar: SidebarsConfig = {
         {
           type: "doc",
           id: "api/web-api/get-project-list-api-project-list-get",
-          label: "List projects for the monitor page",
+          label: "List projects for the Workflows view",
           className: "api-method get",
         },
         {
           type: "doc",
           id: "api/web-api/get-workflow-list-api-workflow-list-get",
-          label: "List workflows for the monitor page",
+          label: "List workflows for the Workflows view",
           className: "api-method get",
         },
         {

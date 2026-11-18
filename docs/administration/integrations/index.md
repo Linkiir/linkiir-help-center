@@ -35,6 +35,8 @@ Below that is the workflow table. Each row shows the workflow's name, how many n
 
 Click a workflow to open it: its description, then its nodes, each with its own **Start**, **Stop** or **Restart** button.
 
+When the table is empty, it says *No workflows yet, or none you have access to.* You only see the workflows of projects you collaborate on, so an empty table doesn't always mean the grid has none. See [Collaborators](../configurations/project-settings.md#collaborators).
+
 Right-click a workflow or node for its actions:
 
 | Right-click | Actions |
@@ -151,20 +153,24 @@ While the node is running, the controls are locked and say why. Stop the node fi
 
 ## The Projects tab
 
-A list of every project on the grid, one row each. A row shows the project's name and description, how many **Workflows** it has, its total **Queue**, and **Start all** or **Stop all** for every workflow in it. The cloud icons at the end of the row push the project to its Git remote and pull from it.
+Every project on the grid, shown as cards or as a list. Switch between them with the **Card view** and **List view** buttons to the right of the search box. Cards are the default, and your browser remembers the one you picked.
+
+A card shows the project's name and description, how many **Workflows** it has, its total **Queue**, and **Start all** or **Stop all** for every workflow in it. The edge down its left side and the badge beside **Start all** show its status: **On**, **Processing**, **Degraded** or **Failed**. A stopped project has neither. The cloud icons at the top of the card push the project to its Git remote and pull from it.
+
+The list shows the same things, one row per project, with the status as the edge down the row's left side and the cloud icons at the end of the row.
 
 | To | Do |
 | --- | --- |
-| Open the project's settings | Click the row. See [Project Settings](../configurations/project-settings.md). |
+| Open the project's settings | Click the card or row. See [Project Settings](../configurations/project-settings.md). |
 | Create or import a project | Click **Add Project**. See [Adding a project](#adding-a-project). |
-| See its workflows on the Workflows tab | Right-click the row, choose **Show workflows**. The Workflows tab opens filtered to this project. |
-| Open the Workflow Builder | Right-click the row, choose **Open in Builder** |
-| Rename or re-describe it | Right-click the row, choose **Edit project** |
-| Delete it | Right-click the row, choose **Delete project**, then type the project's name to confirm |
-| Sort the list | Click the **Project**, **Workflows** or **Queue** heading. A third click returns to your own order. |
-| Reorder the rows | Drag a row by the grip handle at its left. Rows can't be dragged while the list is sorted. |
+| See its workflows on the Workflows tab | Right-click the card or row, choose **Show workflows**. The Workflows tab opens filtered to this project. |
+| Open the Workflow Builder | Right-click the card or row, choose **Open in Builder** |
+| Rename or re-describe it | Right-click the card or row, choose **Edit project** |
+| Delete it | Right-click the card or row, choose **Delete project**, then type the project's name to confirm |
+| Sort the list | In the list, click the **Project**, **Workflows** or **Queue** heading. A third click returns to your own order. Cards always show your own order. |
+| Reorder the projects | Drag a card or row by its grip handle, which appears when you point at it. Rows can't be dragged while the list is sorted. |
 
-**Edit project** and **Delete project** are greyed out without the **Edit project details** and **Delete projects** permissions. Row order is only a display preference, so it is open to everyone and saves as soon as you drop the row.
+**Edit project** and **Delete project** are greyed out without the **Edit project details** and **Delete projects** permissions. The order is only a display preference, so it is open to everyone and saves as soon as you drop the card or row. Cards and the list share it.
 
 The search box filters the list to the projects whose name or description matches, or that hold a workflow the same search would show on the Workflows tab.
 
