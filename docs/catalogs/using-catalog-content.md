@@ -83,6 +83,8 @@ Pulling a catalog updates the instance-level checkout. A library becomes usable 
 - **Explicitly**, from the project's Libraries tab or the Scripting page's catalog libraries tab.
 - **Automatically**, when a node is created from a catalog adapter that pins libraries the project does not have yet.
 
+The catalog libraries tab also lists **lkcodemap**, under **Linkiir**. It isn't from a catalog: it ships with the Grid, and a Data Map node links it to apply its code tables. See [Code Tables in Lua](../interface-development/lua-programming/code-tables.md).
+
 ### Versions are immutable
 
 A published library version is immutable, and versions are additive. Installing a newer version never disturbs nodes already running: a node pins one version by name, keeps resolving that version, and the Scripting page's update dot simply lights up to say a newer one exists.

@@ -77,6 +77,8 @@ Your own code sits at the top of the node. Everything the Map view manages is in
 | `mapping/maps/<name>.map.lua` | One map's rules, as a Lua table | The Map view (or by hand) |
 | `mapping/init.lua`, `mapping/maps/<name>.lua` | The code generated from the maps | Generated: don't edit |
 | `mapping/helpers/*.lua` | Conversion helpers the generated code uses (`hl7v2.lua`, `fhir.lua`, `convert.lua`, `normalize.lua`, …) | Kept up to date by the Map view |
+| `mapping/codetables/<name>.lua` | The node's [code tables](code-tables.md): codes to translate, as a Lua table | The **Code tables** tab |
+| `lkcodemap/` | The **lkcodemap** library, which applies code tables at run time. Linked to every Data Map node | Linkiir. Linked for you when the Map view opens |
 | `linked_tables.json` | Only with database rows: the tables of [linked Database nodes](formats.md#linked-database-nodes) you chose **Don't ask again** for | The Map view and the Database node's Configure dialog |
 
 Nodes made before the `mapping` folder existed are moved into it the first time they are opened, and any custom Lua inside their maps is moved into `custom.lua` as named functions. Nodes that called the destination the **target** have `target.json` renamed `destination.json` the same way. The change shows in Source Control: commit it when you're ready.
@@ -108,5 +110,6 @@ The generated files say **Do not edit by hand** in their first lines. If one is 
 | --- | --- |
 | [Building a Map](building-maps.md) | The Map view, links, functions, normalizing values, Auto-map, fixed values, custom Lua, schema changes, custom messages, moving maps between nodes, the report, undo and committing |
 | [Conditions](conditions.md) | Several maps for one message type, and which one takes a message |
+| [Code Tables](code-tables.md) | Translating codes between code systems with code tables and Code map rules, lookup tables, and the lkcodemap library |
 | [Formats](formats.md) | What is particular to HL7 v2, FHIR, X12, CDA and C-CDA, database rows, JSON and XML |
 | [Testing and Errors](testing-and-errors.md) | Samples, runs, checks, generated code, and committing |

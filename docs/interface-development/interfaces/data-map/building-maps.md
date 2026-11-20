@@ -122,7 +122,7 @@ The functions on offer depend on the formats being mapped. The common ones:
 | **Copy** | The value as it is |
 | **Date**, **Date & time** | Between HL7 `DT`/`DTM`, FHIR `date`/`dateTime`, X12 and CDA dates. **Output format** picks how it is written (see below) |
 | **Gender** | HL7 table 0001 to and from FHIR administrative-gender |
-| **Code map** | Translates codes through a table you fill in, with a default for anything not listed |
+| **Code map** | Translates codes through codes typed into the rule, or through one of the node's [code tables](code-tables.md), with a choice for anything not found |
 | **Identifier**, **Name**, **Address**, **Phone / email** | Whole data types between formats: `CX` ↔ `Identifier`, `XPN` ↔ `HumanName`, `XAD` ↔ `Address`, `XTN` ↔ `ContactPoint` |
 | **Coding**, **Coded concept**, **Coded value** | `CE`/`CWE` ↔ `Coding` and `CodeableConcept` |
 | **Number**, **Yes / No** | Text to numbers, and `Y`/`N`, `T`/`F` and `1`/`0` to booleans |
@@ -135,7 +135,12 @@ The **Rule** tab describes the chosen function as it works for the formats in th
 
 ### Code map
 
-A **Code map** rule shows its codes as a two-column table: the **Code** that arrives and what it **Becomes**. Type in the **+ add a code** row to add one, and use a row's **×** to remove it. When the source field has an HL7 table, a link under the table adds all of that table's codes at once. Anything not in the table gets the rule's default.
+A **Code map** rule takes its codes from one of two places, chosen under **Codes**:
+
+- **In this rule**: a two-column table of the **Code** that arrives and what it **Becomes**. Type in the **+ add a code** row to add one, and use a row's **×** to remove it. When the source field has an HL7 table, a link under the table adds all of that table's codes at once.
+- **Code table**: one of the node's code tables, for a longer or shared translation such as lab codes to LOINC. **Open** shows it in the **Code tables** tab.
+
+**When not found** says what happens to a code that isn't there: **Keep the code as it is**, **Use a value**, **Skip**, or **Reject the message**. For a coded destination, such as a FHIR CodeableConcept or an HL7 `CWE` field, **Keep the original code too** writes the source code beside the translation. See [Code Tables](code-tables.md) for the whole feature.
 
 ### Date output formats
 

@@ -12,7 +12,7 @@ The Projects tab is also where you create, import, rename, delete and reorder pr
 
 ## The project popout
 
-Its header shows the project's name and description, with **Export project** and the **Push to remote** and **Pull from remote** cloud icons. Below it are four counters — **Workflow count**, **Workflows running**, **Nodes running**, and **Current queue** — then a row of tabs.
+Its header shows the project's name and description (and a **Grid Default** chip on the [Grid Default](../integrations/index.md#the-grid-default-project) project), with **Export project** and the **Push to remote** and **Pull from remote** cloud icons. Below it are four counters — **Workflow count**, **Workflows running**, **Nodes running**, and **Current queue** — then a row of tabs.
 
 | Tab | Use it for |
 | --- | --- |
@@ -50,7 +50,7 @@ Per-row actions:
 
 Header actions: **Start All** / **Stop All**, **Add Workflow**, and a sort button that cycles the order rows are listed in. **Add Workflow** here adds the workflow to this project; the Integrations page's **Add Workflow** asks which project it goes in.
 
-Right-click a workflow row for **Edit workflow** — name, description, **Auto start**, and **Payload Encryption** — and **Delete workflow**. Both need the **Edit workflows** permission; without it the menu does not open. The same two actions are on a workflow's right-click menu on the Integrations page's [Workflows tab](../integrations/index.md#editing-and-deleting-a-workflow).
+Right-click a workflow row for **Edit workflow** — name, description, **Auto start**, and **Payload Encryption** — **Move to project…**, and **Delete workflow**. They need the **Edit workflows** permission; without it the menu does not open. The same actions are on a workflow's right-click menu on the Integrations page's [Workflows tab](../integrations/index.md#editing-and-deleting-a-workflow). See [Moving a workflow to another project](../integrations/index.md#moving-a-workflow-to-another-project).
 
 Workflow names are unique within a project, ignoring case, so a name already used in the project is refused.
 
@@ -79,6 +79,8 @@ Auto start is a property of the workflow, so it travels with the project into an
 
 > Values shared by every workflow in this project. Use one in a node setting with the `{x}` button (it reads `${project:NAME}`), or in a script with `linkiir.config.project().NAME`. Nodes pick up a change when they restart.
 
+The Grid Default project can't hold variables. Its **Variables** tab says so and offers **New project** to anyone who may create one. Create a project of your own, then move the workflows into it.
+
 Use variables for the values that differ between environments: hostnames, directory paths, account identifiers, feature switches — and, with the **Secret** flag set, the passwords and keys those endpoints need.
 
 1. Click **Edit**.
@@ -94,10 +96,10 @@ A name can use letters, digits, `_`, `.` and `-`, and can't start with a digit, 
 
 ### Using a variable in a node
 
-In a node's **Configure** dialog, any field can take a project variable. See [Using project variables in a node](../../interface-development/interfaces/index.md#using-project-variables-in-a-node).
+In a node's **Configure** dialog, text, path, number and password fields can take a project variable. On/off switches and lists can't. See [Using project variables in a node](../../interface-development/interfaces/index.md#using-project-variables-in-a-node).
 
 - **Text fields** can mix a variable with other text, such as `https://${project:API_HOST}/v1`.
-- **Number, on/off and list fields** take a variable as their whole value.
+- **Number fields** take a variable as their whole value.
 - The **Node Parameters** panel shows the variable's value, not the `${project:...}` text. Passwords still show as dots.
 
 ### Using a variable in a script
@@ -186,6 +188,8 @@ Create, edit, publish, and link libraries from the **Libraries** picker on the S
 
 **Copying from another project:** click **Import from Project**, pick a **Source Project**, tick the libraries you want, and click **Import Selected**. The whole library comes across — the working copy and every published version. A name already taken in this project is refused rather than merged, and this only reaches projects on the same installation.
 
+**Copying straight to a node:** the Scripting page's **Add Library** picker has an **Other Projects** tab when there is another project. Pick the project in **Project to copy from**, choose the library's version, and click **Add**. The library comes across with every published version, and the version you picked is linked to the node. A library with no published versions shows **Import** instead, which copies it without linking it. A library this project already has reads **In this project**: link it from the **Project Libraries** tab instead.
+
 **Removing one:** right-click a library row and choose **Remove library from project** (needs **Manage shared libraries**). Before you confirm, the dialog lists every node that currently links to it — workflow, node, and the version each is pinned to — so you can see what the removal touches. Those nodes are unlinked automatically and keep running: their own scripts are untouched, but anything they called from the library is gone.
 
 Use a library rather than the project's `common` directory when you want versioning: a node pins a published version, so changing the library does not silently change every node that uses it.
@@ -196,6 +200,8 @@ Libraries travel inside a project export. Importing a project also carries the l
 
 Libraries can also be installed from a subscribed catalog, and a catalog library upgrade is offered to every project that has it installed. See [Using catalog content](../../catalogs/using-catalog-content.md).
 
+Linkiir also ships one library with the Grid: **lkcodemap**, which translates codes through code tables. It is listed under **Linkiir** on the picker's **Catalog Libraries** tab, and is installed into a project the first time a Data Map node is made there. See [Code Tables in Lua](../../interface-development/lua-programming/code-tables.md).
+
 ---
 
 ## Collaborators
@@ -204,14 +210,22 @@ Libraries can also be installed from a subscribed catalog, and a catalog library
 
 Permissions decide what a user may do; this tab decides which projects they may do it to. Both have to allow an action for it to go through — see [Users and Roles](user-roles.md).
 
+A collaborator is a user or a role. A role puts everyone who holds it on the project, for as long as they hold it: give someone the role and they can open the project, take the role away and they can't. The tab lists **Roles** and **Users** in two groups. Each role shows how many users hold it now; each user shows whether the account is local or external, and **Disabled** for a disabled account.
+
 | Action | Needs | Does |
 | --- | --- | --- |
-| **Add Collaborators** | **Add collaborators** | Opens a picker of every user not already on the project; tick names and add them together |
-| Trash icon on a row | **Remove collaborators** | Removes that person, after a confirmation |
+| **Add Collaborators** | **Add collaborators** | Opens the **Add collaborators** dialog |
+| Trash icon on a row | **Remove collaborators** | Removes that user or role, after a confirmation |
 
-Your own row is marked **you**, and you can remove yourself — the confirmation says so plainly, because it takes your own access away.
+The **Add collaborators** dialog has a **Users** tab and a **Roles** tab, sharing one filter box. Tick users and roles on either tab, then add them together. Users already on the project, and roles already on it, aren't listed. A disabled account can't be ticked. External users appear only after they have signed in once.
 
-There is no owner. Whoever creates the project is added as its first collaborator like anybody else. That means the list can end up empty, which is legal and shows as *Nobody is on this project. It cannot be opened until someone is added.* Anyone holding **Add collaborators** can reopen it, on any project on the instance; that permission is what makes a lockout recoverable, and it grants no access to the contents on its own.
+Removing a role takes access away from its users, unless they are on the project by name or through another role. Deleting a role in **Settings → Roles** removes it from every project too.
+
+Your own row is marked **You**, and you can remove yourself — the confirmation says so plainly, because it takes your own access away.
+
+The Grid Default project has no collaborators: everyone can open it. Its **Collaborators** tab says so and offers **New project**, for a project of your own that only the people you choose can open.
+
+There is no owner. Whoever creates the project is added as its first collaborator like anybody else. That means the project can end up with no users and no roles, which is legal and shows as *Nobody is on this project. It cannot be opened until someone is added.* Anyone holding **Add collaborators** can reopen it, on any project on the instance; that permission is what makes a lockout recoverable, and it grants no access to the contents on its own.
 
 A project you are not on still appears on the Integrations page's **Projects** tab as **No access**, with its name and description and nothing else — no workflows, no counters, no right-click menu. Someone holding **Add collaborators** or **Remove collaborators** can still open such a project, and the popout then shows this tab and nothing else: enough to grant access, not enough to read the project.
 

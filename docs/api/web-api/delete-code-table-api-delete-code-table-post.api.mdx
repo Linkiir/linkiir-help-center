@@ -1,0 +1,68 @@
+---
+id: delete-code-table-api-delete-code-table-post
+title: "Delete a Data Map node's code table"
+description: "Removes `mapping/codetables/<id>.lua` from the caller's dev clone, but only when no rule in any map of the node uses the table and none of the node's own Lua requires it (else 409 in_use, with the rules and files) and the file's revision matches base_revision (else 409 stale). A node that follows a catalog is refused (409 catalog_linked)."
+sidebar_label: "Delete a Data Map node's code table"
+hide_title: true
+hide_table_of_contents: true
+api: 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
+sidebar_class_name: "post api-method"
+info_path: docs/api/web-api/linkiir-api
+custom_edit_url: null
+hide_send_button: true
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Delete a Data Map node's code table"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/api/delete_code_table"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Removes `mapping/codetables/<id>.lua` from the caller's dev clone, but only when no rule in any map of the node uses the table and none of the node's own Lua requires it (else 409 in_use, with the rules and files) and the file's revision matches base_revision (else 409 stale). A node that follows a catalog is refused (409 catalog_linked).
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<ParamsDetails>
+  
+</ParamsDetails>
+
+<RequestSchema
+  {...require("./delete-code-table-api-delete-code-table-post.RequestSchema.json")}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  {...require("./delete-code-table-api-delete-code-table-post.StatusCodes.json")}
+>
+  
+</StatusCodes>
+
+
+      

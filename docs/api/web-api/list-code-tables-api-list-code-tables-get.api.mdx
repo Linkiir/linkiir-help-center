@@ -1,0 +1,70 @@
+---
+id: list-code-tables-api-list-code-tables-get
+title: "List a Data Map node's code tables"
+description: "Lists every mapping/codetables/*.lua in the node with its id, name, From and To systems, row counts, revision and the rules that use it. An unreadable file is listed with the reader's message and line in place of its contents. Files are parsed, never run; no network call is made."
+sidebar_label: "List a Data Map node's code tables"
+hide_title: true
+hide_table_of_contents: true
+api: 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
+sidebar_class_name: "get api-method"
+info_path: docs/api/web-api/linkiir-api
+custom_edit_url: null
+hide_send_button: true
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"List a Data Map node's code tables"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/api/list_code_tables"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Lists every mapping/codetables/*.lua in the node with its id, name, From and To systems, row counts, revision and the rules that use it. An unreadable file is listed with the reader's message and line in place of its contents. Files are parsed, never run; no network call is made.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<ParamsDetails
+  {...require("./list-code-tables-api-list-code-tables-get.ParamsDetails.json")}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  {...require("./list-code-tables-api-list-code-tables-get.RequestSchema.json")}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  {...require("./list-code-tables-api-list-code-tables-get.StatusCodes.json")}
+>
+  
+</StatusCodes>
+
+
+      

@@ -1,0 +1,68 @@
+---
+id: preview-code-table-api-preview-code-table-post
+title: "Preview a change to a Data Map node's code table"
+description: "Plans a merge, replace, delete, rename or new-table change and returns what it would do - the counts, the new and changed rows, the findings (duplicates, missing To codes, Excel-date codes, and To codes not in or not active in the official list) and the base and result revisions - without writing anything. Rows come as JSON or as a CSV file (base64); no file text is accepted. The Map view may preview against base_text; include_text returns the file a save would write."
+sidebar_label: "Preview a change to a Data Map node's code table"
+hide_title: true
+hide_table_of_contents: true
+api: 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
+sidebar_class_name: "post api-method"
+info_path: docs/api/web-api/linkiir-api
+custom_edit_url: null
+hide_send_button: true
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Preview a change to a Data Map node's code table"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/api/preview_code_table"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Plans a merge, replace, delete, rename or new-table change and returns what it would do - the counts, the new and changed rows, the findings (duplicates, missing To codes, Excel-date codes, and To codes not in or not active in the official list) and the base and result revisions - without writing anything. Rows come as JSON or as a CSV file (base64); no file text is accepted. The Map view may preview against base_text; include_text returns the file a save would write.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<ParamsDetails>
+  
+</ParamsDetails>
+
+<RequestSchema
+  {...require("./preview-code-table-api-preview-code-table-post.RequestSchema.json")}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  {...require("./preview-code-table-api-preview-code-table-post.StatusCodes.json")}
+>
+  
+</StatusCodes>
+
+
+      

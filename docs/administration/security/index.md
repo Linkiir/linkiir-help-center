@@ -29,7 +29,7 @@ Then stop using it for daily work. Create named accounts with the narrowest role
 
 If the `admin` password is lost and no other administrator can reset it, `linkiirctl reset_admin_password` on the server sets a temporary one that must be replaced at the next sign-in. It needs write access to the working directory, the same as the Grid has. See [Recover a lost admin password](../../getting-started/first-login.md#recover-a-lost-admin-password).
 
-Enforced password rules are a minimum length of 8 characters and "not the same as the current password". Changing your own password, at sign-in or in **Settings → Users**, needs the current one, so a session left open cannot be used to take over the account. There is no complexity requirement and no reuse history, so the strength of your credentials is a matter of your own policy.
+Every Linkiir password must be 8 to 128 characters, must not be the username, and must not be one character repeated. A new password must also differ from the current one. The forms show these rules as a checklist, and the Grid checks them on every save. See [Password rules](../configurations/user-roles.md#password-rules). Changing your own password, at sign-in or in **Settings → Users**, needs the current one, so a session left open cannot be used to take over the account. When an administrator resets someone else's password, that user is signed out everywhere and must choose their own at their next sign-in, so the administrator doesn't go on knowing it. There is no complexity requirement and no reuse history, so the strength of your credentials is a matter of your own policy.
 
 Repeated failed sign-ins are slowed down rather than locking the account. Within any 15 minutes, Linkiir pauses sign-ins after 5 failures for one username from one address, or 20 failures from one address, and the user sees *Too many sign-in attempts*. Each pause is recorded as a **Login Throttled** [audit event](#audit-events). It is a brake on password guessing, not a substitute for restricting who can reach the login page at the network layer.
 
@@ -222,7 +222,7 @@ No event ever contains a password, token, secret, or SSO assertion. Events also 
 | `EXTERNAL_AUTH_SUCCEEDED` / `EXTERNAL_AUTH_FAILED` | An LDAP, SAML, or OpenID Connect sign-in succeeds or fails, with the reason for a failure |
 | `BREAK_GLASS_LOGIN` | A local account, such as `admin`, signs in while external authentication is active |
 | `LOGIN_THROTTLED` | Sign-ins are paused after too many failures |
-| `SESSION_REVOKED` | A user's sessions are ended: disabled or deleted by an administrator, removed by an external-user cleanup, or left with no matching IdP group |
+| `SESSION_REVOKED` | A user's sessions are ended: disabled or deleted by an administrator, their password reset by an administrator, removed by an external-user cleanup, or left with no matching IdP group |
 
 **Users and access**
 

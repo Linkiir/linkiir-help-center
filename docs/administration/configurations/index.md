@@ -12,6 +12,7 @@ Configuration is divided between platform settings, environment-specific connect
 - [Migrating Existing Interfaces](migration.md)
 - [HTTP Server Settings](http-server.md) — the embedded server every Source HTTP node shares
 - [Database Drivers](database-drivers.md) — what SQL Server, PostgreSQL and Oracle need installed
+- [Code Lists](code-lists.md) — official code systems (LOINC, ICD-10-CM, SNOMED CT, …) imported for searching and checking codes while building maps
 - [Log Archive Database](log-archive-database.md)
 - [Log Retention and Purge](log-retention-purge.md) — how long message history is kept, and how the space comes back
 - [Kafka Configuration](kafka-redpanda.md)
@@ -26,7 +27,7 @@ Linkiir splits configuration between the installation and the individual project
 | **Project** | The project popout | Variables, credentials, node templates, libraries, Git remote |
 | **Node** | The node's configuration in the Workflow Builder | Route paths, listen ports, directories, hosts, intervals |
 
-The **Settings** tabs are **About**, **License**, **Database**, **Environment**, **Logging**, **Notifications**, **Catalogs**, **Roles**, **Users**, **Http Server**, and **Instance**. Each is described below.
+The **Settings** tabs are **About**, **License**, **Database**, **Environment**, **Logging**, **Notifications**, **Catalogs**, **Code lists**, **Roles**, **Users**, **Http Server**, and **Instance**. Each is described below.
 
 Keep secrets out of project source. Back up configuration and the master encryption key together.
 
@@ -123,6 +124,10 @@ Configure alert delivery channels (Email, Alert Node), notification rules, and t
 ### Catalogs
 
 Install Linkiir's adapter catalogs from a list, subscribe to any other catalog of adapter nodes and shared libraries, review and pull updates, and publish a catalog from this grid. Needs the **Manage catalogs** permission. See [Catalogs](../../catalogs/index.md).
+
+### Code lists
+
+Import official code systems, such as LOINC, ICD-10-CM, SNOMED CT and CVX, or your own CSV list, so map builders can search, name and check codes in a Data Map's code tables. Running nodes never read them. Needs the **Manage code lists** permission, and is hidden without it. See [Code Lists](code-lists.md).
 
 ### Roles
 

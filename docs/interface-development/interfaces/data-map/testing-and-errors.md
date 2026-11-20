@@ -35,6 +35,8 @@ After a run that pushed one message, the destination column's **Output** column 
 
 Selecting a link afterwards shows in the **Rule** tab what that link read from the sample and what ended up in the output at its destination. It warns when the last run failed, or pushed no message or more than one, since then there is no single output to compare.
 
+For a **Code map** rule, the **Rule** tab also lists the codes the run couldn't translate, under **Not found in this sample**, with **Add to table**. See [Codes not found in a run](code-tables.md#codes-not-found-in-a-run).
+
 **Run Test** in the Scripting toolbar runs the same thing, and the debugger works on a Data Map node as on any other, including breakpoints in `custom.lua`, `premap.lua` and `postmap.lua`. See [Testing and Debugging](../../lua-programming/testing-debugging.md).
 
 ---
@@ -47,6 +49,8 @@ The **Rule** tab lists the map's problems under **Validation** as you edit, as e
 | --- | --- |
 | *PID-5 → Patient.nme[]: Patient.nme[] is not in destination.json* | A path names a field the schema doesn't have, usually after a typo or a schema change |
 | *Code map needs a source field* | The function converts a value, and the rule has no source |
+| *OBX-3 → Observation.code: the code table mapping/codetables/labs.lua is not in this node* | A Code map rule names a code table the node doesn't have. Pick another in the rule, or make the table. See [Code Tables](code-tables.md) |
+| *OBX-3 → Observation.code: the code table ACME lab → LOINC has 2 rows without a To code* | Those codes are treated as not found until you give them a destination code |
 | *ADT_A01 is taken by both A and B; only A gets it* | Two maps take the same messages, and the first has no condition. See [Conditions](conditions.md) |
 | *MSH-9 (Message Type) is required and not mapped* | The destination requires a field no rule fills. The **required** count in the destination column's header shows how many are filled |
 | *Result repeats over OBX, which is not in ADT_A01* | A segment or resource is made per item of something the message doesn't have |

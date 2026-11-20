@@ -21,8 +21,8 @@ These credentials work only until the forced password change completes.
 
 1. Open `http://127.0.0.1:8080` from the machine where Linkiir is installed.
 2. Sign in as `admin` with the password `password`, using **Login to dashboard**.
-3. The same card switches to **Choose a new password**. Enter **New password** and **Confirm new password**.
-4. Click **Set new password**.
+3. The same card switches to **Choose a new password**. Enter **New password** and **Confirm new password**. A checklist under the fields ticks off each rule below as you type.
+4. Click **Set new password**. It stays unavailable until the new password meets every rule.
 
 You land on the dashboard, and the rest of the Grid becomes available.
 
@@ -30,10 +30,13 @@ You land on the dashboard, and the rest of the Grid becomes available.
 
 | Rule | Detail |
 | --- | --- |
-| Minimum length | 8 characters |
+| At least 8 characters | Counted as characters, not bytes |
+| At most 128 characters | Long passphrases are fine |
+| Not the username | Compared ignoring case |
+| Not one character repeated | `aaaaaaaa` is refused |
 | Must differ | The new password cannot match the current one |
 
-Both rules are enforced by the server, not just the browser, so you cannot bypass them with a direct API call.
+The same rules apply to every Linkiir password, including those set in **Settings → Users**. They are enforced by the server, not just the browser, so you cannot bypass them with a direct API call.
 
 There is no complexity requirement, no reuse history beyond "not the current one", and no account lockout. Set your own standard through your organisation's policy, and keep the account out of daily use.
 
@@ -71,7 +74,7 @@ Sign in as `admin` with that password. The card switches to **Choose a new passw
 
 Points worth knowing:
 
-- **Only `admin`.** Other accounts are reset by an administrator in **Settings → Users**. The command takes no options.
+- **Only `admin`.** Other accounts are reset by an administrator in **Settings → Users**. That reset signs the user out, and they choose their own password at their next sign-in, the same way. The command takes no options.
 - **Run it as the account the Grid runs as.** It writes the `admin` account's file in the working directory, so it needs the same access to that directory as the Grid. It works whether the Grid is running or stopped.
 - **Nothing else changes.** Roles, status and the rest of the account are left as they were. If `admin` is disabled, the command says so: it cannot sign in until another administrator enables it.
 - **Sessions already open as `admin`** are held at the password change too, and that change asks for the current password, which is now the temporary one.
@@ -85,7 +88,7 @@ Points worth knowing:
 Once you are in, stop using the bootstrap account for daily work:
 
 1. Open **Settings → Roles** and create the roles you need. A fresh install ships one role, `admin`, holding every permission.
-2. Open **Settings → Users** and click **Add User**. Fill in **Username**, **Name**, **Email address**, **Password**, and assign **Roles**.
+2. Open **Settings → Users** and click **Add User**. Fill in **Username**, **Name**, **Email address**, **Password**, and assign **Roles**. The password must meet the [password rules](#password-rules), and the user replaces it with their own at their first sign-in.
 3. Keep the `admin` account for administrative recovery only, and store its password in your privileged-access system.
 
 If a user will push or pull a project to a Git remote, also set **SSH private key path** on their account.

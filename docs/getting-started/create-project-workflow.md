@@ -31,10 +31,12 @@ Linkiir gives every project, workflow, and node a stable internal identifier sep
 ## 2. Create the workflow
 
 1. Select the **Workflows** tab and click **Add Workflow**.
-2. Choose `Getting Started` as the **Project**.
+2. Choose `Getting Started` as the **Project**. The dialog starts on **Grid Default**, so change it.
 3. Name it `HTTP Intake` and click **Create workflow**.
 
 The workflow is the unit you start and stop. Everything you add next lives inside it.
+
+A workflow added without picking a project goes into **Grid Default**, a project everyone can open. It is created by its first workflow. To give a workflow its own variables and collaborators later, move it into a project of your own with **Move to project…**. See [The Grid Default project](../administration/integrations/index.md#the-grid-default-project).
 
 ---
 
@@ -150,5 +152,6 @@ Clicking a project's row on the **Projects** tab opens the project popout. It ha
 | **Templates** | Reusable node templates, and importing them from another project |
 | **Libraries** | Versioned code bundles shared across the project's nodes |
 | **Git** | Project history and remote configuration. **Export project** is in the popout's header. |
+| **Collaborators** | The users and roles who may open the project |
 
 See [Project Settings](../administration/configurations/project-settings.md).

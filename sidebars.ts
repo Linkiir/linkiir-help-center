@@ -44,6 +44,7 @@ const sidebars: SidebarsConfig = {
           'administration/configurations/http-server',
           'administration/configurations/log-archive-database',
           'administration/configurations/database-drivers',
+          'administration/configurations/code-lists',
           'administration/configurations/log-retention-purge', 'administration/configurations/kafka-redpanda',
         ]},
         'administration/integrations/index',
@@ -74,6 +75,7 @@ const sidebars: SidebarsConfig = {
           {type: 'category', label: 'Data Map Nodes', link: {type: 'doc', id: 'interface-development/interfaces/data-map/index'}, items: [
             'interface-development/interfaces/data-map/building-maps',
             'interface-development/interfaces/data-map/conditions',
+            'interface-development/interfaces/data-map/code-tables',
             'interface-development/interfaces/data-map/formats',
             'interface-development/interfaces/data-map/testing-and-errors',
           ]},
@@ -85,6 +87,7 @@ const sidebars: SidebarsConfig = {
         {type: 'category', label: 'Lua Programming', link: {type: 'doc', id: 'interface-development/lua-programming/index'}, items: [
           'interface-development/lua-programming/testing-debugging',
           'interface-development/lua-programming/code-sets',
+          'interface-development/lua-programming/code-tables',
         ]},
         'interface-development/error-handling',
       ],

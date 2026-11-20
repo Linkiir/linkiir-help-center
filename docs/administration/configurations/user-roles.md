@@ -51,8 +51,8 @@ Everything reachable from a project's row on the Integrations page's **Projects*
 | **Edit project variables** | Change a project's variables and secrets |
 | **Edit repository settings** | Change a project's or template group's remote and credentials |
 | **Import/export projects** | Export a project archive, or import one from a file or remote |
-| **Add collaborators** | Grant another user access to a project |
-| **Remove collaborators** | Revoke another user's access to a project |
+| **Add collaborators** | Grant another user, or a role, access to a project |
+| **Remove collaborators** | Revoke another user's or a role's access to a project |
 | **Edit workflows** | Create and delete workflows, add, remove, connect, and move the nodes on their canvas, and undo saved canvas changes from **Workflow history** |
 | **Manage node templates** | Create, import, edit, and delete node templates and template groups |
 
@@ -118,6 +118,7 @@ Instance-wide settings. Nothing here grants access to projects, logs, or the Bui
 | **Manage archivers** | Add, remove, start, and stop log archiver instances |
 | **Manage license** | Apply, release, and remove the instance license |
 | **Manage catalogs** | Subscribe to, update, and publish catalogs of adapter nodes and libraries |
+| **Manage code lists** | Import and delete the official code lists used while building maps. See [Code Lists](code-lists.md). Searching and checking codes against a list needs only a scripting permission |
 | **Manage external authentication** | Configure LDAP, OpenID Connect, or SAML sign-in, and clean up external users. See [External Authentication](../external-auth/index.md). |
 
 ---
@@ -141,7 +142,7 @@ Role names must be unique.
 
 **Edit** on the row reopens the same checklist. The role name itself cannot be changed after creation — create a new role and reassign its users instead.
 
-The trash icon deletes a role. Users keep the role name on their record, and a name with no matching role grants nothing, so deleting a role quietly narrows its holders' access rather than breaking their sessions. Check who is assigned before removing one.
+The trash icon deletes a role. Users keep the role name on their record, and a name with no matching role grants nothing, so deleting a role quietly narrows its holders' access rather than breaking their sessions. Check who is assigned before removing one. A deleted role is also taken off every project it collaborates on, so a role created later under the same name doesn't inherit that access.
 
 ### Roles are additive
 
@@ -178,12 +179,25 @@ Withhold the Scripting and Node Configuration groups from operational roles. The
 2. Under **Profile**, fill in **Username**, **Name**, and **Email address**. All three are required, and the email address must be well formed.
 3. Under **Roles**, select every role that applies.
 4. Under **Git access**, optionally set **SSH private key path**.
-5. Under **Password**, set a **Password**, and re-type it in **Confirm password**. **Save** stays unavailable while the two do not match.
+5. Under **Password**, set a **Password**, and re-type it in **Confirm password**. A checklist under the fields ticks off the [password rules](#password-rules) as you type. **Save** stays unavailable until the password meets them all and the two match.
 6. Click **Save**.
 
 The username is the login identifier and cannot be changed afterwards. A new account is created needing a password change, so the password you set is replaced by the user at their first login.
 
 Commits are attributed to the **Name** and **Email address** on the account: every git commit Linkiir makes carries the identity of the user who triggered it. With no email address on record it falls back to `username@linkiir.local`. There is no instance-wide git identity.
+
+### Password rules
+
+Every Linkiir password, wherever it is set, must be:
+
+| Rule | Detail |
+| --- | --- |
+| **At least 8 characters** | Counted as characters, so an accented letter or emoji counts as one |
+| **At most 128 characters** | Long passphrases are welcome; the cap only stops absurdly large input |
+| **Not the username** | Compared ignoring case |
+| **Not one character repeated** | `aaaaaaaa` or all spaces is refused |
+
+There is no rule about digits, symbols or mixed case: length matters more than composition. When changing your own password, the new one also has to differ from the current one. The Add User and Edit forms, and the sign-in page when a password change is needed, show the rules as a checklist. The Grid checks them again on every save.
 
 ### SSH private key path
 
@@ -224,11 +238,11 @@ Points worth knowing before you use it:
 
 ### Change a password
 
-Edit the user and, under **Password**, set **New password** and re-type it in **Confirm new password**. Leaving both blank keeps the current password; once either is filled in they have to match before **Save** is available.
+Edit the user and, under **Password**, set **New password** and re-type it in **Confirm new password**. Leaving both blank keeps the current password. Once a new one is typed, the [password rules](#password-rules) checklist appears, and **Save** is available only when the password meets them and the two match.
 
 Users can change their own password this way — the Edit button appears on your own row whether or not you hold **Manage users**. Changing your own password also needs your **Current password**, whatever roles you hold, so a session left open cannot be used to lock you out of your account. A wrong current password is refused with *Current password is incorrect*, and nothing is saved.
 
-An administrator resets someone else's password the same way, without knowing their current one. There is no "forgot password" flow: a forgotten password is reset by an administrator, and a lost `admin` password from the command line — see [Recover a lost admin password](../../getting-started/first-login.md#recover-a-lost-admin-password).
+An administrator resets someone else's password the same way, without knowing their current one. That signs the user out everywhere, and they are asked to choose their own password at their next sign-in, so only they go on knowing it. There is no "forgot password" flow: a forgotten password is reset by an administrator, and a lost `admin` password from the command line — see [Recover a lost admin password](../../getting-started/first-login.md#recover-a-lost-admin-password).
 
 ### External users
 
@@ -257,9 +271,11 @@ Keep at least two accounts holding both.
 Permissions are instance-wide; the projects they apply to are not. Membership is the [Collaborators tab](project-settings.md#collaborators) on each project.
 
 - Every user can see that a project exists and what it is called. A project they do not collaborate on shows as **No access** — name and description, nothing else — so "ask someone for access" is a possible conversation.
+- A role can be a collaborator. Everyone holding it is on the project for as long as they hold it, so access follows the role, not the people who held it when it was added.
 - There is no owner and no implicit access. Whoever creates a project is added as its first collaborator like anyone else, and can be removed like anyone else.
 - Managing membership is not the same as having it. **Add collaborators** works on every project on the instance — that is what makes lockout recoverable — but grants no access to what is inside them.
-- A project with an empty collaborator list is legal, and locked to everybody until someone holding **Add collaborators** puts a name back.
+- A project with no users and no roles on it is legal, and locked to everybody until someone holding **Add collaborators** adds one.
+- The [Grid Default](../integrations/index.md#the-grid-default-project) project is the exception: everyone can open it, and it has no collaborators.
 
 Membership lives inside the project, so it travels with an export or a git sync, and deleting the project takes its access list with it.
 
@@ -294,7 +310,7 @@ Being explicit so you can plan around it:
 | Not available | Consequence |
 | --- | --- |
 | Account lockout | Repeated failures pause sign-ins for 15 minutes rather than locking the account (see [Security](../security/index.md#1-complete-the-administrator-password-change)). Protect the Grid at the network layer as well, and behind a reverse proxy if it is reachable remotely. |
-| Password complexity or reuse rules | Only a minimum length of 8 characters and "not the current password" are enforced. Set your own standard by policy. |
+| Password complexity or reuse rules | Only the [password rules](#password-rules) and "not the current password" are enforced. There is no composition rule and no reuse history. Set your own standard by policy. |
 | Self-service password reset | A user can change their own password from the Users tab while signed in, giving their current one, but a forgotten one is reset by an administrator |
 | A profile page of its own | Managing your own name, password, and SSH key happens through your row on the Users tab rather than a separate profile screen |
 | Per-project roles | Collaboration decides *which* projects a user reaches, not what they may do once inside. Permissions are the same in every project they collaborate on. |

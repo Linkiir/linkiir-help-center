@@ -150,10 +150,12 @@ Any field in the **Configure** dialog can take one of the project's [variables](
 1. Click the `{x}` button at the end of the field.
 2. Pick a variable. Each one shows its value; a secret shows **Secret**.
 
+Only text, path, number and password fields have the `{x}` button. On/off switches and lists don't: a value that isn't on, off or one of the options couldn't be checked until the node runs.
+
 What the field holds afterwards depends on the field:
 
 - **Text and path fields** get `${project:NAME}` at the cursor, so it can sit inside other text: `https://${project:API_HOST}/v1`. A line under the field shows what the text comes to.
-- **Number, on/off and list fields** show the variable in place of their control, with its value. Click **×** to go back to a normal value.
+- **Number fields** show the variable in place of their control, with its value. Click **×** to go back to a normal value. An on/off or list field that already holds a variable shows it the same way, so you can clear it.
 - **Password fields** take the variable as their whole value, and a line under the field says which variable they use. Only password fields offer secret variables.
 
 You can also type `${project:NAME}` yourself. To keep a literal `${` in a value, write `$${`. Text such as `${name}`, with no `project:`, is left as it is.
@@ -218,7 +220,7 @@ Beyond the fields a node type defines, you can add your own to a node's configur
 
 Nodes created from a Linkiir-supplied template have their built-in fields locked: you can change a value, but not a label, type, or option list, and you cannot remove or move one. Fields you add yourself remain fully editable.
 
-To reorder fields, use the **Node Config** panel on the Scripting page. Switch it to **Editing**, then drag a field by the grip to the left of its name. To use the keyboard, focus the grip, press Space, move the field with the arrow keys, and press Space again. Locked fields have no grip and keep their order. Fields you added can go above, below, or between them. The new order is saved as soon as you drop the field.
+Add them on the **Configure** dialog's [Custom Parameters](#custom-parameters) tab, from the Workflow Builder or from the **Node Config** panel on the Scripting page. That panel shows the same cards and **Configure** button as the builder's panel. A field saved from it is left as an uncommitted change, like a script edit, for you to commit from **Source Control**.
 
 ## Editing the canvas
 
@@ -259,6 +261,8 @@ Click **Undo** on a change to reverse it. The undo is saved straight away, and y
 - Any change in the list can be undone, not just the latest one, as long as nothing saved since depends on it. For example, a node that has been edited since it was added can't be removed this way; delete it from the canvas instead.
 - The undo is added to the list as a change of its own, so you can undo the undo.
 - A change that can't be undone says **Can't undo**. Point at it to see why.
+
+The oldest entry marks where the history starts, with **Start of history** in place of **Undo**: **Workflow created**, or, for a workflow [moved from another project](../../administration/integrations/index.md#moving-a-workflow-to-another-project), **Moved here from project** and that project's name. Changes made before a move stay in the old project's history.
 
 Undoing needs **Edit workflows**. It is unavailable while the canvas has unsaved changes: save or cancel them first.
 

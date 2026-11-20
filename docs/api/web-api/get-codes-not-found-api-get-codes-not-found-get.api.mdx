@@ -1,0 +1,70 @@
+---
+id: get-codes-not-found-api-get-codes-not-found-get
+title: "The codes the caller's last Run Test of a node could not translate"
+description: "Returns the time of the caller's last Run Test of this Data Map node and, for each code it could not translate, its code table's id and name, rule, code, system and text. With a `table` the codes are filtered to that code table: `table` matches either the table's id or its name. No record (the node was never tested) gives run_at: null and no codes. The record is read from the caller's dev clone; no node code runs and no network call is made."
+sidebar_label: "The codes the caller's last Run Test of a node could not translate"
+hide_title: true
+hide_table_of_contents: true
+api: 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
+sidebar_class_name: "get api-method"
+info_path: docs/api/web-api/linkiir-api
+custom_edit_url: null
+hide_send_button: true
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"The codes the caller's last Run Test of a node could not translate"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/api/get_codes_not_found"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Returns the time of the caller's last Run Test of this Data Map node and, for each code it could not translate, its code table's id and name, rule, code, system and text. With a `table` the codes are filtered to that code table: `table` matches either the table's id or its name. No record (the node was never tested) gives run_at: null and no codes. The record is read from the caller's dev clone; no node code runs and no network call is made.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<ParamsDetails
+  {...require("./get-codes-not-found-api-get-codes-not-found-get.ParamsDetails.json")}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  {...require("./get-codes-not-found-api-get-codes-not-found-get.RequestSchema.json")}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  {...require("./get-codes-not-found-api-get-codes-not-found-get.StatusCodes.json")}
+>
+  
+</StatusCodes>
+
+
+      

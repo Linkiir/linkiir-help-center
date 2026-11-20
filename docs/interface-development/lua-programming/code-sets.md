@@ -8,6 +8,10 @@ Code sets — code tables — live inside a schema file and give a coded field's
 
 The full signatures are in [Message and Data](../../api/scripting-api/message-data.md). This page is about how to use them.
 
+:::tip
+To translate a sender's own codes into a standard, such as lab codes to LOINC, use a code table instead: a Data Map node's [Code tables](../interfaces/data-map/code-tables.md), or a plain Lua table with the lkcodemap library in any node. See [Code Tables in Lua](code-tables.md).
+:::
+
 ---
 
 ## Loading a code set
@@ -100,5 +104,6 @@ That gives you an auto-generated baseline while building and full control once i
 ## Next
 
 - [Message and Data](../../api/scripting-api/message-data.md) — `linkiir.data.codeset` signatures in full
+- [Code Tables in Lua](code-tables.md) — translating codes with a code table and lkcodemap
 - [Demo: HL7 LLP to Scripting to LLP](../sample-code/hl7-llp-scripting-llp.md)
 - [Testing and Debugging Lua](testing-debugging.md)

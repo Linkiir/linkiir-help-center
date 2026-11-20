@@ -1,0 +1,68 @@
+---
+id: save-code-table-api-save-code-table-post
+title: "Save a change to a Data Map node's code table"
+description: "Writes the file a preview of the same change would write, or nothing. The file is written only when its current revision matches base_revision (else 409 stale) and, when expect_result_revision is given, the recomputed result matches it (else 409 changed). A new table creates `mapping/codetables/<id>.lua`. The change is left uncommitted in the caller's dev clone. A node that follows a catalog is refused (409 catalog_linked)."
+sidebar_label: "Save a change to a Data Map node's code table"
+hide_title: true
+hide_table_of_contents: true
+api: eJztWttyG7cZfhXM5kKUS1GHeHKQ48w4zsFqHVsjyc2FqIggFxQ3WgKbBZYSq2GnD9En7JP0+39gDyRXlCLnplPbMyKJBf7zGXsXOXllo8Pz6J2JlY0uuhE+RnmSucTo6DD6JU+cssJNlBgnqRJSZLmaJepGmDGvWjlVYjSR+kqJG1OksbihI11hcqGNmyT6qifOyuOJ5cdOaWF0Ohc3E3xLnBWjIs+VdoKAW6AWU+lGE2AeSqsuq9WOSq0Sz/e+FtbJVG0LqeOuh6JuMzVy2GqL1NUngPEqmSndZWpzNTLTrHAqFn5jhSdxDeCen3i7J14JDV6dHIL4Ua4kCWMwlVkGvnZHkBk/srvfJPG3vbSQA89sEAiQp2rsRKGBdkp8xyLRTMlIpqnKt6yI1UyMUqMVIwNEPJZOjE2amhsLgY8kWDVXBCxX48ICRoeJ9OuXaaKvidaoG5lM5ZI0dxRDd1bO1CXReMlEXsosuVxdy4x1OJir3wtl3XcmnkeHd9HIaKjI0VewmiYjBrr7myWbuIssJDaV9C3LCaVLYDr4dWPy6zGovrwqkpgW3DxTRIjLIS6gcYlLaeGXsFH8RBtXbe6nD0ffl+ZVghREkkw04PA6CaoXLboRfXkQHxn3w7i+h0DFzzKrgXuoUs/fj+Ejq/AX3WpFF2kaLS5qjEfrqNguWL8keWg+gemO4SayNBdnYM8w5MQ65pP2MR3e8pZpWRa9hhtulAA9B6RxbqbrinvUaeJnLOEzWCBQdm6dmj5VQKf+NOCYp0v5PY4CwiT98qkQ3uAo8aLckxnB0QVAyDhOSNMyPW7IdiwRU7rlYTP8DTGqIdjTJFY/wybSNWt5JX6EqiiKnhnhRU12Kr1VHHLQJLVVETBX4lqbmxDofnxzdNLX4dyHk7d+9f3R9/7Lm7dfitlBBcBHcvZqb6KQB8yTbc+ZT/byyV4eay9/lDFKPEmuYipB2KoaknrNUe8+dqu8vFUzxlyyHHZrMVjROfFYplRhPO/t72/3WlX0KBQB6AvPs8YPGZOkg7vkSNrLppHQ9nUfokjMmXiTIzEvr2lTiN2XD7ken2j1P2ceRAeZMbKWow/hxdEWrB9jDrWAGjZxYm7aDeK9VgLqzefe6utE+8JXmoNBBW8w8LWUR9XXS+bxec9bR0mazHM53+jQJ6TxtmRPpkA5fapyJHd4Zq6yVI5QG0sr/nr6/p3P7Xa2KbHHKEouqQj+4vkm8XPt8p3f1kbL69O/cwUOSx7OUcR2hYe5ozSJxNvuyKTFVK+Yb7v+WmJfgprxSuUtslqsKnqTOF8HItY6kUkymghPopiYNLZCSayME4Wmo1NpFzVV6SeIXSasBQvefsGh6ypPYnGFiteinOfuwfjqnMUwkfZyAq8GL7XEh8akSuqGyN9Ai2/8tnVaFdDkoW3KrSNbIKOTwgPuNf3E5YX6KE9p2khTknZ2pNHs3BdBS5tAJIPhw1CJ3FfHRz5ZsJmQpXrAXSpNTebpC2ro69HEJCMlOnePE/9C7HyLmBmrW+7cSPSlnPq6VVBixTkPHhW6K++TBKnkcy1k0xbW+PSeuKh0MSUBswez0NmBm0L+uYyXTfze4ztQKLNZZNCQgkR9biKRbDfigeiQ4MtEw3QPqU9FQLuVI4fghedWbS8ZTaBpQUupcr6pY8es8s1qTbIc0hqxgwFw5F93u4piDmXQg5n5ngTtekgJT6mCTvzp9pzLuZY6o0oujNEmqxx+VDf0qT79P6xPN+SmVbc4Tdr84R3sc63C5Ix+ToGPQt3FC0HAafYjZzQyI8OlGZCfKrEtL421nqoqyvfipATSGgTLMZirh1LWyZwGUUSup5Q8248YSn0wje0TtacS+wNDA7k8dnuAat6zRDwNrsKMD7W3FNPE8uiuMRb7yPZjeXrVnCw1vQNknPhhWYuJM5FDE88Pq6FOV2RpYcPwsZxJuiUloAIdDJYMYjDoesX48VDVh4R5Z5mG03k51SR59XUTQRDVcv78onfQxZ/PKYkuFk32uQahBZsZbX0UPdjb4wp0icnTYjRC3TQuUlIlb466Tx0Y+hnk5tndGc9e75mnJXE5vPMj2jBcZvPNpJtsAnxMzzcP6bhs6EK+KfiZqbJGquaDH+sTG72AtF5pNHBJ9Hjm6Ikp7Ee75XEA9Mg4MlQwSVV5pB/zt1iqT9jFdCpznii3eyVZ3YZkEo6366jQsO4glvL+odL+Wsex7OqV3QUrWXPwYNgL9pLnbX5wFuyA4o82DrwvjY9ZMEQaRQPaM5UpRDSl4f1QxpcJFea+0Xy+93wdPE+sCe4YjMbhNqVpmTeJm/ibAvhARxs/zy8hft1OMFf7IQ0hK+mR12R5pdPxlyrNoCLiZDxWOeJIeSdSccbcr19TdNbuJYiig4N2ilZ8DVD0loOVAT1q9E6h6ZM565Ys+2d8dwIUymv7docgncpplpJhwQVSkAskb0FFklCLlsoh6pLmijVFPiKlp2aEpoaCX1eoPBcvCTJt6tFn70YNe3RRctfXQogiT7GhH02cyw53d/cPvuzt4f/+4Vd7X+3tyizZXblk6UddPsimUIOm4NizKk9kmvxD3YmdnfNzFCqU0Tm/CLqNgSjo9uPiQiw8kJ0dcYr4Cwm+NuY6QeVER/rRqwKS0S5E3n4kQt480i43cTGiVZHJK9VjML67siDnTpz3Iw+rH11gYQk8o130dTJmayQREVjNQCAqk3fwtzfFGcDe7mul477OEHZchzb3fP/HX4n/bQ4+U7R9hq6owvWTD9VRm/DwlAR1Ul9Q/XDLWm65cKpjfONWqF5c/lXfqfhuoX5S3pGE9ahuDeo9ZhkYV+z1Ty6/m42X+TPhVVPG86Up4jIDlzW2avAXfpRPSBNh+rQ0ZWrIqBoIrYxFQrng++aqPV7uRM9LOBd1s9hgyTdz53+mmDm5XawV141+/p6KtgEj0WNWVpkPQrSguQgAzOAz/sR+b7+315qayhO/qCGdouDPLcrZ2TH/do09cH+ApOZHpWOq2QxNpP7zr3/7kQhfrpdnEIXEhyNRWN+KT6WGxyF2G0pwaEFKZ8BXMn98pMkwl3lCXyW5ZcAGsdH9okUk6OvPPuOxIfVU9POMGi8adxvE41tkiawYopzjIRDtOaxIB1tE9M4ELqyQoawR4RbZiivUSaav54ivAi1cYNNfjSvvvtYHKEChoERciUFrREUpLPuaJ3Z5ofkCmMN1Oi/pXwl9+P8DsM0FQlFmEn6pgFO/pRGWrDdTDvSxrife0gU7vZSAlDhLgHBw/P70THBEQjJL9IBkfqUo0YdDyF0UITlbEovcdiIf+2ViTxEZVJb7eC7Hjmdd2BM0XIraqkzm1H6xrs01ahhiYzAYpAVoQczfr0gMNahPWSSWLpJm5oqyKlsiDmD8Rubh5PEJ7oEMx+DKvLaWS7gX2DlDAeYzSn+tKUB+Wiwlxa27fgQbyCkY9KPDfrQlej3xIazQ9y1Ch0xhLQw9rvcch5WwZ7G1lLAqvlezVj/iR6XNirFE+REfglYC1JLTALACxllN/POlQIt0P2DyS/YMJx0KbA95BQZWwMraM06VAXGpQrhtyMkvGzuD8CH3U+V2qjxeCaA+dQ+dlho6FcMZhoUjY6zhlDPYG0k9NkxMKwi+pKukqlktvKzxHXJ7DjS/nv/64uIvOMfFC9Bev/yGbfzbfkTcYfGgh6KHQgAX84Fcw+/IrPsshwI4SmXbVd120GbX8NnH1m3YelnG03uNuy6U7B8vlA7+QKXE/t8SzThe+rLQTnzt/ezZ26N3fzs6Onn2LMy7OMZCowlK+Oo1rRs5p8gD1HRxYrQS8J1iSoFRDJbKvkGILzKlWnse7ltkFduG9C4OdCEtssqEQrwc0mA4ROQTapgV2+6OOD/1CRKBG1q76PR6u7Zc2SGx84VAbxpvl2FRDEotPhuwEVjBrz0xjpDLhI+u/IKZ4Be35AwuzJ1EonniJn2L4pGBNO6bEeWQORvl2Kmf0TVewVnu5BCh6yZlNeE3XpX69Krc/9SrcmE84NSt281SWDNZB0IED6m4HTlH1kqoylxpSFBgUs1DG+7uSOYf8nSxoGVkEpp2nOPrDHUX78Yvqp1D3Yxy91rN+ZazTpJUV8q04Bn06vCMRjf+xCuE6cxt3NvsrKh8weZheKMvVOq5vKFRCP5ywe0HiTyK4zXfNRcIMHjuYdK//wK6IXDo
+sidebar_class_name: "post api-method"
+info_path: docs/api/web-api/linkiir-api
+custom_edit_url: null
+hide_send_button: true
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Save a change to a Data Map node's code table"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/api/save_code_table"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Writes the file a preview of the same change would write, or nothing. The file is written only when its current revision matches base_revision (else 409 stale) and, when expect_result_revision is given, the recomputed result matches it (else 409 changed). A new table creates `mapping/codetables/<id>.lua`. The change is left uncommitted in the caller's dev clone. A node that follows a catalog is refused (409 catalog_linked).
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<ParamsDetails>
+  
+</ParamsDetails>
+
+<RequestSchema
+  {...require("./save-code-table-api-save-code-table-post.RequestSchema.json")}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  {...require("./save-code-table-api-save-code-table-post.StatusCodes.json")}
+>
+  
+</StatusCodes>
+
+
+      
